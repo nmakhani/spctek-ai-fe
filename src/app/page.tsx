@@ -1,67 +1,95 @@
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      <section className="text-white text-center py-20">
-        <h1 className="text-5xl font-bold mb-4">Welcome to SPCTEK AI</h1>
-        <p className="text-xl text-gray-300 mb-8">
-          Advanced AI Solutions for Modern Organizations
-        </p>
-        <div className="flex gap-4 justify-center">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-            Get Started
-          </button>
-          <button className="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold transition">
-            Learn More
-          </button>
-        </div>
-      </section>
+"use client";
 
-      <section className="grid md:grid-cols-3 gap-8 py-20">
-        <div className="bg-slate-700 p-8 rounded-lg text-white hover:bg-slate-600 transition">
-          <h3 className="text-2xl font-bold mb-4">⚡ Fast & Reliable</h3>
-          <p className="text-gray-300">
-            Built with cutting-edge technology for maximum performance and uptime.
-          </p>
-        </div>
-        <div className="bg-slate-700 p-8 rounded-lg text-white hover:bg-slate-600 transition">
-          <h3 className="text-2xl font-bold mb-4">🔒 Secure</h3>
-          <p className="text-gray-300">
-            Enterprise-grade security with encrypted data and secure API endpoints.
-          </p>
-        </div>
-        <div className="bg-slate-700 p-8 rounded-lg text-white hover:bg-slate-600 transition">
-          <h3 className="text-2xl font-bold mb-4">📈 Scalable</h3>
-          <p className="text-gray-300">
-            Easily scale from startup to enterprise with our robust infrastructure.
-          </p>
-        </div>
-      </section>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+import { useEffect, useRef } from "react";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Problems from "@/components/Problems";
+import Solutions from "@/components/Solutions";
+import Stats from "@/components/Stats";
+import Architecture from "@/components/Architecture";
+import CTASection from "@/components/CTASection";
+import ContactForm from "@/components/ContactForm";
+import Footer from "@/components/Footer";
+
+export default function Home() {
+  const particlesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!particlesRef.current) return;
+
+    // Generate shimmer particles
+    const particleCount = 40;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement("div");
+      particle.className = `shimmer-particle ${Math.random() > 0.5 ? "purple" : ""}`;
+
+      // Random position
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      particle.style.left = `${x}%`;
+      particle.style.top = `${y}%`;
+
+      // Random delay for staggered animation
+      const delay = Math.random() * 8;
+      particle.style.animationDelay = `${delay}s`;
+
+      particlesRef.current.appendChild(particle);
+    }
+  }, []);
+
+  return (
+    <div className="relative min-h-screen noise-overlay grid-bg">
+      {/* Floating Aurora Orb 1 — cyan */}
+      <div
+        className="fixed top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none -z-10 animate-aurora-drift-1"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(6,182,212,0.02) 40%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+      {/* Floating Aurora Orb 2 — purple */}
+      <div
+        className="fixed top-1/2 right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none -z-10 animate-aurora-drift-2"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(124,58,237,0.08) 0%, rgba(124,58,237,0.02) 40%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+      {/* Floating Aurora Orb 3 — cyan light */}
+      <div
+        className="fixed bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full pointer-events-none -z-10 animate-aurora-drift-3"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(34,211,238,0.06) 0%, rgba(34,211,238,0.01) 40%, transparent 70%)",
+          filter: "blur(70px)",
+        }}
+      />
+      {/* Global ambient glow — top */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-cyan/[0.04] via-transparent to-transparent pointer-events-none -z-10" />
+      {/* Global ambient glow — bottom */}
+      <div className="fixed bottom-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-purple/[0.03] via-transparent to-transparent pointer-events-none -z-10" />
+      {/* Animated gradient stripes overlay */}
+      <div className="gradient-stripes" />
+      {/* Shimmer particles container */}
+      <div ref={particlesRef} className="shimmer-particles" />
+
+      <Navbar />
+      <main>
+        <Hero />
+        <div className="section-divider" />
+        <Problems />
+        <div className="section-divider" />
+        <Solutions />
+        <div className="section-divider" />
+        <Stats />
+        <div className="section-divider" />
+        <Architecture />
+        <CTASection />
+        <ContactForm />
       </main>
+      <Footer />
     </div>
   );
 }
