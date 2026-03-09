@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const solutions = [
   {
@@ -23,6 +24,7 @@ const solutions = [
     tagBg: "rgba(6,182,212,0.08)",
     tagBorder: "rgba(6,182,212,0.2)",
     tagColor: "#22d3ee",
+    href: "/reinstatement",
     title: "Reinstatement Estimator",
     description:
       "Automatically calculate and recover lost Amazon marketplace revenue from reinstatement claims.",
@@ -55,6 +57,7 @@ const solutions = [
     tagBg: "rgba(124,58,237,0.08)",
     tagBorder: "rgba(124,58,237,0.2)",
     tagColor: "#a78bfa",
+    href: "/local-llm-setup",
     title: "Local AI Deployment",
     description:
       "Run powerful LLMs on your own infrastructure. No cloud dependencies, no data exposure.",
@@ -100,88 +103,89 @@ export default function Solutions() {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {solutions.map((s, i) => (
-            <motion.div
-              key={s.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              className="glass-card p-8 sm:p-10 cursor-pointer group"
-            >
-              {/* Header row */}
-              <div className="flex items-start justify-between mb-7">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ background: s.iconBg, color: s.iconColor }}
-                >
-                  {s.icon}
-                </div>
-                <span
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-sm"
-                  style={{
-                    background: s.tagBg,
-                    border: `1px solid ${s.tagBorder}`,
-                    color: s.tagColor,
-                  }}
-                >
-                  {s.tagLabel}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
-                {s.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-sm text-slate-400 leading-relaxed mb-7">
-                {s.description}
-              </p>
-
-              {/* Features */}
-              <ul className="flex flex-col gap-3 mb-8 list-none">
-                {s.features.map((f) => (
-                  <li
-                    key={f}
-                    className="flex items-center gap-3 text-sm text-slate-300"
+            <Link href={s.href} key={s.title}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="glass-card p-8 sm:p-10 cursor-pointer group block"
+              >
+                {/* Header row */}
+                <div className="flex items-start justify-between mb-7">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{ background: s.iconBg, color: s.iconColor }}
                   >
-                    <svg
-                      className="w-4 h-4 shrink-0"
-                      style={{ color: s.iconColor }}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+                    {s.icon}
+                  </div>
+                  <span
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-sm"
+                    style={{
+                      background: s.tagBg,
+                      border: `1px solid ${s.tagBorder}`,
+                      color: s.tagColor,
+                    }}
+                  >
+                    {s.tagLabel}
+                  </span>
+                </div>
 
-              {/* CTA */}
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 group-hover:text-white transition-colors duration-300">
-                Explore Solution
-                <svg
-                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                  />
-                </svg>
-              </span>
-            </motion.div>
+                {/* Title */}
+                <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+                  {s.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-sm text-slate-400 leading-relaxed mb-7">
+                  {s.description}
+                </p>
+
+                {/* Features */}
+                <ul className="flex flex-col gap-3 mb-8 list-none">
+                  {s.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-center gap-3 text-sm text-slate-300"
+                    >
+                      <svg
+                        className="w-4 h-4 shrink-0"
+                        style={{ color: s.iconColor }}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4.5 12.75l6 6 9-13.5"
+                        />
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 group-hover:text-white transition-colors duration-300">
+                  Explore Solution
+                  <svg
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </span>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

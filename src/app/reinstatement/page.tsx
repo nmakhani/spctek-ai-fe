@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReportViewer from "@/components/reinstatement/ReportViewer";
+
+const SAMPLE_REPORTS = [
+  {
+    name: "Sample Reinstatement Report.pdf",
+    url: "/sample-reports/Sample%20Reinstatement%20Report.pdf",
+  },
+];
 
 const BUSINESS_MODELS = [
   { value: "", label: "-- Select Business Model --" },
@@ -57,11 +64,29 @@ const INITIAL_FORM: FormState = {
 
 type Status = "idle" | "generating" | "done" | "error";
 
+type ContactForm = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
 export default function ReinstatementPage() {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [status, setStatus] = useState<Status>("idle");
   const [report, setReport] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  // Contact modal state
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactForm, setContactForm] = useState<ContactForm>({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [contactStatus, setContactStatus] = useState<
+    "idle" | "submitting" | "sent"
+  >("idle");
+  const [reportReady, setReportReady] = useState(false);
 
   const isOther = form.business_model === "Other";
 
@@ -88,15 +113,21 @@ export default function ReinstatementPage() {
     e.preventDefault();
     if (!canSubmit) return;
 
-    setStatus("generating");
+    // Show contact modal first before generating report
+    setShowContactModal(true);
+  };
+
+  const handleContactSubmit = async () => {
+    if (!contactForm.name || !contactForm.email) return;
+    setContactStatus("submitting");
     setErrorMsg("");
-    setReport("");
 
     const businessModel = isOther
       ? form.custom_business_model
       : form.business_model;
 
     try {
+      // Generate the report with contact info
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/reinstatement/generate`,
         {
@@ -110,6 +141,10 @@ export default function ReinstatementPage() {
             seller_belief: form.seller_belief,
             available_documents: form.available_documents,
             model_selected: "gemini-3-flash-preview",
+            // Contact information
+            recipient_name: contactForm.name,
+            recipient_email: contactForm.email,
+            recipient_phone: contactForm.phone || null,
           }),
         },
       );
@@ -121,10 +156,17 @@ export default function ReinstatementPage() {
 
       const data = await res.json();
       setReport(data.report);
+      setContactStatus("sent");
+
+      // Keep modal open briefly to show success message
+      await new Promise((r) => setTimeout(r, 1500));
+
+      setShowContactModal(false);
+      setReportReady(true);
       setStatus("done");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
-      setStatus("error");
+      setContactStatus("idle");
     }
   };
 
@@ -133,6 +175,10 @@ export default function ReinstatementPage() {
     setStatus("idle");
     setReport("");
     setErrorMsg("");
+    setShowContactModal(false);
+    setContactForm({ name: "", email: "", phone: "" });
+    setContactStatus("idle");
+    setReportReady(false);
   };
 
   return (
@@ -180,8 +226,76 @@ export default function ReinstatementPage() {
             </p>
           </motion.div>
 
+          {/* Sample Reports */}
+          {!reportReady && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, duration: 0.5 }}
+              className="mb-8 glass-card p-6"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <svg
+                  className="w-4 h-4 text-cyan flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <h2 className="text-sm font-bold text-white">
+                  Have a look at our sample reports
+                </h2>
+              </div>
+              <div className="space-y-2">
+                {SAMPLE_REPORTS.map((file) => (
+                  <a
+                    key={file.name}
+                    href={file.url}
+                    download
+                    className="flex items-center gap-3 p-3 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.05] hover:border-cyan/30 transition-all group"
+                  >
+                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-rose/[0.1] border border-rose/20 flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-rose"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 3h5v1.5H8V16zm0-6h3v1.5H8V10z" />
+                      </svg>
+                    </div>
+                    <span className="flex-1 text-sm text-slate-300 group-hover:text-white transition-colors">
+                      {file.name}
+                    </span>
+                    <div className="flex items-center gap-1 text-xs text-slate-500 group-hover:text-cyan transition-colors">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                        />
+                      </svg>
+                      <span>Download</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
           {/* Show report or form */}
-          {status === "done" && report ? (
+          {reportReady && report ? (
             <ReportViewer report={report} onBack={handleReset} />
           ) : (
             <motion.form
@@ -418,6 +532,203 @@ export default function ReinstatementPage() {
           )}
         </div>
       </main>
+
+      {/* ─── Contact Modal ─── */}
+      <AnimatePresence>
+        {showContactModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25 }}
+              className="relative w-full max-w-md glass-card-elevated p-8 z-10"
+            >
+              {contactStatus === "sent" ? (
+                <div className="text-center py-4">
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan/[0.1] border-2 border-cyan flex items-center justify-center">
+                    <svg
+                      className="w-7 h-7 text-cyan"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.5 12.75l6 6 9-13.5"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    Report processing started!
+                  </h3>
+                  <p className="text-sm text-slate-400">
+                    Your reinstatement report is being generated and will be
+                    sent to{" "}
+                    <span className="text-cyan font-medium">
+                      {contactForm.email}
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-center mb-6">
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-cyan/20 to-purple/20 border border-white/[0.06] flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-cyan"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-1">
+                      Provide Your Contact Information
+                    </h3>
+                    <p className="text-sm text-slate-400">
+                      We'll email your complete report as a PDF to the address
+                      below.
+                    </p>
+                  </div>
+
+                  {errorMsg && (
+                    <div className="mb-4 px-4 py-3 rounded-xl border border-rose/20 bg-rose/[0.06] text-rose text-sm">
+                      {errorMsg}
+                    </div>
+                  )}
+
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <label className="form-label">
+                        Full Name <span className="text-cyan">*</span>
+                      </label>
+                      <input
+                        value={contactForm.name}
+                        onChange={(e) =>
+                          setContactForm((p) => ({
+                            ...p,
+                            name: e.target.value,
+                          }))
+                        }
+                        placeholder="Jane Smith"
+                        className="form-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label">
+                        Email <span className="text-cyan">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={contactForm.email}
+                        onChange={(e) =>
+                          setContactForm((p) => ({
+                            ...p,
+                            email: e.target.value,
+                          }))
+                        }
+                        placeholder="jane@company.com"
+                        className="form-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label">
+                        Phone <span className="text-slate-600">(optional)</span>
+                      </label>
+                      <input
+                        type="tel"
+                        value={contactForm.phone}
+                        onChange={(e) =>
+                          setContactForm((p) => ({
+                            ...p,
+                            phone: e.target.value,
+                          }))
+                        }
+                        placeholder="+1 (555) 123-4567"
+                        className="form-input"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleContactSubmit}
+                    disabled={
+                      !contactForm.name ||
+                      !contactForm.email ||
+                      contactStatus === "submitting"
+                    }
+                    className="glow-btn w-full justify-center text-sm mb-3 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+                  >
+                    {contactStatus === "submitting" ? (
+                      <>
+                        <svg
+                          className="w-4 h-4 animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Generating Report…
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                          />
+                        </svg>
+                        Generate & Email Report
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-[10px] text-slate-600 text-center leading-relaxed">
+                    Your contact information is required to deliver the report.
+                    We'll only use it for that purpose.
+                  </p>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>

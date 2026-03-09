@@ -8,10 +8,17 @@ interface ReportViewerProps {
 }
 
 /**
- * Renders the AI-generated markdown report with styled sections.
- * Parses markdown headings, tables, bold, italic, and lists.
+ * Displays limited sections of the reinstatement report on the page.
+ * Full report is sent via email as PDF for security.
  */
 export default function ReportViewer({ report, onBack }: ReportViewerProps) {
+  // Extract sections 1 and 5 from the report
+  const section1 = extractSection(report, 1);
+  const section5 = extractSection(report, 5);
+
+  // Fallback: if section parsing fails show the first portion of the report
+  const previewContent = section1 || report.split("\n").slice(0, 50).join("\n");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,7 +26,7 @@ export default function ReportViewer({ report, onBack }: ReportViewerProps) {
       transition={{ duration: 0.5 }}
     >
       {/* Action bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between gap-4 mb-6">
         <button onClick={onBack} className="outline-btn text-sm">
           <svg
             className="w-4 h-4"
@@ -36,43 +43,134 @@ export default function ReportViewer({ report, onBack }: ReportViewerProps) {
           </svg>
           New Assessment
         </button>
-        <button
-          onClick={() => {
-            const blob = new Blob([report], { type: "text/markdown" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "Reinstatement_Report.md";
-            a.click();
-            URL.revokeObjectURL(url);
-          }}
-          className="outline-btn text-sm"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-            />
-          </svg>
-          Download Report
-        </button>
+        <div className="text-center text-xs text-slate-400">
+          📧 Full report sent to your email as PDF
+        </div>
       </div>
 
-      {/* Report content */}
-      <div className="glass-card-elevated p-8 md:p-10">
-        <div className="report-content prose-invert">
-          <MarkdownRenderer content={report} />
+      {/* Report content - visible sections */}
+      <div className="glass-card-elevated p-8 md:p-10 space-y-8">
+        {previewContent && (
+          <div className="report-section">
+            <MarkdownRenderer content={previewContent} />
+          </div>
+        )}
+
+        {section5 && section1 && (
+          <div className="report-section">
+            <MarkdownRenderer content={section5} />
+          </div>
+        )}
+
+        {/* Locked premium sections */}
+        <div className="relative mt-12 pt-8 border-t border-white/[0.06]">
+          <div
+            className="blur-sm select-none pointer-events-none opacity-50"
+            style={{ filter: "blur(8px)" }}
+          >
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-base font-bold text-slate-200 mb-2">
+                  Root Cause Identification
+                </h3>
+                <p className="text-sm text-slate-300">
+                  [Premium content - see full report in email]
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-200 mb-2">
+                  Required Documents
+                </h3>
+                <p className="text-sm text-slate-300">
+                  [Premium content - see full report in email]
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-200 mb-2">
+                  Document Comparison
+                </h3>
+                <p className="text-sm text-slate-300">
+                  [Premium content - see full report in email]
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-200 mb-2">
+                  Recommended Steps for Reinstatement
+                </h3>
+                <p className="text-sm text-slate-300">
+                  [Premium content - see full report in email]
+                </p>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-200 mb-2">
+                  Final Summary
+                </h3>
+                <p className="text-sm text-slate-300">
+                  [Premium content - see full report in email]
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Padlock overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-black/80 backdrop-blur-sm rounded-lg px-6 py-4 text-center">
+              <svg
+                className="w-8 h-8 text-cyan mx-auto mb-2"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 1L9 4H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-4l-3-3z" />
+              </svg>
+              <p className="text-sm font-semibold text-cyan mb-1">
+                Full Report in Your Email
+              </p>
+              <p className="text-xs text-slate-400">
+                Complete analysis, documents checklist, and action steps sent to
+                your inbox as PDF
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
   );
+}
+
+/**
+ * Extract a numbered section from the markdown report.
+ * Returns the section heading and its content until the next section.
+ */
+function extractSection(report: string, sectionNum: number): string {
+  const lines = report.split("\n");
+  let startIdx = -1;
+  let endIdx = lines.length;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    // Look for section header like "### **1." or "## 1." or "**1." or plain "1."
+    if (
+      new RegExp(`^#+\\s*\\*?\\*?${sectionNum}\.`).test(line) ||
+      new RegExp(`^\\*\\*${sectionNum}\.`).test(line) ||
+      new RegExp(`^${sectionNum}\.\\s+[A-Z]`).test(line)
+    ) {
+      startIdx = i;
+    }
+
+    // If we found the start, look for the next section
+    if (startIdx !== -1 && i > startIdx) {
+      const nextSectionMatch = line.match(/^#+\s*\*?\*?(\d+)\./);
+      if (nextSectionMatch && parseInt(nextSectionMatch[1]) > sectionNum) {
+        endIdx = i;
+        break;
+      }
+    }
+  }
+
+  if (startIdx === -1) return "";
+
+  return lines.slice(startIdx, endIdx).join("\n");
 }
 
 /* ─── Minimal markdown → JSX renderer ─── */

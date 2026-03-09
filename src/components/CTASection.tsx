@@ -84,7 +84,7 @@ export default function CTASection() {
               viewport={{ once: true }}
               transition={{ delay: 0.25 }}
             >
-              <a href="#contact" className="glow-btn text-sm">
+              <a href="/process-diagnostic" className="glow-btn text-sm">
                 Get My AI Playbook
                 <svg
                   className="w-4 h-4"

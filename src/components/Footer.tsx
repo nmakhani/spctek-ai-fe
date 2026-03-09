@@ -40,7 +40,7 @@ export default function Footer() {
                 Reinstatement Estimator
               </a>
               <a
-                href="#solutions"
+                href="/local-llm-setup"
                 className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
               >
                 Local AI Setup

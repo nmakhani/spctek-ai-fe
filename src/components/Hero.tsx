@@ -109,7 +109,7 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.3 }}
           className="flex items-center justify-center gap-4 flex-wrap mb-16"
         >
-          <a href="#contact" className="glow-btn text-sm">
+          <a href="/process-diagnostic" className="glow-btn text-sm">
             Get Your AI Playbook
             <svg
               className="w-4 h-4"

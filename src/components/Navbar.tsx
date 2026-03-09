@@ -36,10 +36,10 @@ export default function Navbar() {
         {/* Desktop navigation */}
         <div className="ml-auto hidden md:flex items-center gap-1">
           {[
-            { href: "#solutions", label: "Solutions" },
+            { href: "/#solutions", label: "Solutions" },
             { href: "/reinstatement", label: "Reinstatement" },
-            { href: "#about", label: "About" },
-            { href: "#contact", label: "Contact" },
+            { href: "/local-llm-setup", label: "Local AI" },
+            { href: "/#contact", label: "Contact" },
           ].map((link) => (
             <a
               key={link.href}
@@ -51,10 +51,10 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href="/process-diagnostic"
             className="ml-3 glow-btn !py-2 !px-5 !text-xs !rounded-lg"
           >
-            Get Started
+            Free Assessment
           </a>
         </div>
 
@@ -91,10 +91,11 @@ export default function Navbar() {
         }`}
       >
         {[
-          { href: "#solutions", label: "Solutions" },
+          { href: "/#solutions", label: "Solutions" },
           { href: "/reinstatement", label: "Reinstatement" },
-          { href: "#about", label: "About" },
-          { href: "#contact", label: "Contact" },
+          { href: "/process-diagnostic", label: "Assessment" },
+          { href: "/local-llm-setup", label: "Local AI" },
+          { href: "/#contact", label: "Contact" },
         ].map((link) => (
           <a
             key={link.href}
@@ -106,11 +107,11 @@ export default function Navbar() {
           </a>
         ))}
         <a
-          href="#contact"
+          href="/process-diagnostic"
           onClick={() => setMobileOpen(false)}
           className="glow-btn mt-3 justify-center !text-xs"
         >
-          Get Started
+          Free Assessment
         </a>
       </div>
     </nav>
