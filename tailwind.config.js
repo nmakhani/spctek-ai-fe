@@ -12,36 +12,36 @@ module.exports = {
       white: "#ffffff",
       black: "#000000",
       bg: {
-        DEFAULT: "#030508",
-        light: "#0a0f18",
-        card: "#0d1117",
+        DEFAULT: "var(--theme-bg)",
+        light: "var(--theme-bg-light)",
+        card: "var(--theme-bg-card)",
       },
       cyan: {
-        DEFAULT: "#06b6d4",
-        light: "#22d3ee",
-        dark: "#0891b2",
-        50: "#ecfeff",
-        100: "#cffafe",
-        400: "#22d3ee",
-        500: "#06b6d4",
-        600: "#0891b2",
-        900: "#164e63",
+        DEFAULT: "var(--theme-accent)",
+        light: "var(--theme-accent-light)",
+        dark: "var(--theme-accent-dark)",
+        50: "#fdf4ff",
+        100: "#fae8ff",
+        400: "var(--theme-accent-light)",
+        500: "var(--theme-accent)",
+        600: "var(--theme-accent-dark)",
+        900: "#590a70",
       },
       purple: {
-        DEFAULT: "#7c3aed",
-        light: "#a78bfa",
-        dark: "#6d28d9",
-        50: "#f5f3ff",
-        100: "#ede9fe",
-        400: "#a78bfa",
-        500: "#7c3aed",
-        600: "#6d28d9",
-        900: "#4c1d95",
+        DEFAULT: "var(--theme-accent2)",
+        light: "var(--theme-accent2-light)",
+        dark: "var(--theme-accent2-dark)",
+        50: "#f3e8f5",
+        100: "#e8c8f0",
+        400: "var(--theme-accent2-light)",
+        500: "var(--theme-accent2)",
+        600: "var(--theme-accent2-dark)",
+        900: "#250b2a",
       },
-      fg: "#f1f5f9",
-      muted: "#64748b",
-      "muted-light": "#94a3b8",
-      "muted-dark": "#475569",
+      fg: "var(--theme-fg)",
+      muted: "var(--theme-muted)",
+      "muted-light": "var(--theme-muted-light)",
+      "muted-dark": "var(--theme-muted-dark)",
       amber: {
         DEFAULT: "#fbbf24",
         light: "#fcd34d",
@@ -73,7 +73,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["Gued", "var(--font-poppins)", "system-ui", "sans-serif"],
+        heading: ["var(--font-poppins)", "system-ui", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
       },
       backgroundImage: {
@@ -84,11 +85,11 @@ module.exports = {
         "glass-gradient-hover":
           "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)",
         "aurora-1":
-          "linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(124,58,237,0.15) 50%, rgba(6,182,212,0.05) 100%)",
+          "linear-gradient(135deg, rgba(var(--theme-accent-rgb),0.15) 0%, rgba(var(--theme-accent2-rgb),0.15) 50%, rgba(var(--theme-accent-rgb),0.05) 100%)",
         "aurora-2":
-          "linear-gradient(225deg, rgba(124,58,237,0.12) 0%, rgba(6,182,212,0.12) 50%, rgba(124,58,237,0.04) 100%)",
+          "linear-gradient(225deg, rgba(var(--theme-accent2-rgb),0.12) 0%, rgba(var(--theme-accent-rgb),0.12) 50%, rgba(var(--theme-accent2-rgb),0.04) 100%)",
         "mesh-gradient":
-          "radial-gradient(at 40% 20%, rgba(6,182,212,0.08) 0%, transparent 50%), radial-gradient(at 80% 0%, rgba(124,58,237,0.08) 0%, transparent 50%), radial-gradient(at 0% 50%, rgba(6,182,212,0.04) 0%, transparent 50%)",
+          "radial-gradient(at 40% 20%, rgba(var(--theme-accent-rgb),0.08) 0%, transparent 50%), radial-gradient(at 80% 0%, rgba(var(--theme-accent2-rgb),0.08) 0%, transparent 50%), radial-gradient(at 0% 50%, rgba(var(--theme-accent-rgb),0.04) 0%, transparent 50%)",
       },
       animation: {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
@@ -123,8 +124,8 @@ module.exports = {
           "50%": { backgroundPosition: "100% 50%" },
         },
         "border-glow": {
-          "0%, 100%": { borderColor: "rgba(6,182,212,0.2)" },
-          "50%": { borderColor: "rgba(124,58,237,0.3)" },
+          "0%, 100%": { borderColor: "rgba(var(--theme-accent-rgb),0.2)" },
+          "50%": { borderColor: "rgba(var(--theme-accent2-rgb),0.3)" },
         },
         shimmer: {
           "0%": { transform: "translateX(-100%)" },
@@ -179,11 +180,11 @@ module.exports = {
       },
       boxShadow: {
         "glow-cyan":
-          "0 0 40px rgba(6,182,212,0.3), 0 0 80px rgba(6,182,212,0.1)",
+          "0 0 40px rgba(var(--theme-accent-rgb),0.3), 0 0 80px rgba(var(--theme-accent-rgb),0.1)",
         "glow-purple":
-          "0 0 40px rgba(124,58,237,0.3), 0 0 80px rgba(124,58,237,0.1)",
+          "0 0 40px rgba(var(--theme-accent2-rgb),0.3), 0 0 80px rgba(var(--theme-accent2-rgb),0.1)",
         "glow-mixed":
-          "0 0 40px rgba(6,182,212,0.2), 0 0 80px rgba(124,58,237,0.15)",
+          "0 0 40px rgba(var(--theme-accent-rgb),0.2), 0 0 80px rgba(var(--theme-accent2-rgb),0.15)",
         glass:
           "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
         "glass-lg":

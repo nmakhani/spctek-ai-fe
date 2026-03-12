@@ -21,9 +21,9 @@ const solutions = [
       </svg>
     ),
     tagLabel: "Revenue Recovery",
-    tagBg: "rgba(6,182,212,0.08)",
-    tagBorder: "rgba(6,182,212,0.2)",
-    tagColor: "#22d3ee",
+    tagBg: "rgba(var(--theme-accent-rgb),0.08)",
+    tagBorder: "rgba(var(--theme-accent-rgb),0.2)",
+    tagColor: "var(--theme-accent-light)",
     href: "/reinstatement",
     title: "Reinstatement Estimator",
     description:
@@ -33,9 +33,9 @@ const solutions = [
       "Revenue impact projection",
       "Step-by-step case builder",
     ],
-    iconBg: "rgba(6,182,212,0.08)",
-    iconColor: "#06b6d4",
-    hoverGlow: "rgba(6,182,212,0.06)",
+    iconBg: "rgba(var(--theme-accent-rgb),0.08)",
+    iconColor: "var(--theme-accent)",
+    hoverGlow: "rgba(var(--theme-accent-rgb),0.06)",
   },
   {
     icon: (
@@ -54,9 +54,9 @@ const solutions = [
       </svg>
     ),
     tagLabel: "Private AI",
-    tagBg: "rgba(124,58,237,0.08)",
-    tagBorder: "rgba(124,58,237,0.2)",
-    tagColor: "#a78bfa",
+    tagBg: "rgba(var(--theme-accent2-rgb),0.08)",
+    tagBorder: "rgba(var(--theme-accent2-rgb),0.2)",
+    tagColor: "var(--theme-accent2-light)",
     href: "/local-llm-setup",
     title: "Local AI Deployment",
     description:
@@ -66,9 +66,9 @@ const solutions = [
       "Zero data leaves your network",
       "Custom model fine-tuning",
     ],
-    iconBg: "rgba(124,58,237,0.08)",
-    iconColor: "#7c3aed",
-    hoverGlow: "rgba(124,58,237,0.06)",
+    iconBg: "rgba(var(--theme-accent2-rgb),0.08)",
+    iconColor: "var(--theme-accent2)",
+    hoverGlow: "rgba(var(--theme-accent2-rgb),0.06)",
   },
 ];
 

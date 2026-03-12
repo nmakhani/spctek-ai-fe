@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,14 +24,18 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto h-full flex items-center px-5 md:px-8">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5 no-underline group">
-          <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-cyan to-purple flex items-center justify-center text-white font-extrabold text-xs overflow-hidden shadow-glow-cyan group-hover:shadow-glow-mixed transition-shadow duration-500">
-            <span className="relative z-10">S</span>
-            <div className="absolute inset-0 bg-gradient-to-br from-purple to-cyan opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </div>
-          <span className="font-semibold text-white text-sm tracking-tight hidden sm:inline">
-            SPCTEK <span className="text-cyan">AI</span>
-          </span>
+        <Link
+          href="/"
+          className="flex items-center no-underline group bg-transparent"
+        >
+          <Image
+            src="/logo.png"
+            alt="SPCTEK AI"
+            width={120}
+            height={120}
+            className="bg-transparent"
+            priority
+          />
         </Link>
 
         {/* Desktop navigation */}

@@ -1,4 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Gued font – place Gued.woff2 / Gued.woff in /public/fonts/ */
+@font-face {
+  font-family: "Gued";
+  src:
+    url("/fonts/Gued.woff2") format("woff2"),
+    url("/fonts/Gued.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -10,10 +21,19 @@ html {
 }
 
 body {
-  background: #030508;
-  color: #f1f5f9;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  background: var(--theme-bg);
+  color: var(--theme-fg);
+  font-family: "Gued", var(--font-poppins), system-ui, sans-serif;
   overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", var(--font-poppins), system-ui, sans-serif;
 }
 
 /* ── Custom scrollbar ── */
@@ -21,28 +41,32 @@ body {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #030508;
+  background: var(--theme-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(6, 182, 212, 0.3);
+  background: rgba(var(--theme-accent-rgb), 0.3);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(6, 182, 212, 0.5);
+  background: rgba(var(--theme-accent-rgb), 0.5);
 }
 
 /* ── Selection ── */
 ::selection {
-  background: rgba(6, 182, 212, 0.3);
-  color: #f1f5f9;
+  background: rgba(var(--theme-accent-rgb), 0.3);
+  color: var(--theme-fg);
 }
 
 @layer components {
   /* ── Subtle grid background ── */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(var(--theme-accent-rgb), 0.03) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        rgba(var(--theme-accent-rgb), 0.03) 1px,
+        transparent 1px
+      );
     background-size: 60px 60px;
   }
 
@@ -55,12 +79,12 @@ body {
     background: linear-gradient(
       135deg,
       transparent 0%,
-      rgba(6, 182, 212, 0.15) 10%,
-      rgba(124, 58, 237, 0.15) 25%,
-      rgba(6, 182, 212, 0.15) 40%,
+      rgba(var(--theme-accent-rgb), 0.15) 10%,
+      rgba(var(--theme-accent2-rgb), 0.15) 25%,
+      rgba(var(--theme-accent-rgb), 0.15) 40%,
       transparent 50%,
-      rgba(34, 211, 238, 0.12) 60%,
-      rgba(167, 139, 250, 0.12) 75%,
+      rgba(var(--theme-accent-rgb), 0.12) 60%,
+      rgba(var(--theme-accent2-rgb), 0.12) 75%,
       transparent 100%
     );
     background-size: 200% 200%;
@@ -83,21 +107,21 @@ body {
     height: 2px;
     background: radial-gradient(
       circle,
-      rgba(6, 182, 212, 0.8) 0%,
+      rgba(var(--theme-accent-rgb), 0.8) 0%,
       transparent 70%
     );
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(6, 182, 212, 0.6);
+    box-shadow: 0 0 4px rgba(var(--theme-accent-rgb), 0.6);
     animation: particle-shimmer 4s ease-in forwards;
   }
 
   .shimmer-particle.purple {
     background: radial-gradient(
       circle,
-      rgba(124, 58, 237, 0.8) 0%,
+      rgba(var(--theme-accent2-rgb), 0.8) 0%,
       transparent 70%
     );
-    box-shadow: 0 0 4px rgba(124, 58, 237, 0.6);
+    box-shadow: 0 0 4px rgba(var(--theme-accent2-rgb), 0.6);
   }
 
   /* ── Noise texture overlay ── */
@@ -116,16 +140,16 @@ body {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
       135deg,
-      #06b6d4 0%,
-      #a78bfa 50%,
-      #06b6d4 100%
+      var(--theme-accent) 0%,
+      var(--theme-accent2-light) 50%,
+      var(--theme-accent) 100%
     );
     background-size: 200% 200%;
     animation: gradient-shift 8s ease infinite;
   }
 
   .gradient-text-static {
-    @apply bg-gradient-to-r from-cyan to-purple-light bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-cyan to-purple bg-clip-text text-transparent;
   }
 
   /* ── Glass card — premium tier ── */
@@ -150,10 +174,10 @@ body {
     padding: 1px;
     background: linear-gradient(
       135deg,
-      rgba(6, 182, 212, 0.1) 0%,
+      rgba(var(--theme-accent-rgb), 0.1) 0%,
       transparent 40%,
       transparent 60%,
-      rgba(124, 58, 237, 0.1) 100%
+      rgba(var(--theme-accent2-rgb), 0.1) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -170,10 +194,10 @@ body {
       rgba(255, 255, 255, 0.06) 0%,
       rgba(255, 255, 255, 0.02) 100%
     );
-    border-color: rgba(6, 182, 212, 0.12);
+    border-color: rgba(var(--theme-accent-rgb), 0.12);
     box-shadow:
       0 16px 48px rgba(0, 0, 0, 0.4),
-      0 0 40px rgba(6, 182, 212, 0.06),
+      0 0 40px rgba(var(--theme-accent-rgb), 0.06),
       inset 0 1px 0 rgba(255, 255, 255, 0.06);
     transform: translateY(-2px);
   }
@@ -197,10 +221,14 @@ body {
   /* ── Glow button — premium CTA ── */
   .glow-btn {
     @apply relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-none px-7 py-3.5 text-sm font-bold transition-all duration-300 overflow-hidden;
-    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-    color: #030508;
+    background: linear-gradient(
+      135deg,
+      var(--theme-accent) 0%,
+      var(--theme-accent-dark) 100%
+    );
+    color: var(--theme-bg);
     box-shadow:
-      0 0 30px rgba(6, 182, 212, 0.3),
+      0 0 30px rgba(var(--theme-accent-rgb), 0.3),
       0 4px 15px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
     letter-spacing: 0.02em;
@@ -221,9 +249,13 @@ body {
     transition: left 0.5s ease;
   }
   .glow-btn:hover {
-    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+    background: linear-gradient(
+      135deg,
+      var(--theme-accent-light) 0%,
+      var(--theme-accent) 100%
+    );
     box-shadow:
-      0 0 50px rgba(6, 182, 212, 0.45),
+      0 0 50px rgba(var(--theme-accent-rgb), 0.45),
       0 8px 25px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
@@ -242,15 +274,15 @@ body {
   .outline-btn {
     @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #94a3b8;
+    color: var(--theme-muted-light);
     backdrop-filter: blur(8px);
     background: rgba(255, 255, 255, 0.02);
   }
   .outline-btn:hover {
-    border-color: rgba(6, 182, 212, 0.3);
-    color: #f1f5f9;
-    background: rgba(6, 182, 212, 0.05);
-    box-shadow: 0 0 25px rgba(6, 182, 212, 0.08);
+    border-color: rgba(var(--theme-accent-rgb), 0.3);
+    color: var(--theme-fg);
+    background: rgba(var(--theme-accent-rgb), 0.05);
+    box-shadow: 0 0 25px rgba(var(--theme-accent-rgb), 0.08);
   }
 
   /* ── Section divider ── */
@@ -259,9 +291,9 @@ body {
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(6, 182, 212, 0.15) 20%,
-      rgba(124, 58, 237, 0.15) 50%,
-      rgba(6, 182, 212, 0.15) 80%,
+      rgba(var(--theme-accent-rgb), 0.15) 20%,
+      rgba(var(--theme-accent2-rgb), 0.15) 50%,
+      rgba(var(--theme-accent-rgb), 0.15) 80%,
       transparent 100%
     );
   }
@@ -269,9 +301,9 @@ body {
   /* ── Pill/badge ── */
   .pill {
     @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold;
-    background: rgba(6, 182, 212, 0.08);
-    border: 1px solid rgba(6, 182, 212, 0.2);
-    color: #22d3ee;
+    background: rgba(var(--theme-accent-rgb), 0.08);
+    border: 1px solid rgba(var(--theme-accent-rgb), 0.2);
+    color: var(--theme-accent-light);
     backdrop-filter: blur(8px);
   }
 
@@ -280,23 +312,23 @@ body {
     @apply w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all duration-300;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #f1f5f9;
+    color: var(--theme-fg);
     backdrop-filter: blur(8px);
   }
   .form-input::placeholder {
-    color: #475569;
+    color: var(--theme-muted-dark);
   }
   .form-input:focus {
-    border-color: rgba(6, 182, 212, 0.4);
+    border-color: rgba(var(--theme-accent-rgb), 0.4);
     background: rgba(255, 255, 255, 0.05);
     box-shadow:
-      0 0 20px rgba(6, 182, 212, 0.08),
+      0 0 20px rgba(var(--theme-accent-rgb), 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   /* ── Label ── */
   .form-label {
     @apply block text-xs font-semibold mb-2 tracking-wide;
-    color: #cbd5e1;
+    color: var(--theme-muted-light);
   }
 }

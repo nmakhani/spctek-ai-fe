@@ -21,8 +21,8 @@ const nodes = [
     ),
     label: "User Interface",
     desc: "Apps & dashboards",
-    color: "#06b6d4",
-    bg: "rgba(6,182,212,0.08)",
+    color: "var(--theme-accent)",
+    bg: "rgba(var(--theme-accent-rgb),0.08)",
   },
   {
     icon: (
@@ -42,8 +42,8 @@ const nodes = [
     ),
     label: "API Gateway",
     desc: "Internal REST router",
-    color: "#7c3aed",
-    bg: "rgba(124,58,237,0.08)",
+    color: "var(--theme-accent2)",
+    bg: "rgba(var(--theme-accent2-rgb),0.08)",
   },
   {
     icon: (
@@ -63,8 +63,8 @@ const nodes = [
     ),
     label: "Local LLM",
     desc: "Ollama / vLLM on-prem",
-    color: "#06b6d4",
-    bg: "rgba(6,182,212,0.08)",
+    color: "var(--theme-accent)",
+    bg: "rgba(var(--theme-accent-rgb),0.08)",
   },
   {
     icon: (
@@ -122,9 +122,9 @@ export default function Architecture() {
             viewport={{ once: true }}
             className="pill mb-6 text-[11px]"
             style={{
-              background: "rgba(124,58,237,0.08)",
-              borderColor: "rgba(124,58,237,0.2)",
-              color: "#a78bfa",
+              background: "rgba(var(--theme-accent2-rgb),0.08)",
+              borderColor: "rgba(var(--theme-accent2-rgb),0.2)",
+              color: "var(--theme-accent2-light)",
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-purple-light animate-pulse-glow" />

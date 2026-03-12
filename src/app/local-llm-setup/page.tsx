@@ -363,7 +363,7 @@ export default function LocalLLMSetupPage() {
         className="fixed top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none -z-10 animate-aurora-drift-1"
         style={{
           background:
-            "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(6,182,212,0.02) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.08) 0%, rgba(var(--theme-accent-rgb),0.02) 40%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -371,7 +371,7 @@ export default function LocalLLMSetupPage() {
         className="fixed top-1/2 right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none -z-10 animate-aurora-drift-2"
         style={{
           background:
-            "radial-gradient(circle, rgba(124,58,237,0.08) 0%, rgba(124,58,237,0.02) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent2-rgb),0.08) 0%, rgba(var(--theme-accent2-rgb),0.02) 40%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -379,7 +379,7 @@ export default function LocalLLMSetupPage() {
         className="fixed bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full pointer-events-none -z-10 animate-aurora-drift-3"
         style={{
           background:
-            "radial-gradient(circle, rgba(34,211,238,0.06) 0%, rgba(34,211,238,0.01) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.06) 0%, rgba(var(--theme-accent-rgb),0.01) 40%, transparent 70%)",
           filter: "blur(70px)",
         }}
       />
@@ -573,7 +573,7 @@ export default function LocalLLMSetupPage() {
                         className="h-full rounded-full"
                         style={{
                           background:
-                            "linear-gradient(90deg, #06b6d4, #7c3aed)",
+                            "linear-gradient(90deg, #dc3bf5, #520e60)",
                         }}
                         initial={false}
                         animate={{ width: "50%" }}
@@ -600,7 +600,7 @@ export default function LocalLLMSetupPage() {
                             onClick={() => toggleUseCase(uc.id)}
                             className={`w-full text-left rounded-xl p-4 border transition-all duration-200 ${
                               selected
-                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.15)]"
                                 : "border-white/[0.07] bg-white/[0.02] hover:border-cyan/30 hover:bg-cyan/[0.04]"
                             }`}
                           >
@@ -648,7 +648,7 @@ export default function LocalLLMSetupPage() {
                             }
                             className={`w-full text-left rounded-xl p-4 border transition-all duration-200 ${
                               selected
-                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.15)]"
                                 : "border-white/[0.07] bg-white/[0.02] hover:border-cyan/30 hover:bg-cyan/[0.04]"
                             }`}
                           >
@@ -693,7 +693,7 @@ export default function LocalLLMSetupPage() {
                             }
                             className={`w-full text-left rounded-xl p-4 border transition-all duration-200 ${
                               selected
-                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.15)]"
                                 : "border-white/[0.07] bg-white/[0.02] hover:border-cyan/30 hover:bg-cyan/[0.04]"
                             }`}
                           >
@@ -724,7 +724,7 @@ export default function LocalLLMSetupPage() {
                             }
                             className={`w-full text-left rounded-xl p-5 border transition-all duration-200 relative ${
                               selected
-                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                                ? "border-cyan bg-cyan/[0.08] shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.15)]"
                                 : "border-white/[0.07] bg-white/[0.02] hover:border-cyan/30 hover:bg-cyan/[0.04]"
                             }`}
                           >
@@ -805,7 +805,7 @@ export default function LocalLLMSetupPage() {
                         className="h-full rounded-full"
                         style={{
                           background:
-                            "linear-gradient(90deg, #06b6d4, #7c3aed)",
+                            "linear-gradient(90deg, #dc3bf5, #520e60)",
                         }}
                         initial={false}
                         animate={{ width: "100%" }}

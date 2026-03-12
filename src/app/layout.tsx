@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Poppins, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { activeTheme, type Theme } from "@/themes";
 
-const inter = Inter({
-  variable: "--font-inter",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
@@ -15,10 +16,32 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SPCTEK AI – Build a System. Not a Spreadsheet.",
+  title: "SPCTEK AI - Build a System. Not a Spreadsheet.",
   description:
     "AI-native operations platform. Replace fragmented tools and manual chaos with an intelligent AI operating layer.",
 };
+
+function buildThemeCss(t: Theme): string {
+  return `
+    :root {
+      --theme-bg:           ${t.bg};
+      --theme-bg-light:     ${t.bgLight};
+      --theme-bg-card:      ${t.bgCard};
+      --theme-accent:       ${t.accent};
+      --theme-accent-rgb:   ${t.accentRgb};
+      --theme-accent-light: ${t.accentLight};
+      --theme-accent-dark:  ${t.accentDark};
+      --theme-accent2:      ${t.accent2};
+      --theme-accent2-rgb:  ${t.accent2Rgb};
+      --theme-accent2-light:${t.accent2Light};
+      --theme-accent2-dark: ${t.accent2Dark};
+      --theme-fg:           ${t.fg};
+      --theme-muted:        ${t.muted};
+      --theme-muted-light:  ${t.mutedLight};
+      --theme-muted-dark:   ${t.mutedDark};
+    }
+  `.trim();
+}
 
 export default function RootLayout({
   children,
@@ -27,8 +50,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      {/* Inject theme CSS variables — change activeTheme in src/themes/index.ts */}
+      {/* eslint-disable-next-line @next/next/no-head-element */}
+      <head>
+        <style
+          dangerouslySetInnerHTML={{ __html: buildThemeCss(activeTheme) }}
+        />
+      </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-bg text-fg`}
+        className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased bg-bg text-fg`}
       >
         {children}
       </body>

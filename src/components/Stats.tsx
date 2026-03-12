@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "87%", label: "First-appeal success rate", color: "#06b6d4" },
+  { value: "87%", label: "First-appeal success rate", color: "#dc3bf5" },
   { value: "$14.2K", label: "Average recovery per case", color: "#34d399" },
   { value: "24–48hr", label: "Case generation time", color: "#a78bfa" },
   { value: "1,200+", label: "Cases resolved", color: "#fbbf24" },

@@ -27,7 +27,7 @@ export default function Hero() {
         className="absolute top-[15%] left-[20%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            "radial-gradient(circle, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.12) 0%, rgba(var(--theme-accent-rgb),0.03) 40%, transparent 70%)",
           filter: "blur(60px)",
         }}
       />
@@ -42,7 +42,7 @@ export default function Hero() {
         className="absolute bottom-[10%] right-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            "radial-gradient(circle, rgba(124,58,237,0.12) 0%, rgba(124,58,237,0.03) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent2-rgb),0.12) 0%, rgba(var(--theme-accent2-rgb),0.03) 40%, transparent 70%)",
           filter: "blur(60px)",
         }}
       />
@@ -53,7 +53,7 @@ export default function Hero() {
         className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            "radial-gradient(circle, rgba(6,182,212,0.06) 0%, rgba(124,58,237,0.04) 50%, transparent 70%)",
+            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.06) 0%, rgba(var(--theme-accent2-rgb),0.04) 50%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
