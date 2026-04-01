@@ -58,7 +58,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased bg-bg text-fg`}
+        className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg`}
       >
         {children}
       </body>

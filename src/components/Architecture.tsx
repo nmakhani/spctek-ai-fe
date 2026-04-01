@@ -127,7 +127,7 @@ export default function Architecture() {
               color: "var(--theme-accent2-light)",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-purple-light animate-pulse-glow" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent2-light animate-pulse-glow" />
             Architecture
           </motion.div>
           <motion.h2

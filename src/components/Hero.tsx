@@ -1,152 +1,50 @@
-"use client";
-
-import { motion } from "framer-motion";
-
-const tags = [
-  "Private AI Deployment",
-  "Ops Intelligence",
-  "Revenue Monitoring",
-  "Reinstatement Automation",
-  "Inventory Tracking",
-];
+﻿import { PrimaryButton } from "./PrimaryButton";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center text-center px-4 sm:px-6 pt-16 pb-20 overflow-hidden">
-      {/* Grid background */}
-      <div className="absolute inset-0 grid-bg opacity-60" />
+    <section className="flex flex-col items-center justify-center text-center px-6 md:px-12 pt-24 pb-6 max-w-7xl mx-auto relative">
+      {/* 1. Headline - mb-8 reduced to mb-6 */}
+      <h1 className="text-5xl md:text-7xl font-heading font-bold text-white leading-tight mb-6">
+        Transform Operational Chaos <br className="hidden md:block" />
+        Into{" "}
+        <span className="text-[#a0a6fc] font-heading">Intelligent Systems</span>
+      </h1>
 
-      {/* Aurora orb 1 — cyan, top-left */}
-      <motion.div
-        animate={{
-          x: [0, 30, -20, 0],
-          y: [0, -50, 20, 0],
-          scale: [1, 1.1, 0.9, 1],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[15%] left-[20%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full pointer-events-none -z-10"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.12) 0%, rgba(var(--theme-accent-rgb),0.03) 40%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-      {/* Aurora orb 2 — purple, bottom-right */}
-      <motion.div
-        animate={{
-          x: [0, -20, 30, 0],
-          y: [0, 20, -50, 0],
-          scale: [1, 0.9, 1.1, 1],
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-[10%] right-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none -z-10"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(var(--theme-accent2-rgb),0.12) 0%, rgba(var(--theme-accent2-rgb),0.03) 40%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-      {/* Aurora orb 3 — mixed, center */}
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full pointer-events-none -z-10"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(var(--theme-accent-rgb),0.06) 0%, rgba(var(--theme-accent2-rgb),0.04) 50%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-      />
+      {/* 2. Subtitle - mb-12 reduced to mb-8 */}
+      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed mb-8">
+        AI automation is transforming industries, but most SMBs are unsure what
+        to adopt or where to start. We help SMBs solve real operational problems
+        using intelligent diagnostics and targeted automation.
+      </p>
 
-      {/* Horizontal accent line */}
-      <div className="absolute top-[35%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/[0.12] to-transparent" />
-      <div className="absolute top-[65%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple/[0.08] to-transparent" />
+      {/* 3. CTA - mb-14 reduced to mb-10, rounded-xl changed to rounded-2xl */}
+      <PrimaryButton className="mb-10 text-lg px-20 py-4 rounded-2xl shadow-glow-purple transition-all duration-300 hover:scale-[1.02]">
+        Get My AI Playbook
+      </PrimaryButton>
 
-      <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-cyan/20 bg-cyan/[0.06] backdrop-blur-md text-cyan text-xs font-semibold mb-10"
-        >
-          <span className="text-sm">⚡</span>
-          AI-Native Operations Platform
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan" />
+      {/* 4. Trust Badge - mt-4 removed to keep it tight to the button */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+        <div className="flex -space-x-2">
+          <div className="w-9 h-9 rounded-full border-2 border-black bg-gradient-to-br from-[#818cf8] to-[#4f46e5] flex items-center justify-center text-[10px] font-bold text-white shadow-xl">
+            MR
+          </div>
+          <div className="w-9 h-9 rounded-full border-2 border-black bg-gradient-to-br from-[#2dd4bf] to-[#0d9488] flex items-center justify-center text-[10px] font-bold text-white shadow-xl">
+            JK
+          </div>
+          <div className="w-9 h-9 rounded-full border-2 border-black bg-gradient-to-br from-[#fb923c] to-[#ea580c] flex items-center justify-center text-[10px] font-bold text-white shadow-xl">
+            SA
+          </div>
+          <div className="w-9 h-9 rounded-full border-2 border-black bg-gradient-to-br from-[#f472b6] to-[#db2777] flex items-center justify-center text-[10px] font-bold text-white shadow-xl">
+            DP
+          </div>
+        </div>
+
+        <p className="text-sm md:text-base text-white font-heading tracking-wide">
+          Trusted by{" "}
+          <span className="opacity-80">
+            200+ SMB teams across Amazon & Shopify
           </span>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.08] tracking-tight text-white mb-7"
-        >
-          Build a System.
-          <br />
-          <span className="gradient-text">Not a Spreadsheet.</span>
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed font-light"
-        >
-          Replace fragmented tools and manual chaos with an intelligent AI
-          operating layer. Ops intelligence, revenue tracking, and local AI
-          deployment — unified for your business.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="flex items-center justify-center gap-4 flex-wrap mb-16"
-        >
-          <a href="/process-diagnostic" className="glow-btn text-sm">
-            Get Your AI Playbook
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </a>
-          <a href="#solutions" className="outline-btn">
-            Explore Solutions
-          </a>
-        </motion.div>
-
-        {/* Tags */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs text-slate-500"
-        >
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="flex items-center gap-2.5 whitespace-nowrap"
-            >
-              <span className="w-1 h-1 rounded-full bg-cyan/50" />
-              {tag}
-            </span>
-          ))}
-        </motion.div>
+        </p>
       </div>
     </section>
   );

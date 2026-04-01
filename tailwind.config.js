@@ -72,9 +72,14 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        "brand-primary": "#606bfa",
+        "brand-secondary": "#a0a6fc",
+        "brand-dark": "#131532",
+      },
       fontFamily: {
-        sans: ["Gued", "var(--font-poppins)", "system-ui", "sans-serif"],
-        heading: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        sans: ["Poppins", "var(--font-poppins)", "system-ui", "sans-serif"],
+        heading: ["Gued", "Outfit", "system-ui", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
       },
       backgroundImage: {

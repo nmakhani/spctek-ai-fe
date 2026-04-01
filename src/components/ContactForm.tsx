@@ -63,7 +63,7 @@ export default function ContactForm() {
           className="text-center mb-14"
         >
           <div className="inline-flex pill mb-6 text-[11px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse-glow" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse-glow" />
             Get in Touch
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-[1.1] mb-5">
@@ -110,7 +110,7 @@ export default function ContactForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             <div>
               <label className="form-label">
-                Email <span className="text-cyan">*</span>
+                Email <span className="text-accent">*</span>
               </label>
               <input
                 name="email"

@@ -1,12 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
 
-/* Gued font – place Gued.woff2 / Gued.woff in /public/fonts/ */
 @font-face {
   font-family: "Gued";
-  src:
-    url("/fonts/Gued.woff2") format("woff2"),
-    url("/fonts/Gued.woff") format("woff");
-  font-weight: normal;
+  src: url("/fonts/Gued.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gued";
+  src: url("/fonts/Gued - Bold.otf") format("opentype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -14,26 +20,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 /* ── Base styles ── */
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--theme-bg);
+  background: radial-gradient(circle at center, #131532 0%, #000000 100%);
   color: var(--theme-fg);
-  font-family: "Gued", var(--font-poppins), system-ui, sans-serif;
+  font-family: "Poppins", sans-serif;
   overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Poppins", var(--font-poppins), system-ui, sans-serif;
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(
+    circle at center,
+    rgba(96, 107, 250, 0.25) 0%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* ── Custom scrollbar ── */
@@ -55,6 +72,17 @@ h6 {
 ::selection {
   background: rgba(var(--theme-accent-rgb), 0.3);
   color: var(--theme-fg);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
 }
 
 @layer components {

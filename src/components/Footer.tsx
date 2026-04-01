@@ -14,11 +14,11 @@ export default function Footer() {
               href="/"
               className="flex items-center gap-2.5 no-underline mb-4 group"
             >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan to-purple flex items-center justify-center text-white font-extrabold text-[11px]">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-white font-extrabold text-[11px]">
                 S
               </div>
               <span className="font-semibold text-white text-sm">
-                SPCTEK <span className="text-cyan">AI</span>
+                SPCTEK <span className="text-accent">AI</span>
               </span>
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed max-w-[280px]">
@@ -35,13 +35,13 @@ export default function Footer() {
             <div className="flex flex-col gap-3">
               <a
                 href="/reinstatement"
-                className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
+                className="text-sm text-slate-600 hover:text-accent transition-colors duration-300 no-underline"
               >
                 Reinstatement Estimator
               </a>
               <a
                 href="/local-llm-setup"
-                className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
+                className="text-sm text-slate-600 hover:text-accent transition-colors duration-300 no-underline"
               >
                 Local AI Setup
               </a>
@@ -56,19 +56,19 @@ export default function Footer() {
             <div className="flex flex-col gap-3">
               <a
                 href="#contact"
-                className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
+                className="text-sm text-slate-600 hover:text-accent transition-colors duration-300 no-underline"
               >
                 Get AI Playbook
               </a>
               <a
                 href="#"
-                className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
+                className="text-sm text-slate-600 hover:text-accent transition-colors duration-300 no-underline"
               >
                 Privacy Policy
               </a>
               <a
                 href="#"
-                className="text-sm text-slate-600 hover:text-cyan transition-colors duration-300 no-underline"
+                className="text-sm text-slate-600 hover:text-accent transition-colors duration-300 no-underline"
               >
                 Terms of Service
               </a>
@@ -86,8 +86,8 @@ export default function Footer() {
           </span>
           <div className="flex items-center gap-2 text-xs text-slate-700">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
             </span>
             Systems Online
           </div>

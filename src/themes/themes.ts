@@ -78,7 +78,35 @@ export const THEME_PURPLE_MAGENTA: Theme = {
 };
 
 // ─────────────────────────────────────────────────────────────
-//  Theme 2 — Dark Neon
+//  Theme 2 — SPCTEK Brand
+//  Dark navy background with vibrant indigo + light purple
+//  accents. Premium, professional, and modern.
+// ─────────────────────────────────────────────────────────────
+export const THEME_SPCTEK_BRAND: Theme = {
+  name: "spctek-brand",
+
+  bg: "#131532",
+  bgLight: "#1a1a42",
+  bgCard: "#1f1f4a",
+
+  accent: "#606bfa",
+  accentRgb: "96, 107, 250",
+  accentLight: "#7b87fb",
+  accentDark: "#4a52d6",
+
+  accent2: "#a0a6fc",
+  accent2Rgb: "160, 166, 252",
+  accent2Light: "#b8bdfb",
+  accent2Dark: "#8a92f5",
+
+  fg: "#ffffff",
+  muted: "#a0a0a0",
+  mutedLight: "#c0c0c0",
+  mutedDark: "#808080",
+};
+
+// ─────────────────────────────────────────────────────────────
+//  Theme 3 — Dark Neon
 //  Near-black navy background with electric cyan + indigo
 //  accents. Cyberpunk-corporate. Eye-catching and ultra-modern.
 // ─────────────────────────────────────────────────────────────

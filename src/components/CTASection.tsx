@@ -13,7 +13,7 @@ export default function CTASection() {
           className="relative rounded-3xl overflow-hidden max-w-4xl mx-auto"
         >
           {/* Background layers */}
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan/[0.06] via-bg-light to-purple/[0.06]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.06] via-bg-light to-accent2/[0.06]" />
           <div
             className="absolute inset-0"
             style={{
@@ -23,9 +23,9 @@ export default function CTASection() {
           />
 
           {/* Top glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-gradient-radial from-cyan/[0.12] to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-gradient-radial from-accent/[0.12] to-transparent rounded-full blur-3xl pointer-events-none" />
           {/* Bottom glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[100px] bg-gradient-radial from-purple/[0.08] to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[100px] bg-gradient-radial from-accent2/[0.08] to-transparent rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 px-8 md:px-16 py-20 text-center">
             {/* Badge */}

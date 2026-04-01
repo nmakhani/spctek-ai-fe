@@ -4,12 +4,9 @@ import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Problems from "@/components/Problems";
-import Solutions from "@/components/Solutions";
-import Stats from "@/components/Stats";
-import Architecture from "@/components/Architecture";
-import CTASection from "@/components/CTASection";
-import ContactForm from "@/components/ContactForm";
-import Footer from "@/components/Footer";
+import Issues from "@/components/Issues";
+import TargetedSolutions from "@/components/TargetedSolutions";
+import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function Home() {
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -78,18 +75,13 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <div className="section-divider" />
+        <SectionDivider />
         <Problems />
-        <div className="section-divider" />
-        <Solutions />
-        <div className="section-divider" />
-        <Stats />
-        <div className="section-divider" />
-        <Architecture />
-        <CTASection />
-        <ContactForm />
+        <SectionDivider />
+        <Issues />
+        <SectionDivider />
+        <TargetedSolutions />
       </main>
-      <Footer />
     </div>
   );
 }
