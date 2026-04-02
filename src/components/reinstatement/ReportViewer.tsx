@@ -177,7 +177,7 @@ function extractSection(report: string, sectionNum: number): string {
 
 function MarkdownRenderer({ content }: { content: string }) {
   // Strip code fences
-  let text = content
+  const text = content
     .replace(/^```[a-z]*\n?/gm, "")
     .replace(/\n?```$/gm, "")
     .trim();

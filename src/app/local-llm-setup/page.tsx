@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -982,9 +983,9 @@ export default function LocalLLMSetupPage() {
                       </li>
                     </ul>
                   </div>
-                  <a href="/" className="outline-btn inline-flex">
+                  <Link href="/" className="outline-btn inline-flex">
                     ← Back to Home
-                  </a>
+                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1008,7 +1009,7 @@ export default function LocalLLMSetupPage() {
                 tell you honestly whether local AI makes sense for your
                 business.
               </p>
-              <a href="/#contact" className="glow-btn text-sm">
+              <Link href="/#contact" className="glow-btn text-sm">
                 Book a Free Call
                 <svg
                   className="w-4 h-4"
@@ -1023,7 +1024,7 @@ export default function LocalLLMSetupPage() {
                     d="M13 7l5 5m0 0l-5 5m5-5H6"
                   />
                 </svg>
-              </a>
+              </Link>
               <p className="text-xs text-slate-600 mt-3">
                 No commitment. No hard sell.
               </p>

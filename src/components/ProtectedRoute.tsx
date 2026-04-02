@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,6 +16,14 @@ export function ProtectedRoute({
   const router = useRouter();
   const { user, loading, isAdmin } = useAuth();
 
+  const shouldRedirect = !loading && (!user || (requireAdmin && !isAdmin));
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push("/portal/login");
+    }
+  }, [shouldRedirect, router]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -24,15 +32,7 @@ export function ProtectedRoute({
     );
   }
 
-  if (!user) {
-    // Not logged in, redirect to login
-    router.push("/portal/login");
-    return null;
-  }
-
-  if (requireAdmin && !isAdmin) {
-    // Not an admin, redirect to login
-    router.push("/portal/login");
+  if (shouldRedirect) {
     return null;
   }
 

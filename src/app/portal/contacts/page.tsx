@@ -18,6 +18,10 @@ interface Contact {
   created_at?: string;
 }
 
+function getErrorMessage(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
 function ContactsContent() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,8 +47,8 @@ function ContactsContent() {
       const response = await contactsApi.list();
       setContacts(response.data);
       setError("");
-    } catch (err: any) {
-      const message = err.message || "Failed to load contacts";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to load contacts");
       setError(message);
       toast.error(message);
     } finally {
@@ -85,8 +89,8 @@ function ContactsContent() {
       });
       setEditingId(null);
       setShowForm(false);
-    } catch (err: any) {
-      const message = err.message || "Failed to save contact";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to save contact");
       setError(message);
       toast.error(message);
     } finally {
@@ -127,8 +131,8 @@ function ContactsContent() {
       );
       toast.success("Contact deleted");
       setPendingDeleteId(null);
-    } catch (err: any) {
-      const message = err.message || "Failed to delete contact";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to delete contact");
       setError(message);
       toast.error(message);
     } finally {

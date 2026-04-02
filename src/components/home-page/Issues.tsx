@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { PrimaryButton } from "./PrimaryButton";
+import Image from "next/image";
+
+import { PrimaryButton } from "../PrimaryButton";
 
 const issuesList = [
   { number: "1", title: "Disconnected Tools" },
@@ -12,8 +13,8 @@ const issuesList = [
   { number: "6", title: "Fragmented Solutions" },
 ];
 
-const GlassNumber = ({ number }) => (
-  <div className="relative shrink-0 w-10 h-10 flex items-center justify-center bg-transparent">
+const GlassNumber = ({ number }: { number: string }) => (
+  <div className="relative shrink-0 w-8 h-8 flex items-center justify-center bg-transparent">
     <div
       className="absolute inset-0 rounded-lg border border-white/20"
       style={{
@@ -35,7 +36,7 @@ const GlassNumber = ({ number }) => (
 
 export default function Issues() {
   return (
-    <section className="py-24 px-6 md:px-12 bg-[#030303]">
+    <section className="px-6 md:px-12">
       {/* 1. Added max-w-5xl and mx-auto to squeeze everything toward the center */}
       <div className="max-w-5xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold leading-tight text-center text-white font-heading mb-20">
@@ -44,36 +45,35 @@ export default function Issues() {
           <span className="text-[#a0a6fc]">Business</span> Back?
         </h2>
 
-        {/* 2. Used gap-12 and flex/grid adjustments for better balance */}
+        {/* Left Column: List of Issues */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column: List of Issues */}
-          <div className="flex flex-col">
-            {issuesList.map((issue, idx) => (
-              <div
-                key={idx}
-                className={`flex items-center gap-5 py-3 px-2 transition-all duration-300 hover:bg-white/[0.02] rounded-xl ${
-                  idx !== issuesList.length - 1
-                    ? "border-b border-white/20"
-                    : ""
-                }`}
-              >
-                <GlassNumber number={issue.number} />
-                <span className="text-white/90 font-medium text-lg tracking-tight">
-                  {issue.title}
-                </span>
-              </div>
-            ))}
+          <div className="flex flex-col items-start">
+            <div className="w-full max-w-[280px] md:max-w-[340px] divide-y divide-white/2">
+              {issuesList.map((issue, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-4 py-4 transition-all duration-300 hover:bg-white/[0.05]"
+                >
+                  <GlassNumber number={issue.number} />
+                  <span className="text-white/90 font-medium text-lg tracking-tight">
+                    {issue.title}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right Column: Illustration Section */}
           <div className="relative flex justify-center items-center">
-            <div className="absolute bg-[#606bfa]/10 blur-[80px] rounded-full w-64 h-64 -z-10" />
-            <div className="relative animate-float">
-              <img
+            <div className="absolute bg-[#606bfa]/10 blur-[100px] rounded-full w-80 h-80 -z-10" />
+
+            <div className="relative animate-float w-full flex justify-center">
+              <Image
+                width={500}
+                height={500}
                 src="/home-page/ai-robot.png"
                 alt="3D AI Robot Illustration"
-                /* 3. Controlled the width here to stay proportional to the list */
-                className="w-full max-w-[320px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
               />
             </div>
           </div>
@@ -82,7 +82,8 @@ export default function Issues() {
         {/* Final text and CTA */}
         <div className="mt-24 text-center flex flex-col items-center">
           <p className="text-lg text-white/60 font-light max-w-xl mx-auto mb-10 leading-relaxed">
-            If these sound familiar, it's time to fix how your business operates
+            If these sound familiar, it&apos;s time to fix how your business
+            operates
             <span className="text-white">
               {" "}
               rather than just adding more tools.

@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 const stats = [
   {
     stat: "43%",
@@ -20,7 +18,7 @@ const stats = [
   },
 ];
 
-const GlassBadge = ({ stat }) => (
+const GlassBadge = ({ stat }: { stat: string }) => (
   <div className="relative shrink-0 w-[64px] h-[64px] flex items-center justify-center">
     {/* Outer Housing */}
     <div
@@ -66,13 +64,13 @@ const GlassBadge = ({ stat }) => (
 
 export default function Problems() {
   return (
-    <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto bg-[#030303]">
+    <section className="px-6 md:px-12 max-w-7xl mx-auto">
       <div className="text-center mb-20">
         <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight font-heading">
-          The Problem Isn't Lack of{" "}
+          The Problem Isn&apos;t Lack of{" "}
           <span className="text-[#a0a6fc]">AI Tools.</span>
           <br />
-          It's Lack of Systems
+          It&apos;s Lack of Systems
         </h2>
       </div>
 

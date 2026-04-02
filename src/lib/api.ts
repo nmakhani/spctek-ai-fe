@@ -3,6 +3,8 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
 
+type ApiPayload = Record<string, unknown>;
+
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
 });
@@ -29,7 +31,7 @@ apiClient.interceptors.response.use(
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_user");
-        window.location.href = "/portal/login";
+        window.open("/portal/login", "_self");
       }
     }
     return Promise.reject(error);
@@ -39,16 +41,17 @@ apiClient.interceptors.response.use(
 export const contactsApi = {
   list: () => apiClient.get("/contacts/"),
   get: (id: string) => apiClient.get(`/contacts/${id}`),
-  create: (data: any) => apiClient.post("/contacts/", data),
-  update: (id: string, data: any) => apiClient.put(`/contacts/${id}`, data),
+  create: (data: ApiPayload) => apiClient.post("/contacts/", data),
+  update: (id: string, data: ApiPayload) =>
+    apiClient.put(`/contacts/${id}`, data),
   delete: (id: string) => apiClient.delete(`/contacts/${id}`),
 };
 
 export const blogsApi = {
   list: () => apiClient.get("/blogs/"),
   get: (id: string) => apiClient.get(`/blogs/${id}`),
-  create: (data: any) => apiClient.post("/blogs/", data),
-  update: (id: string, data: any) => apiClient.put(`/blogs/${id}`, data),
+  create: (data: ApiPayload) => apiClient.post("/blogs/", data),
+  update: (id: string, data: ApiPayload) => apiClient.put(`/blogs/${id}`, data),
   delete: (id: string) => apiClient.delete(`/blogs/${id}`),
 };
 

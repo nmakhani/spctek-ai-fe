@@ -1,11 +1,23 @@
 "use client";
 
+import React from "react";
 import { useEffect, useRef } from "react";
+
+import {
+  Hero,
+  Problems,
+  Issues,
+  TargetedSolutions,
+  BusinessAdoption,
+  OperationalFramework,
+  Tools,
+  PrivateAiStack,
+  AIPlaybook,
+  FAQSection,
+  ContactSection,
+} from "@/components/home-page";
+
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import Problems from "@/components/Problems";
-import Issues from "@/components/Issues";
-import TargetedSolutions from "@/components/TargetedSolutions";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function Home() {
@@ -33,6 +45,20 @@ export default function Home() {
       particlesRef.current.appendChild(particle);
     }
   }, []);
+
+  const SECTIONS = [
+    Hero,
+    Problems,
+    Issues,
+    OperationalFramework,
+    TargetedSolutions,
+    BusinessAdoption,
+    Tools,
+    PrivateAiStack,
+    AIPlaybook,
+    ContactSection,
+    FAQSection,
+  ];
 
   return (
     <div className="relative min-h-screen noise-overlay grid-bg">
@@ -74,13 +100,14 @@ export default function Home() {
 
       <Navbar />
       <main>
-        <Hero />
-        <SectionDivider />
-        <Problems />
-        <SectionDivider />
-        <Issues />
-        <SectionDivider />
-        <TargetedSolutions />
+        <main>
+          {SECTIONS.map((Section, index) => (
+            <React.Fragment key={index}>
+              <Section />
+              {index < SECTIONS.length - 1 && <SectionDivider />}
+            </React.Fragment>
+          ))}
+        </main>
       </main>
     </div>
   );

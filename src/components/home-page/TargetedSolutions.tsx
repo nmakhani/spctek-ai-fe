@@ -1,0 +1,193 @@
+type SolutionCard = {
+  category: string;
+  title: string;
+  points: string[];
+  cta: string;
+};
+
+const solutionCards: SolutionCard[] = [
+  {
+    category: "Revenue Recovery",
+    title: "Reinstatement Estimator",
+    points: [
+      "Suspension root cause analysis",
+      "Reinstatement probability assessment",
+      "Appeal strategy guidance",
+      "Automatic flagging of complex cases for review",
+    ],
+    cta: "Get Reinstatement Assessment",
+  },
+  {
+    category: "Private AI",
+    title: "Secure Local AI Deployment",
+    points: [
+      "Open-source LLM deployment",
+      "Private & secure hosting",
+      "Role-based access control with a user-friendly interface",
+      "AI aligned with internal workflows and SOPS",
+    ],
+    cta: "Deploy Local AI",
+  },
+  {
+    category: "Custom Solutions",
+    title: "Custom Operational Solutions",
+    points: [
+      "Operations gap identification",
+      "Custom workflow optimization",
+      "System integration across tools",
+      "AI solutions aligned with your operations",
+    ],
+    cta: "Get Custom Solutions",
+  },
+];
+
+function CheckIcon() {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "1.1rem",
+        height: "1.1rem",
+        marginTop: "0.18rem",
+        flexShrink: 0,
+        color: "white",
+      }}
+    >
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ width: "100%", height: "100%" }}
+      >
+        <path
+          d="M4 10.5L8 14.5L16 5.5"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
+export default function TargetedSolutions() {
+  return (
+    <section className="px-6 md:px-12">
+      <div className="mx-auto max-w-7xl">
+        {/* Header Section */}
+        <div className="mx-auto mb-16 max-w-4xl text-center">
+          <h2 className="font-heading text-[2.5rem] font-bold tracking-tight text-white md:text-[3.5rem]">
+            Targeted <span className="text-[#606bfa]">AI Solutions</span> for
+            High-Impact Business Problems
+          </h2>
+          <p className="mx-auto mt-6 max-w-3xl font-medium leading-relaxed text-white md:text-[1.3rem]">
+            Instead of offering generic AI services, we build targeted solutions
+            that address specific operational challenges e-commerce businesses
+            face today.
+          </p>
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
+          {solutionCards.map((card) => (
+            <article
+              key={card.title}
+              className="group relative flex flex-col rounded-[35px] px-8 pb-10 pt-12 transition-all duration-500 hover:scale-[1.02]"
+              style={{
+                minHeight: "620px",
+                // 1. Transparency + Glass Blur
+                background: "rgba(255, 255, 255, 0.03)",
+                backdropFilter: "blur(20px)",
+                // 2. Base Border
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              {/* 3. SHARP DIAGONAL HIGHLIGHTS (Top Left & Bottom Right) */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  borderRadius: "35px",
+                  padding: "1.5px", // Thickness of the "glint"
+                  background:
+                    "linear-gradient(135deg, #fff 0%, transparent 25%, transparent 75%, #fff 100%)",
+                  WebkitMask:
+                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  WebkitMaskComposite: "destination-out",
+                  maskComposite: "exclude",
+                  opacity: 0.8, // Bright white contrast
+                }}
+              />
+
+              {/* 4. LIQUID DROP GLOW (Top Left) */}
+              <div
+                className="pointer-events-none absolute inset-0 rounded-[35px]"
+                style={{
+                  background:
+                    "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.5) 0%, transparent 20%)",
+                }}
+              />
+
+              {/* 4. LIQUID DROP GLOW (Bottom Right) */}
+              <div
+                className="pointer-events-none absolute inset-0 rounded-[35px]"
+                style={{
+                  background:
+                    "radial-gradient(circle at 100% 100%, rgba(255,255,255,0.25) 0%, transparent 10%)",
+                }}
+              />
+
+              {/* Content - High Visibility */}
+              <div className="relative z-10 flex h-full flex-col">
+                <p className="text-center tracking-[0.2em] text-[#7c86fc] text-[1rem]">
+                  {card.category}
+                </p>
+
+                <h3 className="mt-8 text-center font-heading text-[2.2rem] leading-[1.1] text-white">
+                  {card.title}
+                </h3>
+
+                <ul className="mt-12 space-y-4 flex-1">
+                  {card.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2">
+                      <CheckIcon />
+                      <span className="text-white text-[1.05rem] font-medium leading-snug">
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button - Bold & Solid */}
+                <button
+                  className="mt-10 w-full font-bold text-white transition-all active:scale-95"
+                  style={{
+                    borderRadius: "16px",
+                    padding: "1.2rem",
+                    fontSize: "1rem",
+                    background: "#5e69f8",
+                    boxShadow:
+                      "0 8px 20px rgba(94, 105, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                  }}
+                >
+                  {card.cta}
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* BOTTOM SECTION */}
+        <div className="mt-20 text-center">
+          <p className="text-[1.25rem] font-light italic text-white tracking-wide">
+            More solutions and tools coming soon
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

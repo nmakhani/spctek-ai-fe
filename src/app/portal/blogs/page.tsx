@@ -19,6 +19,10 @@ interface Blog {
   updated_at?: string;
 }
 
+function getErrorMessage(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
 function BlogsContent() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,8 +48,8 @@ function BlogsContent() {
       const response = await blogsApi.list();
       setBlogs(response.data);
       setError("");
-    } catch (err: any) {
-      const message = err.message || "Failed to load blogs";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to load blogs");
       setError(message);
       toast.error(message);
     } finally {
@@ -86,8 +90,8 @@ function BlogsContent() {
       });
       setEditingId(null);
       setShowForm(false);
-    } catch (err: any) {
-      const message = err.message || "Failed to save blog";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to save blog");
       setError(message);
       toast.error(message);
     } finally {
@@ -126,8 +130,8 @@ function BlogsContent() {
       setBlogs((prev) => prev.filter((blog) => blog.id !== pendingDeleteId));
       toast.success("Blog deleted");
       setPendingDeleteId(null);
-    } catch (err: any) {
-      const message = err.message || "Failed to delete blog";
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to delete blog");
       setError(message);
       toast.error(message);
     } finally {

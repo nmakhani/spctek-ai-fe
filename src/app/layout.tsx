@@ -50,16 +50,43 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      {/* Inject theme CSS variables — change activeTheme in src/themes/index.ts */}
-      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <style
           dangerouslySetInnerHTML={{ __html: buildThemeCss(activeTheme) }}
         />
       </head>
       <body
-        className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg`}
+        className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg bg-[#030303] min-h-screen relative`}
       >
+        {/* --- HERO SECTION BACKGROUND GLOW --- */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none -z-10 overflow-hidden"
+          style={{
+            width: "100vw",
+            height: "80vh",
+            background:
+              "radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)",
+            filter: "blur(100px)",
+          }}
+        />
+
+        {/* --- SOLID TILTED OVAL GLOW --- */}
+        <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "130vh",
+            left: "70%",
+            width: "400px",
+            height: "200px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.5) 0%, rgba(96, 107, 250, 0.5) 50%, transparent 80%)",
+            transform: "translate(-50%, -50%) rotate(-55deg) scale(1.2)",
+
+            filter: "blur(40px)",
+          }}
+        />
+
+        {/* Your Page Content */}
         {children}
       </body>
     </html>

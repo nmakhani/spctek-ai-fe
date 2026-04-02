@@ -1,8 +1,8 @@
-﻿import { PrimaryButton } from "./PrimaryButton";
+﻿import { PrimaryButton } from "../PrimaryButton";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center justify-center text-center px-6 md:px-12 pt-24 pb-6 max-w-7xl mx-auto relative">
+    <section className="flex flex-col items-center justify-center text-center px-6 md:px-12 max-w-7xl mx-auto relative mt-24">
       {/* 1. Headline - mb-8 reduced to mb-6 */}
       <h1 className="text-5xl md:text-7xl font-heading font-bold text-white leading-tight mb-6">
         Transform Operational Chaos <br className="hidden md:block" />

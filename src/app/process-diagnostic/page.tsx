@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -420,7 +421,7 @@ export default function ProcessDiagnosticPage() {
                       which automations give you the fastest payback — in a
                       single 30-min session.
                     </p>
-                    <a
+                    <Link
                       href="/#contact"
                       className="glow-btn !text-sm !py-2.5 !px-6 w-full justify-center"
                     >
@@ -438,7 +439,7 @@ export default function ProcessDiagnosticPage() {
                           d="M13 7l5 5m0 0l-5 5m5-5H6"
                         />
                       </svg>
-                    </a>
+                    </Link>
                     <p className="text-center text-xs text-slate-600 mt-3">
                       No hard sell. No commitment required.
                     </p>
@@ -1284,5 +1285,11 @@ function buildPointers(f: FormData): Pointer[] {
   // Sort by severity descending, return top 4 (or all if fewer)
   pool.sort((a, b) => b.severity - a.severity);
   const limit = Math.min(pool.length, 4);
-  return pool.slice(0, limit).map(({ severity: _s, ...rest }) => rest);
+  return pool.slice(0, limit).map((item) => ({
+    title: item.title,
+    body: item.body,
+    cost: item.cost,
+    accent: item.accent,
+    costColor: item.costColor,
+  }));
 }

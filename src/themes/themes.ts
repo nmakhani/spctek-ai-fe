@@ -57,9 +57,9 @@ export interface Theme {
 export const THEME_PURPLE_MAGENTA: Theme = {
   name: "purple-magenta",
 
-  bg: "#0f051a",
-  bgLight: "#160723",
-  bgCard: "#1a082a",
+  bg: "#000000",
+  bgLight: "#0a0a0a",
+  bgCard: "#0f0f0f",
 
   accent: "#d946ef",
   accentRgb: "217, 70, 239",
@@ -85,9 +85,9 @@ export const THEME_PURPLE_MAGENTA: Theme = {
 export const THEME_SPCTEK_BRAND: Theme = {
   name: "spctek-brand",
 
-  bg: "#131532",
-  bgLight: "#1a1a42",
-  bgCard: "#1f1f4a",
+  bg: "#000000",
+  bgLight: "#0a0a0a",
+  bgCard: "#0f0f0f",
 
   accent: "#606bfa",
   accentRgb: "96, 107, 250",
@@ -113,9 +113,9 @@ export const THEME_SPCTEK_BRAND: Theme = {
 export const THEME_DARK_NEON: Theme = {
   name: "dark-neon",
 
-  bg: "#020409",
-  bgLight: "#05091a",
-  bgCard: "#080d1e",
+  bg: "#000000",
+  bgLight: "#0a0a0a",
+  bgCard: "#0f0f0f",
 
   accent: "#22d3ee",
   accentRgb: "34, 211, 238",

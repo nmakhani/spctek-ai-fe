@@ -603,8 +603,8 @@ export default function ReinstatementPage() {
                       Provide Your Contact Information
                     </h3>
                     <p className="text-sm text-slate-400">
-                      We'll email your complete report as a PDF to the address
-                      below.
+                      We&apos;ll email your complete report as a PDF to the
+                      address below.
                     </p>
                   </div>
 
@@ -721,7 +721,7 @@ export default function ReinstatementPage() {
 
                   <p className="text-[10px] text-slate-600 text-center leading-relaxed">
                     Your contact information is required to deliver the report.
-                    We'll only use it for that purpose.
+                    We&apos;ll only use it for that purpose.
                   </p>
                 </>
               )}
