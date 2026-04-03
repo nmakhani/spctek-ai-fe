@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
 import { activeTheme, type Theme } from "@/themes";
+import { Poppins, JetBrains_Mono } from "next/font/google";
+
+import "./globals.css";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
   title: "SPCTEK AI - Build a System. Not a Spreadsheet.",
   description:
     "AI-native operations platform. Replace fragmented tools and manual chaos with an intelligent AI operating layer.",
+  icons: { icon: "/favicon-dark.png" },
 };
 
 function buildThemeCss(t: Theme): string {
@@ -58,7 +60,6 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg bg-[#030303] min-h-screen relative`}
       >
-        {/* --- HERO SECTION BACKGROUND GLOW --- */}
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none -z-10 overflow-hidden"
           style={{
@@ -70,11 +71,10 @@ export default function RootLayout({
           }}
         />
 
-        {/* --- SOLID TILTED OVAL GLOW --- */}
         <div
           className="absolute pointer-events-none -z-10 overflow-hidden"
           style={{
-            top: "130vh",
+            top: "160vh",
             left: "70%",
             width: "400px",
             height: "200px",
@@ -85,6 +85,81 @@ export default function RootLayout({
             filter: "blur(40px)",
           }}
         />
+
+        <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "400vh",
+            left: "50%",
+            width: "1200px",
+            height: "600px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+            filter: "blur(100px)",
+            opacity: 0.8,
+          }}
+        />
+
+        <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "700vh",
+            left: "50%",
+            width: "1200px",
+            height: "600px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+            filter: "blur(100px)",
+            opacity: 0.8,
+          }}
+        />
+
+        <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "1050vh",
+            left: "50%",
+            width: "1200px",
+            height: "600px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+            filter: "blur(100px)",
+            opacity: 0.8,
+          }}
+        />
+
+        <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "1400vh",
+            left: "50%",
+            width: "1200px",
+            height: "600px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+            transform: "translate(-50%, -50%) rotate(-40deg) scale(2.0)",
+            filter: "blur(100px)",
+            opacity: 0.8,
+          }}
+        />
+
+        {/* <div
+          className="absolute pointer-events-none -z-10 overflow-hidden"
+          style={{
+            top: "1750vh",
+            left: "50%",
+            width: "1200px",
+            height: "600px",
+            background:
+              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+            transform: "translate(-50%, -50%) rotate(-40deg) scale(2.0)",
+            filter: "blur(100px)",
+            opacity: 0.8,
+          }}
+        /> */}
 
         {/* Your Page Content */}
         {children}

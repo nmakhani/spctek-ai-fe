@@ -1,26 +1,27 @@
-﻿import { PrimaryButton } from "../PrimaryButton";
+﻿import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center justify-center text-center px-6 md:px-12 max-w-7xl mx-auto relative mt-24">
+    <section className="relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12 font-poppins">
       {/* 1. Headline - mb-8 reduced to mb-6 */}
-      <h1 className="text-5xl md:text-7xl font-heading font-bold text-white leading-tight mb-6">
+      <SectionHeading size="hero">
         Transform Operational Chaos <br className="hidden md:block" />
-        Into{" "}
-        <span className="text-[#a0a6fc] font-heading">Intelligent Systems</span>
-      </h1>
+        Into <span className="text-[#a0a6fc]">Intelligent Systems</span>
+      </SectionHeading>
 
       {/* 2. Subtitle - mb-12 reduced to mb-8 */}
-      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed mb-8">
-        AI automation is transforming industries, but most SMBs are unsure what
-        to adopt or where to start. We help SMBs solve real operational problems
-        using intelligent diagnostics and targeted automation.
+      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed my-8">
+        AI automation is transforming industries, but most SMBs are
+        <br /> unsure what to adopt or where to start. We help SMBs solve real
+        operational problems using intelligent diagnostics, secure AI systems,
+        and targeted automation solutions.
       </p>
 
       {/* 3. CTA - mb-14 reduced to mb-10, rounded-xl changed to rounded-2xl */}
-      <PrimaryButton className="mb-10 text-lg px-20 py-4 rounded-2xl shadow-glow-purple transition-all duration-300 hover:scale-[1.02]">
-        Get My AI Playbook
-      </PrimaryButton>
+      <div className="mb-10">
+        <PrimaryButton href="/#contact">Get My AI Playbook</PrimaryButton>
+      </div>
 
       {/* 4. Trust Badge - mt-4 removed to keep it tight to the button */}
       <div className="flex flex-col md:flex-row items-center justify-center gap-4">
@@ -39,7 +40,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <p className="text-sm md:text-base text-white font-heading tracking-wide">
+        <p className="text-sm md:text-base text-white font-poppins tracking-wide">
           Trusted by{" "}
           <span className="opacity-80">
             200+ SMB teams across Amazon & Shopify

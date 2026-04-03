@@ -1,3 +1,6 @@
+import { SectionHeading } from "../ui/SectionHeading";
+import { PrimaryButton } from "../ui/PrimaryButton";
+
 type SolutionCard = {
   category: string;
   title: string;
@@ -76,14 +79,14 @@ function CheckIcon() {
 
 export default function TargetedSolutions() {
   return (
-    <section className="px-6 md:px-12">
+    <section className="px-6 md:px-12 font-poppins">
       <div className="mx-auto max-w-7xl">
         {/* Header Section */}
         <div className="mx-auto mb-16 max-w-4xl text-center">
-          <h2 className="font-heading text-[2.5rem] font-bold tracking-tight text-white md:text-[3.5rem]">
+          <SectionHeading size="large">
             Targeted <span className="text-[#606bfa]">AI Solutions</span> for
             High-Impact Business Problems
-          </h2>
+          </SectionHeading>
           <p className="mx-auto mt-6 max-w-3xl font-medium leading-relaxed text-white md:text-[1.3rem]">
             Instead of offering generic AI services, we build targeted solutions
             that address specific operational challenges e-commerce businesses
@@ -146,9 +149,11 @@ export default function TargetedSolutions() {
                   {card.category}
                 </p>
 
-                <h3 className="mt-8 text-center font-heading text-[2.2rem] leading-[1.1] text-white">
-                  {card.title}
-                </h3>
+                <div className="mt-8">
+                  <h3 className="text-3xl font-bold text-white text-center font-heading">
+                    {card.title}
+                  </h3>
+                </div>
 
                 <ul className="mt-12 space-y-4 flex-1">
                   {card.points.map((point) => (
@@ -162,20 +167,11 @@ export default function TargetedSolutions() {
                 </ul>
 
                 {/* CTA Button - Bold & Solid */}
-                <button
-                  className="mt-10 w-full font-bold text-white transition-all active:scale-95"
-                  style={{
-                    borderRadius: "16px",
-                    padding: "1.2rem",
-                    fontSize: "1rem",
-                    background: "#5e69f8",
-                    boxShadow:
-                      "0 8px 20px rgba(94, 105, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                  }}
-                >
-                  {card.cta}
-                </button>
+                <div className="mt-10">
+                  <PrimaryButton fullWidth href="/#contact">
+                    {card.cta}
+                  </PrimaryButton>
+                </div>
               </div>
             </article>
           ))}

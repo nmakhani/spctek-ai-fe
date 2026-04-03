@@ -1,5 +1,8 @@
 import React from "react";
 
+import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
+
 type ToolComparison = {
   capability: string;
   spctek: "yes" | "no" | "partial";
@@ -72,16 +75,16 @@ function RenderStatus({ status }: { status: "yes" | "no" | "partial" }) {
 
 export default function Tools() {
   return (
-    <section className="px-6 md:px-12 overflow-hidden relative">
+    <section className="px-6 md:px-12 overflow-hidden relative font-poppins">
       <div className="mx-auto max-w-5xl">
         {/* Title */}
         <div className="mx-auto mb-16 text-center text-white">
-          <h2 className="font-heading text-[2.5rem] tracking-tight md:text-[3.5rem] leading-tight">
+          <SectionHeading size="large">
             The <span className="text-[#606bfa]">Tools</span> You`re Using
             Weren`t Built for
             <br />
             Complex Business Operations
-          </h2>
+          </SectionHeading>
           <p className="mx-auto mt-6 max-w-2xl font-medium leading-relaxed md:text-[1.3rem] opacity-100">
             Every tool in your stack was built for one layer of the problem.
             None of them were built for the system.
@@ -143,15 +146,9 @@ export default function Tools() {
 
         {/* CTA Button */}
         <div className="mt-12 flex justify-center">
-          <button
-            className="font-bold text-white transition-all active:scale-95 hover:opacity-90 rounded-full py-4 px-10 text-base shadow-lg"
-            style={{
-              background: "#606bfa",
-              border: "none",
-            }}
-          >
+          <PrimaryButton href="/#contact">
             Talk to an Automation Expert
-          </button>
+          </PrimaryButton>
         </div>
       </div>
     </section>

@@ -1,5 +1,7 @@
 "use client";
 
+import { SectionHeading } from "../ui/SectionHeading";
+
 const stats = [
   {
     stat: "43%",
@@ -64,64 +66,66 @@ const GlassBadge = ({ stat }: { stat: string }) => (
 
 export default function Problems() {
   return (
-    <section className="px-6 md:px-12 max-w-7xl mx-auto">
-      <div className="text-center mb-20">
-        <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight font-heading">
-          The Problem Isn&apos;t Lack of{" "}
-          <span className="text-[#a0a6fc]">AI Tools.</span>
-          <br />
-          It&apos;s Lack of Systems
-        </h2>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-        <div className="lg:col-span-6 lg:pl-10">
-          <p className="text-2xl md:text-[30px] text-white/90 leading-[1.3] font-light tracking-tight max-w-[600px]">
-            Most SMBs are already juggling more tools and dashboards than they
-            can manage. The real challenge is connecting data, workflows, and
-            decisions into a system that brings clarity, consistency, and
-            control.
-          </p>
+    <section className="px-6 md:px-12 font-poppins">
+      <div className="mx-auto max-w-7xl">
+        <div className="text-center mb-20">
+          <SectionHeading size="large">
+            The Problem Isn&apos;t Lack of{" "}
+            <span className="text-[#a0a6fc]">AI Tools.</span>
+            <br />
+            It&apos;s Lack of Systems
+          </SectionHeading>
         </div>
 
-        <div className="lg:col-span-5 flex flex-col gap-8 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#606bfa]/5 blur-[120px] -z-10" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          <div className="lg:col-span-6 lg:pl-20 xl:pl-36">
+            <p className="text-xl md:text-2xl text-white/90 leading-[1.3] font-light tracking-tight max-w-[600px]">
+              Most SMBs are already juggling more tools and dashboards than they
+              can manage. The real challenge is connecting data, workflows, and
+              decisions into a system that brings clarity, consistency, and
+              control.
+            </p>
+          </div>
 
-          {stats.map((item, idx) => (
-            <div
-              key={idx}
-              className="group relative flex items-center gap-4 p-0 rounded-[22px] transition-all duration-500 hover:bg-white/[0.03] max-w-[360px]"
-              style={{
-                background: "rgba(10, 10, 20, 0.4)",
-                backdropFilter: "blur(12px)",
-              }}
-            >
+          <div className="lg:col-span-5 flex flex-col gap-8 relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#606bfa]/5 blur-[120px] -z-10" />
+
+            {stats.map((item, idx) => (
               <div
-                className="absolute inset-0 rounded-[22px] pointer-events-none"
+                key={idx}
+                className="group relative flex items-center gap-4 p-0 rounded-[22px] transition-all duration-500 hover:bg-white/[0.03] max-w-[360px]"
                 style={{
-                  padding: "1px", // Border width
-                  background: `
-                    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.6) 0%, transparent 50%),
-                    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 50%)`,
-                  WebkitMask:
-                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
+                  background: "rgba(10, 10, 20, 0.4)",
+                  backdropFilter: "blur(12px)",
                 }}
-              />
+              >
+                <div
+                  className="absolute inset-0 rounded-[22px] pointer-events-none"
+                  style={{
+                    padding: "1px", // Border width
+                    background: `
+                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.6) 0%, transparent 50%),
+                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 50%)`,
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                  }}
+                />
 
-              <GlassBadge stat={item.stat} />
+                <GlassBadge stat={item.stat} />
 
-              <div className="flex flex-col pr-4">
-                <span className="text-white font-bold text-[16px] leading-tight">
-                  {item.title}
-                </span>
-                <span className="text-white/60 text-[14px] leading-snug mt-0.5">
-                  {item.description}
-                </span>
+                <div className="flex flex-col pr-4">
+                  <span className="text-white font-bold text-[16px] leading-tight">
+                    {item.title}
+                  </span>
+                  <span className="text-white/60 text-[14px] leading-snug mt-0.5">
+                    {item.description}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

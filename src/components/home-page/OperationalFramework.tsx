@@ -1,22 +1,22 @@
 import Image from "next/image";
 
+import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function OperationalFramework() {
-  const headingStyles =
-    "text-[2.2rem] md:text-[3.8rem] font-bold tracking-tight leading-[1.1] text-white";
   const paragraphStyles =
     "mx-auto mt-8 max-w-2xl font-light leading-relaxed text-white md:text-[1.25rem]";
 
   return (
-    <section className="px-6 md:px-12 overflow-hidden text-white">
+    <section className="px-6 md:px-12 overflow-hidden text-white font-poppins">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto mb-16 max-w-4xl text-center">
-          <h2 className={headingStyles}>
+          <SectionHeading size="large">
             We Fix Your Operations First So <br />
             <span className="text-[#606bfa]">AI Automation</span>{" "}
             <br className="md:hidden" /> Actually Works
-          </h2>
+          </SectionHeading>
 
           <p className={paragraphStyles}>
             Most agencies try to implement AI on top of broken operations,
@@ -28,10 +28,10 @@ export default function OperationalFramework() {
 
         <div className="relative">
           <div className="mx-auto mb-16 max-w-4xl text-center">
-            <h3 className={headingStyles}>
+            <SectionHeading size="large">
               The <span className="text-[#606bfa]">Spctek</span> Operational{" "}
               <br className="md:hidden" /> Intelligence Framework
-            </h3>
+            </SectionHeading>
             <p className={paragraphStyles}>
               Our Operational Intelligence Framework focuses on building strong
               operational systems first, ensuring that AI automation delivers
@@ -83,15 +83,9 @@ export default function OperationalFramework() {
 
         {/* CTA Button */}
         <div className="mt-20 flex justify-center">
-          <button
-            className="font-bold text-white transition-all active:scale-95 hover:brightness-110 rounded-full py-4 px-12 text-base shadow-[0_10px_25px_rgba(96,107,250,0.4)]"
-            style={{
-              background: "#606bfa",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
+          <PrimaryButton href="/#contact">
             Talk to an Automation Expert
-          </button>
+          </PrimaryButton>
         </div>
       </div>
     </section>

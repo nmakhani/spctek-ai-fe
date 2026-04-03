@@ -1,5 +1,8 @@
 import React from "react";
 
+import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
+
 type StackComponent = {
   title: string;
   description: string;
@@ -94,16 +97,16 @@ const stackComponents: StackComponent[] = [
 
 export default function PrivateAiStack() {
   return (
-    <section className="px-6 md:px-12 overflow-hidden relative">
+    <section className="px-6 md:px-12 overflow-hidden relative font-poppins">
       <div className="mx-auto max-w-7xl">
         {/* Header Section */}
         <div className="mx-auto mb-20 max-w-4xl text-center">
-          <h2 className="font-heading text-[2.5rem] tracking-tight text-white md:text-[3.5rem] font-bold leading-tight">
+          <SectionHeading size="large">
             Private <span className="text-[#606bfa]">AI Stack</span> Built for
             Your
             <br />
             Infrastructure
-          </h2>
+          </SectionHeading>
           <p className="mx-auto mt-8 max-w-3xl font-medium leading-relaxed text-white/80 md:text-[1.3rem]">
             Every component runs inside your infrastructure. Your data never
             <br className="hidden md:block" />
@@ -216,16 +219,7 @@ export default function PrivateAiStack() {
 
         {/* CTA Button */}
         <div className="flex justify-center">
-          <button
-            className="font-bold text-white transition-all active:scale-95 hover:opacity-90 rounded-full py-4 px-12 text-lg shadow-lg"
-            style={{
-              background: "#606bfa",
-              boxShadow: "0 15px 35px rgba(96, 107, 250, 0.3)",
-              border: "none",
-            }}
-          >
-            Explore Solutions
-          </button>
+          <PrimaryButton href="/#contact">Explore Solutions</PrimaryButton>
         </div>
       </div>
     </section>

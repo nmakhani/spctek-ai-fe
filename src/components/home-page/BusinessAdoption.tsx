@@ -1,5 +1,8 @@
 import React from "react";
 
+import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
+
 type BusinessType = {
   title: string;
   description: string;
@@ -30,15 +33,15 @@ const businessTypes: BusinessType[] = [
 
 export default function BusinessAdoption() {
   return (
-    <section className="px-6 md:px-12">
+    <section className="px-6 md:px-12 font-poppins">
       <div className="mx-auto max-w-6xl">
         {/* Header Section */}
         <div className="mx-auto mb-16 max-w-4xl text-center">
-          <h2 className="font-heading text-[2.5rem] tracking-tight text-white md:text-[3.5rem] font-bold">
+          <SectionHeading size="large">
             For Businesses That Want to Adopt <br />
             <span className="text-[#606bfa]">AI </span>
             the Right Way
-          </h2>
+          </SectionHeading>
           <p className="mx-auto mt-6 max-w-3xl font-light leading-relaxed text-white/80 md:text-[1.3rem]">
             Designed for businesses that want to adopt AI with clarity, manage
             complex operations across multiple tools, and prioritize security
@@ -107,20 +110,7 @@ export default function BusinessAdoption() {
 
         {/* Global CTA Button */}
         <div className="mt-16 flex justify-center">
-          <button
-            className="font-bold text-white transition-all active:scale-95"
-            style={{
-              borderRadius: "100px",
-              padding: "1.1rem 3.5rem",
-              fontSize: "1rem",
-              background: "#5e69f8",
-              boxShadow:
-                "0 10px 25px rgba(94, 105, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-            }}
-          >
-            Explore Solutions
-          </button>
+          <PrimaryButton href="/#contact">Explore Solutions</PrimaryButton>
         </div>
       </div>
     </section>

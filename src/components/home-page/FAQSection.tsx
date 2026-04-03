@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Plus, X } from "lucide-react";
 
+import { SectionHeading } from "../ui/SectionHeading";
+
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -18,13 +20,13 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
         onClick={onClick}
         type="button"
       >
-        <span
-          className={`text-[1.05rem] leading-[1.25] transition-colors md:text-[1.8rem] ${
+        <h3
+          className={`font-heading text-[1.05rem] leading-[1.25] transition-colors md:text-[1.8rem] ${
             isOpen ? "text-[#606bfa]" : "text-white"
           }`}
         >
           {question}
-        </span>
+        </h3>
         <span
           className={`mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all ${
             isOpen
@@ -100,12 +102,15 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative overflow-hidden px-8 md:px-14" id="faq">
+    <section
+      className="relative overflow-hidden px-6 md:px-12 font-poppins pb-36"
+      id="faq"
+    >
       <div className="relative mx-auto max-w-6xl font-poppins">
         <div className="mb-8 text-center md:mb-10">
-          <h2 className="font-heading text-[2rem] font-medium leading-tight tracking-tight text-white md:text-[3.2rem]">
+          <SectionHeading size="large">
             Frequently Asked Questions
-          </h2>
+          </SectionHeading>
         </div>
 
         <div className="mt-8" onMouseLeave={() => setOpenIndex(null)}>

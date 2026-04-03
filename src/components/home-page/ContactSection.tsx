@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 
+import { SectionHeading } from "../ui/SectionHeading";
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -17,15 +19,15 @@ export default function ContactSection() {
 
   return (
     <section
-      className="relative overflow-hidden px-6 font-poppins"
+      className="relative overflow-hidden px-6 md:px-12 font-poppins"
       id="contact"
     >
       <div className="relative mx-auto w-full max-w-5xl">
         <div className="mx-auto mb-10 max-w-4xl text-center md:mb-12">
-          <h2 className="font-heading text-[2rem] font-semibold leading-[1.08] tracking-tight text-white md:text-[3.6rem]">
+          <SectionHeading size="large">
             Ready to See How <span className="text-[#606bfa]">AI</span> Can
             Improve Your Operations?
-          </h2>
+          </SectionHeading>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-[1.35] text-white/90 md:text-2xl">
             Provide your details, and we&apos;ll prepare a custom AI plan
             tailored to your business.

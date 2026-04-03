@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 
-import { PrimaryButton } from "../PrimaryButton";
+import { PrimaryButton } from "../ui/PrimaryButton";
+import { SectionHeading } from "../ui/SectionHeading";
 
 const issuesList = [
   { number: "1", title: "Disconnected Tools" },
@@ -36,14 +37,14 @@ const GlassNumber = ({ number }: { number: string }) => (
 
 export default function Issues() {
   return (
-    <section className="px-6 md:px-12">
+    <section className="px-6 md:px-12 font-poppins">
       {/* 1. Added max-w-5xl and mx-auto to squeeze everything toward the center */}
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold leading-tight text-center text-white font-heading mb-20">
+        <SectionHeading size="large">
           Are These Issues Holding Your
           <br className="hidden md:block" />{" "}
           <span className="text-[#a0a6fc]">Business</span> Back?
-        </h2>
+        </SectionHeading>
 
         {/* Left Column: List of Issues */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -89,7 +90,9 @@ export default function Issues() {
               rather than just adding more tools.
             </span>
           </p>
-          <PrimaryButton>Get a Free Operations Assessment</PrimaryButton>
+          <PrimaryButton href="/#contact">
+            Get a Free Operations Assessment
+          </PrimaryButton>
         </div>
       </div>
 

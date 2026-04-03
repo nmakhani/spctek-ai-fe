@@ -182,7 +182,7 @@ export default function ReinstatementPage() {
   };
 
   return (
-    <div className="relative min-h-screen noise-overlay grid-bg">
+    <div className="relative min-h-screen noise-overlay">
       {/* Aurora orbs */}
       <div
         className="fixed top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none -z-10 animate-aurora-drift-1"

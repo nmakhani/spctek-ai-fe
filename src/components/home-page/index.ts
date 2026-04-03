@@ -6,6 +6,8 @@ export { default as BusinessAdoption } from "./BusinessAdoption";
 export { default as OperationalFramework } from "./OperationalFramework";
 export { default as Tools } from "./Tools";
 export { default as PrivateAiStack } from "./PrivateAiStack";
+export { default as Testimonials } from "./Testimonials";
 export { default as AIPlaybook } from "./AIPlaybook";
 export { default as ContactSection } from "./ContactSection";
 export { default as FAQSection } from "./FAQSection";
+export { SectionHeading } from "../ui/SectionHeading";
