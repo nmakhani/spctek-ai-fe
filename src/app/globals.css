@@ -66,3 +66,17 @@ body {
     @apply font-heading;
   }
 }
+
+@keyframes home-issues-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.home-issues-float {
+  animation: home-issues-float 6s ease-in-out infinite;
+}

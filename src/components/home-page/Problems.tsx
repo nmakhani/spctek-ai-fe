@@ -1,6 +1,7 @@
 "use client";
 
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 const stats = [
   {
@@ -88,8 +89,20 @@ export default function Problems() {
           </div>
 
           <div className="lg:col-span-5 flex flex-col gap-8 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#606bfa]/5 blur-[120px] -z-10" />
+            <GlowBackground
+              style={{
+                top: "25%",
+                left: "50%",
+                width: "90%",
+                height: "80%",
+                background:
+                  "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.5) 0%, rgba(96, 107, 250, 0.5) 50%, transparent 80%)",
+                transform: "translate(-50%, -50%) rotate(-55deg) scale(1.2)",
+                filter: "blur(40px)",
+              }}
+            />
 
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#606bfa]/5 blur-[120px] -z-10" />
             {stats.map((item, idx) => (
               <div
                 key={idx}

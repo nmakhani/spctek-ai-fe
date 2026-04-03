@@ -68,7 +68,7 @@ export default function Issues() {
           <div className="relative flex justify-center items-center">
             <div className="absolute bg-[#606bfa]/10 blur-[100px] rounded-full w-80 h-80 -z-10" />
 
-            <div className="relative animate-float w-full flex justify-center">
+            <div className="relative home-issues-float w-full flex justify-center">
               <Image
                 width={500}
                 height={500}
@@ -95,21 +95,6 @@ export default function Issues() {
           </PrimaryButton>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-15px);
-          }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 }

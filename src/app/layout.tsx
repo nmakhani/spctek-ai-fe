@@ -61,47 +61,6 @@ export default function RootLayout({
         className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg bg-[#030303] min-h-screen relative`}
       >
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none -z-10 overflow-hidden"
-          style={{
-            width: "100vw",
-            height: "80vh",
-            background:
-              "radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)",
-            filter: "blur(100px)",
-          }}
-        />
-
-        <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "160vh",
-            left: "70%",
-            width: "400px",
-            height: "200px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.5) 0%, rgba(96, 107, 250, 0.5) 50%, transparent 80%)",
-            transform: "translate(-50%, -50%) rotate(-55deg) scale(1.2)",
-
-            filter: "blur(40px)",
-          }}
-        />
-
-        <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "400vh",
-            left: "50%",
-            width: "1200px",
-            height: "600px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
-            filter: "blur(100px)",
-            opacity: 0.8,
-          }}
-        />
-
-        <div
           className="absolute pointer-events-none -z-10 overflow-hidden"
           style={{
             top: "700vh",
@@ -160,8 +119,6 @@ export default function RootLayout({
             opacity: 0.8,
           }}
         /> */}
-
-        {/* Your Page Content */}
         {children}
       </body>
     </html>

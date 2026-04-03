@@ -1,4 +1,5 @@
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 type Testimonial = {
   quote: string;
@@ -15,10 +16,21 @@ const featuredTestimonial: Testimonial = {
 
 export default function Testimonials() {
   return (
-    <section
-      className="relative overflow-hidden px-6 md:px-12 font-poppins"
-      id="testimonials"
-    >
+    <section className="relative px-6 md:px-12 font-poppins" id="testimonials">
+      <GlowBackground
+        style={{
+          top: "30%",
+          left: "50%",
+          width: "80%",
+          height: "160%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 text-center md:mb-10">
           <SectionHeading size="large">

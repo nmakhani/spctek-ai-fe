@@ -1,9 +1,22 @@
 ﻿import { PrimaryButton } from "../ui/PrimaryButton";
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 export default function Hero() {
   return (
     <section className="relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12 font-poppins">
+      {/* 0. The Hero Glow - Anchored to the heading area */}
+      <GlowBackground
+        style={{
+          top: "-35%",
+          width: "100%",
+          height: "100%",
+          background:
+            "radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)",
+          filter: "blur(100px)",
+        }}
+      />
+
       {/* 1. Headline - mb-8 reduced to mb-6 */}
       <SectionHeading size="hero">
         Transform Operational Chaos <br className="hidden md:block" />
