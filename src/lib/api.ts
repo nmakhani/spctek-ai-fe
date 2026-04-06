@@ -1,7 +1,11 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
+  process.env.NEXT_PUBLIC_DEV_MODE === "1"
+    ? process.env.NEXT_PUBLIC_API_URL_DEV
+    : process.env.NEXT_PUBLIC_API_URL_PROD;
+
+console.log("API Base URL:", API_BASE_URL);
 
 type ApiPayload = Record<string, unknown>;
 

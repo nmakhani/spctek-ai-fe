@@ -75,6 +75,7 @@ export default function Issues() {
                 src="/home-page/ai-robot.png"
                 alt="3D AI Robot Illustration"
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
           </div>
