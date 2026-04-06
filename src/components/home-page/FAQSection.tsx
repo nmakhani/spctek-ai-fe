@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 interface FAQItemProps {
   question: string;
@@ -102,10 +103,21 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section
-      className="relative overflow-hidden px-6 md:px-12 font-poppins pb-36"
-      id="faq"
-    >
+    <section className="relative px-6 md:px-12 font-poppins pb-36" id="faq">
+      <GlowBackground
+        style={{
+          top: "15%",
+          left: "60%",
+          width: "110%",
+          height: "110%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-30deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+
       <div className="relative mx-auto max-w-6xl font-poppins">
         <div className="mb-8 text-center md:mb-10">
           <SectionHeading size="large">

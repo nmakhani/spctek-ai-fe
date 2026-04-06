@@ -2,6 +2,7 @@ import React from "react";
 
 import { PrimaryButton } from "../ui/PrimaryButton";
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 type StackComponent = {
   title: string;
@@ -97,7 +98,21 @@ const stackComponents: StackComponent[] = [
 
 export default function PrivateAiStack() {
   return (
-    <section className="px-6 md:px-12 overflow-hidden relative font-poppins">
+    <section className="px-6 md:px-12 relative font-poppins">
+      <GlowBackground
+        style={{
+          top: "50%",
+          left: "60%",
+          width: "150%",
+          height: "120%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+
       <div className="mx-auto max-w-7xl">
         {/* Header Section */}
         <div className="mx-auto mb-20 max-w-4xl text-center">

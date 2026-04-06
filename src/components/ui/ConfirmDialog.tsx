@@ -28,20 +28,21 @@ export default function ConfirmDialog({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onCancel}
       />
 
-      <div className="relative w-full max-w-md glass rounded-2xl p-6 border border-white/15">
-        <h3 className="text-lg font-bold text-dark-50">{title}</h3>
-        <p className="text-dark-300 mt-2">{message}</p>
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_45%,rgba(96,107,250,0.14)_100%)] p-6 shadow-[0_20px_55px_rgba(0,0,0,0.62)] backdrop-blur-xl">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#606bfa]/25 blur-2xl" />
+        <h3 className="relative text-lg font-semibold text-white">{title}</h3>
+        <p className="relative mt-2 text-white/75">{message}</p>
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="relative mt-6 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="glass-soft hover:bg-slate-700/60 text-dark-100 px-4 py-2 rounded-xl transition"
+            className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 text-white/85 transition hover:bg-white/[0.14] disabled:opacity-70"
           >
             {cancelLabel}
           </button>
@@ -49,7 +50,7 @@ export default function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className="bg-rose-500 hover:bg-rose-400 text-slate-950 font-semibold px-4 py-2 rounded-xl transition"
+            className="rounded-xl bg-rose-500 px-4 py-2 font-semibold text-white transition hover:bg-rose-400 disabled:opacity-70"
           >
             {loading ? "Please wait..." : confirmLabel}
           </button>

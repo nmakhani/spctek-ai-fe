@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
 import ToastProvider from "@/components/ui/ToastProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
-
-export const metadata: Metadata = {
-  title: "SPCTEK Admin Portal",
-  description: "Dark glassmorphic dashboard for blogs and contacts",
-};
+import { GlowBackground } from "@/components/portal/GlowBackground";
 
 export default function PortalLayout({
   children,
@@ -13,13 +10,12 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="ambient-orb one" />
-      <div className="ambient-orb two" />
+    <div className="relative isolate overflow-x-hidden">
+      <GlowBackground />
       <AuthProvider>
         <ToastProvider />
-        {children}
+        <div className="relative z-10">{children}</div>
       </AuthProvider>
-    </>
+    </div>
   );
 }

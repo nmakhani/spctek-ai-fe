@@ -1,7 +1,6 @@
-import React from "react";
-
 import { PrimaryButton } from "../ui/PrimaryButton";
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 
 type BusinessType = {
   title: string;
@@ -33,7 +32,21 @@ const businessTypes: BusinessType[] = [
 
 export default function BusinessAdoption() {
   return (
-    <section className="px-6 md:px-12 font-poppins">
+    <section className="px-6 md:px-12 font-poppins relative">
+      <GlowBackground
+        style={{
+          top: "60%",
+          left: "60%",
+          width: "100%",
+          height: "60%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+
       <div className="mx-auto max-w-6xl">
         {/* Header Section */}
         <div className="mx-auto mb-16 max-w-4xl text-center">

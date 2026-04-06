@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { contactsApi } from "@/lib/api";
 import toast from "react-hot-toast";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { PageHeader } from "@/components/portal/PageHeader";
+import { StatCard } from "@/components/portal/StatCard";
 
 interface Contact {
   id: string;
@@ -162,7 +163,7 @@ function ContactsContent() {
   };
 
   return (
-    <div className="min-h-screen page-fade">
+    <div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
       <ConfirmDialog
         isOpen={Boolean(pendingDeleteId)}
         title="Delete contact"
@@ -173,43 +174,37 @@ function ContactsContent() {
         onCancel={cancelDelete}
       />
 
-      <header className="sticky top-0 z-10 backdrop-blur-md bg-slate-950/45 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center gap-4">
-          <div>
-            <Link
-              href="/portal"
-              className="text-dark-400 hover:text-sky-300 transition mb-2 inline-block"
-            >
-              ← Back to Home
-            </Link>
-            <h1 className="text-3xl font-bold text-dark-50">
-              Contacts Dashboard
-            </h1>
-          </div>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold px-5 py-2.5 rounded-xl transition"
-          >
-            {showForm ? "Cancel" : "+ New Contact"}
-          </button>
-        </div>
-      </header>
+      <PageHeader
+        title="Contacts"
+        subtitle="Dashboard"
+        backLink="/portal"
+        backText="← Back to Home"
+        buttonText="+ New Contact"
+        buttonOnClick={() => setShowForm(!showForm)}
+        showForm={showForm}
+      />
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="mx-auto max-w-7xl py-10 px-6">
+        <StatCard
+          label="Total Contacts"
+          loading={loading}
+          count={contacts.length}
+        />
+
         {error && (
-          <div className="glass rounded-2xl border-red-700/50 text-red-200 px-4 py-3 mb-6">
+          <div className="mb-6 rounded-2xl border border-red-300/35 bg-red-500/18 px-4 py-3 text-red-200">
             {error}
           </div>
         )}
 
         {showForm && (
-          <div className="glass rounded-3xl p-6 md:p-8 mb-8">
-            <h2 className="text-xl font-bold text-dark-50 mb-4">
+          <div className="mb-8 overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl md:p-8">
+            <h2 className="mb-4 text-xl font-semibold text-white">
               {editingId ? "Edit Contact" : "New Contact"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Name
                 </label>
                 <input
@@ -218,13 +213,13 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="John Doe"
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Email
                 </label>
                 <input
@@ -233,13 +228,13 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="john@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Phone
                 </label>
                 <input
@@ -248,13 +243,13 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="+1 555 123 4567"
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Company
                 </label>
                 <input
@@ -263,13 +258,13 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="Acme Inc."
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Message
                 </label>
                 <textarea
@@ -277,13 +272,13 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus h-28"
+                  className="h-28 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="Message details"
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Source
                 </label>
                 <input
@@ -292,12 +287,12 @@ function ContactsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, source: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="landing_page"
                 />
               </div>
 
-              <p className="text-xs text-dark-400">
+              <p className="text-xs text-white/60">
                 Note: backend requires at least one of Email or Phone.
               </p>
 
@@ -305,7 +300,7 @@ function ContactsContent() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold px-4 py-2 rounded-xl transition"
+                  className="rounded-xl bg-[#606bfa] px-4 py-2 font-semibold text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
                 >
                   {saving ? "Saving..." : editingId ? "Update" : "Create"}
                 </button>
@@ -313,7 +308,7 @@ function ContactsContent() {
                   type="button"
                   onClick={handleCancel}
                   disabled={saving}
-                  className="glass-soft hover:bg-slate-700/60 text-dark-100 px-4 py-2 rounded-xl transition"
+                  className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 text-white/85 transition hover:bg-white/[0.14] disabled:opacity-60"
                 >
                   Cancel
                 </button>
@@ -323,35 +318,35 @@ function ContactsContent() {
         )}
 
         {loading ? (
-          <div className="text-center py-12 text-dark-400">
+          <div className="py-12 text-center text-white/55">
             Loading contacts...
           </div>
         ) : contacts.length === 0 ? (
-          <div className="text-center py-12 text-dark-400">No contacts yet</div>
+          <div className="py-12 text-center text-white/55">No contacts yet</div>
         ) : (
-          <div className="overflow-x-auto glass rounded-3xl">
+          <div className="overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
             <table className="w-full">
-              <thead className="bg-slate-800/40 border-b border-white/10">
+              <thead className="border-b border-white/10 bg-black/25">
                 <tr>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Company
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Source
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-left text-dark-300 font-semibold">
+                  <th className="px-6 py-3 text-left font-semibold text-white/75">
                     Actions
                   </th>
                 </tr>
@@ -360,24 +355,24 @@ function ContactsContent() {
                 {contacts.map((contact) => (
                   <tr
                     key={contact.id}
-                    className="border-b border-white/10 hover:bg-slate-700/25 transition"
+                    className="border-b border-white/10 transition hover:bg-white/[0.05]"
                   >
-                    <td className="px-6 py-3 text-dark-50">
+                    <td className="px-6 py-3 text-white">
                       {contact.name || "—"}
                     </td>
-                    <td className="px-6 py-3 text-dark-300">
+                    <td className="px-6 py-3 text-white/75">
                       {contact.email || "—"}
                     </td>
-                    <td className="px-6 py-3 text-dark-400">
+                    <td className="px-6 py-3 text-white/65">
                       {contact.phone || "—"}
                     </td>
-                    <td className="px-6 py-3 text-dark-400">
+                    <td className="px-6 py-3 text-white/65">
                       {contact.company || "—"}
                     </td>
-                    <td className="px-6 py-3 text-dark-400">
+                    <td className="px-6 py-3 text-white/65">
                       {contact.source || "—"}
                     </td>
-                    <td className="px-6 py-3 text-dark-400">
+                    <td className="px-6 py-3 text-white/65">
                       {contact.created_at
                         ? new Date(contact.created_at).toLocaleDateString()
                         : "—"}
@@ -387,14 +382,14 @@ function ContactsContent() {
                         <button
                           onClick={() => handleEdit(contact)}
                           disabled={deletingId === contact.id}
-                          className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium px-3 py-1.5 rounded-lg text-sm transition"
+                          className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => requestDelete(contact.id)}
                           disabled={deletingId === contact.id}
-                          className="bg-rose-500 hover:bg-rose-400 text-slate-950 font-medium px-3 py-1.5 rounded-lg text-sm transition"
+                          className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {deletingId === contact.id ? "Deleting..." : "Delete"}
                         </button>

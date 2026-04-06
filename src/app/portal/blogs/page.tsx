@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { blogsApi } from "@/lib/api";
 import toast from "react-hot-toast";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { PageHeader } from "@/components/portal/PageHeader";
+import { StatCard } from "@/components/portal/StatCard";
 
 interface Blog {
   id: string;
@@ -161,7 +162,7 @@ function BlogsContent() {
   };
 
   return (
-    <div className="min-h-screen page-fade">
+    <div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
       <ConfirmDialog
         isOpen={Boolean(pendingDeleteId)}
         title="Delete blog"
@@ -172,41 +173,33 @@ function BlogsContent() {
         onCancel={cancelDelete}
       />
 
-      <header className="sticky top-0 z-10 backdrop-blur-md bg-slate-950/45 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center gap-4">
-          <div>
-            <Link
-              href="/portal"
-              className="text-dark-400 hover:text-cyan-300 transition mb-2 inline-block"
-            >
-              ← Back to Home
-            </Link>
-            <h1 className="text-3xl font-bold text-dark-50">Blogs Dashboard</h1>
-          </div>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-5 py-2.5 rounded-xl transition"
-          >
-            {showForm ? "Cancel" : "+ New Blog"}
-          </button>
-        </div>
-      </header>
+      <PageHeader
+        title="Blogs"
+        subtitle="Dashboard"
+        backLink="/portal"
+        backText="← Back to Home"
+        buttonText="+ New Blog"
+        buttonOnClick={() => setShowForm(!showForm)}
+        showForm={showForm}
+      />
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="mx-auto max-w-7xl py-10 px-6">
+        <StatCard label="Total Blogs" loading={loading} count={blogs.length} />
+
         {error && (
-          <div className="glass rounded-2xl border-red-700/50 text-red-200 px-4 py-3 mb-6">
+          <div className="mb-6 rounded-2xl border border-red-300/35 bg-red-500/18 px-4 py-3 text-red-200">
             {error}
           </div>
         )}
 
         {showForm && (
-          <div className="glass rounded-3xl p-6 md:p-8 mb-8">
-            <h2 className="text-xl font-bold text-dark-50 mb-4">
+          <div className="mb-8 overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl md:p-8">
+            <h2 className="mb-4 text-xl font-semibold text-white">
               {editingId ? "Edit Blog" : "New Blog"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Title *
                 </label>
                 <input
@@ -216,14 +209,14 @@ function BlogsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="Blog title"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-dark-300 text-sm font-medium mb-2">
+                  <label className="mb-2 block text-sm font-medium text-white/75">
                     Slug *
                   </label>
                   <input
@@ -233,13 +226,13 @@ function BlogsContent() {
                     onChange={(e) =>
                       setFormData({ ...formData, slug: e.target.value })
                     }
-                    className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                    className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                     placeholder="fastapi-best-practices"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-dark-300 text-sm font-medium mb-2">
+                  <label className="mb-2 block text-sm font-medium text-white/75">
                     Author
                   </label>
                   <input
@@ -248,14 +241,14 @@ function BlogsContent() {
                     onChange={(e) =>
                       setFormData({ ...formData, author: e.target.value })
                     }
-                    className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus"
+                    className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                     placeholder="Author name"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Summary
                 </label>
                 <textarea
@@ -263,13 +256,13 @@ function BlogsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, summary: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus h-24"
+                  className="h-24 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="Short summary used in listings"
                 />
               </div>
 
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="mb-2 block text-sm font-medium text-white/75">
                   Content *
                 </label>
                 <textarea
@@ -278,19 +271,19 @@ function BlogsContent() {
                   onChange={(e) =>
                     setFormData({ ...formData, content: e.target.value })
                   }
-                  className="w-full glass-soft rounded-xl px-4 py-2.5 text-dark-50 ring-focus h-48"
+                  className="h-48 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
                   placeholder="Blog content"
                 />
               </div>
 
-              <label className="flex items-center gap-3 text-dark-200 text-sm">
+              <label className="flex items-center gap-3 text-sm text-white/80">
                 <input
                   type="checkbox"
                   checked={formData.is_published}
                   onChange={(e) =>
                     setFormData({ ...formData, is_published: e.target.checked })
                   }
-                  className="h-4 w-4 accent-cyan-400"
+                  className="h-4 w-4 accent-[#606bfa]"
                 />
                 Mark as published
               </label>
@@ -299,7 +292,7 @@ function BlogsContent() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-2 rounded-xl transition"
+                  className="rounded-xl bg-[#606bfa] px-4 py-2 font-semibold text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
                 >
                   {saving ? "Saving..." : editingId ? "Update" : "Create"}
                 </button>
@@ -307,7 +300,7 @@ function BlogsContent() {
                   type="button"
                   onClick={handleCancel}
                   disabled={saving}
-                  className="glass-soft hover:bg-slate-700/60 text-dark-100 px-4 py-2 rounded-xl transition"
+                  className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 text-white/85 transition hover:bg-white/[0.14] disabled:opacity-60"
                 >
                   Cancel
                 </button>
@@ -317,31 +310,34 @@ function BlogsContent() {
         )}
 
         {loading ? (
-          <div className="text-center py-12 text-dark-400">
+          <div className="py-12 text-center text-white/55">
             Loading blogs...
           </div>
         ) : blogs.length === 0 ? (
-          <div className="text-center py-12 text-dark-400">No blogs yet</div>
+          <div className="py-12 text-center text-white/55">No blogs yet</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {blogs.map((blog) => (
-              <div key={blog.id} className="glass glass-hover rounded-3xl p-6">
-                <h3 className="text-xl font-bold text-dark-50 mb-2 line-clamp-2">
+              <div
+                key={blog.id}
+                className="overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] p-6 shadow-[0_18px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7d89ff]/60"
+              >
+                <h3 className="mb-2 line-clamp-2 text-xl font-semibold text-white">
                   {blog.title}
                 </h3>
-                <p className="text-cyan-300 text-xs mb-2">/{blog.slug}</p>
+                <p className="mb-2 text-xs text-[#a9b2ff]">/{blog.slug}</p>
                 {blog.author && (
-                  <p className="text-dark-400 text-sm mb-3">By {blog.author}</p>
+                  <p className="mb-3 text-sm text-white/60">By {blog.author}</p>
                 )}
                 {blog.summary && (
-                  <p className="text-dark-200 text-sm mb-3 line-clamp-2">
+                  <p className="mb-3 line-clamp-2 text-sm text-white/78">
                     {blog.summary}
                   </p>
                 )}
-                <p className="text-dark-300 text-sm mb-4 line-clamp-3">
+                <p className="mb-4 line-clamp-3 text-sm text-white/65">
                   {blog.content}
                 </p>
-                <div className="flex items-center justify-between text-xs mb-4">
+                <div className="mb-4 flex items-center justify-between text-xs">
                   <span
                     className={`px-2.5 py-1 rounded-full border ${
                       blog.is_published
@@ -352,7 +348,7 @@ function BlogsContent() {
                     {blog.is_published ? "Published" : "Draft"}
                   </span>
                   {blog.created_at && (
-                    <span className="text-dark-400">
+                    <span className="text-white/60">
                       Created {new Date(blog.created_at).toLocaleDateString()}
                     </span>
                   )}
@@ -361,14 +357,15 @@ function BlogsContent() {
                   <button
                     onClick={() => handleEdit(blog)}
                     disabled={deletingId === blog.id}
-                    className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium px-3 py-2 rounded-lg text-sm transition flex-1"
+                    className="flex-1 rounded-lg bg-[#606bfa] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
                   >
                     Edit
                   </button>
+
                   <button
                     onClick={() => requestDelete(blog.id)}
                     disabled={deletingId === blog.id}
-                    className="bg-rose-500 hover:bg-rose-400 text-slate-950 font-medium px-3 py-2 rounded-lg text-sm transition flex-1"
+                    className="flex-1 rounded-lg bg-[#ef4444] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#ff5a5a] disabled:opacity-60"
                   >
                     {deletingId === blog.id ? "Deleting..." : "Delete"}
                   </button>

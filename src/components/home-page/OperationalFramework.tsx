@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { PrimaryButton } from "../ui/PrimaryButton";
 import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function OperationalFramework() {
@@ -10,6 +11,20 @@ export default function OperationalFramework() {
 
   return (
     <section className="px-6 md:px-12 overflow-hidden text-white font-poppins">
+      <GlowBackground
+        style={{
+          top: "35%",
+          left: "55%",
+          width: "100%",
+          height: "5%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto mb-16 max-w-4xl text-center">
           <SectionHeading size="large">

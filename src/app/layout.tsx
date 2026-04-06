@@ -60,65 +60,6 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg bg-[#030303] min-h-screen relative`}
       >
-        <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "700vh",
-            left: "50%",
-            width: "1200px",
-            height: "600px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
-            filter: "blur(100px)",
-            opacity: 0.8,
-          }}
-        />
-
-        <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "1050vh",
-            left: "50%",
-            width: "1200px",
-            height: "600px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-            transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
-            filter: "blur(100px)",
-            opacity: 0.8,
-          }}
-        />
-
-        <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "1400vh",
-            left: "50%",
-            width: "1200px",
-            height: "600px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-            transform: "translate(-50%, -50%) rotate(-40deg) scale(2.0)",
-            filter: "blur(100px)",
-            opacity: 0.8,
-          }}
-        />
-
-        {/* <div
-          className="absolute pointer-events-none -z-10 overflow-hidden"
-          style={{
-            top: "1750vh",
-            left: "50%",
-            width: "1200px",
-            height: "600px",
-            background:
-              "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-            transform: "translate(-50%, -50%) rotate(-40deg) scale(2.0)",
-            filter: "blur(100px)",
-            opacity: 0.8,
-          }}
-        /> */}
         {children}
       </body>
     </html>
