@@ -5,6 +5,12 @@ const API_BASE_URL =
     ? process.env.NEXT_PUBLIC_API_URL_DEV
     : process.env.NEXT_PUBLIC_API_URL_PROD;
 
+console.log(
+  "Dev Mode:",
+  process.env.NEXT_PUBLIC_DEV_MODE,
+  process.env.NEXT_PUBLIC_DEV_MODE === "1",
+);
+
 console.log("API Base URL:", API_BASE_URL);
 
 type ApiPayload = Record<string, unknown>;
@@ -57,6 +63,10 @@ export const blogsApi = {
   create: (data: ApiPayload) => apiClient.post("/blogs/", data),
   update: (id: string, data: ApiPayload) => apiClient.put(`/blogs/${id}`, data),
   delete: (id: string) => apiClient.delete(`/blogs/${id}`),
+};
+
+export const authApi = {
+  login: (data: ApiPayload) => apiClient.post("/auth/login", data),
 };
 
 export default apiClient;

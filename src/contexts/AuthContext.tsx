@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { authApi } from "@/lib/api";
 
 interface User {
   id: string;
@@ -53,23 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading] = useState(false);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      },
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || "Login failed");
-    }
-
-    const data = await response.json();
+    const response = await authApi.login({ email, password });
+    const data = response.data;
 
     setToken(data.access_token);
     setUser(data.user);
