@@ -130,7 +130,7 @@ export default function PrivateAiStack() {
         </div>
 
         {/* Stack Grid */}
-        <div className="flex flex-col md:flex-row items-start justify-center gap-2 md:gap-0 mt-16 mb-20 relative">
+        <div className="flex flex-col md:flex-row items-start justify-center gap-2 md:gap-0 mt-16 mb-12 relative">
           {stackComponents.map((item, index) => (
             <React.Fragment key={item.title}>
               <div className="w-full md:w-[170px] flex flex-col items-center">
@@ -151,13 +151,13 @@ export default function PrivateAiStack() {
                       backgroundImage: `
                         radial-gradient(
                           circle at top right, 
-                          rgba(255, 255, 255, 0.2) 0%, 
-                          transparent 36%
+                          rgba(255, 255, 255, 0.5) 0%, 
+                          transparent 20%
                         ),
                         radial-gradient(
                           circle at bottom left, 
-                          rgba(255, 255, 255, 0.13) 0%, 
-                          transparent 38%
+                          rgba(255, 255, 255, 0.4) 0%, 
+                          transparent 20%
                         )
                       `,
                     }}
@@ -166,7 +166,7 @@ export default function PrivateAiStack() {
                   <div
                     className="relative h-full w-full rounded-[10px] flex items-center justify-center overflow-hidden"
                     style={{
-                      background: "transparent",
+                      background: "rgba(255, 255, 255, 0.1)",
                       border: "0.7px solid rgba(170, 184, 245, 0.2)",
                       boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1)",
                     }}
@@ -217,16 +217,16 @@ export default function PrivateAiStack() {
         </div>
 
         {/* Sub-Bullets */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12 mb-16 text-center">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-24 mb-16 text-center">
           <p className="text-white/30 text-[12px] font-normal tracking-wide">
             No dependency on third-party AI APIs
           </p>
           {/* Optional: subtle dot separator for desktop */}
-          <div className="hidden md:block w-1 h-1 rounded-full bg-white/10" />
+          {/* <div className="hidden md:block w-1 h-1 rounded-full bg-white/10" /> */}
           <p className="text-white/30 text-[12px] font-normal tracking-wide">
             No external data transfer
           </p>
-          <div className="hidden md:block w-1 h-1 rounded-full bg-white/10" />
+          {/* <div className="hidden md:block w-1 h-1 rounded-full bg-white/10" /> */}
           <p className="text-white/30 text-[12px] font-normal tracking-wide">
             Secure access for internal teams only
           </p>

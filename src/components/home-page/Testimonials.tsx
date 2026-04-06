@@ -112,10 +112,7 @@ export default function Testimonials() {
 
             <div className="relative flex flex-col items-end text-right">
               <div className="w-full text-left">
-                <p
-                  style={{ fontFamily: '"Cormorant Garamond", serif' }}
-                  className="inline-block text-2xl font-light leading-relaxed text-white/95 md:text-[2.15rem] md:leading-relaxed"
-                >
+                <p className="inline-block text-xl font-light leading-relaxed text-white/95 md:text-[1.5rem] md:leading-relaxed">
                   {activeTestimonial.quote}
                 </p>
               </div>

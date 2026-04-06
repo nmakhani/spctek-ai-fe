@@ -21,13 +21,13 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
         onClick={onClick}
         type="button"
       >
-        <h3
-          className={`font-heading text-[1.05rem] leading-[1.25] transition-colors md:text-[1.8rem] ${
+        <p
+          className={`font-semibold text-[1.05rem] leading-[1.25] transition-colors md:text-[1.5rem] ${
             isOpen ? "text-[#606bfa]" : "text-white"
           }`}
         >
           {question}
-        </h3>
+        </p>
         <span
           className={`mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all ${
             isOpen

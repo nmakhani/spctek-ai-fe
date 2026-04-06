@@ -17,8 +17,6 @@ import {
   ContactSection,
 } from "@/components/home-page";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function Home() {
@@ -39,7 +37,6 @@ export default function Home() {
 
   return (
     <div className="relative flex flex-col min-h-screen noise-overlay">
-      <Navbar />
       <main className="flex-1">
         {SECTIONS.map(({ Component, id }, index) => (
           <React.Fragment key={index}>
@@ -50,7 +47,6 @@ export default function Home() {
           </React.Fragment>
         ))}
       </main>
-      <Footer />
     </div>
   );
 }

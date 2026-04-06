@@ -6,6 +6,7 @@ type SolutionCard = {
   title: string;
   points: string[];
   cta: string;
+  link: string;
 };
 
 const solutionCards: SolutionCard[] = [
@@ -18,7 +19,8 @@ const solutionCards: SolutionCard[] = [
       "Appeal strategy guidance",
       "Automatic flagging of complex cases for review",
     ],
-    cta: "Get Reinstatement Assessment",
+    cta: "Assess Reinstatement",
+    link: "/reinstatement",
   },
   {
     category: "Private AI",
@@ -30,6 +32,7 @@ const solutionCards: SolutionCard[] = [
       "AI aligned with internal workflows and SOPS",
     ],
     cta: "Deploy Local AI",
+    link: "#contact",
   },
   {
     category: "Custom Solutions",
@@ -41,6 +44,7 @@ const solutionCards: SolutionCard[] = [
       "AI solutions aligned with your operations",
     ],
     cta: "Get Custom Solutions",
+    link: "#contact",
   },
 ];
 
@@ -95,37 +99,34 @@ export default function TargetedSolutions() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Solution Cards Section */}
           {solutionCards.map((card) => (
             <article
               key={card.title}
               className="group relative flex flex-col rounded-[35px] px-8 pb-10 pt-12 transition-all duration-500 hover:scale-[1.02]"
               style={{
                 minHeight: "620px",
-                // 1. Transparency + Glass Blur
-                background: "rgba(255, 255, 255, 0.03)",
                 backdropFilter: "blur(20px)",
-                // 2. Base Border
+                background: "rgba(255, 255, 255, 0.03)",
                 border: "1px solid rgba(255, 255, 255, 0.15)",
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
               }}
             >
-              {/* 3. SHARP DIAGONAL HIGHLIGHTS (Top Left & Bottom Right) */}
               <div
                 className="pointer-events-none absolute inset-0"
                 style={{
                   borderRadius: "35px",
-                  padding: "1.5px", // Thickness of the "glint"
+                  padding: "1.5px",
                   background:
                     "linear-gradient(135deg, #fff 0%, transparent 25%, transparent 75%, #fff 100%)",
                   WebkitMask:
                     "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                   WebkitMaskComposite: "destination-out",
                   maskComposite: "exclude",
-                  opacity: 0.8, // Bright white contrast
+                  opacity: 0.8,
                 }}
               />
 
-              {/* 4. LIQUID DROP GLOW (Top Left) */}
               <div
                 className="pointer-events-none absolute inset-0 rounded-[35px]"
                 style={{
@@ -134,7 +135,6 @@ export default function TargetedSolutions() {
                 }}
               />
 
-              {/* 4. LIQUID DROP GLOW (Bottom Right) */}
               <div
                 className="pointer-events-none absolute inset-0 rounded-[35px]"
                 style={{
@@ -143,7 +143,6 @@ export default function TargetedSolutions() {
                 }}
               />
 
-              {/* Content - High Visibility */}
               <div className="relative z-10 flex h-full flex-col">
                 <p className="text-center tracking-[0.2em] text-[#7c86fc] text-[1rem]">
                   {card.category}
@@ -166,9 +165,8 @@ export default function TargetedSolutions() {
                   ))}
                 </ul>
 
-                {/* CTA Button - Bold & Solid */}
                 <div className="mt-10">
-                  <PrimaryButton fullWidth href="/#contact">
+                  <PrimaryButton fullWidth href={card.link}>
                     {card.cta}
                   </PrimaryButton>
                 </div>

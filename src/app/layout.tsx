@@ -1,8 +1,11 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { activeTheme, type Theme } from "@/themes";
 import { Poppins, JetBrains_Mono } from "next/font/google";
 
-import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -60,7 +63,9 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased text-fg bg-[#030303] min-h-screen relative`}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

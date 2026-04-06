@@ -7,7 +7,7 @@ const stats = [
   {
     stat: "43%",
     title: "of SMBs",
-    description: "cite operations as the top bottleneck",
+    description: "cite operations as the top bottleneck.",
   },
   {
     stat: "7+",
@@ -17,7 +17,7 @@ const stats = [
   {
     stat: "78%",
     title: "of teams",
-    description: "fail to deploy AI effectively",
+    description: "fail to deploy AI effectively.",
   },
 ];
 
@@ -25,7 +25,7 @@ const GlassBadge = ({ stat }: { stat: string }) => (
   <div className="relative shrink-0 w-[64px] h-[64px] flex items-center justify-center">
     {/* Outer Housing */}
     <div
-      className="absolute inset-0 rounded-2xl border border-white/10 overflow-hidden"
+      className="absolute inset-0 rounded-xl border border-white/10 overflow-hidden"
       style={{
         background:
           "linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.3) 100%)",
