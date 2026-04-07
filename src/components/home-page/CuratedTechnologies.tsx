@@ -1,0 +1,167 @@
+"use client";
+
+import Image from "next/image";
+import { SectionHeading } from "../ui/SectionHeading";
+import { GlowBackground } from "../ui/GlowBackground";
+
+const techCategories = [
+  {
+    title: "AI Agents",
+    imagePath: "/home-page/tech-stack/ai-agents.png", // Replace with your actual paths
+  },
+  {
+    title: "CRM and Marketing",
+    imagePath: "/home-page/tech-stack/crm-marketing.png",
+  },
+  {
+    title: "Project Management, Client Success",
+    imagePath: "/home-page/tech-stack/project-mgmt.png",
+  },
+  {
+    title: "Finance, Executive and HR",
+    imagePath: "/home-page/tech-stack/finance-hr.png",
+  },
+];
+
+export default function CuratedTechnologies() {
+  return (
+    <section className="px-6 relative">
+      <GlowBackground
+        style={{
+          top: "60%",
+          left: "60%",
+          width: "100%",
+          height: "60%",
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
+          transform: "translate(-50%, -50%) rotate(-40deg) scale(1.25)",
+          filter: "blur(100px)",
+          opacity: 0.8,
+        }}
+      />
+      <div className="mx-auto max-w-6xl">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <SectionHeading size="large">
+            Curated <span className="text-[#606bfa]">AI And Automation</span>{" "}
+            Technologies
+          </SectionHeading>
+        </div>
+
+        {/* LARGE OUTER GLASS CONTAINER */}
+        <div
+          className="relative rounded-[40px] p-8 md:p-12 overflow-hidden"
+          style={{
+            background: "rgba(255, 255, 255, 0.02)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            boxShadow: "0 40px 100px -20px rgba(0, 0, 0, 0.7)",
+          }}
+        >
+          {/* Outer Container Border Highlights */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              borderRadius: "40px",
+              padding: "1.5px",
+              background:
+                "linear-gradient(135deg, #fff 0%, transparent 30%, transparent 70%, #fff 100%)",
+              WebkitMask:
+                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              opacity: 0.4,
+            }}
+          />
+
+          {/* INNER GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+            {techCategories.map((cat, idx) => (
+              <div
+                key={idx}
+                className="group relative flex flex-col rounded-xl transition-all duration-500 hover:scale-[1.01]"
+                style={{
+                  boxShadow: "0 25px 60px -10px rgba(0,0,0,0.5)",
+                }}
+              >
+                {/* The Main Card Body (Glass Fill) */}
+                <div
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.06) 100%)",
+                    backdropFilter: "blur(10px)",
+                    zIndex: -2,
+                  }}
+                />
+
+                {/* CORNER LIGHT FLARES (Radial) */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-xl"
+                  style={{
+                    background: `
+                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2) 0%, transparent 35%),
+                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 25%)
+                    `,
+                    zIndex: -1,
+                  }}
+                />
+
+                <div className="flex flex-col h-full rounded-xl overflow-hidden relative m-2">
+                  {/* 1. Card Header - fakes transparency with a gradient matching the card background */}
+                  <div className="relative px-6 py-5 z-20 rounded-t-xl overflow-hidden">
+                    {/* The Content */}
+                    <p className="relative z-10 text-white font-semibold text-2xl tracking-tight">
+                      {cat.title}
+                    </p>
+
+                    {/* The 100% Transparent Gradient Border */}
+                    <div
+                      className="pointer-events-none absolute inset-0 rounded-t-xl"
+                      style={{
+                        padding: "1.5px",
+                        background:
+                          "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.3) 100%)",
+                        WebkitMask:
+                          "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                        WebkitMaskComposite: "xor",
+                        maskComposite: "exclude",
+                      }}
+                    />
+
+                    {/* Subtle Internal Corner Glow */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 60%)",
+                      }}
+                    />
+                  </div>
+
+                  {/* 2. Logo Area - no bg needed, inherits white from parent */}
+                  <div className="flex-grow p-8 flex justify-center items-center min-h-[160px] relative z-10 bg-white">
+                    <Image
+                      src={cat.imagePath}
+                      alt={cat.title}
+                      width={400}
+                      height={150}
+                      className="object-contain relative z-10"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* BOTTOM SECTION */}
+        <div className="mt-20 text-center">
+          <p className="text-[1.25rem] font-light italic text-white tracking-wide">
+            And so many more...
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

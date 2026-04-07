@@ -59,7 +59,7 @@ const GlassBadge = ({ stat }: { stat: string }) => (
       style={{
         mixBlendMode: "screen",
         background:
-          "radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)",
+          "radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)",
       }}
     />
   </div>

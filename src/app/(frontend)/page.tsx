@@ -7,14 +7,15 @@ import {
   Problems,
   Issues,
   Testimonials,
-  TargetedSolutions,
-  BusinessAdoption,
   OperationalFramework,
+  TargetedSolutions,
+  CuratedTechnologies,
+  BusinessAdoption,
   Tools,
   PrivateAiStack,
   AIPlaybook,
-  FAQSection,
   ContactSection,
+  FAQSection,
 } from "@/components/home-page";
 
 import { SectionDivider } from "@/components/ui/SectionDivider";
@@ -27,6 +28,7 @@ export default function Home() {
     { Component: Testimonials, id: "testimonials" },
     { Component: OperationalFramework, id: "framework" },
     { Component: TargetedSolutions, id: "solutions" },
+    { Component: CuratedTechnologies, id: "technologies" },
     { Component: BusinessAdoption, id: "adoption" },
     { Component: Tools, id: "tools" },
     { Component: PrivateAiStack, id: "stack" },

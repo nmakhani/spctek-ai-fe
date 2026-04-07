@@ -103,7 +103,7 @@ export default function TargetedSolutions() {
           {solutionCards.map((card) => (
             <article
               key={card.title}
-              className="group relative flex flex-col rounded-[35px] px-8 pb-10 pt-12 transition-all duration-500 hover:scale-[1.02]"
+              className="group relative flex flex-col items-center rounded-[35px] px-8 pb-10 pt-12 transition-all duration-500 hover:scale-[1.02]"
               style={{
                 minHeight: "620px",
                 backdropFilter: "blur(20px)",
@@ -143,7 +143,7 @@ export default function TargetedSolutions() {
                 }}
               />
 
-              <div className="relative z-10 flex h-full flex-col">
+              <div className="relative z-10 flex h-full flex-col w-[320px]">
                 <p className="text-center tracking-[0.2em] text-[#7c86fc] text-[1rem]">
                   {card.category}
                 </p>
