@@ -5,7 +5,6 @@ import { GlowBackground } from "../ui/GlowBackground";
 export default function Hero() {
   return (
     <section className="relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12 font-poppins">
-      {/* 0. The Hero Glow - Anchored to the heading area */}
       <GlowBackground
         style={{
           top: "-35%",
@@ -17,26 +16,22 @@ export default function Hero() {
         }}
       />
 
-      {/* 1. Headline - mb-8 reduced to mb-6 */}
       <SectionHeading size="hero">
         Transform Operational Chaos <br className="hidden md:block" />
         Into <span className="text-[#a0a6fc]">Intelligent Systems</span>
       </SectionHeading>
 
-      {/* 2. Subtitle - mb-12 reduced to mb-8 */}
-      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed mt-8">
+      <p className="text-xl md:text-2xl text-white font-poppins font-light max-w-[800px] leading-relaxed mt-8">
         AI automation is transforming industries, but most SMBs are
         <br /> unsure what to adopt or where to start. We help SMBs solve real
         operational problems using intelligent diagnostics, secure AI systems,
         and targeted automation solutions.
       </p>
 
-      {/* 3. CTA - mb-14 reduced to mb-10, rounded-xl changed to rounded-2xl */}
       <div className="mb-10">
         <PrimaryButton href="/#contact">Get My AI Playbook</PrimaryButton>
       </div>
 
-      {/* 4. Trust Badge - mt-4 removed to keep it tight to the button */}
       <div className="flex flex-col md:flex-row items-center justify-center gap-4">
         <div className="flex -space-x-2">
           <div className="w-9 h-9 rounded-full border-2 border-black bg-gradient-to-br from-[#818cf8] to-[#4f46e5] flex items-center justify-center text-[10px] font-bold text-white shadow-xl">

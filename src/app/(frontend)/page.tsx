@@ -14,7 +14,7 @@ import {
   Tools,
   PrivateAiStack,
   AIPlaybook,
-  ContactSection,
+  Contact,
   FAQSection,
 } from "@/components/home-page";
 
@@ -33,7 +33,7 @@ export default function Home() {
     { Component: Tools, id: "tools" },
     { Component: PrivateAiStack, id: "stack" },
     { Component: AIPlaybook, id: "playbook" },
-    { Component: ContactSection, id: "contact" },
+    { Component: Contact, id: "contact" },
     { Component: FAQSection, id: "faq" },
   ];
 

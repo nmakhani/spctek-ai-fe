@@ -91,7 +91,7 @@ export default function TargetedSolutions() {
             Targeted <span className="text-[#606bfa]">AI Solutions</span> for
             High-Impact Business Problems
           </SectionHeading>
-          <p className="mx-auto mt-6 max-w-3xl font-medium leading-relaxed text-white md:text-[1.3rem]">
+          <p className="mx-auto mt-6 max-w-3xl font-light leading-relaxed text-white md:text-[1.3rem]">
             Instead of offering generic AI services, we build targeted solutions
             that address specific operational challenges e-commerce businesses
             face today.
@@ -107,7 +107,6 @@ export default function TargetedSolutions() {
               style={{
                 minHeight: "620px",
                 backdropFilter: "blur(20px)",
-                background: "rgba(255, 255, 255, 0.03)",
                 border: "1px solid rgba(255, 255, 255, 0.15)",
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
               }}
@@ -130,16 +129,17 @@ export default function TargetedSolutions() {
               <div
                 className="pointer-events-none absolute inset-0 rounded-[35px]"
                 style={{
-                  background:
-                    "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.5) 0%, transparent 20%)",
+                  background: `
+                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.5) 0%, transparent 20%),
+                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 10%)
+                    `,
                 }}
               />
 
               <div
                 className="pointer-events-none absolute inset-0 rounded-[35px]"
                 style={{
-                  background:
-                    "radial-gradient(circle at 100% 100%, rgba(255,255,255,0.25) 0%, transparent 10%)",
+                  background: "",
                 }}
               />
 
@@ -166,9 +166,7 @@ export default function TargetedSolutions() {
                 </ul>
 
                 <div className="flex justify-center">
-                  <PrimaryButton width={300} href={card.link}>
-                    {card.cta}
-                  </PrimaryButton>
+                  <PrimaryButton href={card.link}>{card.cta}</PrimaryButton>
                 </div>
               </div>
             </article>

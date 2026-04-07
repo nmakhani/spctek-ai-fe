@@ -85,7 +85,7 @@ export default function Tools() {
             <br />
             Complex Business Operations
           </SectionHeading>
-          <p className="mx-auto mt-6 max-w-2xl font-medium leading-relaxed md:text-[1.3rem] opacity-100">
+          <p className="mx-auto mt-6 max-w-2xl font-light leading-relaxed md:text-[1.3rem] opacity-100">
             Every tool in your stack was built for one layer of the problem.
             None of them were built for the system.
           </p>

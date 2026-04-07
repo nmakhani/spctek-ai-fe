@@ -4,34 +4,24 @@ import React from "react";
 
 import {
   Hero,
-  Problems,
-  Issues,
-  Testimonials,
-  TargetedSolutions,
-  BusinessAdoption,
-  OperationalFramework,
-  Tools,
-  PrivateAiStack,
-  AIPlaybook,
+  DontWasteTime,
+  ReinstatementProcess,
+  Intelligence,
+  Contact,
+  ExpertHelp,
   FAQSection,
-  ContactSection,
-} from "@/components/home-page";
+} from "@/components/reinstatement";
 
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 export default function Home() {
   const SECTIONS = [
     { Component: Hero, id: "hero" },
-    { Component: Problems, id: "problems" },
-    { Component: Issues, id: "issues" },
-    { Component: Testimonials, id: "testimonials" },
-    { Component: OperationalFramework, id: "framework" },
-    { Component: TargetedSolutions, id: "solutions" },
-    { Component: BusinessAdoption, id: "adoption" },
-    { Component: Tools, id: "tools" },
-    { Component: PrivateAiStack, id: "stack" },
-    { Component: AIPlaybook, id: "playbook" },
-    { Component: ContactSection, id: "contact" },
+    { Component: DontWasteTime, id: "dont-waste-time" },
+    { Component: ReinstatementProcess, id: "reinstatement-process" },
+    { Component: Intelligence, id: "intelligence" },
+    { Component: Contact, id: "contact" },
+    { Component: ExpertHelp, id: "expert-help" },
     { Component: FAQSection, id: "faq" },
   ];
 

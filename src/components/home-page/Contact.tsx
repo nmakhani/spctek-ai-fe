@@ -14,7 +14,7 @@ interface FormErrors {
   submit?: string;
 }
 
-export default function ContactSection() {
+export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -122,7 +122,7 @@ export default function ContactSection() {
             Ready to See How <span className="text-[#606bfa]">AI</span> Can
             Improve Your Operations?
           </SectionHeading>
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-[1.35] text-white/90 md:text-2xl">
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-[1.35] text-white md:text-2xl">
             Provide your details, and we&apos;ll prepare a custom AI plan
             tailored to your business.
           </p>

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { SectionHeading } from "../ui/SectionHeading";
-import { GlowBackground } from "../ui/GlowBackground";
 
 interface FAQItemProps {
   question: string;
@@ -57,45 +56,29 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 
 const faqs = [
   {
-    question: "Why focus on fixing processes before implementing AI?",
+    question: "Is the AI assessment really free?",
     answer:
-      "AI works best when it is built on clear operational systems. If processes are inefficient or disconnected, AI tools often add complexity rather than improving outcomes.",
+      "Yes. The full AI assessment, including viability score, root cause, and strategy recommendation, is completely free with no credit card required. If you choose to proceed with a fully managed appeal and reinstatement, that is a paid service.",
   },
   {
-    question: "How do I know if my business is ready for AI?",
+    question: "How accurate is the viability score?",
     answer:
-      "Businesses are usually ready for AI when their workflows, data sources, and operational processes are clearly defined. Our approach helps identify where AI can create a meaningful impact.",
+      "Our model is trained on Amazon's reinstatement policies, suspension categories, and thousands of historical case outcomes. It correctly identifies high- and low-probability cases and gives a viability percentage score. Complex cases, such as multiple rejections, counterfeit, or Section 3 suspensions, are immediately flagged for human review.",
   },
   {
-    question: "What makes SPCTEK different from typical AI agencies?",
+    question: "Do you need my Amazon login?",
     answer:
-      "Most providers focus on deploying AI tools. SPCTEK focuses on understanding and improving the underlying systems first, so AI solutions actually deliver measurable results.",
+      "No, the AI assessment is based entirely on what you enter in the form. We do not ask for or store your Amazon credentials.",
   },
   {
-    question:
-      "Why would a business choose Local AI instead of public AI tools?",
+    question: "What if my appeal was already rejected?",
     answer:
-      "Local AI allows organizations to maintain full control over their data and eliminate recurring API costs. It allows them to operate AI systems within their own infrastructure without exposing sensitive information to external parties.",
+      "That's useful data. Prior rejection history is factored into the model and often clarifies the real root cause, which is frequently different from what Amazon cited.",
   },
   {
-    question: "Do I need technical expertise to use your AI solutions?",
+    question: "What if my case is too complex for the AI?",
     answer:
-      "No. Our solutions are designed to be accessible for non-technical teams through simple interfaces and guided workflows.",
-  },
-  {
-    question: "Who are your solutions designed for?",
-    answer:
-      "SPCTEK works primarily with SMBs that want to adopt AI responsibly, improve operational efficiency, and build systems that scale with their business.",
-  },
-  {
-    question: "Can you help if we are just starting to explore AI?",
-    answer:
-      "Yes. Many clients come to us early in their AI journey. We help identify practical use cases and implement solutions that align with real operational needs.",
-  },
-  {
-    question: "What types of businesses benefit the most from your solutions?",
-    answer:
-      "Businesses with complex workflows, multiple operational tools, or growing teams benefit the most from improved systems, automation, and secure AI deployment.",
+      "The AI flags complex cases immediately. If your case is flagged, a member of our specialist team will reach out within one business day.",
   },
 ];
 
@@ -104,20 +87,6 @@ export default function FAQSection() {
 
   return (
     <section className="relative px-6 md:px-12 font-poppins" id="faq">
-      <GlowBackground
-        style={{
-          top: "15%",
-          left: "60%",
-          width: "110%",
-          height: "110%",
-          background:
-            "radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)",
-          transform: "translate(-50%, -50%) rotate(-30deg) scale(1.25)",
-          filter: "blur(100px)",
-          opacity: 0.8,
-        }}
-      />
-
       <div className="relative mx-auto max-w-6xl font-poppins">
         <div className="mb-8 text-center md:mb-10">
           <SectionHeading size="large">

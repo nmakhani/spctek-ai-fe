@@ -67,7 +67,7 @@ body {
   }
 }
 
-@keyframes home-issues-float {
+@keyframes bobbing-image {
   0%,
   100% {
     transform: translateY(0);
@@ -77,6 +77,6 @@ body {
   }
 }
 
-.home-issues-float {
-  animation: home-issues-float 6s ease-in-out infinite;
+.bobbing-image {
+  animation: bobbing-image 6s ease-in-out infinite;
 }

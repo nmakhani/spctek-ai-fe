@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative border-t border-white/12 bg-[linear-gradient(135deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0.02)_22%,rgba(15,17,36,0.52)_55%,rgba(6,8,18,0.62)_100%)]"
+      className="mt-48 relative border-t border-white/12 bg-[linear-gradient(135deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0.02)_22%,rgba(15,17,36,0.52)_55%,rgba(6,8,18,0.62)_100%)]"
       style={{
         backdropFilter: "blur(22px) saturate(145%)",
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",

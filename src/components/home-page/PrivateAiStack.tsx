@@ -122,7 +122,7 @@ export default function PrivateAiStack() {
             <br />
             Infrastructure
           </SectionHeading>
-          <p className="mx-auto mt-8 max-w-3xl font-medium leading-relaxed text-white/80 md:text-[1.3rem]">
+          <p className="mx-auto mt-8 max-w-3xl font-light leading-relaxed text-white md:text-2xl">
             Every component runs inside your infrastructure. Your data never
             <br className="hidden md:block" />
             leaves your network, and there are no third-party dependencies.

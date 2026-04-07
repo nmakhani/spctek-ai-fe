@@ -21,6 +21,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
+    { name: "Reinstatement", href: "/reinstatement" },
     { name: "Problems", href: "/#problems" },
     { name: "Framework", href: "/#framework" },
     { name: "Stack", href: "/#stack" },
