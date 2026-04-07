@@ -165,8 +165,8 @@ export default function TargetedSolutions() {
                   ))}
                 </ul>
 
-                <div className="mt-10">
-                  <PrimaryButton fullWidth href={card.link}>
+                <div className="flex justify-center">
+                  <PrimaryButton width={300} href={card.link}>
                     {card.cta}
                   </PrimaryButton>
                 </div>

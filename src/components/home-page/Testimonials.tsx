@@ -90,16 +90,47 @@ export default function Testimonials() {
         </div>
 
         <div className="relative mx-auto w-full max-w-5xl py-6">
+          {/* The underlying glow */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606bfa]/15 blur-[110px]" />
 
           <div
-            className={`relative z-10 overflow-hidden rounded-[2rem] border border-white/20 bg-white/[0.07] p-6 shadow-[0_25px_80px_rgba(6,12,35,0.55)] backdrop-blur-2xl transition-all duration-700 md:p-10 ${
+            className={`relative z-10 overflow-hidden rounded-[35px] p-6 transition-all duration-700 md:p-12 ${
               isTransitioning
                 ? "opacity-0 blur-[1.5px] saturate-125"
                 : "opacity-100 blur-0 saturate-100"
             }`}
+            style={{
+              backdropFilter: "blur(20px)",
+              background: "rgba(255, 255, 255, 0.03)",
+              boxShadow: "0 25px 80px rgba(6, 12, 35, 0.55)",
+            }}
           >
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(130deg,rgba(255,255,255,0.20)_0%,rgba(255,255,255,0.02)_42%,rgba(96,107,250,0.16)_100%)]" />
+            {/* 1. THE CHISELED GRADIENT BORDER (Top-Left & Bottom-Right Shine) */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                borderRadius: "35px",
+                padding: "1.5px",
+                background:
+                  "linear-gradient(135deg, #fff 0%, transparent 25%, transparent 75%, #fff 100%)",
+                WebkitMask:
+                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                WebkitMaskComposite: "destination-out",
+                maskComposite: "exclude",
+                opacity: 0.8,
+              }}
+            />
+
+            {/* 2. TOP-LEFT CORNER GLOW */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-[35px]"
+              style={{
+                background:
+                  "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.15) 0%, transparent 30%)",
+              }}
+            />
+
+            {/* 3. TRANSITION OVERLAY (Appears during isTransitioning) */}
             <div
               className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${
                 isTransitioning ? "opacity-70" : "opacity-0"
@@ -110,22 +141,29 @@ export default function Testimonials() {
               }}
             />
 
-            <div className="relative flex flex-col items-end text-right">
+            {/* CONTENT SECTION */}
+            {/* ... inside the main container ... */}
+
+            <div className="relative z-10 flex h-full min-h-[240px] flex-col justify-between">
+              {/* TOP SECTION: The Quote */}
               <div className="w-full text-left">
-                <p className="inline-block text-xl font-light leading-relaxed text-white/95 md:text-[1.5rem] md:leading-relaxed">
-                  {activeTestimonial.quote}
+                <p className="text-xl font-light leading-relaxed text-white/95 md:text-[1.75rem] md:leading-snug">
+                  "{activeTestimonial.quote}"
                 </p>
               </div>
 
-              <div className="mt-2.5 max-w-[300px] shrink-0">
+              {/* BOTTOM SECTION: Aligned Right */}
+              <div className="mt-8 flex flex-col items-end text-right">
                 <p className="text-xl font-semibold leading-snug text-white md:text-2xl">
                   {activeTestimonial.name}
                 </p>
-                <p className="text-sm leading-snug text-white/65 md:text-base">
+                <p className="mt-1 text-sm font-medium tracking-wide text-[#7c86fc] uppercase md:text-base">
                   {activeTestimonial.role}
                 </p>
               </div>
             </div>
+
+            {/* ... remainder of code ... */}
           </div>
         </div>
       </div>

@@ -55,7 +55,7 @@ const GlassBadge = ({ stat }: { stat: string }) => (
 
     {/* Top-Left Specular Flare */}
     <div
-      className="absolute -top-2 -left-2 w-10 h-10 bg-white/40 blur-lg rounded-full pointer-events-none"
+      className="absolute -top-4 -left-12 w-36 h-8 blur rounded-full pointer-events-none"
       style={{
         mixBlendMode: "screen",
         background:
@@ -106,14 +106,14 @@ export default function Problems() {
             {stats.map((item, idx) => (
               <div
                 key={idx}
-                className="group relative flex items-center gap-4 p-0 rounded-[22px] transition-all duration-500 hover:bg-white/[0.03] max-w-[360px]"
+                className="group relative flex items-center gap-4 p-0 rounded-xl transition-all duration-500 hover:bg-white/[0.03] max-w-[360px]"
                 style={{
                   background: "rgba(10, 10, 20, 0.4)",
                   backdropFilter: "blur(12px)",
                 }}
               >
                 <div
-                  className="absolute inset-0 rounded-[22px] pointer-events-none"
+                  className="absolute inset-0 rounded-xl pointer-events-none"
                   style={{
                     padding: "1px", // Border width
                     background: `

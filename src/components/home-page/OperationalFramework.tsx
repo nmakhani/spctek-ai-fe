@@ -97,7 +97,7 @@ export default function OperationalFramework() {
         </div>
 
         {/* CTA Button */}
-        <div className="mt-20 flex justify-center">
+        <div className="flex justify-center">
           <PrimaryButton href="/#contact">
             Talk to an Automation Expert
           </PrimaryButton>

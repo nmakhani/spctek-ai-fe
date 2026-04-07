@@ -24,7 +24,7 @@ export default function Hero() {
       </SectionHeading>
 
       {/* 2. Subtitle - mb-12 reduced to mb-8 */}
-      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed my-8">
+      <p className="text-xl md:text-2xl text-white/80 font-poppins font-light max-w-[800px] leading-relaxed mt-8">
         AI automation is transforming industries, but most SMBs are
         <br /> unsure what to adopt or where to start. We help SMBs solve real
         operational problems using intelligent diagnostics, secure AI systems,

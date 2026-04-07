@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { debugConsole } from "./debug";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_DEV_MODE === "1"
     ? process.env.NEXT_PUBLIC_API_URL_DEV
@@ -9,10 +11,12 @@ const apiClient = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// --- REQUEST INTERCEPTOR (Logs & Auth) ---
+debugConsole.log("🔧 DEV MODE =", process.env.NEXT_PUBLIC_DEV_MODE);
+debugConsole.log("🔧 BASE URL =", API_BASE_URL);
+
 apiClient.interceptors.request.use(
   (config) => {
-    console.log(
+    debugConsole.log(
       `🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`,
       {
         data: config.data,
@@ -29,14 +33,14 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error("❌ [API Request Error]", error);
+    debugConsole.error("❌ [API Request Error]", error);
     return Promise.reject(error);
   },
 );
 
 apiClient.interceptors.response.use(
   (response) => {
-    console.log(
+    debugConsole.log(
       `✅ [API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`,
       {
         status: response.status,
@@ -46,7 +50,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error(
+    debugConsole.error(
       `🔥 [API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
       {
         status: error.response?.status,

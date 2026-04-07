@@ -1,7 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, ReactNode } from "react";
+import { useRouter, usePathname } from "next/navigation";
+
 import { useAuth } from "@/contexts/AuthContext";
 
 interface ProtectedRouteProps {
@@ -10,13 +11,20 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, loading } = useAuth();
 
+  const isLoginPage = pathname === "/portal/login";
+
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && !isLoginPage) {
       router.push("/portal/login");
     }
-  }, [user, loading, router]);
+
+    if (!loading && user && isLoginPage) {
+      router.push("/portal");
+    }
+  }, [user, loading, router, isLoginPage]);
 
   if (loading) {
     return (
@@ -26,9 +34,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  if (!user) {
-    return null;
+  if (isLoginPage || user) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return null;
 }

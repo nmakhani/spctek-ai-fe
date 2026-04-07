@@ -11,7 +11,7 @@ interface ConfirmDialogProps {
   onCancel: () => void;
 }
 
-export default function ConfirmDialog({
+export const ConfirmDialog = ({
   isOpen,
   title,
   message,
@@ -20,7 +20,7 @@ export default function ConfirmDialog({
   loading = false,
   onConfirm,
   onCancel,
-}: ConfirmDialogProps) {
+}: ConfirmDialogProps) => {
   if (!isOpen) {
     return null;
   }
@@ -58,4 +58,4 @@ export default function ConfirmDialog({
       </div>
     </div>
   );
-}
+};

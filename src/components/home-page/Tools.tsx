@@ -122,19 +122,19 @@ export default function Tools() {
                     key={row.capability}
                     className="border-b border-white/20 last:border-b-0"
                   >
-                    <td className="py-5 px-6 text-left text-white/90 border-r border-white/30 font-medium pl-10">
+                    <td className="py-4 px-6 text-left text-white/90 border-r border-white/30 font-medium pl-10">
                       {row.capability}
                     </td>
-                    <td className="py-5 px-4 border-r border-white/30 bg-[#2D345E]">
+                    <td className="py-4 px-4 border-r border-white/30 bg-[#2D345E]">
                       <RenderStatus status={row.spctek} />
                     </td>
-                    <td className="py-5 px-4 border-r border-white/30">
+                    <td className="py-4 px-4 border-r border-white/30">
                       <RenderStatus status={row.enterprise} />
                     </td>
-                    <td className="py-5 px-4 border-r border-white/30">
+                    <td className="py-4 px-4 border-r border-white/30">
                       <RenderStatus status={row.saas} />
                     </td>
-                    <td className="py-5 px-4">
+                    <td className="py-4 px-4">
                       <RenderStatus status={row.ai} />
                     </td>
                   </tr>
@@ -145,7 +145,7 @@ export default function Tools() {
         </div>
 
         {/* CTA Button */}
-        <div className="mt-12 flex justify-center">
+        <div className="flex justify-center">
           <PrimaryButton href="/#contact">
             Talk to an Automation Expert
           </PrimaryButton>

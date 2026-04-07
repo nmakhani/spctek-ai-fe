@@ -12,10 +12,10 @@ const sizeClasses: Record<SectionHeadingSize, string> = {
   large: "text-[2.5rem] md:text-[3.5rem] leading-tight",
 };
 
-export function SectionHeading({ size, children }: SectionHeadingProps) {
+export const SectionHeading = ({ size, children }: SectionHeadingProps) => {
   return (
     <h1 className={`font-heading text-white text-center ${sizeClasses[size]}`}>
       {children}
     </h1>
   );
-}
+};

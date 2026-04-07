@@ -217,7 +217,7 @@ export default function PrivateAiStack() {
         </div>
 
         {/* Sub-Bullets */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-24 mb-16 text-center">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-24 text-center">
           <p className="text-white/30 text-[12px] font-normal tracking-wide">
             No dependency on third-party AI APIs
           </p>

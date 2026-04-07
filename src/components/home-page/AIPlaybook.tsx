@@ -13,12 +13,12 @@ export default function AIPlaybook() {
           <span className="text-[#606bfa]">AI Playbook</span>
         </SectionHeading>
 
-        <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed mt-8 mb-12">
+        <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed mt-8">
           Take a quick assessment, and get a personalized roadmap of where AI
           and automation can have the biggest impact on your business.
         </p>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center">
           <PrimaryButton href="/#contact">Get My AI Playbook</PrimaryButton>
         </div>
       </div>

@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BookOpen, MessageSquare } from "lucide-react";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { BookOpen, MessageSquare } from "lucide-react";
 
 function DashboardContent() {
   const router = useRouter();
@@ -39,16 +40,26 @@ function DashboardContent() {
               </div>
 
               <div className="w-full rounded-2xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur-xl md:w-auto md:min-w-[320px]">
-                <span>Logged in as </span>
-                <span className="text-[#a9b2ff]">
-                  {user?.username || "User"}
-                </span>
-                <a
-                  href={`mailto:${user?.email}`}
-                  className="mt-2 block cursor-pointer break-all transition hover:text-[#d0d7ff]"
+                <Link
+                  href="/"
+                  className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[#9aa4ff] transition-colors hover:text-white"
                 >
-                  <p className="text-xs text-white/60">{user?.email}</p>
-                </a>
+                  <span className="text-base">←</span> Back to Website
+                </Link>
+
+                <div className="border-t border-white/10 pt-4">
+                  <span className="text-sm text-white/70">Logged in as </span>
+                  <span className="font-medium text-[#a9b2ff]">
+                    {user?.username || "User"}
+                  </span>
+                  <a
+                    href={`mailto:${user?.email}`}
+                    className="mt-1 block cursor-pointer break-all transition hover:text-[#d0d7ff]"
+                  >
+                    <p className="text-xs text-white/40">{user?.email}</p>
+                  </a>
+                </div>
+
                 <button
                   onClick={handleLogout}
                   className="mt-4 w-full rounded-xl border border-red-300/30 bg-red-400/15 px-4 py-2.5 text-sm font-medium text-red-200 transition-colors hover:bg-red-400/25"
