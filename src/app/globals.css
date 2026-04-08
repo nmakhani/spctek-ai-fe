@@ -80,3 +80,18 @@ body {
 .bobbing-image {
   animation: bobbing-image 6s ease-in-out infinite;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.3;
+  right: 5%;
+}
+
+input[type="date"] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: rgb(255 255 255 / 0.3);
+}

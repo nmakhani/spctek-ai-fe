@@ -4,10 +4,10 @@ import React from "react";
 
 import {
   Hero,
-  DontWasteTime,
+  AccountRisk,
   ReinstatementProcess,
   Intelligence,
-  Contact,
+  FreeAssessment,
   ExpertHelp,
   FAQSection,
 } from "@/components/reinstatement";
@@ -17,10 +17,10 @@ import { SectionDivider } from "@/components/ui/SectionDivider";
 export default function Home() {
   const SECTIONS = [
     { Component: Hero, id: "hero" },
-    { Component: DontWasteTime, id: "dont-waste-time" },
+    { Component: AccountRisk, id: "account-risk" },
     { Component: ReinstatementProcess, id: "reinstatement-process" },
     { Component: Intelligence, id: "intelligence" },
-    { Component: Contact, id: "contact" },
+    { Component: FreeAssessment, id: "free-assessment" },
     { Component: ExpertHelp, id: "expert-help" },
     { Component: FAQSection, id: "faq" },
   ];

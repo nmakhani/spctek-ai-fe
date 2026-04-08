@@ -92,4 +92,9 @@ export const authApi = {
   login: (data: Record<string, unknown>) => apiClient.post("/auth/login", data),
 };
 
+export const reinstatementApi = {
+  generateReport: (data: Record<string, unknown>) =>
+    apiClient.post("/reinstatement/generate", data),
+};
+
 export default apiClient;

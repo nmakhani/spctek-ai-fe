@@ -15,7 +15,7 @@ const issuesList = [
   { number: "5", title: "Make mistakes that reduce reinstatement chances" },
 ];
 
-export default function DontWasteTime() {
+export default function AccountRisk() {
   return (
     <section className="px-6 md:px-12 font-poppins">
       <div className="max-w-5xl mx-auto">

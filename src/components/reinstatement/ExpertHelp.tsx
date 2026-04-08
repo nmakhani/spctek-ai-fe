@@ -44,14 +44,14 @@ export default function ExpertHelp() {
         </SectionHeading>
 
         {/* Main Feature Container */}
-        <div className="mt-16 relative rounded-[40px] p-8 md:p-12 overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-          {/* Subtle Outer Radial Border Effect */}
+        <div className="mt-16 mx-4 relative rounded-3xl p-8 md:p-8 overflow-hidden">
+          {/* Outer Gradient Border - Now White focused */}
           <div
-            className="pointer-events-none absolute inset-0 rounded-[40px]"
+            className="pointer-events-none absolute inset-0 rounded-3xl"
             style={{
-              padding: "2px",
+              padding: "3px",
               background:
-                "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.1) 100%)",
+                "linear-gradient(135deg, white 0%, transparent 25%, transparent 75%, white 100%)",
               WebkitMask:
                 "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
               WebkitMaskComposite: "destination-out",
@@ -59,11 +59,12 @@ export default function ExpertHelp() {
             }}
           />
 
-          {/* Top Corner Light Flares */}
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
-            <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[#606bfa]/20 blur-[100px] rounded-full" />
-            <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[30%] bg-white/5 blur-[80px] rounded-full" />
-          </div>
+          <div
+            className="pointer-events-none absolute inset-0 rounded-[25px]"
+            style={{
+              background: `linear-gradient(110deg, rgba(255, 255, 255, 0.6) 0%, transparent 8%, transparent 92%, rgba(255, 255, 255, 0.6) 100%)`,
+            }}
+          />
 
           <div className="relative z-10">
             {/* Suspension Tags Grid */}
@@ -71,10 +72,10 @@ export default function ExpertHelp() {
               {suspensionTypes.map((type, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-center min-h-[70px] border border-white rounded-xl px-4 py-2 text-white text-lg font-medium tracking-tight shadow-lg"
+                  className="flex items-center justify-center min-h-[70px] border-2 border-white rounded-xl px-4 py-2 text-white text-2xl font-medium shadow-lg"
                   style={{
                     background:
-                      "radial-gradient(circle at center, #2e358b 0%, #131532 100%)",
+                      "linear-gradient(to bottom, #2e358b 0%, #131532 100%)",
                   }}
                 >
                   {type}
@@ -90,7 +91,7 @@ export default function ExpertHelp() {
                   className="flex items-center justify-center gap-6 border border-white p-4 md:p-4 rounded-xl transition-all duration-500 hover:scale-[1.01] shadow-2xl"
                   style={{
                     background:
-                      "radial-gradient(circle at center, #2e358b -20%, #131532 100%)",
+                      "linear-gradient(105deg, #131532 0%, #2e358b 30%, #2e358b 70%, #131532 100%)",
                   }}
                 >
                   <span className="text-6xl md:text-8xl font-bold text-white tracking-tighter">
@@ -116,13 +117,13 @@ export default function ExpertHelp() {
         </p>
 
         {/* Checklist Grid */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-16 text-left max-w-5xl mx-auto mb-20">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-16 text-left max-w-5xl mx-auto mb-20">
           {expertServices.map((service, index) => (
-            <div key={index} className="flex items-start gap-4 group">
+            <div key={index} className="flex items-start gap-2 group">
               <span className="text-2xl font-bold group-hover:scale-110 transition-transform">
                 ✓
               </span>
-              <span className="text-lg md:text-xl font-medium text-white/90 leading-snug">
+              <span className="text-lg md:text-2xl font-medium text-white/90 leading-snug">
                 {service}
               </span>
             </div>

@@ -148,7 +148,7 @@ export default function Testimonials() {
               {/* TOP SECTION: The Quote */}
               <div className="w-full text-left">
                 <p className="text-xl font-light leading-relaxed text-white/95 md:text-[1.75rem] md:leading-snug">
-                  "{activeTestimonial.quote}"
+                  &ldquo;{activeTestimonial.quote}&rdquo;
                 </p>
               </div>
 

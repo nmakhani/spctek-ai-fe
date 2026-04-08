@@ -79,10 +79,7 @@ export default function ReinstatementProcess() {
               <div
                 className="pointer-events-none absolute inset-0 rounded-[35px] overflow-hidden"
                 style={{
-                  background: `
-                    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.5) 0%, transparent 20%),
-                    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 10%)
-                  `,
+                  background: `linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 15%, transparent 90%, rgba(255, 255, 255, 0.6) 100%)`,
                 }}
               />
 

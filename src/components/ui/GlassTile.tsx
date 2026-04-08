@@ -31,10 +31,7 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
       <div
         className="pointer-events-none absolute inset-0 rounded-[25px]"
         style={{
-          background: `
-            radial-gradient(circle at 0% 100%, rgba(255,255,255,0.5) 0%, transparent 15%),
-            radial-gradient(circle at 100% 0%, rgba(255,255,255,0.5) 0%, transparent 20%)
-          `,
+          background: `linear-gradient(45deg, rgba(255, 255, 255, 0.6) 0%, transparent 15%, transparent 85%, rgba(255, 255, 255, 0.6) 100%)`,
         }}
       />
 
