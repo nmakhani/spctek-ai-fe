@@ -8,25 +8,26 @@ import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
 
 const issuesList = [
-	{ number: '1', title: 'Waste time with manual assessment & chasing experts' },
-	{ number: '2', title: 'Submit appeals without understanding the root cause' },
-	{ number: '3', title: 'Use generic templates that get rejected' },
-	{ number: '4', title: 'Waste days waiting for unclear guidance' },
-	{ number: '5', title: 'Make mistakes that reduce reinstatement chances' },
+	{ number: '1', title: 'Hours lost every week to manual, repetitive tasks' },
+	{ number: '2', title: 'Disconnected tools causing errors and delays' },
+	{ number: '3', title: "No clear visibility into what's actually slowing things down" },
+	{ number: '4', title: 'Bottlenecks that limit team productivity and execution' },
+	{ number: '5', title: 'Inefficiencies that compound as you try to scale' },
+	{ number: '6', title: 'All tasks need founder approval, causing delays' },
 ];
 
-export default function AccountRisk() {
+export default function Bottlenecks() {
 	return (
 		<section className="font-poppins px-6 md:px-12">
 			<div className="mx-auto max-w-5xl">
 				<SectionHeading size="large">
-					Don&apos;t Risk Your Account <br /> With{' '}
-					<span className="text-[#606bfa]">Delays and Wrong</span> Appeals
+					Operational <span className="text-[#606bfa]">Bottlenecks</span>
+					Can Quietly <br /> Kill Your Business
 				</SectionHeading>
 
 				<p className="mx-auto mt-8 max-w-3xl text-center text-lg font-normal leading-relaxed text-white md:text-xl">
-					When your Amazon account gets suspended, every decision matters. It can take 5-7 days to
-					assess if your case is worth pursuing, and most sellers:
+					Most businesses don&apos;t realize how much time, money, and growth they&apos;re losing to
+					broken processes and disconnected systems.
 				</p>
 
 				<div className="mt-16 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
@@ -44,7 +45,7 @@ export default function AccountRisk() {
 					</div>
 
 					<div className="relative flex items-center justify-center">
-						<div className="bobbing-image relative flex min-w-[600px] justify-center">
+						<div className="bobbing-image relative flex min-w-[400px] justify-center">
 							<GlowBackground
 								style={{
 									top: '40%',
@@ -61,20 +62,16 @@ export default function AccountRisk() {
 							<Image
 								width={600}
 								height={450}
-								alt="Folder of Files Image"
-								src="/reinstatement/files.png"
+								alt="Declining Graph Image"
+								src="/process-rating/decline.png"
 								className="h-auto w-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
 							/>
 						</div>
 					</div>
 				</div>
 
-				<div className="mt-24 flex flex-col items-center text-center">
-					<p className="mx-auto max-w-xl text-lg font-light leading-relaxed text-white/60">
-						One wrong move can delay recovery or
-						<span className="text-white"> permanently damage your account.</span>
-					</p>
-					<PrimaryButton href="/#contact">Get My Reinstatement Report</PrimaryButton>
+				<div className="flex flex-col items-center text-center">
+					<PrimaryButton href="/#contact">Rate My Process</PrimaryButton>
 				</div>
 			</div>
 		</section>

@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -286,30 +284,8 @@ export default function ProcessDiagnosticPage() {
 			/>
 			<div className="gradient-stripes" />
 
-			<Navbar />
-
 			<main className="px-4 pb-24 pt-28 sm:px-6">
 				<div className="mx-auto max-w-2xl">
-					{/* Page header */}
-					<motion.div
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-						className="mb-12 text-center"
-					>
-						<div className="pill mb-6 inline-flex text-[11px]">
-							<span className="bg-cyan animate-pulse-glow h-1.5 w-1.5 rounded-full" />
-							5-Minute Process Assessment
-						</div>
-						<h1 className="mb-5 text-3xl font-black leading-[1.1] text-white sm:text-4xl md:text-5xl">
-							Find Your Hidden <span className="gradient-text">Automation Wins</span>
-						</h1>
-						<p className="mx-auto max-w-md text-sm leading-relaxed text-slate-400">
-							Answer a few questions about how your business runs today — we&apos;ll pinpoint
-							exactly where automation can save you the most time and money, with zero fluff.
-						</p>
-					</motion.div>
-
 					{/* Card */}
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
@@ -975,19 +951,10 @@ export default function ProcessDiagnosticPage() {
 							animate={{ opacity: 1 }}
 							transition={{ delay: 0.4 }}
 							className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-600"
-						>
-							{['Free — no credit card', 'Results in 30 seconds', 'No spam, ever'].map((t) => (
-								<span key={t} className="flex items-center gap-1.5">
-									<span className="text-cyan text-[10px]">✓</span>
-									{t}
-								</span>
-							))}
-						</motion.div>
+						></motion.div>
 					)}
 				</div>
 			</main>
-
-			<Footer />
 		</div>
 	);
 }

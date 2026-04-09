@@ -43,7 +43,7 @@ export default function Issues() {
 							<Image
 								width={500}
 								height={400}
-								src="/home-page/ai-robot.png"
+								src="/home-page/robot.png"
 								alt="3D AI Robot Illustration"
 								className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
 							/>
