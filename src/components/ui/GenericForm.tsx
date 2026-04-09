@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import { GlassGlow } from './GlassGlow';
+import { GradientBorder } from './GradientBorder';
 
 export type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'action' | 'date';
 
@@ -41,48 +43,6 @@ interface GenericFormProps {
 
 const labelClass = 'mb-2 block text-white text-lg font-semibold md:text-2xl';
 const errorClass = 'mt-1 text-sm text-red-400';
-
-function GradientBorder({
-	children,
-	hasError = false,
-	thickness = 1,
-	radius = '1rem',
-	type = 'default',
-}: {
-	children: React.ReactNode;
-	hasError?: boolean;
-	thickness?: number;
-	radius?: string;
-	type?: 'default' | 'subtle';
-}) {
-	const defaultGradient = hasError
-		? 'linear-gradient(135deg, rgba(248,113,113,0.85) 0%, #a0a6fc 50%, rgba(248,113,113,0.85) 100%)'
-		: 'linear-gradient(135deg, rgba(255,255,255,0.75) 0%, #a0a6fc 50%, rgba(255,255,255,0.75) 100%)';
-
-	const subtleGradient = hasError
-		? 'linear-gradient(135deg, rgba(248,113,113,0.85) 0%, rgba(255,255,255,0.25) 50%, rgba(248,113,113,0.85) 100%)'
-		: 'linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.75) 100%)';
-
-	const gradient = type === 'subtle' ? subtleGradient : defaultGradient;
-
-	return (
-		<div className="relative overflow-hidden" style={{ borderRadius: radius }}>
-			<div
-				className="pointer-events-none absolute inset-0"
-				style={{
-					padding: thickness,
-					borderRadius: radius,
-					background: gradient,
-					WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-					WebkitMaskComposite: 'destination-out',
-					maskComposite: 'exclude',
-				}}
-			/>
-
-			<div className="relative z-10">{children}</div>
-		</div>
-	);
-}
 
 const inputInnerClass =
 	'w-full bg-transparent px-5 py-4 text-base text-white/90 placeholder:text-white/25 outline-none focus:ring-0 transition-all resize-none';
@@ -155,7 +115,8 @@ export default function GenericForm({
 					{field.label} {field.required && <span className="text-red-400">*</span>}
 				</label>
 
-				<GradientBorder hasError={hasError} thickness={1} radius="1rem" type="subtle">
+				<div className="relative z-10">
+					<GradientBorder thickness={1} radius="1rem" subtle={true} hasError={hasError} />
 					<GlassGlow angle={105} opacity={0.5} start={5} end={95} borderRadius={12} />
 
 					<div style={{ overflow: 'hidden' }}>
@@ -175,7 +136,7 @@ export default function GenericForm({
 							<input type={field.type} className={inputInnerClass} {...sharedProps} />
 						)}
 					</div>
-				</GradientBorder>
+				</div>
 
 				<div className="ml-4 mt-2 flex items-start justify-between px-1">
 					<div>
@@ -190,8 +151,9 @@ export default function GenericForm({
 	};
 
 	return (
-		<GradientBorder thickness={2} radius="40px">
-			<GlassGlow angle={120} opacity={0.5} start={10} end={90} borderRadius={25} />
+		<div className="relative z-10">
+			<GradientBorder thickness={2} radius="40px" subtle={false} />
+			<GlassGlow angle={120} opacity={0.5} start={10} end={90} borderRadius={40} />
 
 			<form
 				className="relative space-y-6 p-5 md:p-8"
@@ -225,6 +187,6 @@ export default function GenericForm({
 					</div>
 				)}
 			</form>
-		</GradientBorder>
+		</div>
 	);
 }

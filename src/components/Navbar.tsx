@@ -62,7 +62,7 @@ const GlassPill = ({ href, children }: GlassPillProps) => {
 			{/* Layer 6: glint sweep animation */}
 			<div className="absolute inset-0 overflow-hidden rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100">
 				<div
-					className="glint-line group-hover:animate-glint absolute left-[-60%] top-[-60%] h-[200%] w-[60%]"
+					className="glint-line absolute left-[-60%] top-[-60%] h-[200%] w-[60%] group-hover:animate-glint"
 					style={{
 						background:
 							'linear-gradient(105deg, transparent 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 60%, transparent 100%)',
@@ -97,8 +97,10 @@ export default function Navbar() {
 	}, []);
 
 	const navLinks = [
+		{ name: 'About', href: '/about' },
+		{ name: 'Contact', href: '/contact' },
 		{ name: 'Reinstatement', href: '/reinstatement' },
-		{ name: 'Free Assessment', href: '/#contact' },
+		{ name: 'Free Assessment', href: '/process-rating' },
 	];
 
 	return (
@@ -135,7 +137,7 @@ export default function Navbar() {
 					</Link>
 
 					{/* Center/Right-aligned Menu */}
-					<nav className="ml-auto mr-8 hidden items-center gap-2 md:flex">
+					<nav className="ml-auto hidden items-center gap-2 md:flex">
 						{navLinks.map((link) => (
 							<GlassPill key={link.name} href={link.href}>
 								{link.name}

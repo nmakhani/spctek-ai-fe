@@ -1,9 +1,11 @@
 import React from 'react';
 
 type SectionHeadingSize = 'hero' | 'large';
+type SectionHeadingAlign = 'left' | 'center' | 'right';
 
 interface SectionHeadingProps {
 	size: SectionHeadingSize;
+	align?: SectionHeadingAlign;
 	children: React.ReactNode;
 }
 
@@ -12,6 +14,16 @@ const sizeClasses: Record<SectionHeadingSize, string> = {
 	large: 'text-[2.5rem] md:text-[3.5rem] leading-tight',
 };
 
-export const SectionHeading = ({ size, children }: SectionHeadingProps) => {
-	return <h1 className={`text-center font-heading text-white ${sizeClasses[size]}`}>{children}</h1>;
+const alignClasses: Record<SectionHeadingAlign, string> = {
+	left: 'text-left',
+	center: 'text-center',
+	right: 'text-right',
+};
+
+export const SectionHeading = ({ size, align = 'center', children }: SectionHeadingProps) => {
+	return (
+		<h1 className={`font-heading text-white ${sizeClasses[size]} ${alignClasses[align]}`}>
+			{children}
+		</h1>
+	);
 };

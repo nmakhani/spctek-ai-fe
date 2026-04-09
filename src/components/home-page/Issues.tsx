@@ -39,8 +39,6 @@ export default function Issues() {
 					</div>
 
 					<div className="relative flex items-center justify-center">
-						<div className="absolute -z-10 h-80 w-80 rounded-full bg-[#606bfa]/10 blur-[100px]" />
-
 						<div className="bobbing-image relative flex w-full justify-center">
 							<Image
 								width={500}

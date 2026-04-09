@@ -20,8 +20,7 @@ export default function AccountRisk() {
 		<section className="font-poppins px-6 md:px-12">
 			<div className="mx-auto max-w-5xl">
 				<SectionHeading size="large">
-					Don&apos;t Risk Your Account
-					<br className="hidden md:block" /> With{' '}
+					Don&apos;t Risk Your Account <br /> With{' '}
 					<span className="text-[#606bfa]">Delays and Wrong</span> Appeals
 				</SectionHeading>
 
@@ -45,9 +44,7 @@ export default function AccountRisk() {
 					</div>
 
 					<div className="relative flex items-center justify-center">
-						<div className="absolute -z-10 h-80 w-80 rounded-full bg-[#606bfa]/10 blur-[100px]" />
-
-						<div className="bobbing-image relative flex w-full justify-center">
+						<div className="bobbing-image relative flex min-w-[600px] justify-center">
 							<GlowBackground
 								style={{
 									top: '40%',
@@ -62,11 +59,11 @@ export default function AccountRisk() {
 							/>
 
 							<Image
-								width={500}
-								height={400}
+								width={600}
+								height={450}
 								src="/reinstatement/files.png"
 								alt="3D AI Robot Illustration"
-								className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+								className="h-auto w-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
 							/>
 						</div>
 					</div>

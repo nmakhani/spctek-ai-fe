@@ -94,18 +94,6 @@ export default function CuratedTechnologies() {
 									}}
 								/>
 
-								{/* CORNER LIGHT FLARES (Radial) */}
-								{/* <div
-									className="pointer-events-none absolute inset-0 rounded-xl"
-									style={{
-										background: `
-											radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2) 0%, transparent 35%),
-											radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 25%)
-                    					`,
-										zIndex: -1,
-									}}
-								/> */}
-
 								<GlassGlow angle={135} opacity={0.5} start={20} end={85} borderRadius={12} />
 
 								<div className="relative m-2 flex h-full flex-col overflow-hidden rounded-xl">
@@ -143,11 +131,11 @@ export default function CuratedTechnologies() {
 									{/* 2. Logo Area - no bg needed, inherits white from parent */}
 									<div className="relative z-10 flex min-h-[160px] flex-grow items-center justify-center bg-white p-8">
 										<Image
-											src={cat.imagePath}
+											width={500}
+											height={100}
 											alt={cat.title}
-											width={400}
-											height={150}
-											className="relative z-10 object-contain"
+											src={cat.imagePath}
+											className="relative z-10 h-auto w-auto object-contain"
 										/>
 									</div>
 								</div>
