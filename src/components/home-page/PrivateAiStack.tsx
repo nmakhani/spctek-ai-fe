@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
-import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
+import { SectionHeading } from '../ui/SectionHeading';
 
 type StackComponent = {
 	title: string;
@@ -144,23 +145,8 @@ export default function PrivateAiStack() {
 											'0 12px 22px rgba(3, 7, 22, 0.42), inset 0 1px 0 rgba(255,255,255,0.12)',
 									}}
 								>
-									<div
-										className="pointer-events-none absolute inset-0 overflow-hidden rounded-[10px]"
-										style={{
-											backgroundImage: `
-                        radial-gradient(
-                          circle at top right, 
-                          rgba(255, 255, 255, 0.5) 0%, 
-                          transparent 20%
-                        ),
-                        radial-gradient(
-                          circle at bottom left, 
-                          rgba(255, 255, 255, 0.4) 0%, 
-                          transparent 20%
-                        )
-                      `,
-										}}
-									/>
+									<GlassGlow angle={135} opacity={0.5} start={20} end={85} borderRadius={12} />
+
 									{/* Inner nested tile */}
 									<div
 										className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[10px]"

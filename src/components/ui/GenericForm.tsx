@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { GlassGlow } from './GlassGlow';
 
 export type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'action' | 'date';
 
@@ -155,12 +156,8 @@ export default function GenericForm({
 				</label>
 
 				<GradientBorder hasError={hasError} thickness={1} radius="1rem" type="subtle">
-					<div
-						className="pointer-events-none absolute inset-0"
-						style={{
-							background: `linear-gradient(105deg, rgba(255, 255, 255, 0.5) 0%, transparent 4%, transparent 96%, rgba(255, 255, 255, 0.5) 100%)`,
-						}}
-					/>
+					<GlassGlow angle={105} opacity={0.5} start={5} end={95} borderRadius={12} />
+
 					<div style={{ overflow: 'hidden' }}>
 						{field.type === 'action' ? (
 							<button
@@ -194,12 +191,7 @@ export default function GenericForm({
 
 	return (
 		<GradientBorder thickness={2} radius="40px">
-			<div
-				className="pointer-events-none absolute inset-0 rounded-[25px]"
-				style={{
-					background: `linear-gradient(120deg, rgba(255, 255, 255, 0.75) 0%, transparent 8%, transparent 92%, rgba(255, 255, 255, 0.75) 100%)`,
-				}}
-			/>
+			<GlassGlow angle={120} opacity={0.5} start={10} end={90} borderRadius={25} />
 
 			<form
 				className="relative space-y-6 p-5 md:p-8"

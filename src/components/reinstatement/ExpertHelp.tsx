@@ -1,5 +1,6 @@
 'use client';
 
+import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
@@ -58,12 +59,7 @@ export default function ExpertHelp() {
 						}}
 					/>
 
-					<div
-						className="pointer-events-none absolute inset-0 rounded-[25px]"
-						style={{
-							background: `linear-gradient(110deg, rgba(255, 255, 255, 0.6) 0%, transparent 8%, transparent 92%, rgba(255, 255, 255, 0.6) 100%)`,
-						}}
-					/>
+					<GlassGlow angle={110} opacity={0.6} start={10} end={90} borderRadius={25} />
 
 					<div className="relative z-10">
 						{/* Suspension Tags Grid */}

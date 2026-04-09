@@ -1,5 +1,6 @@
-import { SectionHeading } from '../ui/SectionHeading';
+import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
+import { SectionHeading } from '../ui/SectionHeading';
 
 type SolutionCard = {
 	category: string;
@@ -124,15 +125,7 @@ export default function TargetedSolutions() {
 								}}
 							/>
 
-							<div
-								className="pointer-events-none absolute inset-0 rounded-[35px]"
-								style={{
-									background: `
-                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.5) 0%, transparent 20%),
-                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 10%)
-                    `,
-								}}
-							/>
+							<GlassGlow angle={135} opacity={0.8} start={20} end={85} borderRadius={35} />
 
 							<div
 								className="pointer-events-none absolute inset-0 rounded-[35px]"

@@ -1,7 +1,8 @@
 'use client';
 
-import { SectionHeading } from '../ui/SectionHeading';
+import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
+import { SectionHeading } from '../ui/SectionHeading';
 
 type StepCard = {
 	number: string;
@@ -74,12 +75,7 @@ export default function ReinstatementProcess() {
 								}}
 							/>
 
-							<div
-								className="pointer-events-none absolute inset-0 overflow-hidden rounded-[35px]"
-								style={{
-									background: `linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 15%, transparent 90%, rgba(255, 255, 255, 0.6) 100%)`,
-								}}
-							/>
+							<GlassGlow angle={135} opacity={0.6} start={15} end={85} borderRadius={35} />
 
 							<div
 								className="absolute -top-10 left-1/2 z-20 flex h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border-[3px] border-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]"

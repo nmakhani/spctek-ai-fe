@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { SectionHeading } from '../ui/SectionHeading';
+import { GlassGlow } from '../ui/GlassGlow';
 import { GlowBackground } from '../ui/GlowBackground';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const techCategories = [
 	{
 		title: 'AI Agents',
-		imagePath: '/home-page/tech-stack/ai-agents.png', // Replace with your actual paths
+		imagePath: '/home-page/tech-stack/ai-agents.png',
 	},
 	{
 		title: 'CRM and Marketing',
@@ -94,16 +95,18 @@ export default function CuratedTechnologies() {
 								/>
 
 								{/* CORNER LIGHT FLARES (Radial) */}
-								<div
+								{/* <div
 									className="pointer-events-none absolute inset-0 rounded-xl"
 									style={{
 										background: `
-                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2) 0%, transparent 35%),
-                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 25%)
-                    `,
+											radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2) 0%, transparent 35%),
+											radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 25%)
+                    					`,
 										zIndex: -1,
 									}}
-								/>
+								/> */}
+
+								<GlassGlow angle={135} opacity={0.5} start={20} end={85} borderRadius={12} />
 
 								<div className="relative m-2 flex h-full flex-col overflow-hidden rounded-xl">
 									{/* 1. Card Header - fakes transparency with a gradient matching the card background */}

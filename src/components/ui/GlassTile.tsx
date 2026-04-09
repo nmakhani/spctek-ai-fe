@@ -29,7 +29,7 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
 				}}
 			/>
 
-			<GlassGlow angle={45} opacity={0.8} start={20} end={80} />
+			<GlassGlow angle={45} opacity={0.8} start={20} end={80} borderRadius={25} />
 
 			<div className="relative z-10 flex h-full flex-col">
 				<h3 className="text-[1.4rem] font-bold tracking-tight text-[#7c86fc]">{title}</h3>

@@ -39,6 +39,15 @@ module.exports = {
 				'glow-purple':
 					'0 0 40px rgba(var(--theme-accent2-rgb),0.3), 0 0 80px rgba(var(--theme-accent2-rgb),0.1)',
 			},
+			keyframes: {
+				glint: {
+					from: { transform: 'translateX(-50%)' },
+					to: { transform: 'translateX(320%)' },
+				},
+			},
+			animation: {
+				glint: 'glint 0.6s ease forwards',
+			},
 		},
 	},
 	plugins: [],

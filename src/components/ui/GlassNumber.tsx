@@ -1,3 +1,5 @@
+import { GlassGlow } from './GlassGlow';
+
 export const GlassNumber = ({ number }: { number: string }) => (
 	<div className="relative flex h-8 w-8 shrink-0 items-center justify-center">
 		<div
@@ -18,13 +20,7 @@ export const GlassNumber = ({ number }: { number: string }) => (
 			}}
 		/>
 
-		<div
-			className="pointer-events-none absolute inset-[1px] rounded-[7px]"
-			style={{
-				background:
-					'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0%, transparent 50%)',
-			}}
-		/>
+		<GlassGlow angle={135} opacity={0.8} start={40} end={100} borderRadius={7} />
 
 		<span className="relative z-10 text-xl font-bold tracking-tighter text-[#606bfa]">
 			{number}
