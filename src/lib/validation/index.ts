@@ -1,5 +1,2 @@
-export { validateContactForm } from "./contactValidation";
-export {
-  validateEstimatorForm,
-  validateEstimatorContactForm,
-} from "./estimatorValidation";
+export { validateContactForm } from './contactValidation';
+export { validateEstimatorForm, validateEstimatorContactForm } from './estimatorValidation';
