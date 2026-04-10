@@ -2,9 +2,19 @@
 
 import { useState } from 'react';
 
-import ProcessDiagnosticForm from './ProcessDiagnosticForm';
-import { buildPointers, calculateScore, getCategory } from './logic';
-import { INITIAL_FORM_DATA, type FormData, type Phase, type Step } from './types';
+import {
+	type Step,
+	type Phase,
+	type FormData,
+	getCategory,
+	buildPointers,
+	calculateScore,
+	ProcessDiagnosticForm,
+	INITIAL_FORM_DATA,
+} from '.';
+
+import { GlassGlow } from '../../ui/GlassGlow';
+import { GradientBorder } from '../../ui/GradientBorder';
 
 const LOADING_MESSAGES = [
 	'Scanning for process bottlenecks...',
@@ -13,7 +23,7 @@ const LOADING_MESSAGES = [
 	'Generating your personalized scorecard...',
 ];
 
-export default function ProcessDiagnosticPage() {
+export default function ProcessDiagnosticSection() {
 	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
 	const [step, setStep] = useState<Step>(1);
 	const [phase, setPhase] = useState<Phase>('form');
@@ -63,24 +73,32 @@ export default function ProcessDiagnosticPage() {
 	const pointers = buildPointers(form);
 
 	return (
-		<div>
-			<main>
-				<div>
-					<ProcessDiagnosticForm
-						form={form}
-						step={step}
-						phase={phase}
-						submitting={submitting}
-						submitError={submitError}
-						loadingMessage={LOADING_MESSAGES[loadingIdx]}
-						score={score}
-						category={category}
-						pointers={pointers}
-						onChange={setField}
-						onGoToStep={goToStep}
-						onSubmit={runAnalysis}
-					/>
-					{phase === 'form' ? <div aria-hidden="true" /> : null}
+		<div className="flex min-h-screen items-center justify-center p-4 text-white">
+			<main className="w-full max-w-3xl">
+				<div className="relative z-10">
+					<GradientBorder thickness={2} radius="40px" />
+					<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
+
+					<div
+						className="relative p-8 pb-12 shadow-2xl"
+						style={{ borderRadius: '38px', background: 'transparent' }}
+					>
+						<ProcessDiagnosticForm
+							form={form}
+							step={step}
+							phase={phase}
+							submitting={submitting}
+							submitError={submitError}
+							loadingMessage={LOADING_MESSAGES[loadingIdx]}
+							score={score}
+							category={category}
+							pointers={pointers}
+							onChange={setField}
+							onGoToStep={goToStep}
+							onSubmit={runAnalysis}
+						/>
+						{phase === 'form' ? <div aria-hidden="true" /> : null}
+					</div>
 				</div>
 			</main>
 		</div>

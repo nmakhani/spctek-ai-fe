@@ -20,7 +20,7 @@ export const GlassNumber = ({ number }: { number: string }) => (
 			}}
 		/>
 
-		<GlassGlow angle={135} opacity={0.8} start={40} end={100} borderRadius={7} />
+		<GlassGlow angle={135} opacity={0.8} start={40} end={100} radius="7px" />
 
 		<span className="relative z-10 text-xl font-bold tracking-tighter text-[#606bfa]">
 			{number}

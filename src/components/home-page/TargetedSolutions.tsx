@@ -33,7 +33,7 @@ const solutionCards: SolutionCard[] = [
 			'AI aligned with internal workflows and SOPS',
 		],
 		cta: 'Deploy Local AI',
-		link: '#contact',
+		link: 'contact',
 	},
 	{
 		category: 'Custom Solutions',
@@ -45,7 +45,7 @@ const solutionCards: SolutionCard[] = [
 			'AI solutions aligned with your operations',
 		],
 		cta: 'Get Custom Solutions',
-		link: '#contact',
+		link: 'contact',
 	},
 ];
 
@@ -125,7 +125,7 @@ export default function TargetedSolutions() {
 								}}
 							/>
 
-							<GlassGlow angle={135} opacity={0.8} start={20} end={85} borderRadius={35} />
+							<GlassGlow angle={135} opacity={0.8} start={20} end={85} radius="35px" />
 
 							<div
 								className="pointer-events-none absolute inset-0 rounded-[35px]"

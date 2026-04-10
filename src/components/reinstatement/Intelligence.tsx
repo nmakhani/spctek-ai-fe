@@ -56,7 +56,7 @@ export default function Intelligence() {
 
 				{/* Global CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Get My Reinstatement Report</PrimaryButton>
+					<PrimaryButton href="/contact">Get My Reinstatement Report</PrimaryButton>
 				</div>
 			</div>
 		</section>

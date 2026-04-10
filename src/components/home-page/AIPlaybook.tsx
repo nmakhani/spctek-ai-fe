@@ -16,7 +16,7 @@ export default function AIPlaybook() {
 				</p>
 
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Get My AI Playbook</PrimaryButton>
+					<PrimaryButton href="/contact">Get My AI Playbook</PrimaryButton>
 				</div>
 			</div>
 		</section>

@@ -10,8 +10,8 @@ export const GradientBorder = ({
 	hasError?: boolean;
 }) => {
 	const defaultGradient = hasError
-		? 'linear-gradient(135deg, rgba(248,113,113,0.85) 0%, #a0a6fc 50%, rgba(248,113,113,0.85) 100%)'
-		: 'linear-gradient(135deg, rgba(255,255,255,0.75) 0%, #a0a6fc 50%, rgba(255,255,255,0.75) 100%)';
+		? 'linear-gradient(135deg, rgba(248,113,113,0.85) 0%, #606bfa 50%, rgba(248,113,113,0.85) 100%)'
+		: 'linear-gradient(135deg, rgba(255,255,255,0.75) 0%, #606bfa 50%, rgba(255,255,255,0.75) 100%)';
 
 	const subtleGradient = hasError
 		? 'linear-gradient(135deg, rgba(248,113,113,0.85) 0%, rgba(255,255,255,0.25) 50%, rgba(248,113,113,0.85) 100%)'

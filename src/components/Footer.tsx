@@ -9,7 +9,7 @@ export default function Footer() {
 		{ name: 'Framework', href: '/#framework' },
 		{ name: 'Stack', href: '/#stack' },
 		{ name: 'FAQ', href: '/#faq' },
-		{ name: 'Contact', href: '/#contact' },
+		{ name: 'Contact', href: '/contact' },
 	];
 
 	const currentYear = new Date().getFullYear();
@@ -80,7 +80,7 @@ export default function Footer() {
 					{/* CTA */}
 					<div className="flex flex-col justify-start">
 						<Link
-							href="/#contact"
+							href="/contact"
 							className="inline-flex w-fit items-center justify-center rounded-[28px] border border-white/15 bg-[linear-gradient(180deg,rgba(124,134,255,0.98)_0%,rgba(96,107,250,0.98)_100%)] px-8 py-[12px] text-sm font-semibold text-white shadow-[0_10px_24px_rgba(96,107,250,0.28),inset_0_1px_0_rgba(255,255,255,0.35)] transition-all duration-300 hover:translate-y-[-1px] hover:shadow-[0_14px_28px_rgba(96,107,250,0.36),inset_0_1px_0_rgba(255,255,255,0.4)]"
 						>
 							Get Started

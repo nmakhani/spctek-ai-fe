@@ -15,7 +15,7 @@ export default function FixGaps() {
 				</p>
 
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Book a Free Consultation</PrimaryButton>
+					<PrimaryButton href="/contact">Book a Free Consultation</PrimaryButton>
 				</div>
 			</div>
 		</section>

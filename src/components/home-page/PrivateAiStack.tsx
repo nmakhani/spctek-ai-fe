@@ -145,7 +145,7 @@ export default function PrivateAiStack() {
 											'0 12px 22px rgba(3, 7, 22, 0.42), inset 0 1px 0 rgba(255,255,255,0.12)',
 									}}
 								>
-									<GlassGlow angle={135} opacity={0.5} start={20} end={85} borderRadius={12} />
+									<GlassGlow angle={135} opacity={0.5} start={20} end={85} radius="12px" />
 
 									{/* Inner nested tile */}
 									<div
@@ -213,7 +213,7 @@ export default function PrivateAiStack() {
 
 				{/* CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Explore Solutions</PrimaryButton>
+					<PrimaryButton href="/contact">Explore Solutions</PrimaryButton>
 				</div>
 			</div>
 		</section>

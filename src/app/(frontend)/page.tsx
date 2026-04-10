@@ -20,7 +20,7 @@ import {
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
-export default function Home() {
+export default function HomePage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Problems, id: 'problems' },

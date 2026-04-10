@@ -59,7 +59,7 @@ export default function ExpertHelp() {
 						}}
 					/>
 
-					<GlassGlow angle={110} opacity={0.6} start={10} end={90} borderRadius={25} />
+					<GlassGlow angle={110} opacity={0.6} start={10} end={90} radius="25px" />
 
 					<div className="relative z-10">
 						{/* Suspension Tags Grid */}
@@ -124,7 +124,7 @@ export default function ExpertHelp() {
 					))}
 				</div>
 
-				<PrimaryButton href="/#contact">Reinstate My Amazon Account</PrimaryButton>
+				<PrimaryButton href="/contact">Reinstate My Amazon Account</PrimaryButton>
 			</div>
 		</section>
 	);

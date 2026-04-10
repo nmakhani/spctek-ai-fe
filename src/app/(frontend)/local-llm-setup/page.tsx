@@ -179,14 +179,14 @@ const HARDWARE_TIERS: {
 		id: 'starter',
 		label: 'Starter',
 		specs: '16GB RAM · Consumer GPU (8GB+)',
-		models: '7B–13B parameter models',
+		models: '7B-13B parameter models',
 		price: 'Minimal hardware cost',
 	},
 	{
 		id: 'professional',
 		label: 'Professional',
-		specs: '32–64GB RAM · RTX 4090 / A4000',
-		models: '13B–70B parameter models',
+		specs: '32-64GB RAM · RTX 4090 / A4000',
+		models: '13B-70B parameter models',
 		price: 'Best performance / cost ratio',
 		recommended: true,
 	},
@@ -599,8 +599,8 @@ export default function LocalLLMSetupPage() {
 										<label className="form-label">How many people will use the AI?</label>
 										<div className="grid grid-cols-3 gap-3">
 											{[
-												{ v: '1-5', l: '1 – 5', d: 'Small team' },
-												{ v: '6-20', l: '6 – 20', d: 'Growing' },
+												{ v: '1-5', l: '1 - 5', d: 'Small team' },
+												{ v: '6-20', l: '6 - 20', d: 'Growing' },
 												{ v: '20+', l: '20+', d: 'Organization' },
 											].map(({ v, l, d }) => {
 												const selected = form.teamSize === v;
@@ -936,7 +936,7 @@ export default function LocalLLMSetupPage() {
 								Book a free 15-minute call. We&apos;ll assess your needs and tell you honestly
 								whether local AI makes sense for your business.
 							</p>
-							<Link href="/#contact" className="glow-btn text-sm">
+							<Link href="/contact" className="glow-btn text-sm">
 								Book a Free Call
 								<svg
 									className="h-4 w-4"

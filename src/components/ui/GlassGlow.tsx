@@ -3,7 +3,8 @@ interface GlassGlowProps {
 	opacity?: number;
 	start?: number;
 	end?: number;
-	borderRadius?: number;
+	radius?: string;
+	focus?: boolean;
 	classname?: string;
 }
 
@@ -12,19 +13,23 @@ export const GlassGlow: React.FC<GlassGlowProps> = ({
 	opacity,
 	start,
 	end,
-	borderRadius,
+	radius,
+	focus = false,
 	classname = '',
 }) => {
+	const color = focus ? `96, 107, 250` : `255, 255, 255`;
+	const background = focus ? 'black' : 'transparent';
+
 	const gradient = `linear-gradient(${angle}deg, 
-    rgba(255, 255, 255, ${opacity}) 0%, 
-    transparent ${start}%, 
-    transparent ${end}%, 
-    rgba(255, 255, 255, ${opacity}) 100%)`;
+    rgba(${color}, ${opacity}) 0%, 
+    ${background} ${start}%, 
+    ${background} ${end}%, 
+    rgba(${color}, ${opacity}) 100%)`;
 
 	return (
 		<div
-			className={`pointer-events-none absolute inset-0 rounded-[${borderRadius}px] ${classname}`}
-			style={{ background: gradient }}
+			className={`pointer-events-none absolute inset-0 ${classname}`}
+			style={{ background: gradient, borderRadius: radius }}
 			aria-hidden="true"
 		/>
 	);

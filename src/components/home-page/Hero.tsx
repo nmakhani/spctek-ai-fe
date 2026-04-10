@@ -28,7 +28,7 @@ export default function Hero() {
 			</p>
 
 			<div className="mb-10">
-				<PrimaryButton href="/#contact">Get My AI Playbook</PrimaryButton>
+				<PrimaryButton href="/contact">Get My AI Playbook</PrimaryButton>
 			</div>
 
 			<div className="flex flex-col items-center justify-center gap-4 md:flex-row">

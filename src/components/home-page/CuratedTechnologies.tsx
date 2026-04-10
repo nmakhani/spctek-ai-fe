@@ -94,7 +94,7 @@ export default function CuratedTechnologies() {
 									}}
 								/>
 
-								<GlassGlow angle={135} opacity={0.5} start={20} end={85} borderRadius={12} />
+								<GlassGlow angle={135} opacity={0.5} start={20} end={85} radius="12px" />
 
 								<div className="relative m-2 flex h-full flex-col overflow-hidden rounded-xl">
 									{/* 1. Card Header - fakes transparency with a gradient matching the card background */}

@@ -30,7 +30,7 @@ export default function Learned() {
 
 			<div className="relative z-10 my-6 w-full max-w-5xl">
 				<GradientBorder thickness={2} radius="12px" />
-				<GlassGlow angle={105} opacity={0.5} start={8} end={92} borderRadius={12} />
+				<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 
 				<div className="rounded-2xl p-8 shadow-2xl">
 					<div className="flex flex-col gap-8">
@@ -52,7 +52,7 @@ export default function Learned() {
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-8 py-6 text-white shadow-inner">
 									<GradientBorder thickness={1.5} radius="12px" />
-									<GlassGlow angle={105} opacity={0.5} start={8} end={92} borderRadius={12} />
+									<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 
 									<p className="relative z-10 text-lg font-normal tracking-wide md:text-xl lg:text-2xl">
 										{item.text}

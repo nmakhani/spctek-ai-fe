@@ -142,7 +142,7 @@ export default function Tools() {
 
 				{/* CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Talk to an Automation Expert</PrimaryButton>
+					<PrimaryButton href="/contact">Talk to an Automation Expert</PrimaryButton>
 				</div>
 			</div>
 		</section>

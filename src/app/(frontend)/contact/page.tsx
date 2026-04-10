@@ -6,7 +6,7 @@ import { Contact } from '@/components/contact';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
-export default function Home() {
+export default function ContactPage() {
 	const SECTIONS = [{ Component: Contact, id: 'contact' }];
 
 	return (

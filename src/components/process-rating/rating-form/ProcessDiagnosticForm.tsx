@@ -2,16 +2,22 @@
 
 import { AnimatePresence } from 'framer-motion';
 
-import LoadingState from './LoadingState';
-import ProgressBar from './ProgressBar';
-import ResultsState from './ResultsState';
-import Step1OperationalBaseline from './Step1OperationalBaseline';
-import Step2KnowledgeDecision from './Step2KnowledgeDecision';
-import Step3FrictionBottlenecks from './Step3FrictionBottlenecks';
-import Step4BrokenLink from './Step4BrokenLink';
-import Step5Contact from './Step5Contact';
-import StepWrapper from './StepWrapper';
-import type { Category, FormData, Phase, Pointer, Step } from './types';
+import {
+	Step1,
+	Step2,
+	Step3,
+	Step4,
+	Step5,
+	ProgressBar,
+	StepWrapper,
+	LoadingState,
+	ResultsState,
+	type Category,
+	type FormData,
+	type Phase,
+	type Pointer,
+	type Step,
+} from '.';
 
 type ProcessDiagnosticFormProps = {
 	form: FormData;
@@ -56,37 +62,19 @@ export default function ProcessDiagnosticForm({
 				) : (
 					<StepWrapper key={`step-${step}`}>
 						<ProgressBar step={step} />
-						{step === 1 && (
-							<Step1OperationalBaseline form={form} onChange={onChange} onNext={onGoToStep} />
-						)}
+						{step === 1 && <Step1 form={form} onChange={onChange} onNext={onGoToStep} />}
 						{step === 2 && (
-							<Step2KnowledgeDecision
-								form={form}
-								onChange={onChange}
-								onNext={onGoToStep}
-								onBack={onGoToStep}
-							/>
+							<Step2 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
 						)}
 						{step === 3 && (
-							<Step3FrictionBottlenecks
-								form={form}
-								onChange={onChange}
-								onNext={onGoToStep}
-								onBack={onGoToStep}
-							/>
+							<Step3 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
 						)}
 						{step === 4 && (
-							<Step4BrokenLink
-								form={form}
-								onChange={onChange}
-								onNext={onGoToStep}
-								onBack={onGoToStep}
-							/>
+							<Step4 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
 						)}
 						{step === 5 && (
-							<Step5Contact
+							<Step5
 								form={form}
-								score={score}
 								submitError={submitError}
 								submitting={submitting}
 								onChange={onChange}

@@ -75,7 +75,7 @@ export default function ReinstatementProcess() {
 								}}
 							/>
 
-							<GlassGlow angle={135} opacity={0.6} start={15} end={85} borderRadius={35} />
+							<GlassGlow angle={135} opacity={0.6} start={15} end={85} radius="35px" />
 
 							<div
 								className="absolute -top-10 left-1/2 z-20 flex h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border-[3px] border-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]"

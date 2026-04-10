@@ -116,8 +116,8 @@ export default function GenericForm({
 				</label>
 
 				<div className="relative z-10">
-					<GradientBorder thickness={1} radius="1rem" subtle={true} hasError={hasError} />
-					<GlassGlow angle={105} opacity={0.5} start={5} end={95} borderRadius={12} />
+					<GradientBorder thickness={1} radius="16px" subtle={true} hasError={hasError} />
+					<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="12px" />
 
 					<div style={{ overflow: 'hidden' }}>
 						{field.type === 'action' ? (
@@ -152,8 +152,8 @@ export default function GenericForm({
 
 	return (
 		<div className="relative z-10">
-			<GradientBorder thickness={2} radius="40px" subtle={false} />
-			<GlassGlow angle={120} opacity={0.5} start={10} end={90} borderRadius={40} />
+			<GradientBorder thickness={2} radius="40px" />
+			<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
 
 			<form
 				className="relative space-y-6 p-5 md:p-8"

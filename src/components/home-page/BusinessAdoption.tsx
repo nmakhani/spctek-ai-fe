@@ -53,7 +53,7 @@ export default function BusinessAdoption() {
 
 				{/* Global CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/#contact">Explore Solutions</PrimaryButton>
+					<PrimaryButton href="/contact">Explore Solutions</PrimaryButton>
 				</div>
 			</div>
 		</section>

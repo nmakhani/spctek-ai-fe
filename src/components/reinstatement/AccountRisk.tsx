@@ -74,7 +74,7 @@ export default function AccountRisk() {
 						One wrong move can delay recovery or
 						<span className="text-white"> permanently damage your account.</span>
 					</p>
-					<PrimaryButton href="/#contact">Get My Reinstatement Report</PrimaryButton>
+					<PrimaryButton href="/contact">Get My Reinstatement Report</PrimaryButton>
 				</div>
 			</div>
 		</section>

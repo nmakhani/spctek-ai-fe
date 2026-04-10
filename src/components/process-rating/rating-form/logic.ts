@@ -64,7 +64,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		pool.push({
 			title: 'Knowledge Leakage & Bus-Factor Risk',
 			body: `Your critical processes exist only in people's minds. One resignation, sick day, or bad hire creates an immediate operational crisis. You cannot reliably scale, delegate, or automate what hasn't been defined — this is the single most common hidden growth blocker for ${f.teamSize === 'Solo' ? 'founder-led businesses' : `teams of ${f.teamSize}`}.`,
-			cost: '~8–15 hrs/week lost to redundant Q&A, re-explaining, and untracked errors.',
+			cost: '~8-15 hrs/week lost to redundant Q&A, re-explaining, and untracked errors.',
 			accent: 'border-l-rose',
 			costColor: 'text-rose',
 			severity: 9,
@@ -73,7 +73,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		pool.push({
 			title: 'Scattered Knowledge Architecture',
 			body: `Important process knowledge buried in chat threads is effectively invisible. Teams repeat the same mistakes, onboarding takes longer than it should, and institutional knowledge drains out with every departure. For a ${f.industry} operation, inconsistent execution directly impacts customer outcomes.`,
-			cost: 'Recoverable decisions take 3–5× longer than they should.',
+			cost: 'Recoverable decisions take 3-5× longer than they should.',
 			accent: 'border-l-amber',
 			costColor: 'text-amber',
 			severity: 7,
@@ -82,7 +82,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		pool.push({
 			title: 'Documentation Drift',
 			body: `Having docs is a start — but undated, unmaintained SOPs are often worse than none. Team members quietly follow outdated instructions and produce inconsistent results. In ${f.industry}, these silent deviations compound into quality issues that are hard to trace back to process failures.`,
-			cost: "Onboarding costs 2–3× more than necessary; errors blamed on 'human mistake' are often process failures.",
+			cost: "Onboarding costs 2-3× more than necessary; errors blamed on 'human mistake' are often process failures.",
 			accent: 'border-l-amber',
 			costColor: 'text-amber',
 			severity: 5,
@@ -93,7 +93,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		pool.push({
 			title: 'Data Fragmentation & Manual Transfer Risk',
 			body: `Manual data entry between your tools creates invisible errors that compound over time — mismatched records, missed orders, billing discrepancies. These are rarely caught in real-time; they surface when a customer complains, a report is wrong, or a deadline is missed. For ${f.industry}, the downstream cost of even small data errors is significant.`,
-			cost: 'Teams spend 4–10 hrs/week on data reconciliation that automation eliminates entirely.',
+			cost: 'Teams spend 4-10 hrs/week on data reconciliation that automation eliminates entirely.',
 			accent: 'border-l-amber',
 			costColor: 'text-amber',
 			severity: 8,
@@ -111,7 +111,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		pool.push({
 			title: 'Untapped Automation Capacity at the Workflow Edge',
 			body: `Your integrations are healthy — but even well-connected stacks have a 'last mile' of manual work layered on top. An AI agent layer could eliminate repetitive human touchpoints that your current tooling can't handle for your ${f.industry} operations.`,
-			cost: 'Uncaptured efficiency at the workflow edges — typically 2–4 hrs/week per team member.',
+			cost: 'Uncaptured efficiency at the workflow edges — typically 2-4 hrs/week per team member.',
 			accent: 'border-l-purple',
 			costColor: 'text-purple-light',
 			severity: 3,
@@ -123,7 +123,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		if (!alreadyHas) {
 			pool.push({
 				title: 'The Founder Ceiling',
-				body: `Your team's output is capped by a single person's availability. Every decision, review, or approval that routes back to you is a queued task blocking everyone downstream. This isn't a people problem — it's a systems problem. Decision frameworks, documented approval thresholds, and AI-assisted routing can unlock 3–5× team throughput without adding headcount.`,
+				body: `Your team's output is capped by a single person's availability. Every decision, review, or approval that routes back to you is a queued task blocking everyone downstream. This isn't a people problem — it's a systems problem. Decision frameworks, documented approval thresholds, and AI-assisted routing can unlock 3-5× team throughput without adding headcount.`,
 				cost: 'Every hour of founder review delay is a cascading delay for your entire team.',
 				accent: 'border-l-rose',
 				costColor: 'text-rose',
@@ -193,8 +193,8 @@ export function buildPointers(f: FormData): Pointer[] {
 	} else if (f.timeWasted === '5-10') {
 		pool.push({
 			title: 'Significant Manual Process Overhead',
-			body: `5–10 hours per week in manual work is above the threshold where automation ROI is immediate.${f.brokenProcess ? ` "${f.brokenProcess}" is a high-leverage target — systematizing it will likely expose 2–3 adjacent tasks that can be automated in the same pass.` : " Start with the task your team complains about most — it's usually the best automation candidate."}`,
-			cost: '5–10 hrs/week on repetitive tasks represents automation ROI waiting to be captured.',
+			body: `5-10 hours per week in manual work is above the threshold where automation ROI is immediate.${f.brokenProcess ? ` "${f.brokenProcess}" is a high-leverage target — systematizing it will likely expose 2-3 adjacent tasks that can be automated in the same pass.` : " Start with the task your team complains about most — it's usually the best automation candidate."}`,
+			cost: '5-10 hrs/week on repetitive tasks represents automation ROI waiting to be captured.',
 			accent: 'border-l-amber',
 			costColor: 'text-amber',
 			severity: 6,
@@ -202,7 +202,7 @@ export function buildPointers(f: FormData): Pointer[] {
 	} else if (f.timeWasted === '2-5') {
 		pool.push({
 			title: 'Latent Automation Opportunity',
-			body: `Even 2–5 hours weekly represents meaningful efficiency gains.${f.brokenProcess ? ` "${f.brokenProcess}" in particular — structured, repetitive tasks like this are often the easiest to automate with immediate, measurable results.` : ' Small wins compound: automating several 30-minute tasks often frees a full working day per month.'}`,
+			body: `Even 2-5 hours weekly represents meaningful efficiency gains.${f.brokenProcess ? ` "${f.brokenProcess}" in particular — structured, repetitive tasks like this are often the easiest to automate with immediate, measurable results.` : ' Small wins compound: automating several 30-minute tasks often frees a full working day per month.'}`,
 			cost: 'Small automation wins compound into full days of reclaimed capacity each month.',
 			accent: 'border-l-purple',
 			costColor: 'text-purple-light',
@@ -238,7 +238,7 @@ export function buildPointers(f: FormData): Pointer[] {
 	) {
 		pool.push({
 			title: 'Identified Process Ready for Automation',
-			body: `You've pinpointed "${f.brokenProcess}" — this self-awareness is the critical first step. Even if overall time waste is low, automating a specifically identified process eliminates its error surface entirely and typically reveals 2–3 adjacent automation candidates immediately downstream.`,
+			body: `You've pinpointed "${f.brokenProcess}" — this self-awareness is the critical first step. Even if overall time waste is low, automating a specifically identified process eliminates its error surface entirely and typically reveals 2-3 adjacent automation candidates immediately downstream.`,
 			cost: 'Automating one named process often uncovers a cascade of related efficiency gains.',
 			accent: 'border-l-cyan',
 			costColor: 'text-cyan',

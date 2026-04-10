@@ -6,7 +6,7 @@ import { Hero, Learned, Started, Approach, Building } from '@/components/about';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
-export default function Home() {
+export default function AboutPage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Learned, id: 'learned' },

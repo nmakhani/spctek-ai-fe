@@ -2,14 +2,21 @@
 
 import React from 'react';
 
-import { Hero, Bottlenecks, FixGaps, FAQSection } from '@/components/process-rating';
+import {
+	Hero,
+	Bottlenecks,
+	ProcessDiagnostics,
+	FixGaps,
+	FAQSection,
+} from '@/components/process-rating';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
-export default function Home() {
+export default function ProcessRatingPage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Bottlenecks, id: 'bottlenecks' },
+		{ Component: ProcessDiagnostics, id: 'process-diagnostic' },
 		{ Component: FixGaps, id: 'fix-gaps' },
 		{ Component: FAQSection, id: 'faq' },
 	];
