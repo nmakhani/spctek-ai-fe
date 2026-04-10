@@ -26,6 +26,7 @@ export default function Navbar() {
 		{ name: 'About', href: '/about' },
 		{ name: 'Contact', href: '/contact' },
 		{ name: 'Reinstatement', href: '/reinstatement' },
+		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
 		{ name: 'Rate my Process', href: '/process-rating' },
 	];
 

@@ -15,7 +15,7 @@ import {
 	PrivateAiStack,
 	AIPlaybook,
 	Contact,
-	FAQSection,
+	FAQs,
 } from '@/components/home-page';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
@@ -34,7 +34,7 @@ export default function HomePage() {
 		{ Component: PrivateAiStack, id: 'stack' },
 		{ Component: AIPlaybook, id: 'playbook' },
 		{ Component: Contact, id: 'contact' },
-		{ Component: FAQSection, id: 'faq' },
+		{ Component: FAQs, id: 'faq' },
 	];
 
 	return (

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 
 import { SectionHeading } from '../ui/SectionHeading';
-import { GlowBackground } from '../ui/GlowBackground';
 
 interface FAQItemProps {
 	question: string;
@@ -51,65 +50,37 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 
 const faqs = [
 	{
-		question: 'What exactly will I get after completing the assessment?',
+		question: 'Is the AI assessment really free?',
 		answer:
-			"You'll receive a score that rates the efficiency of your operations and highlights the three most critical operational gaps in your current system.",
+			'Yes. The full AI assessment, including viability score, root cause, and strategy recommendation, is completely free with no credit card required. If you choose to proceed with a fully managed appeal and reinstatement, that is a paid service.',
 	},
 	{
-		question: 'How accurate is this process rating?',
+		question: 'How accurate is the viability score?',
 		answer:
-			'The rating is built on real operational frameworks designed to identify common patterns across workflows, systems, and team structures.',
+			"Our model is trained on Amazon's reinstatement policies, suspension categories, and thousands of historical case outcomes. It correctly identifies high- and low-probability cases and gives a viability percentage score. Complex cases, such as multiple rejections, counterfeit, or Section 3 suspensions, are immediately flagged for human review.",
 	},
 	{
-		question: 'How long does it take to complete the assessment?',
+		question: 'Do you need my Amazon login?',
 		answer:
-			'Most users complete the assessment in under 2 minutes, and your results are generated instantly.',
+			'No, the AI assessment is based entirely on what you enter in the form. We do not ask for or store your Amazon credentials.',
 	},
 	{
-		question: 'Is the assessment really free?',
-		answer: 'Yes, the process rating is completely free with no credit card required.',
+		question: 'What if my appeal was already rejected?',
+		answer:
+			"That's useful data. Prior rejection history is factored into the model and often clarifies the real root cause, which is frequently different from what Amazon cited.",
 	},
 	{
-		question: 'Do I need technical knowledge to understand the results?',
+		question: 'What if my case is too complex for the AI?',
 		answer:
-			'No. The rating is easy to understand, and the operational gap highlights are designed to be clear and actionable for non-technical users.',
-	},
-	{
-		question: 'Can you help implement the recommendations?',
-		answer:
-			'Yes. If you prefer a "done-for-you" solution, our team can take your diagnostic results and fully implement the necessary systems and automations. This service is managed under a separate scope.',
-	},
-	{
-		question: 'What types of businesses is the diagnostic for?',
-		answer:
-			'This diagnostic is designed for e-commerce, agencies, SaaS, and service-based businesses looking to improve efficiency and scale operations.',
-	},
-	{
-		question: 'Will my data be secure?',
-		answer:
-			'Yes, your information is kept strictly private and is used only to generate your personalized report.',
+			'The AI flags complex cases immediately. If your case is flagged, a member of our specialist team will reach out within one business day.',
 	},
 ];
 
-export default function FAQSection() {
+export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState<number | null>(0);
 
 	return (
 		<section className="font-poppins relative px-6 md:px-12" id="faq">
-			<GlowBackground
-				style={{
-					top: '15%',
-					left: '60%',
-					width: '110%',
-					height: '110%',
-					background:
-						'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)',
-					transform: 'translate(-50%, -50%) rotate(-30deg) scale(1.25)',
-					filter: 'blur(100px)',
-					opacity: 0.8,
-				}}
-			/>
-
 			<div className="font-poppins relative mx-auto max-w-6xl">
 				<div className="mb-8 text-center md:mb-10">
 					<SectionHeading size="large">Frequently Asked Questions</SectionHeading>

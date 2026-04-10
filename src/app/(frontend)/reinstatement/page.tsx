@@ -9,7 +9,7 @@ import {
 	Intelligence,
 	FreeAssessment,
 	ExpertHelp,
-	FAQSection,
+	FAQs,
 } from '@/components/reinstatement';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
@@ -22,7 +22,7 @@ export default function ReinstatementPage() {
 		{ Component: Intelligence, id: 'intelligence' },
 		{ Component: FreeAssessment, id: 'free-assessment' },
 		{ Component: ExpertHelp, id: 'expert-help' },
-		{ Component: FAQSection, id: 'faq' },
+		{ Component: FAQs, id: 'faq' },
 	];
 
 	return (

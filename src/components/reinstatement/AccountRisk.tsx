@@ -69,10 +69,9 @@ export default function AccountRisk() {
 					</div>
 				</div>
 
-				<div className="mt-24 flex flex-col items-center text-center">
-					<p className="mx-auto max-w-xl text-lg font-light leading-relaxed text-white/60">
-						One wrong move can delay recovery or
-						<span className="text-white"> permanently damage your account.</span>
+				<div className="mt-16 flex flex-col items-center text-center">
+					<p className="mx-auto max-w-xl text-lg font-light leading-relaxed text-white">
+						One wrong move can delay recovery or permanently damage your account.
 					</p>
 					<PrimaryButton href="/contact">Get My Reinstatement Report</PrimaryButton>
 				</div>

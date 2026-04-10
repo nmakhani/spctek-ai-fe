@@ -10,4 +10,4 @@ export { default as Tools } from './Tools';
 export { default as PrivateAiStack } from './PrivateAiStack';
 export { default as AIPlaybook } from './AIPlaybook';
 export { default as Contact } from './Contact';
-export { default as FAQSection } from './FAQSection';
+export { default as FAQs } from './FAQs';

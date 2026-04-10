@@ -1,9 +1,9 @@
 'use client';
 
-import RadioCard from './RadioCard';
+import type { FormData, Step } from './types';
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
-import type { FormData, Step } from './types';
+import { RadioCard } from '../../ui/form-parts/RadioCard';
 
 type Step4Props = {
 	form: FormData;

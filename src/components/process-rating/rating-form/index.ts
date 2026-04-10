@@ -7,7 +7,7 @@ export { default as Step3 } from './Step3';
 export { default as Step4 } from './Step4';
 export { default as Step5 } from './Step5';
 
-export { default as RadioCard } from './RadioCard';
+export { RadioCard } from '../../ui/form-parts/RadioCard';
 export { default as ProgressBar } from './ProgressBar';
 export { default as StepWrapper } from './StepWrapper';
 export { default as LoadingState } from './LoadingState';

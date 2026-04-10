@@ -1,0 +1,126 @@
+'use client';
+
+import { AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+
+import { GlassGlow } from '../../ui/GlassGlow';
+import { GradientBorder } from '../../ui/GradientBorder';
+
+import LoadingState from './LoadingState';
+import ProgressBar from './ProgressBar';
+import ResultsState from './ResultsState';
+import Step1 from './Step1';
+import Step2 from './Step2';
+import Step3 from './Step3';
+import StepWrapper from './StepWrapper';
+import { buildArchitectureRecommendation } from './logic';
+import {
+	INITIAL_FORM_DATA,
+	type ArchitectureRecommendation,
+	type FormData,
+	type Phase,
+	type Step,
+} from './types';
+
+const LOADING_MESSAGES = [
+	'Understanding your deployment goals...',
+	'Evaluating data sensitivity and rollout scope...',
+	'Matching hardware and infrastructure needs...',
+	'Preparing your custom roadmap...',
+];
+
+const CONTACT_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/contacts/`;
+
+export default function RoadmapForm() {
+	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
+	const [step, setStep] = useState<Step>(1);
+	const [phase, setPhase] = useState<Phase>('form');
+	const [submitting, setSubmitting] = useState(false);
+	const [loadingIdx, setLoadingIdx] = useState(0);
+	const [recommendation, setRecommendation] = useState<ArchitectureRecommendation | null>(null);
+
+	const setField = (name: keyof FormData, value: string) => {
+		if (name === 'useCases') {
+			setForm((prev) => ({ ...prev, useCases: value ? value.split('|') : [] }));
+			return;
+		}
+
+		setForm((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const goToStep = (nextStep: Step) => setStep(nextStep);
+
+	const runSubmit = async () => {
+		if (!form.name || !form.email) return;
+
+		setSubmitting(true);
+		setPhase('loading');
+		setLoadingIdx(0);
+
+		const intervalId = setInterval(() => {
+			setLoadingIdx((current) => Math.min(current + 1, LOADING_MESSAGES.length - 1));
+		}, 1200);
+
+		const nextRecommendation = buildArchitectureRecommendation(form);
+
+		try {
+			await fetch(CONTACT_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: form.name,
+					email: form.email,
+					phone: form.phone || null,
+					company: form.company || null,
+					message: `AI Deployment Roadmap — Use Cases: ${form.useCases.join(', ')} | Team Size: ${form.teamSize} | Data Sensitivity: ${form.dataSensitivity} | Deployment Model: ${form.deploymentModel} | Recommended Tier: ${nextRecommendation.tier.label} | Current Stack: ${form.currentStack || 'N/A'}`,
+					source: 'ai_deployment_roadmap',
+				}),
+			});
+		} catch {
+			// Non-blocking
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 3200));
+		clearInterval(intervalId);
+		setRecommendation(nextRecommendation);
+		setPhase('results');
+		setSubmitting(false);
+	};
+
+	return (
+		<div className="relative z-10 mx-auto w-full max-w-3xl">
+			<GradientBorder thickness={2} radius="40px" />
+			<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="40px" />
+			<div className="relative p-8 shadow-2xl md:p-10">
+				<AnimatePresence mode="wait">
+					{phase === 'loading' ? (
+						<StepWrapper key="loading">
+							<LoadingState message={LOADING_MESSAGES[loadingIdx]} />
+						</StepWrapper>
+					) : phase === 'results' && recommendation ? (
+						<StepWrapper key="results">
+							<ResultsState recommendation={recommendation} />
+						</StepWrapper>
+					) : (
+						<StepWrapper key={`step-${step}`}>
+							<ProgressBar step={step} />
+							{step === 1 && <Step1 form={form} onChange={setField} onNext={goToStep} />}
+							{step === 2 && (
+								<Step2 form={form} onChange={setField} onNext={goToStep} onBack={goToStep} />
+							)}
+							{step === 3 && (
+								<Step3
+									form={form}
+									submitting={submitting}
+									onChange={setField}
+									onBack={goToStep}
+									onSubmit={runSubmit}
+								/>
+							)}
+						</StepWrapper>
+					)}
+				</AnimatePresence>
+			</div>
+		</div>
+	);
+}

@@ -1,19 +1,18 @@
 'use client';
 
-import type { FormData } from './types';
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
+import { GlassGlow } from '../GlassGlow';
+import { GradientBorder } from '../GradientBorder';
 
 type RadioCardProps = {
-	name: keyof FormData;
+	name: string;
 	value: string;
 	current: string;
 	label: string;
 	desc?: string;
-	onChange: (name: keyof FormData, value: string) => void;
+	onChange: (name: string, value: string) => void;
 };
 
-export default function RadioCard({ name, value, current, label, desc, onChange }: RadioCardProps) {
+export const RadioCard = ({ name, value, current, label, desc, onChange }: RadioCardProps) => {
 	const selected = current === value;
 
 	return (
@@ -30,7 +29,6 @@ export default function RadioCard({ name, value, current, label, desc, onChange 
 					} `}
 				>
 					<div className="relative z-10 flex flex-col gap-1">
-						{/* Inner glow effect for selected state */}
 						{selected && (
 							<div className="bg-indigo-500/20 pointer-events-none absolute inset-0 -z-10 rounded-2xl blur-md" />
 						)}
@@ -41,10 +39,9 @@ export default function RadioCard({ name, value, current, label, desc, onChange 
 							<p className={`text-sm ${selected ? 'text-indigo-200' : 'text-gray-400'}`}>{desc}</p>
 						) : null}
 					</div>
-					{/* Subtly hide the selected/not selected screen reader text from layout */}
 					<span className="sr-only">{selected ? 'Selected' : 'Not selected'}</span>
 				</button>
 			</div>
 		</div>
 	);
-}
+};

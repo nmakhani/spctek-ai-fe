@@ -51,48 +51,47 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 
 const faqs = [
 	{
-		question: 'Why focus on fixing processes before implementing AI?',
+		question: 'What exactly will I get after completing the assessment?',
 		answer:
-			'AI works best when it is built on clear operational systems. If processes are inefficient or disconnected, AI tools often add complexity rather than improving outcomes.',
+			"You'll receive a score that rates the efficiency of your operations and highlights the three most critical operational gaps in your current system.",
 	},
 	{
-		question: 'How do I know if my business is ready for AI?',
+		question: 'How accurate is this process rating?',
 		answer:
-			'Businesses are usually ready for AI when their workflows, data sources, and operational processes are clearly defined. Our approach helps identify where AI can create a meaningful impact.',
+			'The rating is built on real operational frameworks designed to identify common patterns across workflows, systems, and team structures.',
 	},
 	{
-		question: 'What makes SPCTEK different from typical AI agencies?',
+		question: 'How long does it take to complete the assessment?',
 		answer:
-			'Most providers focus on deploying AI tools. SPCTEK focuses on understanding and improving the underlying systems first, so AI solutions actually deliver measurable results.',
+			'Most users complete the assessment in under 2 minutes, and your results are generated instantly.',
 	},
 	{
-		question: 'Why would a business choose Local AI instead of public AI tools?',
-		answer:
-			'Local AI allows organizations to maintain full control over their data and eliminate recurring API costs. It allows them to operate AI systems within their own infrastructure without exposing sensitive information to external parties.',
+		question: 'Is the assessment really free?',
+		answer: 'Yes, the process rating is completely free with no credit card required.',
 	},
 	{
-		question: 'Do I need technical expertise to use your AI solutions?',
+		question: 'Do I need technical knowledge to understand the results?',
 		answer:
-			'No. Our solutions are designed to be accessible for non-technical teams through simple interfaces and guided workflows.',
+			'No. The rating is easy to understand, and the operational gap highlights are designed to be clear and actionable for non-technical users.',
 	},
 	{
-		question: 'Who are your solutions designed for?',
+		question: 'Can you help implement the recommendations?',
 		answer:
-			'SPCTEK works primarily with SMBs that want to adopt AI responsibly, improve operational efficiency, and build systems that scale with their business.',
+			'Yes. If you prefer a "done-for-you" solution, our team can take your diagnostic results and fully implement the necessary systems and automations. This service is managed under a separate scope.',
 	},
 	{
-		question: 'Can you help if we are just starting to explore AI?',
+		question: 'What types of businesses is the diagnostic for?',
 		answer:
-			'Yes. Many clients come to us early in their AI journey. We help identify practical use cases and implement solutions that align with real operational needs.',
+			'This diagnostic is designed for e-commerce, agencies, SaaS, and service-based businesses looking to improve efficiency and scale operations.',
 	},
 	{
-		question: 'What types of businesses benefit the most from your solutions?',
+		question: 'Will my data be secure?',
 		answer:
-			'Businesses with complex workflows, multiple operational tools, or growing teams benefit the most from improved systems, automation, and secure AI deployment.',
+			'Yes, your information is kept strictly private and is used only to generate your personalized report.',
 	},
 ];
 
-export default function FAQSection() {
+export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState<number | null>(0);
 
 	return (

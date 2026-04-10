@@ -2,17 +2,25 @@
 
 import React from 'react';
 
-import { Hero, Bottlenecks, ProcessDiagnostics, FixGaps, FAQs } from '@/components/process-rating';
+import {
+	Hero,
+	WhyMove,
+	DeploymentProcess,
+	RoadmapFormSection,
+	AiPowered,
+	FAQs,
+} from '@/components/local-ai-setup';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
-export default function ProcessRatingPage() {
+export default function LocalAiSetupPage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
-		{ Component: Bottlenecks, id: 'bottlenecks' },
-		{ Component: ProcessDiagnostics, id: 'process-diagnostic' },
-		{ Component: FixGaps, id: 'fix-gaps' },
-		{ Component: FAQs, id: 'faq' },
+		{ Component: WhyMove, id: 'why-move' },
+		{ Component: DeploymentProcess, id: 'deployment-process' },
+		{ Component: RoadmapFormSection, id: 'roadmap-form' },
+		{ Component: AiPowered, id: 'ai-powered' },
+		{ Component: FAQs, id: 'faqs' },
 	];
 
 	return (

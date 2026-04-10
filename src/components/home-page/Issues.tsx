@@ -51,10 +51,10 @@ export default function Issues() {
 					</div>
 				</div>
 
-				<div className="mt-24 flex flex-col items-center text-center">
-					<p className="mx-auto max-w-xl text-lg font-light leading-relaxed text-white/60">
-						If these sound familiar, it&apos;s time to fix how your business operates
-						<span className="text-white"> rather than just adding more tools.</span>
+				<div className="mt-16 flex flex-col items-center text-center">
+					<p className="mx-auto max-w-xl text-lg font-light leading-relaxed text-white">
+						If these sound familiar, it&apos;s time to fix how your business operates rather than
+						just adding more tools.
 					</p>
 					<PrimaryButton href="/contact">Get a Free Operations Assessment</PrimaryButton>
 				</div>
