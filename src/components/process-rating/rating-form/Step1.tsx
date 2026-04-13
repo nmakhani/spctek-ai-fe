@@ -54,30 +54,28 @@ export default function Step1({ form, onChange, onNext }: Step1Props) {
 							current={form.teamSize}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">Industry / Vertical</label>
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<label className="text-sm font-semibold text-white">Industry</label>
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{[
-						{ v: 'eCommerce', l: 'eCommerce' },
-						{ v: 'Agency/Services', l: 'Agency / Services' },
-						{ v: 'SaaS', l: 'SaaS / Tech' },
-						{ v: 'Professional Services', l: 'Professional Services' },
-						{ v: 'Logistics', l: 'Logistics' },
-						{ v: 'Other', l: 'Other' },
-					].map(({ v, l }) => (
+						{ v: 'SaaS', l: 'SaaS', d: 'Software as a Service' },
+						{ v: 'Ecommerce', l: 'Ecommerce', d: 'Online retail' },
+						{ v: 'Service', l: 'Service Business', d: 'Consulting / Agency' },
+					].map(({ v, l, d }) => (
 						<RadioCard
 							key={v}
 							name="industry"
 							value={v}
 							current={form.industry}
 							label={l}
-							onChange={onChange}
+							desc={d}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>

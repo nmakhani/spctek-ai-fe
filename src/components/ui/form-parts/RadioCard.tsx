@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 import { GlassGlow } from '../GlassGlow';
 import { GradientBorder } from '../GradientBorder';
 
@@ -10,10 +12,32 @@ type RadioCardProps = {
 	label: string;
 	desc?: string;
 	onChange: (name: string, value: string) => void;
+	selected?: boolean;
+	onPress?: () => void;
+	leadingIcon?: ReactNode;
 };
 
-export const RadioCard = ({ name, value, current, label, desc, onChange }: RadioCardProps) => {
-	const selected = current === value;
+export const RadioCard = ({
+	name,
+	value,
+	current,
+	label,
+	desc,
+	onChange,
+	selected: selectedProp,
+	onPress,
+	leadingIcon,
+}: RadioCardProps) => {
+	const selected = selectedProp ?? current === value;
+
+	const handlePress = () => {
+		if (onPress) {
+			onPress();
+			return;
+		}
+
+		onChange(name, value);
+	};
 
 	return (
 		<div className="relative z-10 w-full">
@@ -22,22 +46,33 @@ export const RadioCard = ({ name, value, current, label, desc, onChange }: Radio
 			<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
 				<button
 					type="button"
-					onClick={() => onChange(name, value)}
+					onClick={handlePress}
 					aria-pressed={selected}
 					className={`relative w-full rounded-2xl bg-transparent p-5 text-left transition-all duration-300 ease-out ${
 						selected ? 'bg-indigo-500/10 shadow-[#6366f1]/20' : 'hover:bg-white/[0.07]'
 					} `}
 				>
-					<div className="relative z-10 flex flex-col gap-1">
-						{selected && (
-							<div className="bg-indigo-500/20 pointer-events-none absolute inset-0 -z-10 rounded-2xl blur-md" />
-						)}
-						<p className={`text-[15px] font-medium ${selected ? 'text-white' : 'text-gray-200'}`}>
-							{label}
-						</p>
-						{desc ? (
-							<p className={`text-sm ${selected ? 'text-indigo-200' : 'text-gray-400'}`}>{desc}</p>
+					<div className="relative z-10 flex items-start gap-3">
+						{leadingIcon ? (
+							<div
+								className={`mt-0.5 flex-shrink-0 ${selected ? 'text-[#606bfa]' : 'text-slate-500'}`}
+							>
+								{leadingIcon}
+							</div>
 						) : null}
+						<div className="flex flex-col gap-1">
+							{selected && (
+								<div className="bg-indigo-500/20 pointer-events-none absolute inset-0 -z-10 rounded-2xl blur-md" />
+							)}
+							<p className={`text-[15px] font-medium ${selected ? 'text-white' : 'text-gray-200'}`}>
+								{label}
+							</p>
+							{desc ? (
+								<p className={`text-sm ${selected ? 'text-indigo-200' : 'text-gray-400'}`}>
+									{desc}
+								</p>
+							) : null}
+						</div>
 					</div>
 					<span className="sr-only">{selected ? 'Selected' : 'Not selected'}</span>
 				</button>

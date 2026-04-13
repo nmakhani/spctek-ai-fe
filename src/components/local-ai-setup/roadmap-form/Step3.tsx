@@ -1,8 +1,7 @@
 'use client';
 
 import type { FormData, Step } from './types';
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
+import GlowTextField from '../../ui/form-parts/GlowTextField';
 
 type Step3Props = {
 	form: FormData;
@@ -22,79 +21,74 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 				</p>
 			</div>
 
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<div className="flex flex-col gap-3">
-					<label className="text-sm font-semibold text-white">Full Name</label>
-					<div className="relative z-10">
-						<GradientBorder thickness={1} radius="16px" subtle={true} />
-						<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
-						<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
-							<input
-								className="w-full bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0"
-								value={form.name}
-								onChange={(event) => onChange('name', event.target.value)}
-								placeholder="Jane Smith"
-							/>
-						</div>
+			<div className="border-indigo-500/20 bg-indigo-500/5 rounded-2xl border p-6 backdrop-blur-sm">
+				<div className="flex items-center gap-6">
+					<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#5A5DF3] to-[#8082F8] shadow-[0_0_20px_rgba(90,93,243,0.3)]">
+						<div className="text-3xl font-bold text-white">?</div>
 					</div>
-				</div>
-
-				<div className="flex flex-col gap-3">
-					<label className="text-sm font-semibold text-white">Company</label>
-					<div className="relative z-10">
-						<GradientBorder thickness={1} radius="16px" subtle={true} />
-						<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
-						<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
-							<input
-								className="w-full bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0"
-								value={form.company}
-								onChange={(event) => onChange('company', event.target.value)}
-								placeholder="Acme Corp"
-							/>
-						</div>
+					<div>
+						<p className="text-lg font-semibold text-white">Your recommendation is ready</p>
+						<p className="text-indigo-200 mt-1 text-sm">
+							Enter your email below to reveal your full architecture recommendation.
+						</p>
 					</div>
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<div className="flex flex-col gap-3">
-					<label className="text-sm font-semibold text-white">Work Email</label>
-					<div className="relative z-10">
-						<GradientBorder thickness={1} radius="16px" subtle={true} />
-						<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
-						<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
-							<input
-								type="email"
-								className="w-full bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0"
-								value={form.email}
-								onChange={(event) => onChange('email', event.target.value)}
-								placeholder="jane@company.com"
-							/>
-						</div>
+			<div className="flex flex-col gap-6">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div className="flex flex-col gap-3">
+						<label className="text-left text-sm font-bold text-white">
+							Full Name <span className="text-red-400">*</span>
+						</label>
+						<GlowTextField
+							value={form.name}
+							onChange={(value) => onChange('name', value)}
+							placeholder="Jane Smith"
+						/>
+					</div>
+
+					<div className="flex flex-col gap-3">
+						<label className="text-left text-sm font-bold text-white">
+							Email <span className="text-red-400">*</span>
+						</label>
+						<GlowTextField
+							type="email"
+							value={form.email}
+							onChange={(value) => onChange('email', value)}
+							placeholder="jane@company.com"
+						/>
 					</div>
 				</div>
 
-				<div className="flex flex-col gap-3">
-					<label className="text-sm font-semibold text-white">
-						Phone <span className="text-gray-500 font-normal">(optional)</span>
-					</label>
-					<div className="relative z-10">
-						<GradientBorder thickness={1} radius="16px" subtle={true} />
-						<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
-						<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
-							<input
-								type="tel"
-								className="w-full bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0"
-								value={form.phone}
-								onChange={(event) => onChange('phone', event.target.value)}
-								placeholder="+1 (555) 123-4567"
-							/>
-						</div>
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div className="flex flex-col gap-3">
+						<label className="text-left text-sm font-bold text-white">Company</label>
+						<GlowTextField
+							value={form.company}
+							onChange={(value) => onChange('company', value)}
+							placeholder="Acme Corp"
+						/>
+					</div>
+
+					<div className="flex flex-col gap-3">
+						<label className="text-left text-sm font-bold text-white">Phone</label>
+						<GlowTextField
+							type="tel"
+							value={form.phone}
+							onChange={(value) => onChange('phone', value)}
+							placeholder="+1 (555) 123-4567"
+						/>
 					</div>
 				</div>
 			</div>
 
-			<div className="flex gap-4 pt-6">
+			<p className="text-gray-500 text-xs leading-relaxed">
+				We take privacy seriously. Your details are only used to send your roadmap and optional
+				follow-up. No spam, ever.
+			</p>
+
+			<div className="flex gap-4 pt-2">
 				<button
 					type="button"
 					onClick={() => onBack(2)}

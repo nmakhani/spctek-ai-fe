@@ -6,7 +6,7 @@ import {
 	Hero,
 	WhyMove,
 	DeploymentProcess,
-	RoadmapFormSection,
+	RoadmapForm,
 	AiPowered,
 	FAQs,
 } from '@/components/local-ai-setup';
@@ -18,7 +18,7 @@ export default function LocalAiSetupPage() {
 		{ Component: Hero, id: 'hero' },
 		{ Component: WhyMove, id: 'why-move' },
 		{ Component: DeploymentProcess, id: 'deployment-process' },
-		{ Component: RoadmapFormSection, id: 'roadmap-form' },
+		{ Component: RoadmapForm, id: 'roadmap-form' },
 		{ Component: AiPowered, id: 'ai-powered' },
 		{ Component: FAQs, id: 'faqs' },
 	];

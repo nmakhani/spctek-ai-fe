@@ -17,11 +17,11 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 					<p className="text-gray-400 mb-1 text-xs font-bold uppercase tracking-widest">
 						Recommended Architecture
 					</p>
-					<h3 className="text-2xl font-bold text-white md:text-3xl">
+					<h3 className="text-2xl font-bold text-[#606bfa] md:text-3xl">
 						{recommendation.tier.label} Tier
 					</h3>
 				</div>
-				<div className="text-indigo-100 rounded-xl border border-[#606bfa]/25 bg-[#606bfa]/10 px-4 py-3 text-sm">
+				<div className="rounded-xl border border-white px-4 py-3 text-sm text-white">
 					{recommendation.tier.specs}
 				</div>
 			</div>
@@ -37,9 +37,9 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 			<div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 				{recommendation.modelGroups.map((group) => (
 					<div key={group.modality} className="group relative z-10 w-full">
-						<GradientBorder thickness={1} radius="16px" subtle={true} />
-						<GlassGlow angle={105} opacity={0.35} start={5} end={95} radius="16px" />
-						<div className="relative overflow-hidden rounded-[15px] bg-[#0A0E17]/80 p-5 backdrop-blur-sm">
+						<GradientBorder thickness={1.5} radius="16px" />
+						<GlassGlow angle={105} opacity={0.5} start={10} end={90} radius="16px" />
+						<div className="relative overflow-hidden rounded-[15px] p-5">
 							<p className="text-xs font-bold uppercase tracking-widest text-[#606bfa]">
 								{group.modality}
 							</p>

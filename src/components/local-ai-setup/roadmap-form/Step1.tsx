@@ -38,32 +38,17 @@ export default function Step1({ form, onChange, onNext }: Step1Props) {
 						const selected = form.useCases.includes(useCase.id);
 
 						return (
-							<button
+							<RadioCard
 								key={useCase.id}
-								type="button"
-								onClick={() => toggleUseCase(useCase.id)}
-								className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ${
-									selected
-										? 'border-[#606bfa] bg-[#606bfa]/10 shadow-[0_0_20px_rgba(96,107,250,0.15)]'
-										: 'border-white/[0.07] bg-white/[0.02] hover:border-[#606bfa]/30 hover:bg-[#606bfa]/5'
-								}`}
-							>
-								<div className="flex items-start gap-3">
-									<div
-										className={`mt-0.5 flex-shrink-0 ${selected ? 'text-[#606bfa]' : 'text-slate-500'}`}
-									>
-										{useCase.icon}
-									</div>
-									<div>
-										<p
-											className={`text-sm font-medium ${selected ? 'text-white' : 'text-slate-300'}`}
-										>
-											{useCase.label}
-										</p>
-										<p className="mt-0.5 text-xs text-slate-500">{useCase.desc}</p>
-									</div>
-								</div>
-							</button>
+								name="useCases"
+								value={useCase.id}
+								current=""
+								label={useCase.label}
+								desc={useCase.desc}
+								onChange={(_, selectedValue) => toggleUseCase(selectedValue)}
+								selected={selected}
+								leadingIcon={useCase.icon}
+							/>
 						);
 					})}
 				</div>
@@ -80,7 +65,7 @@ export default function Step1({ form, onChange, onNext }: Step1Props) {
 							current={form.teamSize}
 							label={label}
 							desc={desc}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>

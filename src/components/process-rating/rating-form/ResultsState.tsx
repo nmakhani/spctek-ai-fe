@@ -82,7 +82,7 @@ const ChallengeCard = ({ pointer, index }: { pointer: Pointer; index: number }) 
 	return (
 		<div
 			className={`group relative z-10 w-full ${
-				index > 0
+				index > 1
 					? 'pointer-events-none select-none opacity-80 blur-[4px] transition-all duration-300'
 					: ''
 			}`}
@@ -105,7 +105,23 @@ const ChallengeCard = ({ pointer, index }: { pointer: Pointer; index: number }) 
 };
 
 export default function ResultsState({ score, category, pointers }: ResultsStateProps) {
-	pointers = pointers.slice(0, 3);
+	const basePointers = pointers.slice(0, 4);
+
+	const placeholderText =
+		"You need to contact us to get the actual analysis pal, we aren't that easy to hack. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore dolore magna aliqua.";
+	const placeholderCost = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ';
+
+	const displayedPointers = basePointers.map((pointer, index) => {
+		if (index > 1) {
+			return {
+				...pointer,
+				title: 'Nice try buddy, but this is a placeholder title.',
+				body: placeholderText,
+				cost: placeholderCost,
+			};
+		}
+		return pointer;
+	});
 
 	return (
 		<div className="flex flex-col gap-12 text-left">
@@ -114,10 +130,10 @@ export default function ResultsState({ score, category, pointers }: ResultsState
 			{/* Challenges Section */}
 			<div className="flex flex-col gap-6">
 				<h3 className="mb-2 text-xl font-bold text-white">
-					Top {pointers.length} Hidden Challenges Detected:
+					Top {displayedPointers.length} Hidden Challenges Detected:
 				</h3>
 				<div className="flex flex-col gap-5">
-					{pointers.map((pointer, index) => (
+					{displayedPointers.map((pointer, index) => (
 						<ChallengeCard key={index} pointer={pointer} index={index} />
 					))}
 				</div>

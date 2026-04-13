@@ -8,16 +8,18 @@ import {
 	Step3,
 	Step4,
 	Step5,
-	ProgressBar,
 	StepWrapper,
-	LoadingState,
 	ResultsState,
+	TOTAL_STEPS,
 	type Category,
 	type FormData,
-	type Phase,
 	type Pointer,
+	type Phase,
 	type Step,
 } from '.';
+
+import FormProgressBar from '../../ui/form-parts/FormProgressBar';
+import FormLoadingState from '../../ui/form-parts/FormLoadingState';
 
 type ProcessDiagnosticFormProps = {
 	form: FormData;
@@ -53,7 +55,7 @@ export default function ProcessDiagnosticForm({
 			<AnimatePresence mode="wait">
 				{phase === 'loading' ? (
 					<StepWrapper key="loading">
-						<LoadingState message={loadingMessage} />
+						<FormLoadingState message={loadingMessage} title="Analyzing Process Architecture..." />
 					</StepWrapper>
 				) : phase === 'results' ? (
 					<StepWrapper key="results">
@@ -61,7 +63,7 @@ export default function ProcessDiagnosticForm({
 					</StepWrapper>
 				) : (
 					<StepWrapper key={`step-${step}`}>
-						<ProgressBar step={step} />
+						<FormProgressBar step={step} totalSteps={TOTAL_STEPS} />
 						{step === 1 && <Step1 form={form} onChange={onChange} onNext={onGoToStep} />}
 						{step === 2 && (
 							<Step2 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />

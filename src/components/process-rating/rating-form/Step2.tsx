@@ -42,7 +42,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 							current={form.sopLocation}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
@@ -73,7 +73,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 							current={form.decisionMaking}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
@@ -96,7 +96,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 							current={form.onboardingTime}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>

@@ -2,11 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-type LoadingStateProps = {
-	message: string;
-};
-
-export default function LoadingState({ message }: LoadingStateProps) {
+export default function FormLoadingState({ message, title }: { message: string; title: string }) {
 	return (
 		<div className="flex min-h-[400px] flex-col items-center justify-center gap-8 py-10 text-center">
 			<div className="relative flex h-24 w-24 items-center justify-center">
@@ -37,9 +33,7 @@ export default function LoadingState({ message }: LoadingStateProps) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<h3 className="text-[28px] font-bold tracking-tight text-[#606bfa]">
-					Generating Deployment Roadmap...
-				</h3>
+				<h3 className="text-[28px] font-bold tracking-tight text-[#606bfa]">{title}</h3>
 				<div className="h-8">
 					<motion.p
 						key={message}

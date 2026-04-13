@@ -1,9 +1,8 @@
 'use client';
 
 import type { FormData, Step } from './types';
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
 import { RadioCard } from '../../ui/form-parts/RadioCard';
+import GlowTextField from '../../ui/form-parts/GlowTextField';
 
 type Step4Props = {
 	form: FormData;
@@ -26,19 +25,13 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 				<label className="text-sm font-semibold text-white">
 					Describe the most tedious or error-prone manual process in your business
 				</label>
-				<div className="relative z-10">
-					<GradientBorder thickness={1} radius="16px" subtle={true} />
-					<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
-					<div style={{ overflow: 'hidden', borderRadius: '15px' }}>
-						<textarea
-							rows={4}
-							className="w-full resize-none bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0"
-							value={form.brokenProcess}
-							onChange={(e) => onChange('brokenProcess', e.target.value)}
-							placeholder="e.g., We manually download orders from Shopify and re-enter them into a spreadsheet for the warehouse team, then manually email tracking updates to customers..."
-						/>
-					</div>
-				</div>
+				<GlowTextField
+					value={form.brokenProcess}
+					onChange={(value) => onChange('brokenProcess', value)}
+					placeholder="e.g., We manually download orders from Shopify and re-enter them into a spreadsheet for the warehouse team, then manually email tracking updates to customers..."
+					multiline={true}
+					rows={4}
+				/>
 			</div>
 
 			<div className="flex flex-col gap-3">
@@ -59,7 +52,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 							current={form.timeWasted}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
@@ -82,7 +75,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 							current={form.triedToFix}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>

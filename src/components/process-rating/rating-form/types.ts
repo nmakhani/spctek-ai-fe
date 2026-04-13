@@ -14,10 +14,13 @@ export type FormData = {
 	name: string;
 	email: string;
 	company: string;
+	phone: string;
 };
 
 export type Step = 1 | 2 | 3 | 4 | 5;
 export type Phase = 'form' | 'loading' | 'results';
+
+export const TOTAL_STEPS = 5;
 
 export type Category = {
 	label: string;
@@ -51,4 +54,5 @@ export const INITIAL_FORM_DATA: FormData = {
 	name: '',
 	email: '',
 	company: '',
+	phone: '',
 };

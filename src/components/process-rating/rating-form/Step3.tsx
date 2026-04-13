@@ -37,7 +37,7 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 							current={form.toolIntegration}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
@@ -62,7 +62,7 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 							current={form.founderBottleneck}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>
@@ -90,7 +90,7 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 							current={form.customerComms}
 							label={l}
 							desc={d}
-							onChange={onChange}
+							onChange={onChange as (name: string, value: string) => void}
 						/>
 					))}
 				</div>

@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 
+import { contactsApi } from '../../../lib/api';
+
+import { GlassGlow } from '../../ui/GlassGlow';
+import { GradientBorder } from '../../ui/GradientBorder';
+
 import {
 	type Step,
 	type Phase,
@@ -12,9 +17,6 @@ import {
 	ProcessDiagnosticForm,
 	INITIAL_FORM_DATA,
 } from '.';
-
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
 
 const LOADING_MESSAGES = [
 	'Scanning for process bottlenecks...',
@@ -47,16 +49,12 @@ export default function ProcessDiagnosticSection() {
 		}, 1200);
 
 		try {
-			await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/contacts/`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name: form.name,
-					email: form.email,
-					company: form.company || null,
-					message: `Process Diagnostic — Motive: ${form.motive} | Team: ${form.teamSize} | Industry: ${form.industry} | SOPs: ${form.sopLocation} | Tools: ${form.toolIntegration} | Score: ${calculateScore(form)} | Broken process: ${form.brokenProcess}`,
-					source: 'process_diagnostic',
-				}),
+			await contactsApi.create({
+				name: form.name,
+				email: form.email,
+				company: form.company || null,
+				message: `Process Diagnostic — Motive: ${form.motive} | Team: ${form.teamSize} | Industry: ${form.industry} | SOPs: ${form.sopLocation} | Tools: ${form.toolIntegration} | Score: ${calculateScore(form)} | Broken process: ${form.brokenProcess}`,
+				source: 'process_diagnostic',
 			});
 		} catch {
 			// Non-blocking — still show results

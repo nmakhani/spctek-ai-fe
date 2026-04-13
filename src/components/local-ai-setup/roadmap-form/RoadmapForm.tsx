@@ -1,26 +1,30 @@
 'use client';
 
-import { AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+
+import { contactsApi } from '../../../lib/api';
 
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
 
-import LoadingState from './LoadingState';
-import ProgressBar from './ProgressBar';
-import ResultsState from './ResultsState';
-import Step1 from './Step1';
-import Step2 from './Step2';
-import Step3 from './Step3';
-import StepWrapper from './StepWrapper';
-import { buildArchitectureRecommendation } from './logic';
+import FormProgressBar from '../../ui/form-parts/FormProgressBar';
+import FormLoadingState from '../../ui/form-parts/FormLoadingState';
+
 import {
+	Step1,
+	Step2,
+	Step3,
+	StepWrapper,
+	ResultsState,
+	TOTAL_STEPS,
 	INITIAL_FORM_DATA,
+	buildArchitectureRecommendation,
 	type ArchitectureRecommendation,
 	type FormData,
 	type Phase,
 	type Step,
-} from './types';
+} from './';
 
 const LOADING_MESSAGES = [
 	'Understanding your deployment goals...',
@@ -28,8 +32,6 @@ const LOADING_MESSAGES = [
 	'Matching hardware and infrastructure needs...',
 	'Preparing your custom roadmap...',
 ];
-
-const CONTACT_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/contacts/`;
 
 export default function RoadmapForm() {
 	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
@@ -64,17 +66,13 @@ export default function RoadmapForm() {
 		const nextRecommendation = buildArchitectureRecommendation(form);
 
 		try {
-			await fetch(CONTACT_ENDPOINT, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name: form.name,
-					email: form.email,
-					phone: form.phone || null,
-					company: form.company || null,
-					message: `AI Deployment Roadmap — Use Cases: ${form.useCases.join(', ')} | Team Size: ${form.teamSize} | Data Sensitivity: ${form.dataSensitivity} | Deployment Model: ${form.deploymentModel} | Recommended Tier: ${nextRecommendation.tier.label} | Current Stack: ${form.currentStack || 'N/A'}`,
-					source: 'ai_deployment_roadmap',
-				}),
+			await contactsApi.create({
+				name: form.name,
+				email: form.email,
+				phone: form.phone || null,
+				company: form.company || null,
+				message: `AI Deployment Roadmap — Use Cases: ${form.useCases.join(', ')} | Team Size: ${form.teamSize} | Data Sensitivity: ${form.dataSensitivity} | Deployment Model: ${form.deploymentModel} | Recommended Tier: ${nextRecommendation.tier.label} | Current Stack: ${form.currentStack || 'N/A'}`,
+				source: 'ai_deployment_roadmap',
 			});
 		} catch {
 			// Non-blocking
@@ -95,7 +93,10 @@ export default function RoadmapForm() {
 				<AnimatePresence mode="wait">
 					{phase === 'loading' ? (
 						<StepWrapper key="loading">
-							<LoadingState message={LOADING_MESSAGES[loadingIdx]} />
+							<FormLoadingState
+								message={LOADING_MESSAGES[loadingIdx]}
+								title="Generating Deployment Roadmap..."
+							/>
 						</StepWrapper>
 					) : phase === 'results' && recommendation ? (
 						<StepWrapper key="results">
@@ -103,7 +104,7 @@ export default function RoadmapForm() {
 						</StepWrapper>
 					) : (
 						<StepWrapper key={`step-${step}`}>
-							<ProgressBar step={step} />
+							<FormProgressBar step={step} totalSteps={TOTAL_STEPS} />
 							{step === 1 && <Step1 form={form} onChange={setField} onNext={goToStep} />}
 							{step === 2 && (
 								<Step2 form={form} onChange={setField} onNext={goToStep} onBack={goToStep} />
