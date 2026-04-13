@@ -13,7 +13,7 @@ type GlowTextFieldProps = {
 };
 
 const baseClass =
-	'w-full bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0';
+	'w-full glow-input bg-transparent px-5 py-4 text-sm text-white/90 outline-none transition-all placeholder:text-white/25 focus:ring-0';
 
 export default function GlowTextField({
 	value,

@@ -45,7 +45,7 @@ const labelClass = 'mb-2 block text-white text-lg font-semibold md:text-2xl';
 const errorClass = 'mt-1 text-sm text-red-400';
 
 const inputInnerClass =
-	'w-full bg-transparent px-5 py-4 text-base text-white/90 placeholder:text-white/25 outline-none focus:ring-0 transition-all resize-none';
+	'w-full glow-input bg-transparent px-5 py-4 text-base text-white/90 placeholder:text-white/25 outline-none focus:ring-0 transition-all resize-none';
 
 export default function GenericForm({
 	fields,
@@ -117,7 +117,7 @@ export default function GenericForm({
 
 				<div className="relative z-10">
 					<GradientBorder thickness={1} radius="16px" subtle={true} hasError={hasError} />
-					<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="12px" />
+					<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
 
 					<div style={{ overflow: 'hidden' }}>
 						{field.type === 'action' ? (

@@ -74,7 +74,7 @@ export default function AccountRisk() {
 				</div>
 
 				<div className="mt-12 flex flex-col items-center text-center">
-					<PrimaryButton href="/contact">Get a Free Custom Local AI Plan</PrimaryButton>
+					<PrimaryButton href="#roadmap-form">Get a Free Custom Local AI Plan</PrimaryButton>
 				</div>
 			</div>
 		</section>

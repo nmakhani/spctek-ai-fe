@@ -60,7 +60,7 @@ export default function DeploymentProcess() {
 			</div>
 
 			<div className="flex justify-center">
-				<PrimaryButton href="/contact">Get a Free Custom Local AI Plan</PrimaryButton>
+				<PrimaryButton href="#roadmap-form">Get a Free Custom Local AI Plan</PrimaryButton>
 			</div>
 		</section>
 	);

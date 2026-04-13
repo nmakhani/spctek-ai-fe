@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
 	Hero,
@@ -20,7 +20,30 @@ import {
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
+import Newsletter from '@/components/generic-sections/Newsletter';
+
+const NEWSLETTER_SESSION_KEY = 'spctek-newsletter-seen';
+
 export default function HomePage() {
+	const [showNewsletterModal, setShowNewsletterModal] = useState(() => {
+		if (typeof window === 'undefined') {
+			return false;
+		}
+
+		return sessionStorage.getItem(NEWSLETTER_SESSION_KEY) !== 'true';
+	});
+
+	useEffect(() => {
+		if (showNewsletterModal) {
+			sessionStorage.setItem(NEWSLETTER_SESSION_KEY, 'true');
+		}
+	}, [showNewsletterModal]);
+
+	useEffect(() => {
+		document.body.style.overflow = '';
+		document.body.style.paddingRight = '';
+	}, []);
+
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Problems, id: 'problems' },
@@ -39,6 +62,23 @@ export default function HomePage() {
 
 	return (
 		<div className="noise-overlay relative flex min-h-screen flex-col">
+			{showNewsletterModal && (
+				<div
+					className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+					onClick={() => setShowNewsletterModal(false)}
+				>
+					<button
+						type="button"
+						onClick={() => setShowNewsletterModal(false)}
+						className="absolute right-5 top-5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white transition hover:bg-white/20"
+					>
+						Close
+					</button>
+					<div onClick={(e) => e.stopPropagation()}>
+						<Newsletter onClose={() => setShowNewsletterModal(false)} />
+					</div>
+				</div>
+			)}
 			<main className="flex-1">
 				{SECTIONS.map(({ Component, id }, index) => (
 					<React.Fragment key={index}>

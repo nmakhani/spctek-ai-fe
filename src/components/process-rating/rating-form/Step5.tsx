@@ -20,6 +20,25 @@ export default function Step5({
 	onBack,
 	onSubmit,
 }: Step5Props) {
+	const trimmedName = form.name.trim();
+	const trimmedEmail = form.email.trim();
+	const hasName = trimmedName.length > 0;
+	const hasEmail = trimmedEmail.length > 0;
+	const hasPhone = form.phone.trim().length > 0;
+	const isNameValid = /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(trimmedName);
+	const isEmailValid =
+		/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail) &&
+		!/\.\./.test(trimmedEmail);
+	const phoneDigits = form.phone.replace(/\D/g, '');
+	const isPhoneValid =
+		!hasPhone ||
+		(/^[+]?[\d()\-\s]{10,25}$/.test(form.phone.trim()) &&
+			phoneDigits.length >= 10 &&
+			phoneDigits.length <= 15 &&
+			!/^(\d)\1+$/.test(phoneDigits));
+	const canSubmit =
+		hasEmail && isEmailValid && hasName && isNameValid && isPhoneValid && !submitting;
+
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
@@ -55,6 +74,11 @@ export default function Step5({
 							onChange={(value) => onChange('name', value)}
 							placeholder="Jane Smith"
 						/>
+						{hasName && !isNameValid ? (
+							<p className="text-red-400 text-xs font-medium">
+								Enter a valid name using letters, spaces, apostrophes, or hyphens.
+							</p>
+						) : null}
 					</div>
 
 					<div className="flex flex-col gap-3">
@@ -67,6 +91,9 @@ export default function Step5({
 							onChange={(value) => onChange('email', value)}
 							placeholder="jane@company.com"
 						/>
+						{hasEmail && !isEmailValid ? (
+							<p className="text-red-400 text-xs font-medium">Enter a valid email address.</p>
+						) : null}
 					</div>
 				</div>
 
@@ -88,6 +115,11 @@ export default function Step5({
 							onChange={(value) => onChange('phone', value)}
 							placeholder="+1 (555) 123-4567"
 						/>
+						{hasPhone && !isPhoneValid ? (
+							<p className="text-red-400 text-xs font-medium">
+								Enter a valid phone number (10 to 15 digits) or leave this field empty.
+							</p>
+						) : null}
 					</div>
 				</div>
 			</div>
@@ -110,7 +142,7 @@ export default function Step5({
 				<button
 					type="button"
 					onClick={onSubmit}
-					disabled={!form.name || !form.email || submitting}
+					disabled={!canSubmit}
 					className="flex w-full flex-[2] items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					{submitting ? 'Analyzing...' : 'Reveal My Scorecard →'}

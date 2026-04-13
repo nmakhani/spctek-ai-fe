@@ -71,7 +71,7 @@ export default function Bottlenecks() {
 				</div>
 
 				<div className="flex flex-col items-center text-center">
-					<PrimaryButton href="/contact">Rate My Process</PrimaryButton>
+					<PrimaryButton href="#process-diagnostic">Rate My Process</PrimaryButton>
 				</div>
 			</div>
 		</section>

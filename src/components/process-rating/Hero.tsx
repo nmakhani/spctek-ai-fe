@@ -27,7 +27,7 @@ export default function Hero() {
 			</p>
 
 			<div>
-				<PrimaryButton href="/contact">Rate My Process</PrimaryButton>
+				<PrimaryButton href="#process-diagnostic">Rate My Process</PrimaryButton>
 			</div>
 		</section>
 	);

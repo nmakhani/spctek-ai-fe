@@ -37,17 +37,10 @@ export default function Hero() {
 
 			{/* Button Container */}
 			<div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
-				<PrimaryButton
-					href="/report"
-					config={{
-						bgColor: '#6366f1',
-						hoverColor: '#5558e3',
-					}}
-				>
-					Get My Reinstatement Report
-				</PrimaryButton>
+				<PrimaryButton href="#free-assessment">Get My Reinstatement Report</PrimaryButton>
 
 				<PrimaryButton
+					href="/contact"
 					config={{
 						bgColor: '#e0e7ff',
 						hoverColor: '#ffffff',

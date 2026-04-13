@@ -33,7 +33,7 @@ const solutionCards: SolutionCard[] = [
 			'AI aligned with internal workflows and SOPS',
 		],
 		cta: 'Deploy Local AI',
-		link: 'contact',
+		link: '/local-ai-setup',
 	},
 	{
 		category: 'Custom Solutions',
@@ -45,7 +45,7 @@ const solutionCards: SolutionCard[] = [
 			'AI solutions aligned with your operations',
 		],
 		cta: 'Get Custom Solutions',
-		link: 'contact',
+		link: '/process-rating',
 	},
 ];
 

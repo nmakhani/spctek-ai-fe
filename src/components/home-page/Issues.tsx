@@ -56,7 +56,7 @@ export default function Issues() {
 						If these sound familiar, it&apos;s time to fix how your business operates rather than
 						just adding more tools.
 					</p>
-					<PrimaryButton href="/contact">Get a Free Operations Assessment</PrimaryButton>
+					<PrimaryButton href="/process-rating">Get a Free Operations Assessment</PrimaryButton>
 				</div>
 			</div>
 		</section>

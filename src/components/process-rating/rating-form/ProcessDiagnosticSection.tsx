@@ -25,6 +25,17 @@ const LOADING_MESSAGES = [
 	'Generating your personalized scorecard...',
 ];
 
+const isValidName = (name: string) => /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(name.trim());
+const isValidEmail = (email: string) =>
+	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) &&
+	!/\.\./.test(email.trim());
+const isValidPhone = (phone: string) =>
+	!phone.trim() ||
+	(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
+		phone.replace(/\D/g, '').length >= 10 &&
+		phone.replace(/\D/g, '').length <= 15 &&
+		!/^(\d)\1+$/.test(phone.replace(/\D/g, '')));
+
 export default function ProcessDiagnosticSection() {
 	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
 	const [step, setStep] = useState<Step>(1);
@@ -38,7 +49,26 @@ export default function ProcessDiagnosticSection() {
 	const goToStep = (nextStep: Step) => setStep(nextStep);
 
 	const runAnalysis = async () => {
-		if (!form.email || !form.name) return;
+		if (!form.email.trim() || !form.name.trim()) {
+			setSubmitError('Name and email are required.');
+			return;
+		}
+
+		if (!isValidName(form.name)) {
+			setSubmitError('Please enter a valid full name.');
+			return;
+		}
+
+		if (!isValidEmail(form.email)) {
+			setSubmitError('Please enter a valid email address.');
+			return;
+		}
+
+		if (!isValidPhone(form.phone)) {
+			setSubmitError('Please enter a valid phone number (10 to 15 digits) or leave it empty.');
+			return;
+		}
+
 		setSubmitting(true);
 		setSubmitError('');
 		setPhase('loading');
@@ -50,8 +80,9 @@ export default function ProcessDiagnosticSection() {
 
 		try {
 			await contactsApi.create({
-				name: form.name,
-				email: form.email,
+				name: form.name.trim(),
+				email: form.email.trim(),
+				phone: form.phone.trim() || null,
 				company: form.company || null,
 				message: `Process Diagnostic — Motive: ${form.motive} | Team: ${form.teamSize} | Industry: ${form.industry} | SOPs: ${form.sopLocation} | Tools: ${form.toolIntegration} | Score: ${calculateScore(form)} | Broken process: ${form.brokenProcess}`,
 				source: 'process_diagnostic',

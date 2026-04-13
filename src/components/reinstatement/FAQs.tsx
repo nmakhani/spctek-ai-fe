@@ -1,52 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
-
-import { SectionHeading } from '../ui/SectionHeading';
-
-interface FAQItemProps {
-	question: string;
-	answer: string;
-	isOpen: boolean;
-	onClick: () => void;
-}
-
-const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
-	return (
-		<div className="border-b border-white/60" onMouseEnter={onClick}>
-			<button
-				className="group flex w-full items-start justify-between gap-4 py-4 text-left md:py-5"
-				onClick={onClick}
-				type="button"
-			>
-				<p
-					className={`text-[1.05rem] font-semibold leading-[1.25] transition-colors md:text-[1.5rem] ${
-						isOpen ? 'text-[#606bfa]' : 'text-white'
-					}`}
-				>
-					{question}
-				</p>
-				<span
-					className={`mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all ${
-						isOpen ? 'border-[#9fb0ff] bg-[#606bfa] text-white' : 'border-white/80 text-white'
-					}`}
-				>
-					{isOpen ? <X size={14} strokeWidth={2.5} /> : <Plus size={14} strokeWidth={2.5} />}
-				</span>
-			</button>
-			<div
-				className={`overflow-hidden transition-all duration-300 ease-in-out ${
-					isOpen ? 'max-h-56 pb-6' : 'max-h-0'
-				}`}
-			>
-				<p className="font-poppins max-w-5xl text-sm leading-[1.5] text-white/90 md:text-lg">
-					{answer}
-				</p>
-			</div>
-		</div>
-	);
-};
+import GenericFAQs from '../generic-sections/FAQs';
 
 const faqs = [
 	{
@@ -77,27 +31,5 @@ const faqs = [
 ];
 
 export default function FAQs() {
-	const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-	return (
-		<section className="font-poppins relative px-6 md:px-12" id="faq">
-			<div className="font-poppins relative mx-auto max-w-6xl">
-				<div className="mb-8 text-center md:mb-10">
-					<SectionHeading size="large">Frequently Asked Questions</SectionHeading>
-				</div>
-
-				<div className="mt-8" onMouseLeave={() => setOpenIndex(null)}>
-					{faqs.map((faq, index) => (
-						<FAQItem
-							key={index}
-							question={faq.question}
-							answer={faq.answer}
-							isOpen={openIndex === index}
-							onClick={() => setOpenIndex(index)}
-						/>
-					))}
-				</div>
-			</div>
-		</section>
-	);
+	return <GenericFAQs faqs={faqs} />;
 }

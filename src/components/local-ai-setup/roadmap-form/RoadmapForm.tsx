@@ -33,6 +33,17 @@ const LOADING_MESSAGES = [
 	'Preparing your custom roadmap...',
 ];
 
+const isValidName = (name: string) => /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(name.trim());
+const isValidEmail = (email: string) =>
+	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) &&
+	!/\.\./.test(email.trim());
+const isValidPhone = (phone: string) =>
+	!phone.trim() ||
+	(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
+		phone.replace(/\D/g, '').length >= 10 &&
+		phone.replace(/\D/g, '').length <= 15 &&
+		!/^(\d)\1+$/.test(phone.replace(/\D/g, '')));
+
 export default function RoadmapForm() {
 	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
 	const [step, setStep] = useState<Step>(1);
@@ -53,7 +64,10 @@ export default function RoadmapForm() {
 	const goToStep = (nextStep: Step) => setStep(nextStep);
 
 	const runSubmit = async () => {
-		if (!form.name || !form.email) return;
+		if (!form.name.trim() || !form.email.trim()) return;
+		if (!isValidName(form.name)) return;
+		if (!isValidEmail(form.email)) return;
+		if (!isValidPhone(form.phone)) return;
 
 		setSubmitting(true);
 		setPhase('loading');
@@ -67,9 +81,9 @@ export default function RoadmapForm() {
 
 		try {
 			await contactsApi.create({
-				name: form.name,
-				email: form.email,
-				phone: form.phone || null,
+				name: form.name.trim(),
+				email: form.email.trim(),
+				phone: form.phone.trim() || null,
 				company: form.company || null,
 				message: `AI Deployment Roadmap — Use Cases: ${form.useCases.join(', ')} | Team Size: ${form.teamSize} | Data Sensitivity: ${form.dataSensitivity} | Deployment Model: ${form.deploymentModel} | Recommended Tier: ${nextRecommendation.tier.label} | Current Stack: ${form.currentStack || 'N/A'}`,
 				source: 'ai_deployment_roadmap',

@@ -114,15 +114,7 @@ export default function ReinstatementProcess() {
 				</div>
 
 				<div className="flex justify-center">
-					<PrimaryButton
-						href="/report"
-						config={{
-							width: 'auto',
-							marginTop: '0px',
-						}}
-					>
-						Get My Reinstatement Report
-					</PrimaryButton>
+					<PrimaryButton href="#free-assessment">Get My Reinstatement Report</PrimaryButton>
 				</div>
 			</div>
 		</section>
