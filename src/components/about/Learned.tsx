@@ -19,12 +19,12 @@ export default function Learned() {
 
 			<LeftTextSection>
 				Through our years of hands-on work, we began to notice a consistent pattern. <br />
-				<br /> Most businesses were not struggling because they lacked tools. They were struggling
-				because their processes were unclear, fragmented, or disconnected. <br />
-				<br /> Teams were operating across multiple platforms, leads were missed, workflows were
-				inconsistent, and decisions were delayed because information was scattered. <br />
-				<br /> At the same time, AI was rapidly gaining attention. Businesses wanted to adopt it,
-				but many did not know where it actually fit within their operations. <br /> <br /> <br />
+				<br /> Most businesses were not struggling because they lacked tools. They were struggling because their
+				processes were unclear, fragmented, or disconnected. <br />
+				<br /> Teams were operating across multiple platforms, leads were missed, workflows were inconsistent, and
+				decisions were delayed because information was scattered. <br />
+				<br /> At the same time, AI was rapidly gaining attention. Businesses wanted to adopt it, but many did not know
+				where it actually fit within their operations. <br /> <br /> <br />
 				<p className="font-bold">We saw companies:</p>
 			</LeftTextSection>
 
@@ -40,23 +40,18 @@ export default function Learned() {
 									<div
 										className="absolute inset-0 -z-10"
 										style={{
-											background:
-												'linear-gradient(105deg, #131532 0%, #606bfa 40%, #606bfa 60%, #131532 100%)',
+											background: 'linear-gradient(105deg, #131532 0%, #606bfa 40%, #606bfa 60%, #131532 100%)',
 											filter: 'blur(8px)',
 										}}
 									/>
-									<span className="relative z-10 text-4xl font-bold text-white md:text-6xl">
-										{item.id}
-									</span>
+									<span className="relative z-10 text-4xl font-bold text-white md:text-6xl">{item.id}</span>
 								</div>
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-8 py-6 text-white shadow-inner">
 									<GradientBorder thickness={1.5} radius="12px" />
 									<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 
-									<p className="relative z-10 text-lg font-normal tracking-wide md:text-xl lg:text-2xl">
-										{item.text}
-									</p>
+									<p className="relative z-10 text-lg font-normal tracking-wide md:text-xl lg:text-2xl">{item.text}</p>
 								</div>
 							</div>
 						))}

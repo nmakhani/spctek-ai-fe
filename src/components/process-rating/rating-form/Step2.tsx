@@ -14,16 +14,12 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
-					Knowledge &amp; Decision-Making
-				</h2>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Knowledge &amp; Decision-Making</h2>
 				<p className="text-gray-400 text-sm">How does information flow inside your business?</p>
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					Where do your SOPs and processes currently live?
-				</label>
+				<label className="text-sm font-semibold text-white">Where do your SOPs and processes currently live?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					{[
 						{ v: 'Heads', l: "In people's heads", d: 'Tribal knowledge, not written down' },
@@ -49,9 +45,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					Who makes day-to-day operational decisions?
-				</label>
+				<label className="text-sm font-semibold text-white">Who makes day-to-day operational decisions?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{[
 						{
@@ -80,9 +74,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					How long does it take to onboard a new team member?
-				</label>
+				<label className="text-sm font-semibold text-white">How long does it take to onboard a new team member?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{[
 						{ v: 'Long', l: '1+ months', d: 'Painful' },

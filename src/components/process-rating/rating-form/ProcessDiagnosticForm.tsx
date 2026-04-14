@@ -65,15 +65,9 @@ export default function ProcessDiagnosticForm({
 					<StepWrapper key={`step-${step}`}>
 						<FormProgressBar step={step} totalSteps={TOTAL_STEPS} />
 						{step === 1 && <Step1 form={form} onChange={onChange} onNext={onGoToStep} />}
-						{step === 2 && (
-							<Step2 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
-						)}
-						{step === 3 && (
-							<Step3 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
-						)}
-						{step === 4 && (
-							<Step4 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />
-						)}
+						{step === 2 && <Step2 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />}
+						{step === 3 && <Step3 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />}
+						{step === 4 && <Step4 form={form} onChange={onChange} onNext={onGoToStep} onBack={onGoToStep} />}
 						{step === 5 && (
 							<Step5
 								form={form}

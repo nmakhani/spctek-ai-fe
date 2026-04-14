@@ -16,7 +16,7 @@ import {
 	AIPlaybook,
 	Contact,
 	FAQs,
-} from '@/components/home-page';
+} from '@/components/landing-page';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 

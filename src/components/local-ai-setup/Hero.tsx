@@ -10,20 +10,18 @@ export default function Hero() {
 					top: '-35%',
 					width: '100%',
 					height: '100%',
-					background:
-						'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
+					background: 'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
 					filter: 'blur(100px)',
 				}}
 			/>
 
 			<SectionHeading size="hero">
-				Deploy <span className="text-[#606bfa]">Local AI</span> Without <br /> Compromising Security
-				or Control
+				Deploy <span className="text-[#606bfa]">Local AI</span> Without <br /> Compromising Security or Control
 			</SectionHeading>
 
 			<p className="font-poppins mt-8 max-w-[800px] text-xl font-light leading-relaxed text-white md:text-2xl">
-				Run powerful AI inside your own environment with full data ownership, role-based access, and
-				zero risk of data leakage.
+				Run powerful AI inside your own environment with full data ownership, role-based access, and zero risk of data
+				leakage.
 			</p>
 
 			<div>

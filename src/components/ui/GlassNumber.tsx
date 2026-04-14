@@ -30,8 +30,7 @@ export const GlassNumber = ({ number, size = 'sm' }: GlassNumberProps) => {
 			<div
 				className="pointer-events-none absolute inset-[1px] overflow-hidden rounded-[7px]"
 				style={{
-					background:
-						'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.3) 100%)',
+					background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.3) 100%)',
 				}}
 			/>
 

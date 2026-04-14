@@ -19,8 +19,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 	const hasPhone = form.phone.trim().length > 0;
 	const isNameValid = /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(trimmedName);
 	const isEmailValid =
-		/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail) &&
-		!/\.\./.test(trimmedEmail);
+		/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail) && !/\.\./.test(trimmedEmail);
 	const phoneDigits = form.phone.replace(/\D/g, '');
 	const isPhoneValid =
 		!hasPhone ||
@@ -28,16 +27,13 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 			phoneDigits.length >= 10 &&
 			phoneDigits.length <= 15 &&
 			!/^(\d)\1+$/.test(phoneDigits));
-	const canSubmit =
-		hasEmail && isEmailValid && hasName && isNameValid && isPhoneValid && !submitting;
+	const canSubmit = hasEmail && isEmailValid && hasName && isNameValid && isPhoneValid && !submitting;
 
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
 				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Contact Details</h2>
-				<p className="text-gray-400 text-sm">
-					Enter your details to generate your architecture recommendation.
-				</p>
+				<p className="text-gray-400 text-sm">Enter your details to generate your architecture recommendation.</p>
 			</div>
 
 			<div className="border-indigo-500/20 bg-indigo-500/5 rounded-2xl border p-6 backdrop-blur-sm">
@@ -60,11 +56,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 						<label className="text-left text-sm font-bold text-white">
 							Full Name <span className="text-red-400">*</span>
 						</label>
-						<GlowTextField
-							value={form.name}
-							onChange={(value) => onChange('name', value)}
-							placeholder="Jane Smith"
-						/>
+						<GlowTextField value={form.name} onChange={(value) => onChange('name', value)} placeholder="Jane Smith" />
 						{hasName && !isNameValid ? (
 							<p className="text-red-400 text-xs font-medium">
 								Enter a valid name using letters, spaces, apostrophes, or hyphens.
@@ -116,8 +108,8 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 			</div>
 
 			<p className="text-gray-500 text-xs leading-relaxed">
-				We take privacy seriously. Your details are only used to send your roadmap and optional
-				follow-up. No spam, ever.
+				We take privacy seriously. Your details are only used to send your roadmap and optional follow-up. No spam,
+				ever.
 			</p>
 
 			<div className="flex gap-4 pt-2">

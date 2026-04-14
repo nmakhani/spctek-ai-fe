@@ -2,14 +2,7 @@
 
 import React from 'react';
 
-import {
-	Hero,
-	WhyMove,
-	DeploymentProcess,
-	RoadmapForm,
-	AiPowered,
-	FAQs,
-} from '@/components/local-ai-setup';
+import { Hero, WhyMove, DeploymentProcess, RoadmapForm, AiPowered, FAQs } from '@/components/local-ai-setup';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
 

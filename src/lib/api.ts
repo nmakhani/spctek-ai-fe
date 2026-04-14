@@ -3,9 +3,7 @@ import axios from 'axios';
 import { debugConsole } from './debug';
 
 const API_BASE_URL =
-	process.env.NEXT_PUBLIC_DEV_MODE === '1'
-		? process.env.NEXT_PUBLIC_API_URL_DEV
-		: process.env.NEXT_PUBLIC_API_URL_PROD;
+	process.env.NEXT_PUBLIC_DEV_MODE === '1' ? process.env.NEXT_PUBLIC_API_URL_DEV : process.env.NEXT_PUBLIC_API_URL_PROD;
 
 const apiClient = axios.create({
 	baseURL: API_BASE_URL,
@@ -37,24 +35,18 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
 	(response) => {
-		debugConsole.log(
-			`✅ [API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`,
-			{
-				status: response.status,
-				data: response.data,
-			}
-		);
+		debugConsole.log(`✅ [API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+			status: response.status,
+			data: response.data,
+		});
 		return response;
 	},
 	(error) => {
-		debugConsole.error(
-			`🔥 [API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
-			{
-				status: error.response?.status,
-				data: error.response?.data,
-				message: error.message,
-			}
-		);
+		debugConsole.error(`🔥 [API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, {
+			status: error.response?.status,
+			data: error.response?.data,
+			message: error.message,
+		});
 
 		if (error.response?.status === 401) {
 			if (typeof window !== 'undefined') {
@@ -88,8 +80,7 @@ export const authApi = {
 };
 
 export const reinstatementApi = {
-	generateReport: (data: Record<string, unknown>) =>
-		apiClient.post('/reinstatement/generate', data),
+	generateReport: (data: Record<string, unknown>) => apiClient.post('/reinstatement/generate', data),
 };
 
 export default apiClient;

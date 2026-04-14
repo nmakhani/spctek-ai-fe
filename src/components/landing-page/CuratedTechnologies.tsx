@@ -26,15 +26,14 @@ const techCategories = [
 
 export default function CuratedTechnologies() {
 	return (
-		<section className="relative px-6">
+		<section className="relative px-4 md:px-6 lg:px-12">
 			<GlowBackground
 				style={{
 					top: '60%',
 					left: '60%',
 					width: '100%',
 					height: '60%',
-					background:
-						'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)',
+					background: 'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)',
 					transform: 'translate(-50%, -50%) rotate(-40deg) scale(1.25)',
 					filter: 'blur(100px)',
 					opacity: 0.8,
@@ -42,7 +41,7 @@ export default function CuratedTechnologies() {
 			/>
 			<div className="mx-auto max-w-6xl">
 				{/* Section Header */}
-				<div className="mb-16 text-center">
+				<div className="mb-10 text-center md:mb-12 lg:mb-16">
 					<SectionHeading size="large">
 						Curated <span className="text-[#606bfa]">AI And Automation</span> Technologies
 					</SectionHeading>
@@ -50,7 +49,7 @@ export default function CuratedTechnologies() {
 
 				{/* LARGE OUTER GLASS CONTAINER */}
 				<div
-					className="relative overflow-hidden rounded-[40px] p-8 md:p-12"
+					className="relative overflow-hidden rounded-[28px] p-4 sm:p-6 md:rounded-[34px] md:p-8 lg:rounded-[40px] lg:p-12"
 					style={{
 						background: 'rgba(255, 255, 255, 0.02)',
 						backdropFilter: 'blur(20px)',
@@ -64,8 +63,7 @@ export default function CuratedTechnologies() {
 						style={{
 							borderRadius: '40px',
 							padding: '1.5px',
-							background:
-								'linear-gradient(135deg, #fff 0%, transparent 30%, transparent 70%, #fff 100%)',
+							background: 'linear-gradient(135deg, #fff 0%, transparent 30%, transparent 70%, #fff 100%)',
 							WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
 							WebkitMaskComposite: 'xor',
 							maskComposite: 'exclude',
@@ -74,7 +72,7 @@ export default function CuratedTechnologies() {
 					/>
 
 					{/* INNER GRID */}
-					<div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-2">
+					<div className="relative z-10 grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 md:gap-7 lg:gap-8">
 						{techCategories.map((cat, idx) => (
 							<div
 								key={idx}
@@ -87,8 +85,7 @@ export default function CuratedTechnologies() {
 								<div
 									className="absolute inset-0 rounded-xl"
 									style={{
-										background:
-											'linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.06) 100%)',
+										background: 'linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.06) 100%)',
 										backdropFilter: 'blur(10px)',
 										zIndex: -2,
 									}}
@@ -98,9 +95,9 @@ export default function CuratedTechnologies() {
 
 								<div className="relative m-2 flex h-full flex-col overflow-hidden rounded-xl">
 									{/* 1. Card Header - fakes transparency with a gradient matching the card background */}
-									<div className="relative z-20 overflow-hidden rounded-t-xl px-6 py-5">
+									<div className="relative z-20 overflow-hidden rounded-t-xl px-4 py-4 sm:px-5 md:px-6 md:py-5">
 										{/* The Content */}
-										<p className="relative z-10 text-2xl font-semibold tracking-tight text-white">
+										<p className="relative z-10 text-xl font-semibold tracking-tight text-white sm:text-2xl">
 											{cat.title}
 										</p>
 
@@ -111,8 +108,7 @@ export default function CuratedTechnologies() {
 												padding: '1.5px',
 												background:
 													'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.3) 100%)',
-												WebkitMask:
-													'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+												WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
 												WebkitMaskComposite: 'xor',
 												maskComposite: 'exclude',
 											}}
@@ -122,20 +118,19 @@ export default function CuratedTechnologies() {
 										<div
 											className="pointer-events-none absolute inset-0"
 											style={{
-												background:
-													'radial-gradient(circle at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 60%)',
+												background: 'radial-gradient(circle at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 60%)',
 											}}
 										/>
 									</div>
 
 									{/* 2. Logo Area - no bg needed, inherits white from parent */}
-									<div className="relative z-10 flex min-h-[160px] flex-grow items-center justify-center bg-white p-8">
+									<div className="relative z-10 flex aspect-[16/7] min-h-[140px] flex-grow items-center justify-center bg-white p-5 sm:p-6 md:min-h-[170px] md:p-8 lg:min-h-[220px] lg:p-10">
 										<Image
 											width={500}
-											height={100}
+											height={140}
 											alt={cat.title}
 											src={cat.imagePath}
-											className="relative z-10 h-auto w-auto object-contain"
+											className="relative z-10 h-auto w-full max-w-[320px] object-contain lg:max-w-[500px]"
 										/>
 									</div>
 								</div>
@@ -145,10 +140,8 @@ export default function CuratedTechnologies() {
 				</div>
 
 				{/* BOTTOM SECTION */}
-				<div className="mt-20 text-center">
-					<p className="text-[1.25rem] font-light italic tracking-wide text-white">
-						And so many more...
-					</p>
+				<div className="mt-12 text-center md:mt-16 lg:mt-20">
+					<p className="text-lg font-light italic tracking-wide text-white md:text-xl">And so many more...</p>
 				</div>
 			</div>
 		</section>

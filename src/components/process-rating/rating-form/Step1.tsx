@@ -22,21 +22,13 @@ export default function Step1({ form, onChange, onNext }: Step1Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
-					Operational Baseline
-				</h2>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Operational Baseline</h2>
 				<p className="text-gray-400 text-sm">Tell us a bit about your team and goals.</p>
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					What is your primary goal right now?
-				</label>
-				<DarkDropdown
-					value={form.motive}
-					options={MOTIVE_OPTIONS}
-					onChange={(value) => onChange('motive', value)}
-				/>
+				<label className="text-sm font-semibold text-white">What is your primary goal right now?</label>
+				<DarkDropdown value={form.motive} options={MOTIVE_OPTIONS} onChange={(value) => onChange('motive', value)} />
 			</div>
 
 			<div className="flex flex-col gap-3">

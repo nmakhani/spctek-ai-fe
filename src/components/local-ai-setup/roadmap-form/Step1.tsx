@@ -23,12 +23,8 @@ export default function Step1({ form, onChange, onNext }: Step1Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
-					AI Deployment Scope
-				</h2>
-				<p className="text-gray-400 text-sm">
-					Tell us what you want to deploy and how large the rollout is.
-				</p>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">AI Deployment Scope</h2>
+				<p className="text-gray-400 text-sm">Tell us what you want to deploy and how large the rollout is.</p>
 			</div>
 
 			<div className="flex flex-col gap-3">

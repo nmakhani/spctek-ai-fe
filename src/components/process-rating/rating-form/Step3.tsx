@@ -14,16 +14,12 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
-					Friction &amp; Bottlenecks
-				</h2>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Friction &amp; Bottlenecks</h2>
 				<p className="text-gray-400 text-sm">Where does momentum die in your operations?</p>
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					How well do your tools talk to each other?
-				</label>
+				<label className="text-sm font-semibold text-white">How well do your tools talk to each other?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{[
 						{ v: 'Manual', l: 'Manual copy-pasting', d: 'Highest risk of errors' },
@@ -69,9 +65,7 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					How is customer communication managed?
-				</label>
+				<label className="text-sm font-semibold text-white">How is customer communication managed?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					{[
 						{ v: 'Manual', l: 'Manually by team members', d: 'Reactive and inconsistent' },

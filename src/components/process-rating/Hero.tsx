@@ -10,8 +10,7 @@ export default function Hero() {
 					top: '-35%',
 					width: '100%',
 					height: '100%',
-					background:
-						'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
+					background: 'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
 					filter: 'blur(100px)',
 				}}
 			/>
@@ -22,8 +21,8 @@ export default function Hero() {
 			</SectionHeading>
 
 			<p className="font-poppins mt-8 max-w-[800px] text-xl font-light leading-relaxed text-white md:text-2xl">
-				Measure your operational efficiency with an AI-powered process rating and uncover the most
-				critical operational flaws.
+				Measure your operational efficiency with an AI-powered process rating and uncover the most critical operational
+				flaws.
 			</p>
 
 			<div>

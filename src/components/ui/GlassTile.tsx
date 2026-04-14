@@ -20,8 +20,7 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
 				style={{
 					borderRadius: '25px',
 					padding: '1.2px',
-					background:
-						'linear-gradient(135deg, #fff 0%, transparent 20%, transparent 80%, #fff 100%)',
+					background: 'linear-gradient(135deg, #fff 0%, transparent 20%, transparent 80%, #fff 100%)',
 					WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
 					WebkitMaskComposite: 'destination-out',
 					maskComposite: 'exclude',
@@ -33,9 +32,7 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
 
 			<div className="relative z-10 flex h-full flex-col">
 				<h3 className="text-[1.4rem] font-bold tracking-tight text-[#7c86fc]">{title}</h3>
-				<p className="mt-4 text-[1.1rem] font-medium leading-relaxed text-white/90">
-					{description}
-				</p>
+				<p className="mt-4 text-[1.1rem] font-medium leading-relaxed text-white/90">{description}</p>
 			</div>
 		</div>
 	);

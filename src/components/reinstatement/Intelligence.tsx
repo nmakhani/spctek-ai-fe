@@ -12,13 +12,11 @@ type IntelligenceType = {
 const intelligenceTypes: IntelligenceType[] = [
 	{
 		title: 'Deep Case Intelligence',
-		description:
-			'Goes beyond detection to analyze root causes, severity, and reinstatement potential.',
+		description: 'Goes beyond detection to analyze root causes, severity, and reinstatement potential.',
 	},
 	{
 		title: 'Structured Viability Assessment',
-		description:
-			'Evaluates your case holistically to generate a clear reinstatement score and path forward.',
+		description: 'Evaluates your case holistically to generate a clear reinstatement score and path forward.',
 	},
 	{
 		title: 'Amazon-Trained AI Engine',
@@ -26,8 +24,7 @@ const intelligenceTypes: IntelligenceType[] = [
 	},
 	{
 		title: 'Actionable, Outcome-Focused Guidance',
-		description:
-			'Eliminates guesswork with precise insights that improve appeal success and save time.',
+		description: 'Eliminates guesswork with precise insights that improve appeal success and save time.',
 	},
 ];
 
@@ -42,8 +39,8 @@ export default function Intelligence() {
 						<span className="text-[#606bfa]">Reinstatement Estimator</span>
 					</SectionHeading>
 					<p className="mx-auto mt-6 max-w-3xl font-light leading-relaxed text-white md:text-2xl">
-						The Reinstatement Estimator analyzes your suspension using Amazon-specific data to
-						deliver a clear viability score and the smartest path to reinstatement.
+						The Reinstatement Estimator analyzes your suspension using Amazon-specific data to deliver a clear viability
+						score and the smartest path to reinstatement.
 					</p>
 				</div>
 

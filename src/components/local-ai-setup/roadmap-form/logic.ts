@@ -110,11 +110,7 @@ const getModelGroups = (tierId: string): ModelGroup[] => {
 		return [
 			{
 				modality: 'Text',
-				models: [
-					'Llama 3.1 70B Instruct (quantized)',
-					'Qwen2.5-32B-Instruct',
-					'Mixtral-8x22B-Instruct',
-				],
+				models: ['Llama 3.1 70B Instruct (quantized)', 'Qwen2.5-32B-Instruct', 'Mixtral-8x22B-Instruct'],
 				notes: 'For advanced reasoning, larger context, and higher simultaneous users.',
 			},
 			{
@@ -138,11 +134,7 @@ const getModelGroups = (tierId: string): ModelGroup[] => {
 	return [
 		{
 			modality: 'Text',
-			models: [
-				'Llama 3.1 70B Instruct',
-				'Qwen2.5-72B-Instruct',
-				'DeepSeek-V3 (self-hosted variant)',
-			],
+			models: ['Llama 3.1 70B Instruct', 'Qwen2.5-72B-Instruct', 'DeepSeek-V3 (self-hosted variant)'],
 			notes: 'Built for strict governance, high throughput, and long-context workflows.',
 		},
 		{

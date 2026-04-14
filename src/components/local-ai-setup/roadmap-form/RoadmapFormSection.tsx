@@ -13,8 +13,7 @@ export default function RoadmapFormSection() {
 			</SectionHeading>
 
 			<p className="mx-auto my-8 max-w-3xl text-xl font-light leading-relaxed text-white md:text-2xl">
-				Tell us your requirements, and we&apos;ll instantly map out the ideal local AI setup for
-				your business.
+				Tell us your requirements, and we&apos;ll instantly map out the ideal local AI setup for your business.
 			</p>
 
 			<div className="relative z-10 w-full p-2">

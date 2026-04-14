@@ -22,30 +22,29 @@ const businessTypes: BusinessType[] = [
 	},
 	{
 		title: 'Operations-Heavy SMBs',
-		description:
-			'Businesses with complex processes that benefit from automation and intelligent systems.',
+		description: 'Businesses with complex processes that benefit from automation and intelligent systems.',
 	},
 ];
 
 export default function BusinessAdoption() {
 	return (
-		<section className="font-poppins relative px-6 md:px-12">
+		<section className="font-poppins relative px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-6xl">
 				{/* Header Section */}
-				<div className="mx-auto mb-16 max-w-4xl text-center">
+				<div className="mx-auto mb-10 max-w-4xl text-center md:mb-12 lg:mb-16">
 					<SectionHeading size="large">
 						For Businesses That Want to Adopt <br />
 						<span className="text-[#606bfa]">AI </span>
 						the Right Way
 					</SectionHeading>
-					<p className="mx-auto mt-6 max-w-3xl font-light leading-relaxed text-white md:text-2xl">
-						Designed for businesses that want to adopt AI with clarity, manage complex operations
-						across multiple tools, and prioritize security and real-world workflows.
+					<p className="mx-auto mt-5 max-w-3xl text-base font-light leading-relaxed text-white sm:text-lg md:text-xl lg:text-2xl">
+						Designed for businesses that want to adopt AI with clarity, manage complex operations across multiple tools,
+						and prioritize security and real-world workflows.
 					</p>
 				</div>
 
 				{/* Business Types Grid */}
-				<div className="mx-auto mb-12 grid max-w-[900px] grid-cols-1 gap-6 md:grid-cols-2">
+				<div className="mx-auto mb-8 grid max-w-[900px] grid-cols-1 gap-5 md:mb-10 md:grid-cols-2 md:gap-6 lg:mb-12 lg:grid-cols-2">
 					{businessTypes.map((type) => (
 						<GlassTile key={type.title} title={type.title} description={type.description} />
 					))}

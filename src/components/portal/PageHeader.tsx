@@ -24,10 +24,7 @@ export function PageHeader({
 			<div className="mx-auto flex max-w-7xl items-center justify-between gap-4 py-5">
 				<div>
 					{backLink && (
-						<Link
-							href={backLink}
-							className="mb-2 inline-block text-sm text-white/60 transition hover:text-[#a9b2ff]"
-						>
+						<Link href={backLink} className="mb-2 inline-block text-sm text-white/60 transition hover:text-[#a9b2ff]">
 							{backText || '← Back'}
 						</Link>
 					)}

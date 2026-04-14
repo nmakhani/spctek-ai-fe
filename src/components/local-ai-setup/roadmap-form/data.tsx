@@ -6,13 +6,7 @@ export const USE_CASES: UseCaseOption[] = [
 		label: 'Document Processing',
 		desc: 'Invoices, contracts, reports and internal docs handled locally',
 		icon: (
-			<svg
-				className="h-5 w-5"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				strokeWidth={1.5}
-			>
+			<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -26,13 +20,7 @@ export const USE_CASES: UseCaseOption[] = [
 		label: 'Customer Support AI',
 		desc: 'Private chat agents that answer customers on your infrastructure',
 		icon: (
-			<svg
-				className="h-5 w-5"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				strokeWidth={1.5}
-			>
+			<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -46,13 +34,7 @@ export const USE_CASES: UseCaseOption[] = [
 		label: 'Code Assistant',
 		desc: 'Private copilots for coding, review and developer support',
 		icon: (
-			<svg
-				className="h-5 w-5"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				strokeWidth={1.5}
-			>
+			<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -66,13 +48,7 @@ export const USE_CASES: UseCaseOption[] = [
 		label: 'Data Analysis',
 		desc: 'Query internal data and visualize insights with natural language',
 		icon: (
-			<svg
-				className="h-5 w-5"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				strokeWidth={1.5}
-			>
+			<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -86,13 +62,7 @@ export const USE_CASES: UseCaseOption[] = [
 		label: 'Workflow Automation',
 		desc: 'Route approvals, tasks and follow-ups through AI logic',
 		icon: (
-			<svg
-				className="h-5 w-5"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				strokeWidth={1.5}
-			>
+			<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"

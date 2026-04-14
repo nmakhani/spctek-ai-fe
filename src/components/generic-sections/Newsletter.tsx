@@ -71,15 +71,12 @@ const ContactComponent = ({ onClose }: NewsletterProps) => {
 							Operational Chaos
 						</h2>
 						<p className="mx-auto max-w-md text-base leading-relaxed text-slate-200/90 sm:text-lg md:text-lg">
-							Get weekly actionable insights and AI updates to improve operations and grow with
-							better systems.
+							Get weekly actionable insights and AI updates to improve operations and grow with better systems.
 						</p>
 					</div>
 
 					<div className="space-y-2.5 sm:space-y-4">
-						<div
-							className={`group relative w-full transition-all duration-300 ${isError ? 'scale-[1.01]' : ''}`}
-						>
+						<div className={`group relative w-full transition-all duration-300 ${isError ? 'scale-[1.01]' : ''}`}>
 							<GradientBorder thickness={1.5} radius="12px" hasError={isError} />
 							<GlassGlow angle={105} opacity={0.5} start={10} end={90} radius="12px" />
 
@@ -97,11 +94,7 @@ const ContactComponent = ({ onClose }: NewsletterProps) => {
 							</div>
 						</div>
 
-						<PrimaryButton
-							onClick={handleSubmit}
-							disabled={isLoading}
-							config={{ width: '100%', marginTop: '0' }}
-						>
+						<PrimaryButton onClick={handleSubmit} disabled={isLoading} config={{ width: '100%', marginTop: '0' }}>
 							{isLoading ? 'Subscribing...' : 'Subscribe Free'}
 						</PrimaryButton>
 					</div>

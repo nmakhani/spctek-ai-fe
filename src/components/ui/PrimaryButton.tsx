@@ -17,7 +17,7 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const PrimaryButton = ({ children, href, config = {}, ...props }: PrimaryButtonProps) => {
 	const defaults: ButtonConfig = {
-		width: '360px',
+		width: '100%',
 		bgColor: '#606bfa',
 		hoverColor: '#6f79ff',
 		textColor: '#ffffff',
@@ -28,8 +28,8 @@ export const PrimaryButton = ({ children, href, config = {}, ...props }: Primary
 
 	const baseClasses = `
     transition-all duration-300 ease-in-out 
-    h-[60px] inline-flex items-center justify-center 
-    rounded-[24px] text-base font-semibold 
+	h-[54px] w-full max-w-[360px] inline-flex items-center justify-center 
+	rounded-[20px] text-sm font-semibold md:h-[58px] md:text-base lg:h-[60px] lg:rounded-[24px] 
     active:scale-[0.99] px-8
     [width:var(--w)]
     [color:var(--txt)]

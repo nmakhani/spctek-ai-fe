@@ -65,8 +65,7 @@ export default function GenericForm({
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [loading, setLoading] = useState(false);
 
-	const handleChange = (name: string, value: string) =>
-		setValues((prev) => ({ ...prev, [name]: value }));
+	const handleChange = (name: string, value: string) => setValues((prev) => ({ ...prev, [name]: value }));
 
 	const handleClear = () => {
 		setValues(defaultValues);
@@ -155,11 +154,7 @@ export default function GenericForm({
 			<GradientBorder thickness={2} radius="40px" />
 			<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
 
-			<form
-				className="relative space-y-6 p-5 md:p-8"
-				style={{ borderRadius: '38px' }}
-				onSubmit={handleSubmit}
-			>
+			<form className="relative space-y-6 p-5 md:p-8" style={{ borderRadius: '38px' }} onSubmit={handleSubmit}>
 				<div className="relative z-10 grid grid-cols-1 gap-5 text-left md:grid-cols-2 md:gap-6">
 					{fields.map(renderField)}
 				</div>

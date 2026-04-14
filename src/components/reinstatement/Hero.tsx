@@ -10,8 +10,7 @@ export default function Hero() {
 					top: '-35%',
 					width: '100%',
 					height: '100%',
-					background:
-						'radial-gradient(circle at center, rgba(96, 107, 250, 0.3) 0%, transparent 70%)',
+					background: 'radial-gradient(circle at center, rgba(96, 107, 250, 0.3) 0%, transparent 70%)',
 					filter: 'blur(100px)',
 				}}
 			/>
@@ -26,11 +25,10 @@ export default function Hero() {
 				</h2>
 
 				<p className="text-gray-300 text-lg font-light leading-relaxed md:text-2xl">
-					It can take 5-7 days to assess if your case is worth pursuing.{' '}
-					<br className="hidden md:block" />
-					Our Reinstatement Estimator provides an{' '}
-					<span className="font-normal text-white">instant assessment</span> of{' '}
-					<br className="hidden md:block" />
+					It can take 5-7 days to assess if your case is worth pursuing. <br className="hidden md:block" />
+					Our Reinstatement Estimator provides an <span className="font-normal text-white">
+						instant assessment
+					</span> of <br className="hidden md:block" />
 					your suspension and reinstatement viability report.
 				</p>
 			</div>

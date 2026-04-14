@@ -27,8 +27,7 @@ const LOADING_MESSAGES = [
 
 const isValidName = (name: string) => /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(name.trim());
 const isValidEmail = (email: string) =>
-	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) &&
-	!/\.\./.test(email.trim());
+	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) && !/\.\./.test(email.trim());
 const isValidPhone = (phone: string) =>
 	!phone.trim() ||
 	(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
@@ -44,8 +43,7 @@ export default function ProcessDiagnosticSection() {
 	const [submitError, setSubmitError] = useState('');
 	const [loadingIdx, setLoadingIdx] = useState(0);
 
-	const setField = (name: keyof FormData, value: string) =>
-		setForm((prev) => ({ ...prev, [name]: value }));
+	const setField = (name: keyof FormData, value: string) => setForm((prev) => ({ ...prev, [name]: value }));
 	const goToStep = (nextStep: Step) => setStep(nextStep);
 
 	const runAnalysis = async () => {
@@ -108,10 +106,7 @@ export default function ProcessDiagnosticSection() {
 					<GradientBorder thickness={2} radius="40px" />
 					<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
 
-					<div
-						className="relative p-8 pb-12 shadow-2xl"
-						style={{ borderRadius: '38px', background: 'transparent' }}
-					>
+					<div className="relative p-8 pb-12 shadow-2xl" style={{ borderRadius: '38px', background: 'transparent' }}>
 						<ProcessDiagnosticForm
 							form={form}
 							step={step}

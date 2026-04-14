@@ -7,10 +7,7 @@ export default function FormLoadingState({ message, title }: { message: string; 
 		<div className="flex min-h-[400px] flex-col items-center justify-center gap-8 py-10 text-center">
 			<div className="relative flex h-24 w-24 items-center justify-center">
 				<div className="absolute inset-0 animate-pulse rounded-full bg-[#606bfa]/20 blur-2xl" />
-				<svg
-					className="absolute inset-0 h-full w-full animate-spin text-white/5"
-					viewBox="0 0 100 100"
-				>
+				<svg className="absolute inset-0 h-full w-full animate-spin text-white/5" viewBox="0 0 100 100">
 					<circle cx="50" cy="50" r="46" fill="none" strokeWidth="8" stroke="currentColor" />
 				</svg>
 				<svg

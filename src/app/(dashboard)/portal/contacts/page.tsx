@@ -71,9 +71,7 @@ function ContactsContent() {
 			if (editingId) {
 				const response = await contactsApi.update(editingId, formData);
 				const updated = response.data as Contact;
-				setContacts((prev) =>
-					prev.map((contact) => (contact.id === editingId ? updated : contact))
-				);
+				setContacts((prev) => prev.map((contact) => (contact.id === editingId ? updated : contact)));
 				toast.success('Contact updated');
 			} else {
 				const response = await contactsApi.create(formData);
@@ -187,16 +185,12 @@ function ContactsContent() {
 				<StatCard label="Total Contacts" loading={loading} count={contacts.length} />
 
 				{error && (
-					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">
-						{error}
-					</div>
+					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}
 
 				{showForm && (
 					<div className="mb-8 overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl md:p-8">
-						<h2 className="mb-4 text-xl font-semibold text-white">
-							{editingId ? 'Edit Contact' : 'New Contact'}
-						</h2>
+						<h2 className="mb-4 text-xl font-semibold text-white">{editingId ? 'Edit Contact' : 'New Contact'}</h2>
 						<form onSubmit={handleSubmit} className="space-y-5">
 							<div>
 								<label className="mb-2 block text-sm font-medium text-white/75">Name</label>
@@ -263,9 +257,7 @@ function ContactsContent() {
 								/>
 							</div>
 
-							<p className="text-xs text-white/60">
-								Note: backend requires at least one of Email or Phone.
-							</p>
+							<p className="text-xs text-white/60">Note: backend requires at least one of Email or Phone.</p>
 
 							<div className="flex gap-3 pt-4">
 								<button
@@ -308,10 +300,7 @@ function ContactsContent() {
 							</thead>
 							<tbody>
 								{contacts.map((contact) => (
-									<tr
-										key={contact.id}
-										className="border-b border-white/10 transition hover:bg-white/[0.05]"
-									>
+									<tr key={contact.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
 										<td className="px-6 py-3 text-white">{contact.name || '—'}</td>
 										<td className="px-6 py-3 text-white/75">{contact.email || '—'}</td>
 										<td className="px-6 py-3 text-white/65">{contact.phone || '—'}</td>

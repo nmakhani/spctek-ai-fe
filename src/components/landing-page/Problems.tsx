@@ -12,7 +12,7 @@ const stats = [
 	{
 		stat: '7+',
 		title: 'tools',
-		description: 'The average SMB uses daily.',
+		description: 'the average SMB uses daily.',
 	},
 	{
 		stat: '78%',
@@ -62,9 +62,9 @@ const GlassBadge = ({ stat }: { stat: string }) => (
 
 export default function Problems() {
 	return (
-		<section className="font-poppins px-6 md:px-12">
+		<section className="font-poppins px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-7xl">
-				<div className="mb-20 text-center">
+				<div className="mb-10 text-center md:mb-14 lg:mb-20">
 					<SectionHeading size="large">
 						The Problem Isn&apos;t Lack of <span className="text-[#a0a6fc]">AI Tools.</span>
 						<br />
@@ -72,16 +72,15 @@ export default function Problems() {
 					</SectionHeading>
 				</div>
 
-				<div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-20">
-					<div className="lg:col-span-6 lg:pl-20 xl:pl-36">
-						<p className="max-w-[600px] text-xl font-light leading-[1.3] tracking-tight text-white/90 md:text-2xl">
-							Most SMBs are already juggling more tools and dashboards than they can manage. The
-							real challenge is connecting data, workflows, and decisions into a system that brings
-							clarity, consistency, and control.
+				<div className="grid grid-cols-1 items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-16">
+					<div className="lg:col-span-6 lg:pl-8 xl:pl-20">
+						<p className="max-w-[600px] text-base font-light leading-relaxed tracking-tight text-white/90 sm:text-lg md:mx-auto md:text-center md:text-xl lg:mx-0 lg:text-left lg:text-2xl">
+							Most SMBs are already juggling more tools and dashboards than they can manage. The real challenge is
+							connecting data, workflows, and decisions into a system that brings clarity, consistency, and control.
 						</p>
 					</div>
 
-					<div className="relative flex flex-col gap-8 lg:col-span-5">
+					<div className="relative flex flex-col gap-5 sm:gap-6 md:items-center md:gap-7 lg:col-span-5 lg:items-start lg:gap-8">
 						<GlowBackground
 							style={{
 								top: '25%',
@@ -99,7 +98,7 @@ export default function Problems() {
 						{stats.map((item, idx) => (
 							<div
 								key={idx}
-								className="group relative flex max-w-[360px] items-center gap-4 rounded-xl p-0 transition-all duration-500 hover:bg-white/[0.03]"
+								className="group relative flex max-w-[380px] items-center gap-4 rounded-xl p-0 transition-all duration-500 hover:bg-white/[0.03]"
 								style={{
 									background: 'rgba(10, 10, 20, 0.4)',
 									backdropFilter: 'blur(12px)',
@@ -121,12 +120,8 @@ export default function Problems() {
 								<GlassBadge stat={item.stat} />
 
 								<div className="flex flex-col pr-4">
-									<span className="text-[16px] font-bold leading-tight text-white">
-										{item.title}
-									</span>
-									<span className="mt-0.5 text-[14px] leading-snug text-white/60">
-										{item.description}
-									</span>
+									<span className="text-[16px] font-bold leading-tight text-white">{item.title}</span>
+									<span className="mt-0.5 text-[14px] leading-snug text-white/60">{item.description}</span>
 								</div>
 							</div>
 						))}

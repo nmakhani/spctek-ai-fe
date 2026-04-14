@@ -35,8 +35,7 @@ const LOADING_MESSAGES = [
 
 const isValidName = (name: string) => /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(name.trim());
 const isValidEmail = (email: string) =>
-	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) &&
-	!/\.\./.test(email.trim());
+	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) && !/\.\./.test(email.trim());
 const isValidPhone = (phone: string) =>
 	!phone.trim() ||
 	(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
@@ -107,10 +106,7 @@ export default function RoadmapForm() {
 				<AnimatePresence mode="wait">
 					{phase === 'loading' ? (
 						<StepWrapper key="loading">
-							<FormLoadingState
-								message={LOADING_MESSAGES[loadingIdx]}
-								title="Generating Deployment Roadmap..."
-							/>
+							<FormLoadingState message={LOADING_MESSAGES[loadingIdx]} title="Generating Deployment Roadmap..." />
 						</StepWrapper>
 					) : phase === 'results' && recommendation ? (
 						<StepWrapper key="results">
@@ -120,17 +116,9 @@ export default function RoadmapForm() {
 						<StepWrapper key={`step-${step}`}>
 							<FormProgressBar step={step} totalSteps={TOTAL_STEPS} />
 							{step === 1 && <Step1 form={form} onChange={setField} onNext={goToStep} />}
-							{step === 2 && (
-								<Step2 form={form} onChange={setField} onNext={goToStep} onBack={goToStep} />
-							)}
+							{step === 2 && <Step2 form={form} onChange={setField} onNext={goToStep} onBack={goToStep} />}
 							{step === 3 && (
-								<Step3
-									form={form}
-									submitting={submitting}
-									onChange={setField}
-									onBack={goToStep}
-									onSubmit={runSubmit}
-								/>
+								<Step3 form={form} submitting={submitting} onChange={setField} onBack={goToStep} onSubmit={runSubmit} />
 							)}
 						</StepWrapper>
 					)}

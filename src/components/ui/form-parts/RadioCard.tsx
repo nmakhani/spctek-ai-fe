@@ -54,9 +54,7 @@ export const RadioCard = ({
 				>
 					<div className="relative z-10 flex items-start gap-3">
 						{leadingIcon ? (
-							<div
-								className={`mt-0.5 flex-shrink-0 ${selected ? 'text-[#606bfa]' : 'text-slate-500'}`}
-							>
+							<div className={`mt-0.5 flex-shrink-0 ${selected ? 'text-[#606bfa]' : 'text-slate-500'}`}>
 								{leadingIcon}
 							</div>
 						) : null}
@@ -64,14 +62,8 @@ export const RadioCard = ({
 							{selected && (
 								<div className="bg-indigo-500/20 pointer-events-none absolute inset-0 -z-10 rounded-2xl blur-md" />
 							)}
-							<p className={`text-[15px] font-medium ${selected ? 'text-white' : 'text-gray-200'}`}>
-								{label}
-							</p>
-							{desc ? (
-								<p className={`text-sm ${selected ? 'text-indigo-200' : 'text-gray-400'}`}>
-									{desc}
-								</p>
-							) : null}
+							<p className={`text-[15px] font-medium ${selected ? 'text-white' : 'text-gray-200'}`}>{label}</p>
+							{desc ? <p className={`text-sm ${selected ? 'text-indigo-200' : 'text-gray-400'}`}>{desc}</p> : null}
 						</div>
 					</div>
 					<span className="sr-only">{selected ? 'Selected' : 'Not selected'}</span>

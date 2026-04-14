@@ -10,8 +10,8 @@ export default function FixGaps() {
 				</SectionHeading>
 
 				<p className="mx-auto mt-8 max-w-3xl text-xl font-light leading-relaxed text-white md:text-2xl">
-					We take your diagnostic results and turn them into a fully optimized, automated system. So
-					your business runs faster, smoother, and with less manual work.
+					We take your diagnostic results and turn them into a fully optimized, automated system. So your business runs
+					faster, smoother, and with less manual work.
 				</p>
 
 				<div className="flex justify-center">

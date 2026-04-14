@@ -4,14 +4,13 @@ import { GlowBackground } from '../ui/GlowBackground';
 
 export default function Hero() {
 	return (
-		<section className="font-poppins relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12">
+		<section className="font-poppins relative mx-auto mt-24 flex max-w-7xl flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
 			<GlowBackground
 				style={{
-					top: '-35%',
+					top: '-30%',
 					width: '100%',
 					height: '100%',
-					background:
-						'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
+					background: 'radial-gradient(circle at center, rgba(96, 107, 250, 0.4) 0%, transparent 75%)',
 					filter: 'blur(100px)',
 				}}
 			/>
@@ -21,13 +20,13 @@ export default function Hero() {
 				Into <span className="text-[#a0a6fc]">Intelligent Systems</span>
 			</SectionHeading>
 
-			<p className="font-poppins mt-8 max-w-[800px] text-xl font-light leading-relaxed text-white md:text-2xl">
+			<p className="font-poppins mt-6 max-w-[800px] text-base font-light leading-relaxed text-white/95 md:text-xl lg:text-2xl">
 				AI automation is transforming industries, but most SMBs are
-				<br /> unsure what to adopt or where to start. We help SMBs solve real operational problems
-				using intelligent diagnostics, secure AI systems, and targeted automation solutions.
+				<br className="hidden md:block" /> unsure what to adopt or where to start. We help SMBs solve real operational
+				problems using intelligent diagnostics, secure AI systems, and targeted automation solutions.
 			</p>
 
-			<div className="mb-10">
+			<div className="mb-8 w-full max-w-[360px]">
 				<PrimaryButton href="/contact">Get My AI Playbook</PrimaryButton>
 			</div>
 

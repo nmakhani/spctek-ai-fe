@@ -10,8 +10,8 @@ interface SectionHeadingProps {
 }
 
 const sizeClasses: Record<SectionHeadingSize, string> = {
-	hero: 'text-5xl md:text-7xl leading-tight',
-	large: 'text-[2.5rem] md:text-[3.5rem] leading-tight',
+	hero: 'text-3xl leading-tight md:text-5xl lg:text-7xl',
+	large: 'text-[1.9rem] leading-tight md:text-[2.6rem] lg:text-[3.5rem]',
 };
 
 const alignClasses: Record<SectionHeadingAlign, string> = {
@@ -21,9 +21,5 @@ const alignClasses: Record<SectionHeadingAlign, string> = {
 };
 
 export const SectionHeading = ({ size, align = 'center', children }: SectionHeadingProps) => {
-	return (
-		<h1 className={`font-heading text-white ${sizeClasses[size]} ${alignClasses[align]}`}>
-			{children}
-		</h1>
-	);
+	return <h1 className={`font-heading text-white ${sizeClasses[size]} ${alignClasses[align]}`}>{children}</h1>;
 };

@@ -150,8 +150,8 @@ export default function FreeAssessment() {
 						Amazon <span className="text-[#606bfa]">Reinstatement</span> Estimator
 					</SectionHeading>
 					<p className="mx-auto mt-5 max-w-4xl text-lg leading-[1.35] text-white md:text-2xl">
-						Paste your Amazon performance notification to get an instant AI-powered reinstatement
-						assessment with clear next steps.
+						Paste your Amazon performance notification to get an instant AI-powered reinstatement assessment with clear
+						next steps.
 					</p>
 				</div>
 

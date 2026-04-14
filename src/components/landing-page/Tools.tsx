@@ -65,72 +65,73 @@ const comparisons: ToolComparison[] = [
 
 function RenderStatus({ status }: { status: 'yes' | 'no' | 'partial' }) {
 	if (status === 'yes') {
-		return <span className="text-[1.4rem] font-bold text-[#39FF14]">✓</span>;
+		return <span className="text-lg font-bold text-[#39FF14] md:text-[1.4rem]">✓</span>;
 	}
 	if (status === 'no') {
-		return <span className="text-xl font-bold text-[#4D5470]">X</span>;
+		return <span className="text-base font-bold text-[#4D5470] md:text-xl">X</span>;
 	}
-	return <span className="font-bold text-[#FFD700]">Partial</span>;
+	return <span className="text-xs font-bold text-[#FFD700] md:text-sm">Partial</span>;
 }
 
 export default function Tools() {
 	return (
-		<section className="font-poppins relative overflow-hidden px-6 md:px-12">
+		<section className="font-poppins relative overflow-hidden px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-5xl">
 				{/* Title */}
-				<div className="mx-auto mb-16 text-center text-white">
+				<div className="mx-auto mb-10 text-center text-white md:mb-12 lg:mb-16">
 					<SectionHeading size="large">
 						The <span className="text-[#606bfa]">Tools</span> You`re Using Weren`t Built for
 						<br />
 						Complex Business Operations
 					</SectionHeading>
-					<p className="mx-auto mt-6 max-w-2xl font-light leading-relaxed opacity-100 md:text-[1.3rem]">
-						Every tool in your stack was built for one layer of the problem. None of them were built
-						for the system.
+					<p className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed opacity-100 sm:text-lg md:text-[1.2rem] lg:text-[1.3rem]">
+						Every tool in your stack was built for one layer of the problem. None of them were built for the system.
 					</p>
 				</div>
 
 				{/* Table Container */}
-				<div className="overflow-x-auto pb-8">
-					<div className="min-w-[800px] overflow-hidden rounded-2xl border-[2px] border-white bg-[#1A1F3C] shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+				<div className="overflow-x-hidden pb-6 md:overflow-x-auto md:pb-8">
+					<div className="w-full overflow-hidden rounded-2xl border-[2px] border-white bg-[#1A1F3C] shadow-[0_0_30px_rgba(255,255,255,0.1)] md:min-w-[800px]">
 						<table className="w-full border-collapse text-center">
 							<thead>
 								<tr className="border-b border-white/30 bg-[#0D1127]">
-									<th className="w-1/4 border-r border-white/30 px-4 py-6 text-center font-bold text-white">
+									<th className="w-[68%] border-r border-white/30 px-3 py-4 text-left text-xs font-bold text-white md:w-1/4 md:px-4 md:py-6 md:text-center md:text-base">
 										Capability
 									</th>
-									<th className="border-r border-white/30 bg-[#2D345E] px-4 py-6 font-bold text-white">
+									<th className="w-[32%] border-r border-white/30 bg-[#2D345E] px-2 py-4 text-xs font-bold text-white md:w-auto md:px-4 md:py-6 md:text-base">
 										SPCTEK
 										<br />
 										AI Platform
 									</th>
-									<th className="border-r border-white/30 px-4 py-6 font-bold text-white">
+									<th className="hidden border-r border-white/30 px-3 py-4 text-sm font-bold text-white md:table-cell md:px-4 md:py-6 md:text-base">
 										Enterprise
 										<br />
 										Platforms
 									</th>
-									<th className="border-r border-white/30 px-4 py-6 font-bold text-white">
+									<th className="hidden border-r border-white/30 px-3 py-4 text-sm font-bold text-white md:table-cell md:px-4 md:py-6 md:text-base">
 										SaaS Tools
 									</th>
-									<th className="px-4 py-6 font-bold text-white">AI Tools</th>
+									<th className="hidden px-3 py-4 text-sm font-bold text-white md:table-cell md:px-4 md:py-6 md:text-base">
+										AI Tools
+									</th>
 								</tr>
 							</thead>
 							<tbody>
 								{comparisons.map((row) => (
 									<tr key={row.capability} className="border-b border-white/20 last:border-b-0">
-										<td className="border-r border-white/30 px-6 py-4 pl-10 text-left font-medium text-white/90">
+										<td className="border-r border-white/30 px-3 py-3 text-left text-xs font-medium text-white/90 md:px-6 md:py-4 md:pl-10 md:text-base">
 											{row.capability}
 										</td>
-										<td className="border-r border-white/30 bg-[#2D345E] px-4 py-4">
+										<td className="border-r border-white/30 bg-[#2D345E] px-2 py-3 md:px-4 md:py-4">
 											<RenderStatus status={row.spctek} />
 										</td>
-										<td className="border-r border-white/30 px-4 py-4">
+										<td className="hidden border-r border-white/30 px-3 py-3 md:table-cell md:px-4 md:py-4">
 											<RenderStatus status={row.enterprise} />
 										</td>
-										<td className="border-r border-white/30 px-4 py-4">
+										<td className="hidden border-r border-white/30 px-3 py-3 md:table-cell md:px-4 md:py-4">
 											<RenderStatus status={row.saas} />
 										</td>
-										<td className="px-4 py-4">
+										<td className="hidden px-3 py-3 md:table-cell md:px-4 md:py-4">
 											<RenderStatus status={row.ai} />
 										</td>
 									</tr>

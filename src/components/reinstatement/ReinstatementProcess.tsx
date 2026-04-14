@@ -46,9 +46,8 @@ export default function ReinstatementProcess() {
 						Way to Approach <span className="text-[#606bfa]">Reinstatement</span>
 					</SectionHeading>
 					<p className="mx-auto mt-6 max-w-4xl font-normal leading-relaxed text-white md:text-xl">
-						Our Reinstatement Estimator analyzes your suspension details and provides a clear,
-						structured evaluation of your case. Instead of guessing, you get data-backed insights to
-						guide your next steps.
+						Our Reinstatement Estimator analyzes your suspension details and provides a clear, structured evaluation of
+						your case. Instead of guessing, you get data-backed insights to guide your next steps.
 					</p>
 				</div>
 
@@ -83,25 +82,18 @@ export default function ReinstatementProcess() {
 									background: 'linear-gradient(135deg, #606bfa 0%, #131532 100%)',
 								}}
 							>
-								<span className="text-4xl font-bold tracking-tighter text-white">
-									{step.number}
-								</span>
+								<span className="text-4xl font-bold tracking-tighter text-white">{step.number}</span>
 							</div>
 
 							<div className="relative z-10 mt-10 flex w-full flex-col text-left">
 								<h3 className="mb-6 min-h-[60px] text-2xl font-bold text-white">{step.title}</h3>
 
-								<p className="mb-6 text-lg font-light leading-relaxed text-white/70">
-									{step.description}
-								</p>
+								<p className="mb-6 text-lg font-light leading-relaxed text-white/70">{step.description}</p>
 
 								{step.points && (
 									<ul className="space-y-3">
 										{step.points.map((point) => (
-											<li
-												key={point}
-												className="flex items-start gap-3 text-[12px] text-base text-white/70"
-											>
+											<li key={point} className="flex items-start gap-3 text-[12px] text-base text-white/70">
 												<span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#606bfa]" />
 												<span className="leading-snug">{point}</span>
 											</li>

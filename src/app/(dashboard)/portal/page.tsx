@@ -34,8 +34,7 @@ function DashboardContent() {
 									Portal <span className="text-[#606bfa]">Dashboard</span>
 								</h1>
 								<p className="mt-4 max-w-2xl text-base text-white/75 md:text-lg">
-									Manage contacts and blogs from one focused workspace with the same visual language
-									as your homepage.
+									Manage contacts and blogs from one focused workspace with the same visual language as your homepage.
 								</p>
 							</div>
 
@@ -97,8 +96,7 @@ function DashboardContent() {
 							</div>
 							<h2 className="mb-2 text-2xl font-semibold text-white">Blogs</h2>
 							<p className="text-white/75">
-								Publish polished articles with full schema controls including slug, summary, and
-								publication status.
+								Publish polished articles with full schema controls including slug, summary, and publication status.
 							</p>
 							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
 								Open Blogs

@@ -13,8 +13,7 @@ export default function LoginPage() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
-	const getErrorMessage = (err: unknown, fallback: string): string =>
-		err instanceof Error ? err.message : fallback;
+	const getErrorMessage = (err: unknown, fallback: string): string => (err instanceof Error ? err.message : fallback);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -44,9 +43,7 @@ export default function LoginPage() {
 						<div className="bg-[#606bfa]/22 pointer-events-none absolute -right-12 -top-14 h-40 w-40 rounded-full blur-3xl" />
 
 						<div className="relative mb-9">
-							<p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[#9aa4ff]">
-								Secure Access
-							</p>
+							<p className="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[#9aa4ff]">Secure Access</p>
 							<h1 className="mt-2 font-heading text-4xl font-semibold tracking-tight text-white">
 								SPCTEK <span className="text-[#606bfa]">Portal</span>
 							</h1>

@@ -4,12 +4,7 @@ import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
-const suspensionTypes = [
-	'Multiple rejections',
-	'Section 3 suspensions',
-	'IP complaints',
-	'Counterfeit claims',
-];
+const suspensionTypes = ['Multiple rejections', 'Section 3 suspensions', 'IP complaints', 'Counterfeit claims'];
 
 const successStats = [
 	{
@@ -51,8 +46,7 @@ export default function ExpertHelp() {
 						className="pointer-events-none absolute inset-0 rounded-3xl"
 						style={{
 							padding: '3px',
-							background:
-								'linear-gradient(135deg, white 0%, transparent 25%, transparent 75%, white 100%)',
+							background: 'linear-gradient(135deg, white 0%, transparent 25%, transparent 75%, white 100%)',
 							WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
 							WebkitMaskComposite: 'destination-out',
 							maskComposite: 'exclude',
@@ -84,13 +78,10 @@ export default function ExpertHelp() {
 									key={idx}
 									className="flex items-center justify-center gap-6 rounded-xl border border-white p-4 shadow-2xl transition-all duration-500 hover:scale-[1.01] md:p-4"
 									style={{
-										background:
-											'linear-gradient(105deg, #131532 0%, #2e358b 30%, #2e358b 70%, #131532 100%)',
+										background: 'linear-gradient(105deg, #131532 0%, #2e358b 30%, #2e358b 70%, #131532 100%)',
 									}}
 								>
-									<span className="text-6xl font-bold tracking-tighter text-white md:text-8xl">
-										{stat.value}
-									</span>
+									<span className="text-6xl font-bold tracking-tighter text-white md:text-8xl">{stat.value}</span>
 									<div className="text-left">
 										<p className="text-2xl font-normal leading-[1.1] text-white md:text-4xl">
 											{stat.label}
@@ -106,20 +97,16 @@ export default function ExpertHelp() {
 
 				{/* Context Text */}
 				<p className="mx-auto mt-12 max-w-4xl text-lg font-light leading-relaxed text-white md:text-2xl">
-					If your case is complex or your assessment shows low to moderate viability, our expert
-					team can step in to take over completely.
+					If your case is complex or your assessment shows low to moderate viability, our expert team can step in to
+					take over completely.
 				</p>
 
 				{/* Checklist Grid */}
 				<div className="mx-auto mb-20 mt-16 grid max-w-5xl grid-cols-1 gap-x-16 gap-y-2 text-left md:grid-cols-2">
 					{expertServices.map((service, index) => (
 						<div key={index} className="group flex items-start gap-2">
-							<span className="text-2xl font-bold transition-transform group-hover:scale-110">
-								✓
-							</span>
-							<span className="text-lg font-medium leading-snug text-white/90 md:text-2xl">
-								{service}
-							</span>
+							<span className="text-2xl font-bold transition-transform group-hover:scale-110">✓</span>
+							<span className="text-lg font-medium leading-snug text-white/90 md:text-2xl">{service}</span>
 						</div>
 					))}
 				</div>

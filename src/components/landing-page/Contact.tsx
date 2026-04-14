@@ -60,13 +60,13 @@ export default function Contact() {
 	};
 
 	return (
-		<section className="font-poppins relative overflow-hidden px-6 md:px-12" id="contact">
+		<section className="font-poppins relative overflow-hidden px-4 md:px-6 lg:px-12" id="contact">
 			<div className="relative mx-auto w-full max-w-5xl">
-				<div className="mx-auto mb-10 max-w-4xl text-center md:mb-12">
+				<div className="mx-auto mb-8 max-w-4xl text-center md:mb-10 lg:mb-12">
 					<SectionHeading size="large">
 						Ready to See How <span className="text-[#606bfa]">AI</span> Can Improve Your Operations?
 					</SectionHeading>
-					<p className="mx-auto mt-5 max-w-3xl text-lg leading-[1.35] text-white md:text-2xl">
+					<p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-white sm:text-lg md:mt-5 md:text-xl lg:text-2xl">
 						Provide your details, and we&apos;ll prepare a custom AI plan tailored to your business.
 					</p>
 				</div>

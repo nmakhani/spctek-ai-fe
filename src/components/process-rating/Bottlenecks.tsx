@@ -26,8 +26,8 @@ export default function Bottlenecks() {
 				</SectionHeading>
 
 				<p className="mx-auto mt-8 max-w-3xl text-center text-lg font-normal leading-relaxed text-white md:text-xl">
-					Most businesses don&apos;t realize how much time, money, and growth they&apos;re losing to
-					broken processes and disconnected systems.
+					Most businesses don&apos;t realize how much time, money, and growth they&apos;re losing to broken processes
+					and disconnected systems.
 				</p>
 
 				<div className="mt-16 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
@@ -36,9 +36,7 @@ export default function Bottlenecks() {
 							{issuesList.map((issue, idx) => (
 								<div key={idx} className="flex items-center gap-4 py-4 transition-all duration-300">
 									<GlassNumber number={issue.number} />
-									<span className="text-lg font-medium tracking-tight text-white/90">
-										{issue.title}
-									</span>
+									<span className="text-lg font-medium tracking-tight text-white/90">{issue.title}</span>
 								</div>
 							))}
 						</div>

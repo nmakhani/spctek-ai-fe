@@ -230,12 +230,7 @@ export function buildPointers(f: FormData): Pointer[] {
 		});
 	}
 
-	if (
-		f.brokenProcess &&
-		f.timeWasted !== '10+' &&
-		f.timeWasted !== '5-10' &&
-		f.timeWasted !== '2-5'
-	) {
+	if (f.brokenProcess && f.timeWasted !== '10+' && f.timeWasted !== '5-10' && f.timeWasted !== '2-5') {
 		pool.push({
 			title: 'Identified Process Ready for Automation',
 			body: `You've pinpointed "${f.brokenProcess}" — this self-awareness is the critical first step. Even if overall time waste is low, automating a specifically identified process eliminates its error surface entirely and typically reveals 2-3 adjacent automation candidates immediately downstream.`,

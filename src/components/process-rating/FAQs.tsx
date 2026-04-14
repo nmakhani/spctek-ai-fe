@@ -13,8 +13,7 @@ const faqs = [
 	},
 	{
 		question: 'How long does it take to complete the assessment?',
-		answer:
-			'Most users complete the assessment in under 2 minutes, and your results are generated instantly.',
+		answer: 'Most users complete the assessment in under 2 minutes, and your results are generated instantly.',
 	},
 	{
 		question: 'Is the assessment really free?',
@@ -37,8 +36,7 @@ const faqs = [
 	},
 	{
 		question: 'Will my data be secure?',
-		answer:
-			'Yes, your information is kept strictly private and is used only to generate your personalized report.',
+		answer: 'Yes, your information is kept strictly private and is used only to generate your personalized report.',
 	},
 ];
 

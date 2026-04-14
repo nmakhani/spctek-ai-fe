@@ -16,9 +16,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 		<div className="flex flex-col gap-10">
 			<div>
 				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">The Broken Link</h2>
-				<p className="text-gray-400 text-sm">
-					Tell us about the one process that keeps costing you.
-				</p>
+				<p className="text-gray-400 text-sm">Tell us about the one process that keeps costing you.</p>
 			</div>
 
 			<div className="flex flex-col gap-3">
@@ -35,9 +33,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					How much time does this process waste per week?
-				</label>
+				<label className="text-sm font-semibold text-white">How much time does this process waste per week?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					{[
 						{ v: '2', l: 'Under 2 hrs/wk', d: 'Minor friction' },
@@ -59,9 +55,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<label className="text-sm font-semibold text-white">
-					Have you tried to fix this before?
-				</label>
+				<label className="text-sm font-semibold text-white">Have you tried to fix this before?</label>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{[
 						{ v: 'Never', l: 'Never', d: 'Not sure where to start' },

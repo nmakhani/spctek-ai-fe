@@ -1,12 +1,6 @@
 'use client';
 
-export default function FormProgressBar({
-	step,
-	totalSteps,
-}: {
-	step: number;
-	totalSteps: number;
-}) {
+export default function FormProgressBar({ step, totalSteps }: { step: number; totalSteps: number }) {
 	const pct = (step / totalSteps) * 100;
 
 	return (

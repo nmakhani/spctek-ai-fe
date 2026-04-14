@@ -49,17 +49,14 @@ export default function AccountRisk() {
 				</SectionHeading>
 
 				<p className="mx-auto mt-8 max-w-3xl text-center text-lg font-normal leading-relaxed text-white">
-					Gain full control over your data, reduce costs, and use AI confidently. <br /> No need to
-					rely on public tools or risk your sensitive information.
+					Gain full control over your data, reduce costs, and use AI confidently. <br /> No need to rely on public tools
+					or risk your sensitive information.
 				</p>
 
 				<div className="mt-16 w-full">
 					<div className="flex flex-col gap-6">
 						{benefits.map((item, idx) => (
-							<div
-								key={idx}
-								className="relative flex items-center gap-6 px-8 py-4 transition-all duration-300"
-							>
+							<div key={idx} className="relative flex items-center gap-6 px-8 py-4 transition-all duration-300">
 								<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 								<GradientBorder thickness={1} radius="12px" />
 								<GlassNumber number={item.number} size="md" />

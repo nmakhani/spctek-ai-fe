@@ -33,8 +33,7 @@ const faqs = [
 	},
 	{
 		question: 'Do I need technical expertise to use the system?',
-		answer:
-			'No, we deliver a ready-to-use system and provide training so your team can easily operate and manage it.',
+		answer: 'No, we deliver a ready-to-use system and provide training so your team can easily operate and manage it.',
 	},
 	{
 		question: 'Do you provide support after deployment?',

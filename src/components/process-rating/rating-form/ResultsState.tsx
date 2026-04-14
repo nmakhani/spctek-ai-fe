@@ -66,9 +66,7 @@ const HeroSection = ({ score, category }: { score: number; category: Category })
 			</div>
 
 			<div className="flex h-full flex-col justify-center pt-2 text-center md:text-left">
-				<p className="text-gray-400 mb-2 text-sm font-bold uppercase tracking-widest">
-					Process Health
-				</p>
+				<p className="text-gray-400 mb-2 text-sm font-bold uppercase tracking-widest">Process Health</p>
 				<p className="mb-2 text-2xl font-bold md:text-3xl" style={{ color: dynamicColor }}>
 					{category.label}
 				</p>
@@ -82,9 +80,7 @@ const ChallengeCard = ({ pointer, index }: { pointer: Pointer; index: number }) 
 	return (
 		<div
 			className={`group relative z-10 w-full ${
-				index > 1
-					? 'pointer-events-none select-none opacity-80 blur-[4px] transition-all duration-300'
-					: ''
+				index > 1 ? 'pointer-events-none select-none opacity-80 blur-[4px] transition-all duration-300' : ''
 			}`}
 		>
 			<GradientBorder thickness={1} radius="16px" subtle={true} />
@@ -146,8 +142,8 @@ export default function ResultsState({ score, category, pointers }: ResultsState
 				<div className="relative flex flex-col items-center gap-4 rounded-[23px] bg-white/[0.03] p-8 backdrop-blur-xl">
 					<p className="text-2xl font-bold text-white">Ready to fix these in less than 30 days?</p>
 					<p className="text-gray-400 max-w-lg text-sm leading-relaxed">
-						We&apos;ll map your entire process landscape and identify which automations give you the
-						fastest payback, all in a single 30 minute session.
+						We&apos;ll map your entire process landscape and identify which automations give you the fastest payback,
+						all in a single 30 minute session.
 					</p>
 					<PrimaryButton href="/contact">Book My Free Strategy Call</PrimaryButton>
 					<p className="text-gray-500 text-xs font-medium">No hard sell. No commitment required.</p>

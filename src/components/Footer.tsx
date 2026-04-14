@@ -75,20 +75,14 @@ export default function Footer() {
 					{/* Brand */}
 					<div className="md:col-span-5">
 						<Link href="/" className="mb-4 flex items-center">
-							<Image
-								src="/logo-light.png"
-								alt="SPCTEK AI Logo"
-								width={146}
-								height={44}
-								className="object-contain"
-							/>
+							<Image src="/logo-light.png" alt="SPCTEK AI Logo" width={146} height={44} className="object-contain" />
 						</Link>
 						<p className="font-poppins max-w-md text-lg leading-relaxed text-white/70">
 							Transformation through intelligent automation.
 						</p>
 						<p className="font-poppins mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-							We help operators eliminate repetitive work, standardize execution, and turn complex
-							processes into reliable AI-assisted systems.
+							We help operators eliminate repetitive work, standardize execution, and turn complex processes into
+							reliable AI-assisted systems.
 						</p>
 						<div className="mt-4 flex flex-wrap gap-2">
 							<span className="font-poppins rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
@@ -131,12 +125,8 @@ export default function Footer() {
 
 					{/* Newsletter */}
 					<div className="md:col-span-3">
-						<h3 className="font-poppins mb-2 text-sm font-semibold text-white">
-							Weekly Newsletter
-						</h3>
-						<p className="font-poppins mb-4 text-sm text-white/60">
-							Get practical AI updates and growth insights.
-						</p>
+						<h3 className="font-poppins mb-2 text-sm font-semibold text-white">Weekly Newsletter</h3>
+						<p className="font-poppins mb-4 text-sm text-white/60">Get practical AI updates and growth insights.</p>
 						<div className="flex flex-col gap-3">
 							<input
 								type="email"

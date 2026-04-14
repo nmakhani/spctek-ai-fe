@@ -42,8 +42,7 @@ export const GlassPill = ({ href, children }: GlassPillProps) => {
 			<div
 				className="absolute bottom-0 left-[10%] right-[10%] h-px rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
 				style={{
-					background:
-						'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
+					background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
 				}}
 			/>
 

@@ -16,9 +16,7 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
-					Security &amp; Deployment Model
-				</h2>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Security &amp; Deployment Model</h2>
 				<p className="text-gray-400 text-sm">We use this to scope your deployment boundaries.</p>
 			</div>
 

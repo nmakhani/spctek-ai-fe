@@ -36,8 +36,7 @@ module.exports = {
 				heading: ['Gued', 'Outfit', 'system-ui', 'sans-serif'],
 			},
 			boxShadow: {
-				'glow-purple':
-					'0 0 40px rgba(var(--theme-accent2-rgb),0.3), 0 0 80px rgba(var(--theme-accent2-rgb),0.1)',
+				'glow-purple': '0 0 40px rgba(var(--theme-accent2-rgb),0.3), 0 0 80px rgba(var(--theme-accent2-rgb),0.1)',
 			},
 			keyframes: {
 				glint: {

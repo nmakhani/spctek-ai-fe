@@ -49,13 +49,9 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 				</span>
 			</button>
 			<div
-				className={`overflow-hidden transition-all duration-300 ease-in-out ${
-					isOpen ? 'max-h-56 pb-6' : 'max-h-0'
-				}`}
+				className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-56 pb-6' : 'max-h-0'}`}
 			>
-				<p className="font-poppins max-w-5xl text-sm leading-[1.5] text-white/90 md:text-lg">
-					{answer}
-				</p>
+				<p className="font-poppins max-w-5xl text-sm leading-[1.5] text-white/90 md:text-lg">{answer}</p>
 			</div>
 		</div>
 	);
@@ -81,8 +77,7 @@ export default function FAQs({
 					left: '60%',
 					width: '110%',
 					height: '110%',
-					background:
-						'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)',
+					background: 'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.72) 0%, transparent 100%)',
 					transform: 'translate(-50%, -50%) rotate(-30deg) scale(1.25)',
 					filter: 'blur(100px)',
 					opacity: 0.8,
