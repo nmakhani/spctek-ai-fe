@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" className="dark">
 			<GoogleTagManager gtmId="GTM-MD27LC69" />
-			<body className="bg-[#020617] text-white antialiased">
+			<body className="text-white antialiased">
 				<ToastProvider />
 				{children}
 			</body>

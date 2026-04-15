@@ -133,6 +133,15 @@ export function BlogRenderer({ data, title }: BlogRendererProps) {
 						);
 					}
 
+					if (block.type === 'raw') {
+						const html = String(blockData.html || '');
+						if (!html.trim()) {
+							return null;
+						}
+
+						return <div key={key} dangerouslySetInnerHTML={{ __html: html }} />;
+					}
+
 					return null;
 				})}
 			</div>

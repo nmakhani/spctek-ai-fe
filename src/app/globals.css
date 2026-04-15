@@ -117,3 +117,8 @@ textarea.glow-input:-webkit-autofill:active {
 	transition: background-color 9999s ease-out 0s;
 	caret-color: rgba(255, 255, 255, 0.9);
 }
+
+::selection {
+	background-color: #5d6cf3;
+	color: #ffffff;
+}

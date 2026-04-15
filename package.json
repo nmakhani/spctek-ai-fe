@@ -19,6 +19,7 @@
 		"@editorjs/list": "^2.0.8",
 		"@editorjs/marker": "^1.4.0",
 		"@editorjs/paragraph": "^2.11.7",
+		"@editorjs/raw": "^2.5.1",
 		"@next/third-parties": "^16.2.3",
 		"axios": "^1.6.0",
 		"editorjs-text-underline": "^1.0.1",

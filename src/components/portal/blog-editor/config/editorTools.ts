@@ -9,6 +9,7 @@ export async function createEditorTools() {
 		{ default: InlineCode },
 		{ default: Marker },
 		{ default: Underline },
+		{ default: Raw },
 	] = await Promise.all([
 		import('@editorjs/header'),
 		import('@editorjs/list'),
@@ -16,6 +17,7 @@ export async function createEditorTools() {
 		import('@editorjs/inline-code'),
 		import('@editorjs/marker'),
 		import('editorjs-text-underline'),
+		import('@editorjs/raw'),
 	]);
 
 	return {
@@ -53,6 +55,9 @@ export async function createEditorTools() {
 					uploadByUrl: async (url: string) => ({ success: 1, file: { url } }),
 				},
 			},
+		},
+		raw: {
+			class: Raw,
 		},
 	};
 }

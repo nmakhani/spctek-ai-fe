@@ -2,6 +2,7 @@
 
 import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
+import { GradientBorder } from '../ui/GradientBorder';
 
 const stats = [
 	{
@@ -83,13 +84,13 @@ export default function Problems() {
 					<div className="relative flex flex-col gap-5 sm:gap-6 md:items-center md:gap-7 lg:col-span-5 lg:items-start lg:gap-8">
 						<GlowBackground
 							style={{
-								top: '25%',
+								top: '40%',
 								left: '50%',
 								width: '90%',
 								height: '80%',
 								background:
 									'radial-gradient(ellipse at center, rgba(96, 107, 250, 0.5) 0%, rgba(96, 107, 250, 0.5) 50%, transparent 80%)',
-								transform: 'translate(-50%, -50%) rotate(-55deg) scale(1.2)',
+								transform: 'translate(-50%, -50%) rotate(-55deg)',
 								filter: 'blur(40px)',
 							}}
 						/>
@@ -98,24 +99,13 @@ export default function Problems() {
 						{stats.map((item, idx) => (
 							<div
 								key={idx}
-								className="group relative flex max-w-[380px] items-center gap-4 rounded-xl p-0 transition-all duration-500 hover:bg-white/[0.03]"
+								className="group relative flex w-full max-w-[360px] items-center gap-4 rounded-xl p-0 transition-all duration-500 hover:bg-white/[0.03]"
 								style={{
 									background: 'rgba(10, 10, 20, 0.4)',
 									backdropFilter: 'blur(12px)',
 								}}
 							>
-								<div
-									className="pointer-events-none absolute inset-0 rounded-xl"
-									style={{
-										padding: '1px', // Border width
-										background: `
-                      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.6) 0%, transparent 50%),
-                      radial-gradient(circle at 100% 100%, rgba(255,255,255,0.5) 0%, transparent 50%)`,
-										WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-										WebkitMaskComposite: 'xor',
-										maskComposite: 'exclude',
-									}}
-								/>
+								<GradientBorder thickness={0.5} radius="12px" subtle={true} />
 
 								<GlassBadge stat={item.stat} />
 

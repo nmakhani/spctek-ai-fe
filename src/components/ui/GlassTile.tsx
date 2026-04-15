@@ -1,4 +1,5 @@
 import { GlassGlow } from './GlassGlow';
+import { GradientBorder } from './GradientBorder';
 
 interface GlassTileProps {
 	title: string;
@@ -15,18 +16,7 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
 				boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.6)',
 			}}
 		>
-			<div
-				className="pointer-events-none absolute inset-0"
-				style={{
-					borderRadius: '25px',
-					padding: '1.2px',
-					background: 'linear-gradient(135deg, #fff 0%, transparent 20%, transparent 80%, #fff 100%)',
-					WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-					WebkitMaskComposite: 'destination-out',
-					maskComposite: 'exclude',
-					opacity: 0.8,
-				}}
-			/>
+			<GradientBorder thickness={2} radius="24px" subtle={true} />
 
 			<GlassGlow angle={45} opacity={0.8} start={20} end={80} radius="25px" />
 
