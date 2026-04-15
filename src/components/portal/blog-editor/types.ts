@@ -1,5 +1,11 @@
 import type { OutputData } from '@editorjs/editorjs';
 
+export interface Category {
+	id: string;
+	name: string;
+	slug: string;
+}
+
 export interface Blog {
 	id: string;
 	title: string;
@@ -9,6 +15,7 @@ export interface Blog {
 	content: string;
 	author?: string;
 	is_published: boolean;
+	categories?: Category[];
 	created_at?: string;
 	updated_at?: string;
 }
@@ -20,6 +27,7 @@ export type BlogFormData = {
 	author: string;
 	thumbnail_url: string;
 	is_published: boolean;
+	category_ids: string[];
 };
 
 export const EMPTY_EDITOR_DATA: OutputData = {
@@ -35,4 +43,5 @@ export const EMPTY_BLOG_FORM: BlogFormData = {
 	author: '',
 	thumbnail_url: '',
 	is_published: false,
+	category_ids: [],
 };

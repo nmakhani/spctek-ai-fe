@@ -2,6 +2,7 @@ import { GlassGlow } from '../ui/GlassGlow';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { GradientBorder } from '../ui/GradientBorder';
 import { SectionHeading } from '../ui/SectionHeading';
+import { GradientNumber } from '../ui/GradientNumber';
 
 const deploymentSteps = [
 	{ id: '01', text: 'Discovery & Requirements Mapping' },
@@ -30,7 +31,7 @@ export default function DeploymentProcess() {
 					<div className="flex flex-col gap-8">
 						{deploymentSteps.map((item) => (
 							<div key={item.id} className="group flex items-center gap-6">
-								<div className="relative flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white">
+								{/* <div className="relative flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white">
 									<div
 										className="absolute inset-0 -z-10"
 										style={{
@@ -39,7 +40,9 @@ export default function DeploymentProcess() {
 										}}
 									/>
 									<span className="relative z-10 text-4xl font-bold text-white md:text-6xl">{item.id}</span>
-								</div>
+								</div> */}
+
+								<GradientNumber id={item.id} width="144px" height="96px" rotation={105} borderRadius="12px" />
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-8 py-6 text-white shadow-inner">
 									<GradientBorder thickness={1.5} radius="12px" />

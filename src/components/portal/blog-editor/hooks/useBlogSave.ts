@@ -46,6 +46,7 @@ export function useBlogSave(mode: 'create' | 'edit', blogId?: string) {
 					author: formData.author,
 					thumbnail_url: finalThumbnailUrl,
 					is_published: formData.is_published,
+					category_ids: formData.category_ids,
 					content: JSON.stringify(swapped),
 				};
 

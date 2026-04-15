@@ -1,0 +1,98 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
+import { resolveR2PublicUrl } from '@/lib/r2';
+import { extractPreviewText } from '@/components/portal/blog-editor/utils';
+
+import { GlassGlow } from '../ui/GlassGlow';
+import { GradientBorder } from '../ui/GradientBorder';
+import { GradientNumber } from '../ui/GradientNumber';
+
+import type { PublicBlog } from './types';
+
+interface CardProps {
+	blog: PublicBlog;
+}
+
+function formatBlogDate(value?: string) {
+	if (!value) {
+		return null;
+	}
+
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) {
+		return null;
+	}
+
+	return date.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	});
+}
+
+export default function Card({ blog, index }: CardProps & { index: number }) {
+	const previewText = extractPreviewText(blog.content);
+	const thumbnailUrl = resolveR2PublicUrl(blog.thumbnail_url);
+	const publishedDate = formatBlogDate(blog.updated_at || blog.created_at);
+	const displayId = String(index + 1).padStart(2, '0');
+	const displayText = blog.summary || previewText;
+
+	return (
+		<Link href={`/blog/${blog.slug}`} className="group block">
+			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
+				<GradientBorder thickness={1.5} radius="24px" />
+				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
+
+				{/* ID Badge */}
+				<div className="absolute right-6 top-0 z-30 -translate-y-1/2">
+					<GradientNumber id={displayId} width="108px" height="72px" borderRadius="8px" rotation={0} />
+				</div>
+
+				<div className="relative z-10 flex flex-col overflow-hidden md:flex-row">
+					{thumbnailUrl && (
+						/* Changed items-center to items-start to align with top of text */
+						<div className="relative flex w-full shrink-0 items-start p-6 md:w-[42%]">
+							<div className="relative aspect-video w-full overflow-hidden rounded-xl md:aspect-[4/3]">
+								<Image
+									src={thumbnailUrl}
+									alt={blog.title}
+									fill
+									unoptimized
+									className="object-cover opacity-90 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
+								/>
+								<div className="pointer-events-none absolute inset-0 z-20">
+									<GradientBorder thickness={2} radius="12px" subtle={true} />
+								</div>
+							</div>
+						</div>
+					)}
+
+					{/* Changed justify-center to justify-start and matched padding (p-6) */}
+					<div className="flex flex-1 flex-col justify-start p-6 md:pl-2 md:pr-10 md:pt-7">
+						<div className="mb-3 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
+							<span className="text-[#a9b2ff]">{blog.author?.trim() ? blog.author : 'SPCTEK Team'}</span>
+							{publishedDate && (
+								<>
+									<span className="h-1 w-1 rounded-full bg-white/20" />
+									<span>{publishedDate}</span>
+								</>
+							)}
+						</div>
+
+						<div>
+							<h3 className="line-clamp-2 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff]">
+								{blog.title}
+							</h3>
+							{displayText && <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/60">{displayText}</p>}
+						</div>
+
+						<div className="mt-6 flex items-center text-[10px] font-bold uppercase tracking-widest text-[#a9b2ff] opacity-0 transition-all duration-300 group-hover:translate-x-2 group-hover:opacity-100">
+							Read More →
+						</div>
+					</div>
+				</div>
+			</div>
+		</Link>
+	);
+}

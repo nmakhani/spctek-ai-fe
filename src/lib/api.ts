@@ -68,11 +68,20 @@ export const contactsApi = {
 };
 
 export const blogsApi = {
-	list: () => apiClient.get('/blogs'),
+	list: (params?: { search?: string; category?: string; skip?: number; limit?: number }) =>
+		apiClient.get('/blogs', { params }),
 	get: (id: string) => apiClient.get(`/blogs/${id}`),
 	create: (data: Record<string, unknown>) => apiClient.post('/blogs', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/blogs/${id}`, data),
 	delete: (id: string) => apiClient.delete(`/blogs/${id}`),
+};
+
+export const categoriesApi = {
+	list: () => apiClient.get('/categories'),
+	get: (id: string) => apiClient.get(`/categories/${id}`),
+	create: (data: Record<string, unknown>) => apiClient.post('/categories', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/categories/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/categories/${id}`),
 };
 
 export const authApi = {

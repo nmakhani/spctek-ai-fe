@@ -2,9 +2,9 @@ import { useState, useCallback } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
 import toast from 'react-hot-toast';
 
-import { blogsApi } from '@/lib/api';
+import { blogsApi, categoriesApi } from '@/lib/api';
 import { parseEditorData } from '../utils';
-import type { Blog, BlogFormData } from '../types';
+import type { Blog, BlogFormData, Category } from '../types';
 import { EMPTY_BLOG_FORM, EMPTY_EDITOR_DATA } from '../types';
 
 export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
@@ -14,6 +14,17 @@ export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
 	const [editorData, setEditorData] = useState<OutputData>({ ...EMPTY_EDITOR_DATA });
 	const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState('');
 	const [slugManuallyEdited, setSlugManuallyEdited] = useState(mode === 'edit');
+	const [categories, setCategories] = useState<Category[]>([]);
+
+	const loadCategories = useCallback(async () => {
+		try {
+			const response = await categoriesApi.list();
+			setCategories(response.data as Category[]);
+		} catch {
+			// Keep editor usable even if categories fail to load.
+			setCategories([]);
+		}
+	}, []);
 
 	const loadBlog = useCallback(async () => {
 		if (mode !== 'edit' || !blogId) return;
@@ -30,6 +41,7 @@ export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
 				author: blog.author || '',
 				thumbnail_url: blog.thumbnail_url || '',
 				is_published: blog.is_published,
+				category_ids: (blog.categories || []).map((category) => category.id),
 			});
 			setCurrentThumbnailUrl(blog.thumbnail_url || '');
 			setEditorData(parseEditorData(blog.content));
@@ -56,6 +68,8 @@ export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
 		setCurrentThumbnailUrl,
 		slugManuallyEdited,
 		setSlugManuallyEdited,
+		categories,
+		loadCategories,
 		loadBlog,
 	};
 }

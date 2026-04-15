@@ -115,20 +115,16 @@ export default function Testimonials() {
 				</div>
 
 				<div className="relative mx-auto w-full max-w-5xl py-4 sm:py-5 md:py-6">
-					{/* The underlying glow */}
 					<div className="pointer-events-none absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#606bfa]/15 blur-[110px]" />
 
 					<div
-						className={`relative z-10 overflow-hidden rounded-[26px] p-5 transition-all duration-700 sm:rounded-[30px] sm:p-6 md:rounded-[35px] md:p-10 lg:p-12 ${
-							isTransitioning ? 'saturate-125 opacity-0 blur-[1.5px]' : 'opacity-100 blur-0 saturate-100'
-						}`}
+						className="relative z-10 overflow-hidden rounded-[26px] p-5 sm:rounded-[30px] sm:p-6 md:rounded-[35px] md:p-10 lg:p-12"
 						style={{
 							backdropFilter: 'blur(20px)',
 							background: 'rgba(255, 255, 255, 0.03)',
 							boxShadow: '0 25px 80px rgba(6, 12, 35, 0.55)',
 						}}
 					>
-						{/* 1. THE CHISELED GRADIENT BORDER (Top-Left & Bottom-Right Shine) */}
 						<div
 							className="pointer-events-none absolute inset-0"
 							style={{
@@ -142,7 +138,6 @@ export default function Testimonials() {
 							}}
 						/>
 
-						{/* 2. TOP-LEFT CORNER GLOW */}
 						<div
 							className="pointer-events-none absolute inset-0 rounded-[35px]"
 							style={{
@@ -150,29 +145,16 @@ export default function Testimonials() {
 							}}
 						/>
 
-						{/* 3. TRANSITION OVERLAY (Appears during isTransitioning) */}
 						<div
-							className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${
-								isTransitioning ? 'opacity-70' : 'opacity-0'
-							}`}
-							style={{
-								backgroundImage:
-									'radial-gradient(circle at 18% 24%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 46%), radial-gradient(circle at 78% 70%, rgba(128,138,255,0.32) 0%, rgba(128,138,255,0) 50%), linear-gradient(120deg, rgba(15,20,48,0.00) 0%, rgba(15,20,48,0.35) 55%, rgba(15,20,48,0.62) 100%)',
-							}}
-						/>
-
-						{/* CONTENT SECTION */}
-						<div className="relative z-10 flex h-full min-h-[240px] flex-col justify-between">
-							{/* TOP SECTION: The Quote */}
+							className={`relative z-10 flex h-full min-h-[240px] flex-col justify-between transition-all duration-500 ${isTransitioning ? 'opacity-0 blur-sm' : 'opacity-100 blur-0'}`}
+						>
 							<div className="w-full text-left">
 								<p className="text-base font-light leading-relaxed text-white/95 sm:text-lg md:text-xl lg:text-[1.75rem] lg:leading-snug">
 									&ldquo;{activeTestimonial.quote}&rdquo;
 								</p>
 							</div>
 
-							{/* BOTTOM SECTION: Nav on Left, Info on Right */}
 							<div className="mt-6 flex flex-row items-end justify-between sm:mt-7 md:mt-8">
-								{/* NAVIGATION BUTTONS (Bottom Left) */}
 								<div className="flex gap-3 pb-1">
 									<button
 										onClick={handlePrev}
@@ -212,7 +194,6 @@ export default function Testimonials() {
 									</button>
 								</div>
 
-								{/* INFO SECTION (Bottom Right) */}
 								<div className="flex flex-col items-end text-right">
 									<p className="text-lg font-semibold leading-snug text-white sm:text-xl md:text-2xl">
 										{activeTestimonial.name}
@@ -223,8 +204,6 @@ export default function Testimonials() {
 								</div>
 							</div>
 						</div>
-
-						{/* ... remainder of code ... */}
 					</div>
 				</div>
 			</div>

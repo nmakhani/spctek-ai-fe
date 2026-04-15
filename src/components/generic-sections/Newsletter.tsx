@@ -12,7 +12,7 @@ interface NewsletterProps {
 	onClose?: () => void;
 }
 
-const ContactComponent = ({ onClose }: NewsletterProps) => {
+export default function Newsletter({ onClose }: NewsletterProps) {
 	const [email, setEmail] = useState('');
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -57,11 +57,11 @@ const ContactComponent = ({ onClose }: NewsletterProps) => {
 	};
 
 	return (
-		<div className="relative z-10 my-2 w-full max-w-sm sm:my-4">
-			<GradientBorder thickness={2} radius="24px" />
+		<div className="relative z-10 my-2 w-full max-w-sm">
+			<GradientBorder thickness={1.5} radius="24px" subtle={true} />
 			<GlassGlow angle={105} opacity={0.3} start={8} end={92} radius="24px" />
 
-			<div className="relative z-10 rounded-3xl p-5 shadow-2xl backdrop-blur-sm sm:p-7 md:p-8">
+			<div className="relative z-10 rounded-3xl p-5 sm:p-7 md:p-8">
 				<div className="flex flex-col gap-6 sm:gap-5">
 					<div className="space-y-4 text-center sm:space-y-6">
 						<p className="text-sm font-medium text-slate-300 sm:text-base">Weekly Newsletter</p>
@@ -107,6 +107,4 @@ const ContactComponent = ({ onClose }: NewsletterProps) => {
 			</div>
 		</div>
 	);
-};
-
-export default ContactComponent;
+}

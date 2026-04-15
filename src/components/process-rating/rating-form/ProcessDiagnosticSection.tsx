@@ -6,6 +6,7 @@ import { contactsApi } from '../../../lib/api';
 
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
+import { SectionHeading } from '../../ui/SectionHeading';
 
 import {
 	type Step,
@@ -102,6 +103,17 @@ export default function ProcessDiagnosticSection() {
 	return (
 		<div className="flex min-h-screen items-center justify-center p-4 text-white">
 			<main className="w-full max-w-3xl">
+				<div className="mb-12">
+					<SectionHeading size="large">
+						Get Your Instant <span className="text-[#606bfa]">AI-Powered</span> <br /> Process Rating
+					</SectionHeading>
+
+					<p className="font-poppins mt-8 max-w-[800px] text-center text-xl font-light leading-relaxed text-white md:text-2xl">
+						Our system analyzes your inputs and gives you a clear process rating so you can quickly understand where you
+						stand and what needs attention.
+					</p>
+				</div>
+
 				<div className="relative z-10">
 					<GradientBorder thickness={2} radius="40px" />
 					<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />

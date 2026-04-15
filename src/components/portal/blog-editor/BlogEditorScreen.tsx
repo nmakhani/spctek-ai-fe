@@ -43,6 +43,8 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 		setCurrentThumbnailUrl,
 		slugManuallyEdited,
 		setSlugManuallyEdited,
+		categories,
+		loadCategories,
 		loadBlog,
 	} = useBlogData(mode, blogId);
 
@@ -71,8 +73,9 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 
 	// Load blog when needed
 	useEffect(() => {
+		void loadCategories();
 		void loadBlog();
-	}, [mode, blogId, loadBlog]);
+	}, [mode, blogId, loadBlog, loadCategories]);
 
 	// Initialize editor only after component is mounted and ID is set and loading is done
 	useEditorInit(
@@ -189,6 +192,7 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
 					<BlogMetaForm
 						formData={formData}
+						categories={categories}
 						highlightErrors={highlightErrors}
 						onTitleChange={(value) => setFormData((prev) => ({ ...prev, title: value }))}
 						onSlugChange={(value) => {
@@ -197,6 +201,14 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 						}}
 						onSummaryChange={(value) => setFormData((prev) => ({ ...prev, summary: value }))}
 						onAuthorChange={(value) => setFormData((prev) => ({ ...prev, author: value }))}
+						onToggleCategory={(categoryId) =>
+							setFormData((prev) => ({
+								...prev,
+								category_ids: prev.category_ids.includes(categoryId)
+									? prev.category_ids.filter((id) => id !== categoryId)
+									: [...prev.category_ids, categoryId],
+							}))
+						}
 						onThumbnailUrlChange={(value, file) => {
 							setCurrentThumbnailUrl(value);
 							setFormData((prev) => ({ ...prev, thumbnail_url: value }));

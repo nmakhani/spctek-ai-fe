@@ -2,6 +2,7 @@ import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
 import { SectionHeading } from '../ui/SectionHeading';
 import { LeftTextSection } from '../ui/LeftTextSection';
+import { GradientNumber } from '../ui/GradientNumber';
 
 const aiChallenges = [
 	{ id: '01', text: 'Trying AI without a clear process' },
@@ -35,17 +36,8 @@ export default function Learned() {
 				<div className="rounded-2xl p-8 shadow-2xl">
 					<div className="flex flex-col gap-8">
 						{aiChallenges.map((item) => (
-							<div key={item.id} className="group flex items-stretch gap-8">
-								<div className="relative flex w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white md:w-24">
-									<div
-										className="absolute inset-0 -z-10"
-										style={{
-											background: 'linear-gradient(105deg, #131532 0%, #606bfa 40%, #606bfa 60%, #131532 100%)',
-											filter: 'blur(8px)',
-										}}
-									/>
-									<span className="relative z-10 text-4xl font-bold text-white md:text-6xl">{item.id}</span>
-								</div>
+							<div key={item.id} className="group flex items-center gap-8">
+								<GradientNumber id={item.id} width="96px" height="80px" rotation={105} borderRadius="8px" />
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-8 py-6 text-white shadow-inner">
 									<GradientBorder thickness={1.5} radius="12px" />
