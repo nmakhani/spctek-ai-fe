@@ -48,8 +48,8 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 
 			<div className="relative z-10 mt-2 text-center">
 				<GlassGlow angle={120} opacity={0.35} start={20} end={80} radius="24px" />
-				<div className="relative flex flex-col items-center gap-4 rounded-[23px] bg-white/[0.03] p-8 backdrop-blur-xl">
-					<p className="text-2xl font-bold text-white">Ready to implement this roadmap?</p>
+				<div className="relative flex flex-col items-center gap-4 rounded-[23px] bg-white/[0.03] p-5 backdrop-blur-xl sm:p-6 md:p-8">
+					<p className="text-xl font-bold text-white sm:text-2xl">Ready to implement this roadmap?</p>
 					<p className="text-gray-400 max-w-lg text-sm leading-relaxed">
 						We can turn this architecture into a concrete rollout plan with stack choices, security controls, and
 						deployment milestones.

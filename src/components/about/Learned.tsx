@@ -13,7 +13,7 @@ const aiChallenges = [
 
 export default function Learned() {
 	return (
-		<section className="font-poppins relative mx-auto flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12">
+		<section className="font-poppins relative mx-auto flex max-w-7xl flex-col items-center justify-center px-4 text-center md:px-6 lg:px-12">
 			<SectionHeading size="large">
 				What We <span className="text-[#606bfa]">Learned</span> Along the Way
 			</SectionHeading>
@@ -33,17 +33,24 @@ export default function Learned() {
 				<GradientBorder thickness={2} radius="12px" />
 				<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 
-				<div className="rounded-2xl p-8 shadow-2xl">
-					<div className="flex flex-col gap-8">
+				<div className="rounded-2xl p-5 shadow-2xl sm:p-6 md:p-8">
+					<div className="flex flex-col gap-5 sm:gap-6 md:gap-8">
 						{aiChallenges.map((item) => (
-							<div key={item.id} className="group flex items-center gap-8">
-								<GradientNumber id={item.id} width="96px" height="80px" rotation={105} borderRadius="8px" />
+							<div
+								key={item.id}
+								className="group flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6 md:gap-8"
+							>
+								<div className="hidden shrink-0 self-start sm:block sm:self-center">
+									<GradientNumber id={item.id} width="96px" height="80px" rotation={105} borderRadius="8px" />
+								</div>
 
-								<div className="relative flex flex-grow items-center overflow-hidden px-8 py-6 text-white shadow-inner">
+								<div className="relative flex flex-grow items-center overflow-hidden px-4 py-4 text-white shadow-inner sm:px-6 sm:py-5 md:px-8 md:py-6">
 									<GradientBorder thickness={1.5} radius="12px" />
 									<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 
-									<p className="relative z-10 text-lg font-normal tracking-wide md:text-xl lg:text-2xl">{item.text}</p>
+									<p className="relative z-10 text-base font-normal tracking-wide sm:text-lg md:text-xl lg:text-2xl">
+										{item.text}
+									</p>
 								</div>
 							</div>
 						))}

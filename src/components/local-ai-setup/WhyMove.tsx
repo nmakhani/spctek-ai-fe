@@ -41,29 +41,36 @@ const benefits = [
 
 export default function AccountRisk() {
 	return (
-		<section className="font-poppins px-6 md:px-12">
+		<section className="font-poppins px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-5xl">
 				<SectionHeading size="large">
 					Why You Need to Move Your <br /> Business to
 					<span className="text-[#606bfa]"> Local AI</span>
 				</SectionHeading>
 
-				<p className="mx-auto mt-8 max-w-3xl text-center text-lg font-normal leading-relaxed text-white">
+				<p className="mx-auto mt-6 max-w-3xl text-center text-base font-normal leading-relaxed text-white sm:text-lg md:mt-8">
 					Gain full control over your data, reduce costs, and use AI confidently. <br /> No need to rely on public tools
 					or risk your sensitive information.
 				</p>
 
-				<div className="mt-16 w-full">
+				<div className="mt-10 w-full md:mt-12 lg:mt-16">
 					<div className="flex flex-col gap-6">
 						{benefits.map((item, idx) => (
-							<div key={idx} className="relative flex items-center gap-6 px-8 py-4 transition-all duration-300">
+							<div
+								key={idx}
+								className="relative flex items-start gap-4 px-4 py-4 transition-all duration-300 sm:items-center sm:gap-6 sm:px-6 md:px-8"
+							>
 								<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="12px" />
 								<GradientBorder thickness={1} radius="12px" />
 								<GlassNumber number={item.number} size="md" />
 
 								<div className="flex flex-col">
-									<p className="text-[24px] font-medium tracking-tight text-white">{item.title}</p>
-									<p className="text-[20px] font-light leading-relaxed text-white">{item.text}</p>
+									<p className="text-lg font-medium tracking-tight text-white sm:text-xl lg:text-[24px]">
+										{item.title}
+									</p>
+									<p className="text-base font-light leading-relaxed text-white sm:text-lg lg:text-[20px]">
+										{item.text}
+									</p>
 								</div>
 							</div>
 						))}

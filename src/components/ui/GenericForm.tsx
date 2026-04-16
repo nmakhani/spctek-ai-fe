@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 
 import { GlassGlow } from './GlassGlow';
 import { GradientBorder } from './GradientBorder';
+import { DarkDropdown } from './form-parts/DarkDropdown';
 
-export type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'action' | 'date';
+export type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'action' | 'date' | 'select';
 
 export interface FieldConfig {
 	name: string;
@@ -18,6 +19,7 @@ export interface FieldConfig {
 	onAction?: () => void;
 	gridSpan?: 'half' | 'full';
 	rows?: number;
+	options?: string[];
 }
 
 export interface FormValues {
@@ -31,14 +33,20 @@ export interface FormErrors {
 
 export type ValidateFn = (values: FormValues) => FormErrors;
 
+export interface SubmitAction {
+	label: string;
+	value: string;
+}
+
 interface GenericFormProps {
 	fields: FieldConfig[];
 	initialValues?: FormValues;
 	validate?: ValidateFn;
-	onSubmit?: (values: FormValues) => Promise<void>;
+	onSubmit?: (values: FormValues, action?: string) => Promise<void>;
 	clearable?: boolean;
 	submitLabel?: string;
 	loadingLabel?: string;
+	submitActions?: SubmitAction[];
 }
 
 const labelClass = 'mb-2 block text-white text-lg font-semibold md:text-2xl';
@@ -55,6 +63,7 @@ export default function GenericForm({
 	clearable = false,
 	submitLabel = 'Submit',
 	loadingLabel = 'Submitting...',
+	submitActions,
 }: GenericFormProps) {
 	const defaultValues = fields.reduce<FormValues>((acc, f) => {
 		acc[f.name] = initialValues?.[f.name] ?? '';
@@ -72,8 +81,11 @@ export default function GenericForm({
 		setErrors({});
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+		const action = submitter?.value;
 
 		const validationErrors = validate?.(values);
 		setErrors(validationErrors || {});
@@ -84,7 +96,7 @@ export default function GenericForm({
 			setLoading(true);
 			setErrors({});
 			if (onSubmit) {
-				await onSubmit(values);
+				await onSubmit(values, action);
 			}
 			setValues(defaultValues);
 		} catch (error) {
@@ -115,26 +127,37 @@ export default function GenericForm({
 				</label>
 
 				<div className="relative z-10">
-					<GradientBorder thickness={1} radius="16px" subtle={true} hasError={hasError} />
-					<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
+					{field.type === 'select' ? (
+						<DarkDropdown
+							value={values[field.name]}
+							options={field.options || []}
+							placeholder={field.placeholder}
+							onChange={(value) => handleChange(field.name, value)}
+						/>
+					) : (
+						<>
+							<GradientBorder thickness={1} radius="16px" subtle={true} hasError={hasError} />
+							<GlassGlow angle={105} opacity={0.5} start={5} end={95} radius="16px" />
 
-					<div style={{ overflow: 'hidden' }}>
-						{field.type === 'action' ? (
-							<button
-								type="button"
-								disabled={loading}
-								onClick={field.onAction}
-								className="flex w-full items-center justify-between px-5 py-4 text-lg font-medium transition-all hover:bg-white/5 active:bg-white/10"
-							>
-								<span className="text-white/60">{field.placeholder}</span>
-								<span className="text-white/30">{field.actionLabel}</span>
-							</button>
-						) : field.type === 'textarea' ? (
-							<textarea rows={field.rows ?? 4} className={inputInnerClass} {...sharedProps} />
-						) : (
-							<input type={field.type} className={inputInnerClass} {...sharedProps} />
-						)}
-					</div>
+							<div style={{ overflow: 'hidden' }}>
+								{field.type === 'action' ? (
+									<button
+										type="button"
+										disabled={loading}
+										onClick={field.onAction}
+										className="flex w-full items-center justify-between px-5 py-4 text-lg font-medium transition-all hover:bg-white/5 active:bg-white/10"
+									>
+										<span className="text-white/60">{field.placeholder}</span>
+										<span className="text-white/30">{field.actionLabel}</span>
+									</button>
+								) : field.type === 'textarea' ? (
+									<textarea rows={field.rows ?? 4} className={inputInnerClass} {...sharedProps} />
+								) : (
+									<input type={field.type} className={inputInnerClass} {...sharedProps} />
+								)}
+							</div>
+						</>
+					)}
 				</div>
 
 				<div className="ml-4 mt-2 flex items-start justify-between px-1">
@@ -160,21 +183,43 @@ export default function GenericForm({
 				</div>
 
 				{onSubmit && (
-					<div className="relative z-10 flex gap-4 pt-1">
-						<button
-							type="submit"
-							disabled={loading}
-							className="flex-[4] rounded-2xl bg-[#606bfa] py-3.5 text-lg font-semibold text-white transition-all hover:bg-[#6f79ff] disabled:opacity-50"
-						>
-							{loading ? loadingLabel : submitLabel}
-						</button>
+					<div className="relative z-10 flex flex-col gap-3 pt-1 sm:flex-row">
+						{submitActions?.length ? (
+							submitActions.map((action, index) => {
+								const isPrimary = index === 0;
+
+								return (
+									<button
+										key={action.value}
+										type="submit"
+										value={action.value}
+										disabled={loading}
+										className={`flex-1 rounded-2xl px-5 py-3.5 text-lg font-semibold transition-all disabled:opacity-50 ${
+											isPrimary
+												? 'bg-[#606bfa] text-white hover:bg-[#6f79ff]'
+												: 'border border-white/20 bg-white/[0.08] text-white hover:bg-white/[0.12]'
+										}`}
+									>
+										{loading ? loadingLabel : action.label}
+									</button>
+								);
+							})
+						) : (
+							<button
+								type="submit"
+								disabled={loading}
+								className="flex-[4] rounded-2xl bg-[#606bfa] py-3.5 text-lg font-semibold text-white transition-all hover:bg-[#6f79ff] disabled:opacity-50"
+							>
+								{loading ? loadingLabel : submitLabel}
+							</button>
+						)}
 
 						{clearable && (
 							<button
 								type="button"
 								onClick={handleClear}
 								disabled={loading}
-								className="min-w-[120px] flex-1 rounded-2xl border border-white py-3.5 text-lg font-semibold text-white transition-all hover:bg-white/10 disabled:opacity-50"
+								className="min-w-[120px] rounded-2xl border border-white py-3.5 text-lg font-semibold text-white transition-all hover:bg-white/10 disabled:opacity-50 sm:flex-1"
 							>
 								Clear Form
 							</button>

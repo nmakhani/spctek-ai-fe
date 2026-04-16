@@ -36,13 +36,13 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 				<p className="text-gray-400 text-sm">Enter your details to generate your architecture recommendation.</p>
 			</div>
 
-			<div className="border-indigo-500/20 bg-indigo-500/5 rounded-2xl border p-6 backdrop-blur-sm">
-				<div className="flex items-center gap-6">
-					<div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#5A5DF3] to-[#8082F8] shadow-[0_0_20px_rgba(90,93,243,0.3)]">
-						<div className="text-3xl font-bold text-white">?</div>
+			<div className="border-indigo-500/20 bg-indigo-500/5 rounded-2xl border p-4 backdrop-blur-sm sm:p-6">
+				<div className="flex items-center gap-4 sm:gap-6">
+					<div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#5A5DF3] to-[#8082F8] shadow-[0_0_20px_rgba(90,93,243,0.3)] sm:h-20 sm:w-20">
+						<div className="text-2xl font-bold text-white sm:text-3xl">?</div>
 					</div>
 					<div>
-						<p className="text-lg font-semibold text-white">Your recommendation is ready</p>
+						<p className="text-base font-semibold text-white sm:text-lg">Your recommendation is ready</p>
 						<p className="text-indigo-200 mt-1 text-sm">
 							Enter your email below to reveal your full architecture recommendation.
 						</p>
@@ -112,7 +112,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 				ever.
 			</p>
 
-			<div className="flex gap-4 pt-2">
+			<div className="flex flex-col gap-3 pt-2 sm:flex-row sm:gap-4">
 				<button
 					type="button"
 					onClick={() => onBack(2)}
@@ -124,7 +124,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 					type="button"
 					onClick={onSubmit}
 					disabled={!canSubmit}
-					className="flex w-full flex-[2] items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50"
+					className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-[2]"
 				>
 					{submitting ? 'Generating...' : 'Generate My Architecture →'}
 				</button>

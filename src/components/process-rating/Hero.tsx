@@ -4,7 +4,7 @@ import { GlowBackground } from '../ui/GlowBackground';
 
 export default function Hero() {
 	return (
-		<section className="font-poppins relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12">
+		<section className="font-poppins relative mx-auto mt-24 flex max-w-7xl flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
 			<GlowBackground
 				style={{
 					top: '-35%',
@@ -20,7 +20,7 @@ export default function Hero() {
 				<span className="text-[#606bfa]">Business Processes</span> Really Are
 			</SectionHeading>
 
-			<p className="font-poppins mt-8 max-w-[800px] text-xl font-light leading-relaxed text-white md:text-2xl">
+			<p className="font-poppins mt-6 max-w-[800px] text-base font-light leading-relaxed text-white sm:text-lg md:mt-8 md:text-xl lg:text-2xl">
 				Measure your operational efficiency with an AI-powered process rating and uncover the most critical operational
 				flaws.
 			</p>

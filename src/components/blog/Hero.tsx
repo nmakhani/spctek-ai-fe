@@ -3,7 +3,7 @@ import { GlowBackground } from '../ui/GlowBackground';
 
 export default function Hero() {
 	return (
-		<section className="font-poppins relative mx-auto mt-36 flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12">
+		<section className="font-poppins relative mx-auto mt-24 flex max-w-7xl flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
 			<GlowBackground
 				style={{
 					top: '-35%',
@@ -17,12 +17,12 @@ export default function Hero() {
 			<SectionHeading size="hero">
 				Practical Insights on{' '}
 				<span className="text-[#606bfa]">
-					AI, Operations, <br /> and Scalable Growth
+					AI, Operations, <br className="hidden sm:block" /> and Scalable Growth
 				</span>
 			</SectionHeading>
 
-			<div className="mt-8 max-w-[1000px]">
-				<p className="text-gray-300 text-lg font-light leading-relaxed md:text-2xl">
+			<div className="mt-6 max-w-[1000px] md:mt-8">
+				<p className="text-gray-300 text-base font-light leading-relaxed sm:text-lg md:text-xl lg:text-2xl">
 					Practical ideas, real-world strategies, and actionable guides to help you improve processes and implement AI
 					effectively.
 				</p>

@@ -45,14 +45,14 @@ export default function Card({ blog, index }: CardProps & { index: number }) {
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
 
 				{/* ID Badge */}
-				<div className="absolute right-6 top-0 z-30 -translate-y-1/2">
+				<div className="absolute right-4 top-0 z-30 hidden -translate-y-1/2 sm:right-6 sm:block">
 					<GradientNumber id={displayId} width="108px" height="72px" borderRadius="8px" rotation={0} />
 				</div>
 
 				<div className="relative z-10 flex flex-col overflow-hidden md:flex-row">
 					{thumbnailUrl && (
 						/* Changed items-center to items-start to align with top of text */
-						<div className="relative flex w-full shrink-0 items-start p-6 md:w-[42%]">
+						<div className="relative flex w-full shrink-0 items-start p-4 sm:p-6 md:w-[42%]">
 							<div className="relative aspect-video w-full overflow-hidden rounded-xl md:aspect-[4/3]">
 								<Image
 									src={thumbnailUrl}
@@ -69,8 +69,8 @@ export default function Card({ blog, index }: CardProps & { index: number }) {
 					)}
 
 					{/* Changed justify-center to justify-start and matched padding (p-6) */}
-					<div className="flex flex-1 flex-col justify-start p-6 md:pl-2 md:pr-10 md:pt-7">
-						<div className="mb-3 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
+					<div className="flex flex-1 flex-col justify-start p-4 sm:p-6 md:pl-2 md:pr-10 md:pt-7">
+						<div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
 							<span className="text-[#a9b2ff]">{blog.author?.trim() ? blog.author : 'SPCTEK Team'}</span>
 							{publishedDate && (
 								<>
@@ -81,13 +81,13 @@ export default function Card({ blog, index }: CardProps & { index: number }) {
 						</div>
 
 						<div>
-							<h3 className="line-clamp-2 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff]">
+							<h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-2xl">
 								{blog.title}
 							</h3>
 							{displayText && <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/60">{displayText}</p>}
 						</div>
 
-						<div className="mt-6 flex items-center text-[10px] font-bold uppercase tracking-widest text-[#a9b2ff] opacity-0 transition-all duration-300 group-hover:translate-x-2 group-hover:opacity-100">
+						<div className="mt-6 flex items-center text-[10px] font-bold uppercase tracking-widest text-[#a9b2ff] opacity-100 transition-all duration-300 sm:opacity-0 sm:group-hover:translate-x-2 sm:group-hover:opacity-100">
 							Read More →
 						</div>
 					</div>

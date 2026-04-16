@@ -75,7 +75,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 				</div>
 			</div>
 
-			<div className="flex gap-4 pt-6">
+			<div className="flex flex-col gap-3 pt-6 sm:flex-row sm:gap-4">
 				<button
 					type="button"
 					onClick={() => onBack(3)}
@@ -86,7 +86,7 @@ export default function Step4({ form, onChange, onNext, onBack }: Step4Props) {
 				<button
 					type="button"
 					onClick={() => onNext(5)}
-					className="flex w-full flex-[2] items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6]"
+					className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] sm:flex-[2]"
 				>
 					Get My Scorecard <span className="ml-1">→</span>
 				</button>

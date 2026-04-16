@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BookOpen, MessageSquare } from 'lucide-react';
+import { BookOpen, MessageSquare, FileText } from 'lucide-react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -70,7 +70,7 @@ function DashboardContent() {
 			</header>
 
 			<main className="mx-auto mt-8 max-w-7xl">
-				<div className="grid grid-cols-1 gap-7 md:grid-cols-2">
+				<div className="grid grid-cols-1 gap-7 md:grid-cols-3">
 					<Link href="/portal/contacts" className="group">
 						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
 							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
@@ -100,6 +100,23 @@ function DashboardContent() {
 							</p>
 							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
 								Open Blogs
+								<span className="transition-transform group-hover:translate-x-1">→</span>
+							</div>
+						</div>
+					</Link>
+
+					<Link href="/portal/reinstatement-logs" className="group">
+						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
+							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
+							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
+								<FileText size={24} />
+							</div>
+							<h2 className="mb-2 text-2xl font-semibold text-white">Reinstatement Logs</h2>
+							<p className="text-white/75">
+								Track Amazon reinstatement assessments by contact and regenerate reports as needed.
+							</p>
+							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
+								Open Logs
 								<span className="transition-transform group-hover:translate-x-1">→</span>
 							</div>
 						</div>

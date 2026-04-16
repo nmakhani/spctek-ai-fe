@@ -103,12 +103,12 @@ export default function ProcessDiagnosticSection() {
 	return (
 		<div className="flex min-h-screen items-center justify-center p-4 text-white">
 			<main className="w-full max-w-3xl">
-				<div className="mb-12">
+				<div className="mb-8 md:mb-10 lg:mb-12">
 					<SectionHeading size="large">
 						Get Your Instant <span className="text-[#606bfa]">AI-Powered</span> <br /> Process Rating
 					</SectionHeading>
 
-					<p className="font-poppins mt-8 max-w-[800px] text-center text-xl font-light leading-relaxed text-white md:text-2xl">
+					<p className="font-poppins mt-5 max-w-[800px] text-center text-base font-light leading-relaxed text-white sm:text-lg md:mt-6 md:text-xl lg:text-2xl">
 						Our system analyzes your inputs and gives you a clear process rating so you can quickly understand where you
 						stand and what needs attention.
 					</p>
@@ -118,7 +118,10 @@ export default function ProcessDiagnosticSection() {
 					<GradientBorder thickness={2} radius="40px" />
 					<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
 
-					<div className="relative p-8 pb-12 shadow-2xl" style={{ borderRadius: '38px', background: 'transparent' }}>
+					<div
+						className="relative p-5 pb-8 shadow-2xl sm:p-6 sm:pb-10 md:p-8 md:pb-12"
+						style={{ borderRadius: '38px', background: 'transparent' }}
+					>
 						<ProcessDiagnosticForm
 							form={form}
 							step={step}

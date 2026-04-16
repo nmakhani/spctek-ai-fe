@@ -64,7 +64,9 @@ export default function DetailPage() {
 	if (loading || !slug) {
 		return (
 			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="flex flex-1 items-center justify-center px-6 pt-24 text-white/65">Loading article...</main>
+				<main className="flex flex-1 items-center justify-center px-4 pt-24 text-white/65 md:px-6">
+					Loading article...
+				</main>
 			</div>
 		);
 	}
@@ -72,7 +74,7 @@ export default function DetailPage() {
 	if (error) {
 		return (
 			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="mx-auto flex w-full max-w-3xl flex-1 items-center justify-center px-6 pt-24">
+				<main className="mx-auto flex w-full max-w-3xl flex-1 items-center justify-center px-4 pt-24 md:px-6">
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 rounded-2xl border px-5 py-4">{error}</div>
 				</main>
 			</div>
@@ -82,7 +84,7 @@ export default function DetailPage() {
 	if (!blog) {
 		return (
 			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-6 pt-24 text-center">
+				<main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 pt-24 text-center md:px-6">
 					<h1 className="text-3xl font-semibold text-white">Blog not found</h1>
 					<p className="mt-3 text-white/65">This article is unavailable or not published yet.</p>
 					<Link

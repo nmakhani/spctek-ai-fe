@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { GlassPill } from './ui/GlassPill';
+import { GlassPill } from '@/components/ui/GlassPill';
 
 import { useEffect, useState } from 'react';
 
@@ -24,11 +24,11 @@ export default function Navbar() {
 	}, []);
 
 	const navLinks = [
-		{ name: 'About', href: '/about' },
-		{ name: 'Blog', href: '/blog' },
-		{ name: 'Contact', href: '/contact' },
 		{ name: 'Amazon Recovery', href: '/reinstatement' },
 		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
+		{ name: 'Blog', href: '/blog' },
+		{ name: 'About', href: '/about' },
+		{ name: 'Contact', href: '/contact' },
 		{ name: 'Rate my Process', href: '/process-rating' },
 	];
 
@@ -84,7 +84,7 @@ export default function Navbar() {
 					{/* Center/Right-aligned Menu */}
 					<nav className="ml-auto hidden items-center gap-2 lg:flex">
 						{navLinks.map((link) => (
-							<GlassPill key={link.name} href={link.href}>
+							<GlassPill key={link.name} href={link.href} highlight={link.name === 'Rate my Process'}>
 								{link.name}
 							</GlassPill>
 						))}

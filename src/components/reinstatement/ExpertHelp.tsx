@@ -30,7 +30,7 @@ const expertServices = [
 
 export default function ExpertHelp() {
 	return (
-		<section className="font-poppins px-6 md:px-12">
+		<section className="font-poppins px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-6xl text-center">
 				{/* Header Section */}
 				<SectionHeading size="large">
@@ -40,7 +40,7 @@ export default function ExpertHelp() {
 				</SectionHeading>
 
 				{/* Main Feature Container */}
-				<div className="relative mx-4 mt-16 overflow-hidden rounded-3xl p-8 md:p-8">
+				<div className="relative mt-10 overflow-hidden rounded-3xl p-5 sm:mx-4 sm:p-6 md:mt-12 md:p-8 lg:mt-16">
 					{/* Outer Gradient Border - Now White focused */}
 					<div
 						className="pointer-events-none absolute inset-0 rounded-3xl"
@@ -57,11 +57,11 @@ export default function ExpertHelp() {
 
 					<div className="relative z-10">
 						{/* Suspension Tags Grid */}
-						<div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+						<div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 							{suspensionTypes.map((type, index) => (
 								<div
 									key={index}
-									className="flex min-h-[70px] items-center justify-center rounded-xl border-2 border-white px-4 py-2 text-2xl font-medium text-white shadow-lg"
+									className="flex min-h-[64px] items-center justify-center rounded-xl border-2 border-white px-4 py-2 text-lg font-medium text-white shadow-lg sm:text-xl md:min-h-[70px] md:text-2xl"
 									style={{
 										background: 'linear-gradient(to bottom, #2e358b 0%, #131532 100%)',
 									}}
@@ -72,7 +72,7 @@ export default function ExpertHelp() {
 						</div>
 
 						{/* Success Statistics Grid */}
-						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2">
 							{successStats.map((stat, idx) => (
 								<div
 									key={idx}
@@ -81,9 +81,11 @@ export default function ExpertHelp() {
 										background: 'linear-gradient(105deg, #131532 0%, #2e358b 30%, #2e358b 70%, #131532 100%)',
 									}}
 								>
-									<span className="text-6xl font-bold tracking-tighter text-white md:text-8xl">{stat.value}</span>
+									<span className="text-4xl font-bold tracking-tighter text-white sm:text-6xl md:text-8xl">
+										{stat.value}
+									</span>
 									<div className="text-left">
-										<p className="text-2xl font-normal leading-[1.1] text-white md:text-4xl">
+										<p className="text-xl font-normal leading-[1.1] text-white sm:text-2xl md:text-4xl">
 											{stat.label}
 											<br />
 											{stat.subLabel}
@@ -96,17 +98,19 @@ export default function ExpertHelp() {
 				</div>
 
 				{/* Context Text */}
-				<p className="mx-auto mt-12 max-w-4xl text-lg font-light leading-relaxed text-white md:text-2xl">
+				<p className="mx-auto mt-10 max-w-4xl text-base font-light leading-relaxed text-white sm:text-lg md:mt-12 md:text-xl lg:text-2xl">
 					If your case is complex or your assessment shows low to moderate viability, our expert team can step in to
 					take over completely.
 				</p>
 
 				{/* Checklist Grid */}
-				<div className="mx-auto mb-20 mt-16 grid max-w-5xl grid-cols-1 gap-x-16 gap-y-2 text-left md:grid-cols-2">
+				<div className="mx-auto mb-16 mt-10 grid max-w-5xl grid-cols-1 gap-x-10 gap-y-3 text-left sm:gap-x-12 md:mt-14 md:grid-cols-2 md:gap-x-16 md:gap-y-2 lg:mb-20 lg:mt-16">
 					{expertServices.map((service, index) => (
 						<div key={index} className="group flex items-start gap-2">
 							<span className="text-2xl font-bold transition-transform group-hover:scale-110">✓</span>
-							<span className="text-lg font-medium leading-snug text-white/90 md:text-2xl">{service}</span>
+							<span className="text-base font-medium leading-snug text-white/90 sm:text-lg md:text-xl lg:text-2xl">
+								{service}
+							</span>
 						</div>
 					))}
 				</div>

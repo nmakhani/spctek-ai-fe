@@ -102,7 +102,7 @@ export default function RoadmapForm() {
 		<div className="relative z-10 mx-auto w-full max-w-3xl">
 			<GradientBorder thickness={2} radius="40px" />
 			<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="40px" />
-			<div className="relative p-8 shadow-2xl md:p-10">
+			<div className="relative p-5 shadow-2xl sm:p-6 md:p-10">
 				<AnimatePresence mode="wait">
 					{phase === 'loading' ? (
 						<StepWrapper key="loading">

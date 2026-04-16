@@ -11,7 +11,7 @@ export default function BlogArticleSection({ blog }: BlogArticleSectionProps) {
 	const data = parseEditorData(blog.content);
 
 	return (
-		<div className="px-4 md:px-6 lg:px-12">
+		<div className="px-4 pb-2 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-5xl">
 				<BlogRenderer data={data} title="" />
 			</div>

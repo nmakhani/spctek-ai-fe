@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
 import { SectionHeading } from '../ui/SectionHeading';
 
-import { reinstatementApi } from '@/lib/api';
+import { reinstatementApi, contactsApi } from '@/lib/api';
 import { validateEstimatorForm, validateEstimatorContactForm } from '@/lib/validation';
 
 const DOWNLOAD_FIELD: FieldConfig[] = [
@@ -52,14 +52,24 @@ const REINSTATEMENT_FIELDS: FieldConfig[] = [
 	},
 	{
 		name: 'businessModel',
-		type: 'text',
+		type: 'select',
 		label: 'Business Model',
-		placeholder: '- Select Business Model -',
+		placeholder: 'Select Business Model',
 		subtext: 'Select the model that best describes your operation',
 		required: true,
-		gridSpan: 'full',
+		gridSpan: 'half',
+		options: ['Dropshipping (Retail / Online Arbitrage)', 'Private Label / White Label', 'Wholesale (Reseller)'],
 	},
-
+	{
+		name: 'fulfillmentChannel',
+		type: 'select',
+		label: 'Fulfillment Channel',
+		placeholder: 'Select Fulfillment Channel',
+		subtext: 'How you fulfill your orders',
+		required: true,
+		gridSpan: 'half',
+		options: ['Fulfilled by Amazon (FBA)', 'Fulfilled by Merchant (FBM)'],
+	},
 	{
 		name: 'suspensionCause',
 		type: 'textarea',
@@ -121,19 +131,38 @@ export default function FreeAssessment() {
 		if (!pendingData) return;
 
 		try {
-			const reportRequest = {
+			// Create contact first
+			const contactRequest = {
+				name: contactValues.name,
+				email: contactValues.email,
+				phone: contactValues.phone || null,
+				source: 'reinstatement_estimator',
+			};
+
+			const contactResponse = await contactsApi.create(contactRequest);
+			const contactId = contactResponse.data.id;
+
+			// Create reinstatement log
+			const logRequest = {
+				contact_id: contactId,
 				performance_notification: pendingData.performanceNotification,
 				suspension_date: pendingData.suspensionDate,
 				business_model: pendingData.businessModel,
+				fulfillment_channel: pendingData.fulfillmentChannel,
 				appeals_made: parseInt(pendingData.previousAppeals as string) || 0,
 				seller_belief: pendingData.suspensionCause,
 				available_documents: pendingData.availableDocuments,
-				recipient_name: contactValues.name,
-				recipient_email: contactValues.email,
-				recipient_phone: contactValues.phone || null,
 			};
 
-			await reinstatementApi.generateReport(reportRequest);
+			const logResponse = await reinstatementApi.createLog(logRequest);
+			const logId = logResponse.data.id;
+
+			// Generate report from log
+			const reportRequest = {
+				log_id: logId,
+			};
+
+			await reinstatementApi.generateReportFromLog(reportRequest);
 			toast.success('Report generated! Check your email.');
 			setIsModalOpen(false);
 		} catch (error) {
@@ -143,13 +172,13 @@ export default function FreeAssessment() {
 	};
 
 	return (
-		<section className="font-poppins relative overflow-hidden px-6 md:px-12" id="free-assessment">
+		<section className="font-poppins relative overflow-hidden px-4 md:px-6 lg:px-12" id="free-assessment">
 			<div className="relative mx-auto w-full max-w-5xl">
 				<div className="mx-auto mb-10 max-w-4xl text-center md:mb-12">
 					<SectionHeading size="large">
 						Amazon <span className="text-[#606bfa]">Reinstatement</span> Estimator
 					</SectionHeading>
-					<p className="mx-auto mt-5 max-w-4xl text-lg leading-[1.35] text-white md:text-2xl">
+					<p className="mx-auto mt-4 max-w-4xl text-base leading-[1.45] text-white sm:text-lg md:mt-5 md:text-xl lg:text-2xl">
 						Paste your Amazon performance notification to get an instant AI-powered reinstatement assessment with clear
 						next steps.
 					</p>
@@ -175,9 +204,9 @@ export default function FreeAssessment() {
 						if (e.target === e.currentTarget) setIsModalOpen(false);
 					}}
 				>
-					<div className="custom-scrollbar max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1a1a1a] p-6 shadow-2xl md:p-10">
+					<div className="custom-scrollbar max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1a1a1a] p-5 shadow-2xl sm:p-6 md:p-10">
 						<div className="mb-6">
-							<h3 className="text-2xl font-bold text-white md:text-3xl">One Last Step</h3>
+							<h3 className="text-xl font-bold text-white sm:text-2xl md:text-3xl">One Last Step</h3>
 							<p className="mt-2 text-white/60">Where should we send your assessment?</p>
 						</div>
 

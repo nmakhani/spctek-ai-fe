@@ -18,32 +18,32 @@ const issuesList = [
 
 export default function Bottlenecks() {
 	return (
-		<section className="font-poppins px-6 md:px-12">
+		<section className="font-poppins px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-5xl">
 				<SectionHeading size="large">
 					Operational <span className="text-[#606bfa]">Bottlenecks</span>
 					Can Quietly <br /> Kill Your Business
 				</SectionHeading>
 
-				<p className="mx-auto mt-8 max-w-3xl text-center text-lg font-normal leading-relaxed text-white md:text-xl">
+				<p className="mx-auto mt-6 max-w-3xl text-center text-base font-normal leading-relaxed text-white sm:text-lg md:mt-8 md:text-xl">
 					Most businesses don&apos;t realize how much time, money, and growth they&apos;re losing to broken processes
 					and disconnected systems.
 				</p>
 
-				<div className="mt-16 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+				<div className="mt-10 grid grid-cols-1 items-center gap-10 md:mt-12 md:gap-12 lg:mt-16 lg:grid-cols-2 lg:gap-16">
 					<div className="flex flex-col items-start">
-						<div className="divide-white/2 w-full max-w-[280px] divide-y md:max-w-[450px]">
+						<div className="divide-white/2 w-full max-w-[280px] divide-y sm:max-w-[360px] md:max-w-[450px]">
 							{issuesList.map((issue, idx) => (
 								<div key={idx} className="flex items-center gap-4 py-4 transition-all duration-300">
 									<GlassNumber number={issue.number} />
-									<span className="text-lg font-medium tracking-tight text-white/90">{issue.title}</span>
+									<span className="text-base font-medium tracking-tight text-white/90 sm:text-lg">{issue.title}</span>
 								</div>
 							))}
 						</div>
 					</div>
 
 					<div className="relative flex items-center justify-center">
-						<div className="bobbing-image relative flex min-w-[400px] justify-center">
+						<div className="bobbing-image relative flex w-full max-w-[320px] justify-center sm:max-w-[420px] md:max-w-[500px] lg:min-w-[400px] lg:max-w-none">
 							<GlowBackground
 								style={{
 									top: '40%',

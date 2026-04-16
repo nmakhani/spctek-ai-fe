@@ -4,7 +4,7 @@ import { LeftTextSection } from '../ui/LeftTextSection';
 
 export default function Building() {
 	return (
-		<section className="font-poppins relative mx-auto flex max-w-7xl flex-col items-center justify-center px-6 text-center md:px-12">
+		<section className="font-poppins relative mx-auto flex max-w-7xl flex-col items-center justify-center px-4 text-center md:px-6 lg:px-12">
 			<SectionHeading size="large">
 				<span className="text-[#606bfa]">Tools & Solutions</span> We Are Building
 			</SectionHeading>

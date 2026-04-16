@@ -22,22 +22,23 @@ import { SectionDivider } from '@/components/ui/SectionDivider';
 
 import Newsletter from '@/components/generic-sections/Newsletter';
 
-const NEWSLETTER_SESSION_KEY = 'spctek-newsletter-seen';
+const NEWSLETTER_STORAGE_KEY = 'spctek-newsletter-seen';
 
 export default function HomePage() {
-	const [showNewsletterModal, setShowNewsletterModal] = useState(() => {
-		if (typeof window === 'undefined') {
-			return false;
-		}
-
-		return sessionStorage.getItem(NEWSLETTER_SESSION_KEY) !== 'true';
-	});
+	const [showNewsletterModal, setShowNewsletterModal] = useState(false);
 
 	useEffect(() => {
-		if (showNewsletterModal) {
-			sessionStorage.setItem(NEWSLETTER_SESSION_KEY, 'true');
-		}
-	}, [showNewsletterModal]);
+		if (typeof window === 'undefined') return;
+
+		if (localStorage.getItem(NEWSLETTER_STORAGE_KEY) === 'true') return;
+
+		const timer = window.setTimeout(() => {
+			setShowNewsletterModal(true);
+			localStorage.setItem(NEWSLETTER_STORAGE_KEY, 'true');
+		}, 5000);
+
+		return () => window.clearTimeout(timer);
+	}, []);
 
 	useEffect(() => {
 		document.body.style.overflow = '';
