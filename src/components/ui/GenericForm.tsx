@@ -47,6 +47,7 @@ interface GenericFormProps {
 	submitLabel?: string;
 	loadingLabel?: string;
 	submitActions?: SubmitAction[];
+	skipValidationForActions?: string[];
 }
 
 const labelClass = 'mb-2 block text-white text-lg font-semibold md:text-2xl';
@@ -64,6 +65,7 @@ export default function GenericForm({
 	submitLabel = 'Submit',
 	loadingLabel = 'Submitting...',
 	submitActions,
+	skipValidationForActions = [],
 }: GenericFormProps) {
 	const defaultValues = fields.reduce<FormValues>((acc, f) => {
 		acc[f.name] = initialValues?.[f.name] ?? '';
@@ -86,11 +88,12 @@ export default function GenericForm({
 
 		const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
 		const action = submitter?.value;
+		const skipValidation = Boolean(action && skipValidationForActions.includes(action));
 
-		const validationErrors = validate?.(values);
-		setErrors(validationErrors || {});
+		const validationErrors = skipValidation ? {} : validate?.(values) || {};
+		setErrors(validationErrors);
 
-		if (Object.keys(validationErrors || {}).length > 0) return;
+		if (Object.keys(validationErrors).length > 0) return;
 
 		try {
 			setLoading(true);

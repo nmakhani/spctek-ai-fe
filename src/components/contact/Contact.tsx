@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { InlineWidget } from 'react-calendly';
+import Script from 'next/script';
 import toast from 'react-hot-toast';
 
 import { SectionHeading } from '../ui/SectionHeading';
@@ -27,11 +27,11 @@ const CONTACT_FIELDS: FieldConfig[] = [
 	},
 ];
 
-const CALENDLY_URL = 'https://calendly.com/f-ali-spctek/30min';
+const CALENDLY_INLINE_URL =
+	'https://calendly.com/contact-spctek/30min?background_color=060b21&text_color=ffffff&primary_color=606b96';
 
 export default function Contact() {
 	const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
-	const [calendlyPrefill, setCalendlyPrefill] = useState<{ name: string; email: string } | null>(null);
 
 	useEffect(() => {
 		document.body.style.overflow = isCalendlyOpen ? 'hidden' : '';
@@ -41,6 +41,11 @@ export default function Contact() {
 	}, [isCalendlyOpen]);
 
 	const handleSubmit = async (values: FormValues, action?: string) => {
+		if (action === 'book_call') {
+			setIsCalendlyOpen(true);
+			return;
+		}
+
 		await contactsApi.create({
 			name: values.name,
 			company: values.company,
@@ -51,11 +56,6 @@ export default function Contact() {
 		});
 
 		toast.success("Thank you! We'll be in touch soon.");
-
-		if (action === 'book_call') {
-			setCalendlyPrefill({ name: values.name, email: values.email });
-			setIsCalendlyOpen(true);
-		}
 	};
 
 	return (
@@ -89,6 +89,7 @@ export default function Contact() {
 						fields={CONTACT_FIELDS}
 						validate={validateContactForm}
 						onSubmit={handleSubmit}
+						skipValidationForActions={['book_call']}
 						submitActions={[
 							{ label: 'Get in Touch', value: 'get_in_touch' },
 							{ label: 'Book a Call', value: 'book_call' },
@@ -98,28 +99,26 @@ export default function Contact() {
 				</div>
 			</div>
 
-			{isCalendlyOpen && calendlyPrefill && (
+			{isCalendlyOpen && (
 				<div
-					className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+					className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-2 backdrop-blur-md sm:p-4"
 					onClick={() => {
 						setIsCalendlyOpen(false);
-						setCalendlyPrefill(null);
 					}}
 				>
 					<div
-						className="relative w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/15 bg-[linear-gradient(160deg,rgba(8,12,28,0.98)_0%,rgba(16,20,42,0.98)_45%,rgba(20,24,48,0.98)_100%)] shadow-[0_30px_80px_rgba(0,0,0,0.7)]"
+						className="relative flex w-full max-w-[1150px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-[linear-gradient(160deg,rgba(8,12,28,0.98)_0%,rgba(16,20,42,0.98)_45%,rgba(20,24,48,0.98)_100%)] shadow-[0_30px_80px_rgba(0,0,0,0.7)] sm:rounded-[28px]"
 						onClick={(e) => e.stopPropagation()}
 					>
-						<div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-6">
+						<div className="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6 sm:py-4">
 							<div>
 								<p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9aa4ff]">Schedule a call</p>
-								<h3 className="mt-1 text-xl font-semibold text-white sm:text-2xl">Book a 30 minute meeting</h3>
+								<h3 className="mt-1 text-lg font-semibold text-white sm:text-2xl">Book a 30 minute meeting</h3>
 							</div>
 							<button
 								type="button"
 								onClick={() => {
 									setIsCalendlyOpen(false);
-									setCalendlyPrefill(null);
 								}}
 								className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-medium text-white transition hover:bg-white/[0.12]"
 								aria-label="Close booking modal"
@@ -128,23 +127,13 @@ export default function Contact() {
 							</button>
 						</div>
 
-						<div className="h-[min(76vh,760px)] w-full p-2 sm:p-4">
-							<InlineWidget
-								url={CALENDLY_URL}
-								prefill={{
-									name: calendlyPrefill.name,
-									email: calendlyPrefill.email,
-								}}
-								pageSettings={{
-									backgroundColor: '0f172a',
-									primaryColor: '606bfa',
-									textColor: 'ffffff',
-									hideLandingPageDetails: true,
-									hideEventTypeDetails: true,
-									hideGdprBanner: true,
-								}}
-								styles={{ height: '100%', width: '100%' }}
+						<div className="h-[min(700px,78vh)] overflow-hidden px-0 pb-0">
+							<div
+								data-url={CALENDLY_INLINE_URL}
+								className="calendly-inline-widget w-full"
+								style={{ minWidth: '320px', height: '100%' }}
 							/>
+							<Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
 						</div>
 					</div>
 				</div>

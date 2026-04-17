@@ -65,17 +65,20 @@ export default function HomePage() {
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			{showNewsletterModal && (
 				<div
-					className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+					className="fixed inset-0 z-[70] grid place-items-end bg-black/70 p-3 backdrop-blur-sm sm:place-items-center sm:p-4"
 					onClick={() => setShowNewsletterModal(false)}
 				>
 					<button
 						type="button"
 						onClick={() => setShowNewsletterModal(false)}
-						className="absolute right-5 top-5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white transition hover:bg-white/20"
+						className="absolute right-3 top-3 z-10 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white transition hover:bg-white/20 sm:right-5 sm:top-5"
 					>
 						Close
 					</button>
-					<div onClick={(e) => e.stopPropagation()}>
+					<div
+						className="max-h-[90vh] w-full max-w-md overflow-y-auto overscroll-contain"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<Newsletter onClose={() => setShowNewsletterModal(false)} />
 					</div>
 				</div>
