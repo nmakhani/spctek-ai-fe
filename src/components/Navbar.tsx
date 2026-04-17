@@ -51,15 +51,14 @@ export default function Navbar() {
 					}}
 				/>
 
-				<div className="relative z-10 flex h-full w-full min-w-0 items-center justify-between py-3 lg:py-0">
-					{/* Logo Placeholder */}
+				<div className="relative z-10 flex h-full w-full min-w-0 items-center justify-between py-3 pl-4 lg:py-0">
 					<Link href="/" className="flex shrink-0 items-center">
 						<Image
-							src="/logo-light.png"
+							src="/logo.png"
 							alt="SPCTEK AI Logo"
-							width={130}
-							height={44}
-							className="h-8 w-auto max-w-[185px] object-contain md:h-9 md:max-w-[210px] lg:max-w-[220px]"
+							width={500}
+							height={100}
+							className="h-10 w-auto max-w-[160px] object-contain md:h-12 md:max-w-[180px] lg:h-14 lg:max-w-[200px]"
 							priority
 						/>
 					</Link>

@@ -73,18 +73,28 @@ export default function Footer() {
 			<div className="relative z-10 mx-auto max-w-7xl px-8 py-8">
 				<div className="mb-6 grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10">
 					{/* Brand */}
-					<div className="md:col-span-5">
-						<Link href="/" className="mb-4 flex items-center">
-							<Image src="/logo-light.png" alt="SPCTEK AI Logo" width={146} height={44} className="object-contain" />
+					<div className="flex flex-col items-start md:col-span-5">
+						<Link href="/" className="mb-4 block">
+							<Image
+								src="/logo.png"
+								alt="SPCTEK AI Logo"
+								width={200}
+								height={40}
+								className="object-contain object-left"
+								priority
+							/>
 						</Link>
-						<p className="font-poppins max-w-md text-lg leading-relaxed text-white/70">
+
+						<p className="font-poppins max-w-md text-lg font-medium leading-tight text-white/90">
 							Transformation through intelligent automation.
 						</p>
+
 						<p className="font-poppins mt-3 max-w-lg text-sm leading-relaxed text-white/50">
 							We help operators eliminate repetitive work, standardize execution, and turn complex processes into
 							reliable AI-assisted systems.
 						</p>
-						<div className="mt-4 flex flex-wrap gap-2">
+
+						<div className="mt-6 flex flex-wrap gap-2">
 							<span className="font-poppins rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
 								Automation-first
 							</span>
