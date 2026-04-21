@@ -12,6 +12,7 @@ import type { PublicBlog } from './types';
 
 interface CardProps {
 	blog: PublicBlog;
+	basePath?: string;
 }
 
 function formatBlogDate(value?: string) {
@@ -31,7 +32,7 @@ function formatBlogDate(value?: string) {
 	});
 }
 
-export default function Card({ blog, index }: CardProps & { index: number }) {
+export default function Card({ blog, index, basePath = '/blog' }: CardProps & { index: number }) {
 	const previewText = extractPreviewText(blog.content);
 	const thumbnailUrl = resolveR2PublicUrl(blog.thumbnail_url);
 	const publishedDate = formatBlogDate(blog.updated_at || blog.created_at);
@@ -39,7 +40,7 @@ export default function Card({ blog, index }: CardProps & { index: number }) {
 	const displayText = blog.summary || previewText;
 
 	return (
-		<Link href={`/blog/${blog.slug}`} className="group block">
+		<Link href={`${basePath}/${blog.slug}`} className="group block">
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />

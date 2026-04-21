@@ -8,13 +8,23 @@ import { BlogMetaForm } from './BlogMetaForm';
 import { useBlogData, useEditorInit, useBlogSave } from './hooks';
 import { createEditorTools } from './config/editorTools';
 import { slugify } from './utils';
+import type { ContentType } from '@/lib/api';
 
 interface BlogEditorScreenProps {
 	mode: 'create' | 'edit';
 	blogId?: string;
+	contentType?: ContentType;
+	entityLabel?: string;
+	backPath?: string;
 }
 
-export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
+export function BlogEditorScreen({
+	mode,
+	blogId,
+	contentType = 'BLOG',
+	entityLabel = 'Blog',
+	backPath = '/portal/blogs',
+}: BlogEditorScreenProps) {
 	const baseId = useId().replace(/:/g, '');
 	const [mounted, setMounted] = useState(false);
 	const editorHolderId = mounted ? `editor-${baseId}` : '';
@@ -46,10 +56,15 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 		categories,
 		loadCategories,
 		loadBlog,
-	} = useBlogData(mode, blogId);
+	} = useBlogData(mode, blogId, contentType);
 
 	// Save management
-	const { editorRef, blobFileMapRef, saving, saveBlog, syncEditorState } = useBlogSave(mode, blogId);
+	const { editorRef, blobFileMapRef, saving, saveBlog, syncEditorState } = useBlogSave(
+		mode,
+		blogId,
+		contentType,
+		entityLabel
+	);
 
 	// Update blob file map refs when state changes
 	useEffect(() => {
@@ -138,14 +153,11 @@ export function BlogEditorScreen({ mode, blogId }: BlogEditorScreenProps) {
 			<header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/60 px-6 backdrop-blur-md">
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
 					<div>
-						<Link
-							href="/portal/blogs"
-							className="mb-1 inline-block text-sm text-white/60 transition hover:text-[#a9b2ff]"
-						>
-							← Back to Blogs
+						<Link href={backPath} className="mb-1 inline-block text-sm text-white/60 transition hover:text-[#a9b2ff]">
+							← Back to {entityLabel}s
 						</Link>
 						<h1 className="text-2xl font-semibold text-white md:text-3xl">
-							{mode === 'edit' ? 'Edit' : 'Create'} <span className="text-[#606bfa]">Blog</span>
+							{mode === 'edit' ? 'Edit' : 'Create'} <span className="text-[#606bfa]">{entityLabel}</span>
 						</h1>
 					</div>
 

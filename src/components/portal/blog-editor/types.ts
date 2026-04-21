@@ -1,4 +1,5 @@
 import type { OutputData } from '@editorjs/editorjs';
+import type { ContentType } from '@/lib/api';
 
 export interface Category {
 	id: string;
@@ -14,6 +15,7 @@ export interface Blog {
 	thumbnail_url: string;
 	content: string;
 	author?: string;
+	type: ContentType;
 	is_published: boolean;
 	categories?: Category[];
 	created_at?: string;

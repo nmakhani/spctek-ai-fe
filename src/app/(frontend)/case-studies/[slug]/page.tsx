@@ -12,10 +12,10 @@ function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
 }
 
-export default function DetailPage() {
+export default function CaseStudyDetailPage() {
 	const params = useParams<{ slug: string }>();
 	const slug = params?.slug || '';
-	const [blogs, setBlogs] = useState<PublicBlog[]>([]);
+	const [items, setItems] = useState<PublicBlog[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 
@@ -26,20 +26,20 @@ export default function DetailPage() {
 
 		let isMounted = true;
 
-		const fetchBlogs = async () => {
+		const fetchItems = async () => {
 			try {
 				setLoading(true);
-				const response = await contentApi.list({ type: 'BLOG' });
+				const response = await contentApi.list({ type: 'CASE_STUDY' });
 				if (!isMounted) {
 					return;
 				}
-				setBlogs(response.data as PublicBlog[]);
+				setItems(response.data as PublicBlog[]);
 				setError('');
 			} catch (err: unknown) {
 				if (!isMounted) {
 					return;
 				}
-				setError(getErrorMessage(err, 'Failed to load blog'));
+				setError(getErrorMessage(err, 'Failed to load case study'));
 			} finally {
 				if (isMounted) {
 					setLoading(false);
@@ -47,25 +47,25 @@ export default function DetailPage() {
 			}
 		};
 
-		void fetchBlogs();
+		void fetchItems();
 
 		return () => {
 			isMounted = false;
 		};
 	}, [slug]);
 
-	const blog = useMemo(() => {
+	const caseStudy = useMemo(() => {
 		if (!slug) {
 			return null;
 		}
-		return blogs.find((item) => item.slug === slug && item.is_published) ?? null;
-	}, [blogs, slug]);
+		return items.find((item) => item.slug === slug && item.is_published) ?? null;
+	}, [items, slug]);
 
 	if (loading || !slug) {
 		return (
 			<div className="noise-overlay relative flex min-h-screen flex-col">
 				<main className="flex flex-1 items-center justify-center px-4 pt-24 text-white/65 md:px-6">
-					Loading article...
+					Loading case study...
 				</main>
 			</div>
 		);
@@ -81,17 +81,17 @@ export default function DetailPage() {
 		);
 	}
 
-	if (!blog) {
+	if (!caseStudy) {
 		return (
 			<div className="noise-overlay relative flex min-h-screen flex-col">
 				<main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 pt-24 text-center md:px-6">
-					<h1 className="text-3xl font-semibold text-white">Blog not found</h1>
-					<p className="mt-3 text-white/65">This article is unavailable or not published yet.</p>
+					<h1 className="text-3xl font-semibold text-white">Case study not found</h1>
+					<p className="mt-3 text-white/65">This case study is unavailable or not published yet.</p>
 					<Link
-						href="/blog"
+						href="/case-studies"
 						className="mt-6 rounded-xl bg-[#606bfa] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#6f79ff]"
 					>
-						Back to Blogs
+						Back to Case Studies
 					</Link>
 				</main>
 			</div>
@@ -102,11 +102,11 @@ export default function DetailPage() {
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">
 				<section id="hero">
-					<DetailHero blog={blog} />
+					<DetailHero blog={caseStudy} eyebrow="SPCTEK Case Study" />
 				</section>
 				<SectionDivider />
 				<section id="article">
-					<ArticleSection blog={blog} />
+					<ArticleSection blog={caseStudy} />
 				</section>
 			</main>
 		</div>

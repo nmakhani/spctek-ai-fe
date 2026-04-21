@@ -27,6 +27,7 @@ export default function Navbar() {
 		{ name: 'Amazon Recovery', href: '/reinstatement' },
 		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
 		{ name: 'Blog', href: '/blog' },
+		{ name: 'Case Studies', href: '/case-studies' },
 		{ name: 'About', href: '/about' },
 		{ name: 'Contact', href: '/contact' },
 		{ name: 'Rate my Process', href: '/process-rating' },

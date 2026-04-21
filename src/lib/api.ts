@@ -67,13 +67,24 @@ export const contactsApi = {
 	delete: (id: string) => apiClient.delete(`/contacts/${id}`),
 };
 
+export type ContentType = 'BLOG' | 'CASE_STUDY';
+
+export const contentApi = {
+	list: (params: { type: ContentType; search?: string; category?: string; skip?: number; limit?: number }) =>
+		apiClient.get('/content', { params }),
+	get: (id: string, type: ContentType) => apiClient.get(`/content/${id}`, { params: { type } }),
+	create: (data: Record<string, unknown>) => apiClient.post('/content', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/content/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/content/${id}`),
+};
+
 export const blogsApi = {
 	list: (params?: { search?: string; category?: string; skip?: number; limit?: number }) =>
-		apiClient.get('/blogs', { params }),
-	get: (id: string) => apiClient.get(`/blogs/${id}`),
-	create: (data: Record<string, unknown>) => apiClient.post('/blogs', data),
-	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/blogs/${id}`, data),
-	delete: (id: string) => apiClient.delete(`/blogs/${id}`),
+		contentApi.list({ type: 'BLOG', ...params }),
+	get: (id: string) => contentApi.get(id, 'BLOG'),
+	create: (data: Record<string, unknown>) => contentApi.create({ ...data, type: 'BLOG' }),
+	update: (id: string, data: Record<string, unknown>) => contentApi.update(id, { ...data, type: 'BLOG' }),
+	delete: (id: string) => contentApi.delete(id),
 };
 
 export const categoriesApi = {

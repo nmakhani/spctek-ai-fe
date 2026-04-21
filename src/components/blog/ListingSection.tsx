@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { blogsApi, categoriesApi } from '@/lib/api';
+import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
 
 import Card from './Card';
 import FilterBar from './FilterBar';
@@ -16,7 +16,21 @@ function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
 }
 
-export default function ListingSection() {
+interface ListingSectionProps {
+	contentType?: ContentType;
+	basePath?: string;
+	emptyText?: string;
+	errorText?: string;
+	loadingText?: string;
+}
+
+export default function ListingSection({
+	contentType = 'BLOG',
+	basePath = '/blog',
+	emptyText = 'No published blogs yet. Please check back soon.',
+	errorText = 'Failed to load blogs',
+	loadingText = 'Loading articles...',
+}: ListingSectionProps) {
 	const [blogs, setBlogs] = useState<PublicBlog[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -59,7 +73,8 @@ export default function ListingSection() {
 		const fetchBlogs = async () => {
 			try {
 				setLoading(true);
-				const response = await blogsApi.list({
+				const response = await contentApi.list({
+					type: contentType,
 					search: searchTerm || undefined,
 					category: selectedCategory !== 'all' ? selectedCategory : undefined,
 				});
@@ -72,7 +87,7 @@ export default function ListingSection() {
 				if (!isMounted) {
 					return;
 				}
-				setError(getErrorMessage(err, 'Failed to load blogs'));
+				setError(getErrorMessage(err, errorText));
 			} finally {
 				if (isMounted) {
 					setLoading(false);
@@ -85,7 +100,7 @@ export default function ListingSection() {
 		return () => {
 			isMounted = false;
 		};
-	}, [searchTerm, selectedCategory]);
+	}, [contentType, searchTerm, selectedCategory, errorText]);
 
 	const publishedBlogs = useMemo(() => blogs.filter((blog) => blog.is_published), [blogs]);
 	const filterCategories = useMemo(
@@ -115,16 +130,16 @@ export default function ListingSection() {
 
 						{loading ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
-								Loading articles...
+								{loadingText}
 							</div>
 						) : publishedBlogs.length === 0 ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
-								No published blogs yet. Please check back soon.
+								{emptyText}
 							</div>
 						) : (
 							<div className="flex flex-col gap-12">
 								{publishedBlogs.map((blog, index) => (
-									<Card key={blog.id} blog={blog} index={index} />
+									<Card key={blog.id} blog={blog} index={index} basePath={basePath} />
 								))}
 							</div>
 						)}

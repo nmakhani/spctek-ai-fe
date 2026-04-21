@@ -2,12 +2,12 @@ import { useState, useCallback } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
 import toast from 'react-hot-toast';
 
-import { blogsApi, categoriesApi } from '@/lib/api';
+import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
 import { parseEditorData } from '../utils';
 import type { Blog, BlogFormData, Category } from '../types';
 import { EMPTY_BLOG_FORM, EMPTY_EDITOR_DATA } from '../types';
 
-export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
+export function useBlogData(mode: 'create' | 'edit', blogId: string | undefined, contentType: ContentType) {
 	const [loading, setLoading] = useState(mode === 'edit');
 	const [error, setError] = useState('');
 	const [formData, setFormData] = useState<BlogFormData>(EMPTY_BLOG_FORM);
@@ -31,7 +31,7 @@ export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
 
 		try {
 			setLoading(true);
-			const response = await blogsApi.get(blogId);
+			const response = await contentApi.get(blogId, contentType);
 			const blog = response.data as Blog;
 
 			setFormData({
@@ -54,7 +54,7 @@ export function useBlogData(mode: 'create' | 'edit', blogId?: string) {
 		} finally {
 			setLoading(false);
 		}
-	}, [mode, blogId]);
+	}, [mode, blogId, contentType]);
 
 	return {
 		loading,
