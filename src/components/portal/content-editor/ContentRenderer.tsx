@@ -1,7 +1,7 @@
 import type { OutputData } from '@editorjs/editorjs';
 import { resolveR2PublicUrl } from '@/lib/r2';
 
-interface BlogRendererProps {
+interface ContentRendererProps {
 	data: OutputData;
 	title: string;
 }
@@ -32,7 +32,7 @@ function renderListItemNode(item: ListItemNode, key: string) {
 	);
 }
 
-export function BlogRenderer({ data, title }: BlogRendererProps) {
+export function ContentRenderer({ data, title }: ContentRendererProps) {
 	return (
 		<div className="w-full rounded-2xl border border-white/15 bg-white/[0.04] p-6 md:p-8">
 			{title && <h1 className="text-3xl font-semibold leading-tight text-white md:text-4xl">{title}</h1>}
@@ -127,7 +127,7 @@ export function BlogRenderer({ data, title }: BlogRendererProps) {
 						return (
 							<figure key={key} className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
 								{/* eslint-disable-next-line @next/next/no-img-element */}
-								<img src={url} alt={caption || 'Blog image'} className="h-auto w-full object-cover" />
+								<img src={url} alt={caption || 'Content image'} className="h-auto w-full object-cover" />
 								{caption && <figcaption className="px-4 py-2 text-sm text-white/65">{caption}</figcaption>}
 							</figure>
 						);

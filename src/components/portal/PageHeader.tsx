@@ -5,8 +5,8 @@ interface PageHeaderProps {
 	subtitle?: string;
 	backLink?: string;
 	backText?: string;
-	buttonText: string;
-	buttonOnClick: () => void;
+	buttonText?: string;
+	buttonOnClick?: () => void;
 	showForm?: boolean;
 }
 
@@ -32,12 +32,15 @@ export function PageHeader({
 						{title} <span className="text-[#606bfa]">{subtitle}</span>
 					</h1>
 				</div>
-				<button
-					onClick={buttonOnClick}
-					className="shrink-0 rounded-xl bg-[#606bfa] px-5 py-2.5 font-semibold text-white transition hover:bg-[#6f79ff] hover:shadow-[0_0_18px_rgba(96,107,250,0.5)]"
-				>
-					{showForm ? 'Cancel' : buttonText}
-				</button>
+
+				{buttonText && buttonOnClick && (
+					<button
+						onClick={buttonOnClick}
+						className="shrink-0 rounded-xl bg-[#606bfa] px-5 py-2.5 font-semibold text-white transition hover:bg-[#6f79ff] hover:shadow-[0_0_18px_rgba(96,107,250,0.5)]"
+					>
+						{showForm ? 'Cancel' : buttonText}
+					</button>
+				)}
 			</div>
 		</header>
 	);

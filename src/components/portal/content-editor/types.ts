@@ -7,7 +7,7 @@ export interface Category {
 	slug: string;
 }
 
-export interface Blog {
+export interface Content {
 	id: string;
 	title: string;
 	slug: string;
@@ -22,7 +22,7 @@ export interface Blog {
 	updated_at?: string;
 }
 
-export type BlogFormData = {
+export type ContentFormData = {
 	title: string;
 	slug: string;
 	summary: string;
@@ -38,7 +38,7 @@ export const EMPTY_EDITOR_DATA: OutputData = {
 	version: '2.31.0',
 };
 
-export const EMPTY_BLOG_FORM: BlogFormData = {
+export const EMPTY_CONTENT_FORM: ContentFormData = {
 	title: '',
 	slug: '',
 	summary: '',

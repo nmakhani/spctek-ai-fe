@@ -2,10 +2,80 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BookOpen, MessageSquare, FileText, FolderTree, BriefcaseBusiness } from 'lucide-react';
+import { BookOpen, MessageSquare, FileText, FolderTree, BriefcaseBusiness, LucideIcon } from 'lucide-react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+
+interface DashboardCardProps {
+	href: string;
+	title: string;
+	linkText: string;
+	description: string;
+	icon: LucideIcon;
+}
+
+export const DashboardCard = ({ href, title, linkText, description, icon: Icon }: DashboardCardProps) => {
+	return (
+		<Link href={href} className="group">
+			<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
+				{/* Glow Effect */}
+				<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
+
+				{/* Icon Wrapper */}
+				<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
+					<Icon size={24} />
+				</div>
+
+				<h2 className="mb-2 text-2xl font-semibold text-white">{title}</h2>
+				<p className="text-white/75">{description}</p>
+
+				<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
+					{linkText}
+					<span className="transition-transform group-hover:translate-x-1">→</span>
+				</div>
+			</div>
+		</Link>
+	);
+};
+
+const DASHBOARD_ITEMS: DashboardCardProps[] = [
+	{
+		title: 'Contacts',
+		href: '/portal/contacts',
+		linkText: 'Open Contacts',
+		description: 'Review incoming inquiries, edit details, and keep communication records organized.',
+		icon: MessageSquare,
+	},
+	{
+		title: 'Categories',
+		href: '/portal/categories',
+		linkText: 'Open Categories',
+		description: 'Maintain reusable content categories in a dedicated workspace separate from content lists.',
+		icon: FolderTree,
+	},
+	{
+		title: 'Reinstatement Logs',
+		href: '/portal/reinstatement-logs',
+		linkText: 'Open Reinstatement Logs',
+		description: 'Track Amazon reinstatement assessments by contact and regenerate reports as needed.',
+		icon: FileText,
+	},
+	{
+		title: 'Blogs',
+		href: '/portal/blogs',
+		linkText: 'Open Blogs',
+		description: 'Publish polished articles with full schema controls including slug, summary, and publication status.',
+		icon: BookOpen,
+	},
+	{
+		title: 'Case Studies',
+		href: '/portal/case-studies',
+		linkText: 'Open Case Studies',
+		description: 'Create and publish client-focused case studies with the same editor and workflow as blogs.',
+		icon: BriefcaseBusiness,
+	},
+];
 
 function DashboardContent() {
 	const router = useRouter();
@@ -70,91 +140,10 @@ function DashboardContent() {
 			</header>
 
 			<main className="mx-auto mt-8 max-w-7xl">
-				<div className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-5">
-					<Link href="/portal/contacts" className="group">
-						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
-							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
-							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
-								<MessageSquare size={24} />
-							</div>
-							<h2 className="mb-2 text-2xl font-semibold text-white">Contacts</h2>
-							<p className="text-white/75">
-								Review incoming inquiries, edit details, and keep communication records organized.
-							</p>
-							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
-								Open Contacts
-								<span className="transition-transform group-hover:translate-x-1">→</span>
-							</div>
-						</div>
-					</Link>
-
-					<Link href="/portal/blogs" className="group">
-						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
-							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
-							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
-								<BookOpen size={24} />
-							</div>
-							<h2 className="mb-2 text-2xl font-semibold text-white">Blogs</h2>
-							<p className="text-white/75">
-								Publish polished articles with full schema controls including slug, summary, and publication status.
-							</p>
-							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
-								Open Blogs
-								<span className="transition-transform group-hover:translate-x-1">→</span>
-							</div>
-						</div>
-					</Link>
-
-					<Link href="/portal/case-studies" className="group">
-						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
-							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
-							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
-								<BriefcaseBusiness size={24} />
-							</div>
-							<h2 className="mb-2 text-2xl font-semibold text-white">Case Studies</h2>
-							<p className="text-white/75">
-								Create and publish client-focused case studies with the same editor and workflow as blogs.
-							</p>
-							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
-								Open Case Studies
-								<span className="transition-transform group-hover:translate-x-1">→</span>
-							</div>
-						</div>
-					</Link>
-
-					<Link href="/portal/categories" className="group">
-						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
-							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
-							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
-								<FolderTree size={24} />
-							</div>
-							<h2 className="mb-2 text-2xl font-semibold text-white">Categories</h2>
-							<p className="text-white/75">
-								Maintain reusable content categories in a dedicated workspace separate from content lists.
-							</p>
-							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
-								Open Categories
-								<span className="transition-transform group-hover:translate-x-1">→</span>
-							</div>
-						</div>
-					</Link>
-
-					<Link href="/portal/reinstatement-logs" className="group">
-						<div className="relative h-full overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_42%,rgba(96,107,250,0.12)_100%)] p-8 shadow-[0_20px_45px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 hover:-translate-y-1 hover:border-[#7c87ff]/60 hover:shadow-[0_26px_50px_rgba(0,0,0,0.65)]">
-							<div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-[#606bfa]/20 blur-3xl" />
-							<div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8993ff]/35 bg-[#606bfa]/20 text-white">
-								<FileText size={24} />
-							</div>
-							<h2 className="mb-2 text-2xl font-semibold text-white">Reinstatement Logs</h2>
-							<p className="text-white/75">
-								Track Amazon reinstatement assessments by contact and regenerate reports as needed.
-							</p>
-							<div className="mt-7 inline-flex items-center gap-2 font-medium text-[#a9b2ff]">
-								Open Logs
-								<span className="transition-transform group-hover:translate-x-1">→</span>
-							</div>
-						</div>
-					</Link>
+				<div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+					{DASHBOARD_ITEMS.map((item) => (
+						<DashboardCard key={item.href} {...item} />
+					))}
 				</div>
 			</main>
 		</div>

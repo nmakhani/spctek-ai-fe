@@ -1,9 +1,9 @@
-import type { BlogFormData } from './types';
+import type { ContentFormData } from './types';
 import { R2ImageUpload } from './R2ImageUpload';
 import type { Category } from './types';
 
-interface BlogMetaFormProps {
-	formData: BlogFormData;
+interface ContentMetaFormProps {
+	formData: ContentFormData;
 	categories: Category[];
 	onTitleChange: (value: string) => void;
 	onSlugChange: (value: string) => void;
@@ -14,7 +14,7 @@ interface BlogMetaFormProps {
 	highlightErrors?: boolean;
 }
 
-export function BlogMetaForm({
+export function ContentMetaForm({
 	formData,
 	categories,
 	onTitleChange,
@@ -24,7 +24,7 @@ export function BlogMetaForm({
 	onToggleCategory,
 	onThumbnailUrlChange,
 	highlightErrors = false,
-}: BlogMetaFormProps) {
+}: ContentMetaFormProps) {
 	return (
 		<div className="space-y-5 rounded-2xl border border-white/15 bg-white/[0.04] p-5 md:p-6">
 			<div>
@@ -39,7 +39,7 @@ export function BlogMetaForm({
 							? 'border-red-500/80 bg-red-500/10 focus:border-red-500 focus:ring-red-500/40'
 							: 'border-white/15 bg-white/[0.06] focus:border-[#8c96ff] focus:ring-[#606bfa]/45'
 					}`}
-					placeholder="Blog title"
+					placeholder="Content title"
 				/>
 			</div>
 

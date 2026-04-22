@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { BlogEditorScreen } from '@/components/portal/blog-editor/BlogEditorScreen';
+import { ContentEditorScreen } from '@/components/portal/content-editor/ContentEditorScreen';
 
 export default function EditCaseStudyPage() {
 	const params = useParams<{ id: string }>();
@@ -15,9 +15,9 @@ export default function EditCaseStudyPage() {
 
 	return (
 		<ProtectedRoute>
-			<BlogEditorScreen
+			<ContentEditorScreen
 				mode="edit"
-				blogId={caseStudyId}
+				contentId={caseStudyId}
 				contentType="CASE_STUDY"
 				entityLabel="Case Study"
 				backPath="/portal/case-studies"

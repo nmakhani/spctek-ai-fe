@@ -1,30 +1,26 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useId, useState } from 'react';
 
-import { BlogRenderer } from './BlogRenderer';
-import { BlogMetaForm } from './BlogMetaForm';
-import { useBlogData, useEditorInit, useBlogSave } from './hooks';
-import { createEditorTools } from './config/editorTools';
 import { slugify } from './utils';
 import type { ContentType } from '@/lib/api';
+import { ContentRenderer } from './ContentRenderer';
+import { ContentMetaForm } from './ContentMetaForm';
+import { createEditorTools } from './config/editorTools';
+import { useContentData, useEditorInit, useContentSave } from './hooks';
 
-interface BlogEditorScreenProps {
+interface ContentEditorScreenProps {
 	mode: 'create' | 'edit';
-	blogId?: string;
-	contentType?: ContentType;
-	entityLabel?: string;
-	backPath?: string;
+	contentId?: string;
+	contentType: ContentType;
+	entityLabel: string;
+	backPath: string;
 }
 
-export function BlogEditorScreen({
-	mode,
-	blogId,
-	contentType = 'BLOG',
-	entityLabel = 'Blog',
-	backPath = '/portal/blogs',
-}: BlogEditorScreenProps) {
+export function ContentEditorScreen({ mode, contentId, contentType, entityLabel, backPath }: ContentEditorScreenProps) {
+	const router = useRouter();
 	const baseId = useId().replace(/:/g, '');
 	const [mounted, setMounted] = useState(false);
 	const editorHolderId = mounted ? `editor-${baseId}` : '';
@@ -40,7 +36,7 @@ export function BlogEditorScreen({
 		setMounted(true);
 	}, []);
 
-	// Blog data management
+	// Content data management
 	const {
 		loading,
 		error,
@@ -55,13 +51,13 @@ export function BlogEditorScreen({
 		setSlugManuallyEdited,
 		categories,
 		loadCategories,
-		loadBlog,
-	} = useBlogData(mode, blogId, contentType);
+		loadContent,
+	} = useContentData(mode, contentId, contentType);
 
 	// Save management
-	const { editorRef, blobFileMapRef, saving, saveBlog, syncEditorState } = useBlogSave(
+	const { editorRef, blobFileMapRef, saving, saveContent, syncEditorState } = useContentSave(
 		mode,
-		blogId,
+		contentId,
 		contentType,
 		entityLabel
 	);
@@ -86,11 +82,11 @@ export function BlogEditorScreen({
 		};
 	}, []);
 
-	// Load blog when needed
+	// Load content when needed
 	useEffect(() => {
 		void loadCategories();
-		void loadBlog();
-	}, [mode, blogId, loadBlog, loadCategories]);
+		void loadContent();
+	}, [mode, contentId, loadContent, loadCategories]);
 
 	// Initialize editor only after component is mounted and ID is set and loading is done
 	useEditorInit(
@@ -127,8 +123,11 @@ export function BlogEditorScreen({
 		}
 
 		const synced = await syncEditorState(editorData);
-		const success = await saveBlog(formData, currentThumbnailUrl, editorData, synced);
-		if (success) setHighlightErrors(false);
+		const success = await saveContent(formData, currentThumbnailUrl, editorData, synced);
+		if (success) {
+			setHighlightErrors(false);
+			router.back();
+		}
 	};
 
 	if (loading) {
@@ -154,7 +153,7 @@ export function BlogEditorScreen({
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 py-4">
 					<div>
 						<Link href={backPath} className="mb-1 inline-block text-sm text-white/60 transition hover:text-[#a9b2ff]">
-							← Back to {entityLabel}s
+							← Back to {entityLabel} Page
 						</Link>
 						<h1 className="text-2xl font-semibold text-white md:text-3xl">
 							{mode === 'edit' ? 'Edit' : 'Create'} <span className="text-[#606bfa]">{entityLabel}</span>
@@ -202,7 +201,7 @@ export function BlogEditorScreen({
 				)}
 
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-					<BlogMetaForm
+					<ContentMetaForm
 						formData={formData}
 						categories={categories}
 						highlightErrors={highlightErrors}
@@ -246,7 +245,7 @@ export function BlogEditorScreen({
 							</div>
 							{previewMode && (
 								<div className="absolute inset-0 overflow-auto rounded-2xl bg-[#020617] p-2 md:p-0">
-									<BlogRenderer data={editorData} title={formData.title} />
+									<ContentRenderer data={editorData} title={formData.title} />
 								</div>
 							)}
 						</div>

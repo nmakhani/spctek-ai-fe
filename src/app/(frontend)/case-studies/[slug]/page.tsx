@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { contentApi } from '@/lib/api';
 import { SectionDivider } from '@/components/ui/SectionDivider';
-import { DetailHero, ArticleSection, type PublicBlog } from '@/components/blog';
+import { DetailHero, ArticleSection, type PublicContent } from '@/components/content';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
@@ -15,7 +15,7 @@ function getErrorMessage(err: unknown, fallback: string): string {
 export default function CaseStudyDetailPage() {
 	const params = useParams<{ slug: string }>();
 	const slug = params?.slug || '';
-	const [items, setItems] = useState<PublicBlog[]>([]);
+	const [items, setItems] = useState<PublicContent[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 
@@ -33,7 +33,7 @@ export default function CaseStudyDetailPage() {
 				if (!isMounted) {
 					return;
 				}
-				setItems(response.data as PublicBlog[]);
+				setItems(response.data as PublicContent[]);
 				setError('');
 			} catch (err: unknown) {
 				if (!isMounted) {
@@ -102,11 +102,11 @@ export default function CaseStudyDetailPage() {
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">
 				<section id="hero">
-					<DetailHero blog={caseStudy} eyebrow="SPCTEK Case Study" />
+					<DetailHero content={caseStudy} />
 				</section>
 				<SectionDivider />
 				<section id="article">
-					<ArticleSection blog={caseStudy} />
+					<ArticleSection content={caseStudy} />
 				</section>
 			</main>
 		</div>

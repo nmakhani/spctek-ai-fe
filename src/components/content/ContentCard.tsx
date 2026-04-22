@@ -2,20 +2,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { resolveR2PublicUrl } from '@/lib/r2';
-import { extractPreviewText } from '@/components/portal/blog-editor/utils';
+import { extractPreviewText } from '@/components/portal/content-editor/utils';
 
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
 import { GradientNumber } from '../ui/GradientNumber';
 
-import type { PublicBlog } from './types';
+import type { PublicContent } from './types';
 
-interface CardProps {
-	blog: PublicBlog;
-	basePath?: string;
-}
-
-function formatBlogDate(value?: string) {
+function formatContentDate(value?: string) {
 	if (!value) {
 		return null;
 	}
@@ -32,15 +27,23 @@ function formatBlogDate(value?: string) {
 	});
 }
 
-export default function Card({ blog, index, basePath = '/blog' }: CardProps & { index: number }) {
-	const previewText = extractPreviewText(blog.content);
-	const thumbnailUrl = resolveR2PublicUrl(blog.thumbnail_url);
-	const publishedDate = formatBlogDate(blog.updated_at || blog.created_at);
+export default function ContentCard({
+	index,
+	content,
+	basePath,
+}: {
+	index: number;
+	content: PublicContent;
+	basePath: string;
+}) {
+	const previewText = extractPreviewText(content.content);
+	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
+	const publishedDate = formatContentDate(content.updated_at || content.created_at);
 	const displayId = String(index + 1).padStart(2, '0');
-	const displayText = blog.summary || previewText;
+	const displayText = content.summary || previewText;
 
 	return (
-		<Link href={`${basePath}/${blog.slug}`} className="group block">
+		<Link href={`${basePath}/${content.slug}`} className="group block">
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
@@ -57,7 +60,7 @@ export default function Card({ blog, index, basePath = '/blog' }: CardProps & { 
 							<div className="relative aspect-video w-full overflow-hidden rounded-xl md:aspect-[4/3]">
 								<Image
 									src={thumbnailUrl}
-									alt={blog.title}
+									alt={content.title}
 									fill
 									unoptimized
 									className="object-cover opacity-90 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
@@ -72,7 +75,7 @@ export default function Card({ blog, index, basePath = '/blog' }: CardProps & { 
 					{/* Changed justify-center to justify-start and matched padding (p-6) */}
 					<div className="flex flex-1 flex-col justify-start p-4 sm:p-6 md:pl-2 md:pr-10 md:pt-7">
 						<div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
-							<span className="text-[#a9b2ff]">{blog.author?.trim() ? blog.author : 'SPCTEK Team'}</span>
+							<span className="text-[#a9b2ff]">{content.author?.trim() ? content.author : 'SPCTEK Team'}</span>
 							{publishedDate && (
 								<>
 									<span className="h-1 w-1 rounded-full bg-white/20" />
@@ -83,7 +86,7 @@ export default function Card({ blog, index, basePath = '/blog' }: CardProps & { 
 
 						<div>
 							<h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-2xl">
-								{blog.title}
+								{content.title}
 							</h3>
 							{displayText && <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/60">{displayText}</p>}
 						</div>

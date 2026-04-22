@@ -2,16 +2,12 @@ import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
 
 interface HeroProps {
-	titlePrefix?: string;
-	titleAccent?: string;
-	description?: string;
+	titlePrefix: string;
+	titleAccent: string;
+	description: string;
 }
 
-export default function Hero({
-	titlePrefix = 'Practical Insights on',
-	titleAccent = 'AI, Operations, and Scalable Growth',
-	description = 'Practical ideas, real-world strategies, and actionable guides to help you improve processes and implement AI effectively.',
-}: HeroProps) {
+export default function Hero({ titlePrefix, titleAccent, description }: HeroProps) {
 	return (
 		<section className="font-poppins relative mx-auto mt-24 flex max-w-7xl flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
 			<GlowBackground

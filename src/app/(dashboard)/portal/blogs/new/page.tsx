@@ -1,12 +1,12 @@
 'use client';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { BlogEditorScreen } from '@/components/portal/blog-editor/BlogEditorScreen';
+import { ContentEditorScreen } from '@/components/portal/content-editor/ContentEditorScreen';
 
 export default function NewBlogPage() {
 	return (
 		<ProtectedRoute>
-			<BlogEditorScreen mode="create" />
+			<ContentEditorScreen mode="create" contentType="BLOG" entityLabel="Blog" backPath="/portal/blogs" />
 		</ProtectedRoute>
 	);
 }

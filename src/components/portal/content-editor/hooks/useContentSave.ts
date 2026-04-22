@@ -1,16 +1,16 @@
-import { useRef, useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
 import type EditorJS from '@editorjs/editorjs';
 import type { OutputData } from '@editorjs/editorjs';
-import toast from 'react-hot-toast';
+import { useRef, useState, useCallback } from 'react';
 
-import { contentApi, type ContentType } from '@/lib/api';
 import { uploadFileToR2 } from '@/lib/r2';
+import type { ContentFormData } from '../types';
 import { replaceBlobUrlsRecursively } from '../utils';
-import type { BlogFormData } from '../types';
+import { contentApi, type ContentType } from '@/lib/api';
 
-export function useBlogSave(
+export function useContentSave(
 	mode: 'create' | 'edit',
-	blogId: string | undefined,
+	contentId: string | undefined,
 	contentType: ContentType,
 	entityLabel: string
 ) {
@@ -24,9 +24,9 @@ export function useBlogSave(
 		return await editorRef.current.save();
 	}, []);
 
-	const saveBlog = useCallback(
+	const saveContent = useCallback(
 		async (
-			formData: BlogFormData,
+			formData: ContentFormData,
 			currentThumbnailUrl: string,
 			editorData: OutputData,
 			editorDataForSync: OutputData
@@ -56,8 +56,8 @@ export function useBlogSave(
 					content: JSON.stringify(swapped),
 				};
 
-				if (mode === 'edit' && blogId) {
-					await contentApi.update(blogId, payload);
+				if (mode === 'edit' && contentId) {
+					await contentApi.update(contentId, payload);
 					toast.success(`${entityLabel} updated`);
 				} else {
 					await contentApi.create(payload);
@@ -66,7 +66,7 @@ export function useBlogSave(
 
 				return true;
 			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to save blog';
+				const message = err instanceof Error ? err.message : 'Failed to save content';
 				setError(message);
 				toast.error(message);
 				return false;
@@ -74,7 +74,7 @@ export function useBlogSave(
 				setSaving(false);
 			}
 		},
-		[mode, blogId, contentType, entityLabel, syncEditorState]
+		[mode, contentId, contentType, entityLabel, syncEditorState]
 	);
 
 	return {
@@ -83,7 +83,7 @@ export function useBlogSave(
 		saving,
 		error,
 		setError,
-		saveBlog,
+		saveContent,
 		syncEditorState,
 	};
 }

@@ -2,36 +2,35 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
-
-import Card from './Card';
 import FilterBar from './FilterBar';
+import ContentCard from './ContentCard';
 import Playbook from '../generic-sections/Playbook';
 import Newsletter from '../generic-sections/Newsletter';
 
-import type { PublicBlog } from './types';
-import type { Category } from '@/components/portal/blog-editor/types';
+import type { PublicContent } from './types';
+import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
+import type { Category } from '@/components/portal/content-editor/types';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
 }
 
 interface ListingSectionProps {
-	contentType?: ContentType;
-	basePath?: string;
-	emptyText?: string;
-	errorText?: string;
-	loadingText?: string;
+	contentType: ContentType;
+	basePath: string;
+	emptyText: string;
+	errorText: string;
+	loadingText: string;
 }
 
 export default function ListingSection({
-	contentType = 'BLOG',
-	basePath = '/blog',
-	emptyText = 'No published blogs yet. Please check back soon.',
-	errorText = 'Failed to load blogs',
-	loadingText = 'Loading articles...',
+	contentType,
+	basePath,
+	emptyText,
+	errorText,
+	loadingText,
 }: ListingSectionProps) {
-	const [blogs, setBlogs] = useState<PublicBlog[]>([]);
+	const [contents, setContents] = useState<PublicContent[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
@@ -70,7 +69,7 @@ export default function ListingSection({
 	useEffect(() => {
 		let isMounted = true;
 
-		const fetchBlogs = async () => {
+		const fetchContents = async () => {
 			try {
 				setLoading(true);
 				const response = await contentApi.list({
@@ -81,7 +80,7 @@ export default function ListingSection({
 				if (!isMounted) {
 					return;
 				}
-				setBlogs(response.data as PublicBlog[]);
+				setContents(response.data as PublicContent[]);
 				setError('');
 			} catch (err: unknown) {
 				if (!isMounted) {
@@ -95,14 +94,14 @@ export default function ListingSection({
 			}
 		};
 
-		void fetchBlogs();
+		void fetchContents();
 
 		return () => {
 			isMounted = false;
 		};
 	}, [contentType, searchTerm, selectedCategory, errorText]);
 
-	const publishedBlogs = useMemo(() => blogs.filter((blog) => blog.is_published), [blogs]);
+	const publishedContents = useMemo(() => contents.filter((content) => content.is_published), [contents]);
 	const filterCategories = useMemo(
 		() => [{ label: 'All', value: 'all' }, ...categories.map((item) => ({ label: item.name, value: item.slug }))],
 		[categories]
@@ -132,14 +131,14 @@ export default function ListingSection({
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 								{loadingText}
 							</div>
-						) : publishedBlogs.length === 0 ? (
+						) : publishedContents.length === 0 ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 								{emptyText}
 							</div>
 						) : (
 							<div className="flex flex-col gap-12">
-								{publishedBlogs.map((blog, index) => (
-									<Card key={blog.id} blog={blog} index={index} basePath={basePath} />
+								{publishedContents.map((content, index) => (
+									<ContentCard key={content.id} content={content} index={index} basePath={basePath} />
 								))}
 							</div>
 						)}

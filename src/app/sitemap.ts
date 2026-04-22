@@ -3,12 +3,12 @@ import type { MetadataRoute } from 'next';
 const PUBLIC_PATHS = [
 	{ path: '/', priority: 1, changeFrequency: 'daily' as const },
 	{ path: '/blog', priority: 0.8, changeFrequency: 'weekly' as const },
-	{ path: '/case-studies', priority: 0.8, changeFrequency: 'weekly' as const },
 	{ path: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
 	{ path: '/contact', priority: 0.7, changeFrequency: 'monthly' as const },
+	{ path: '/case-studies', priority: 0.8, changeFrequency: 'weekly' as const },
+	{ path: '/reinstatement', priority: 0.8, changeFrequency: 'monthly' as const },
 	{ path: '/local-ai-setup', priority: 0.8, changeFrequency: 'monthly' as const },
 	{ path: '/process-rating', priority: 0.8, changeFrequency: 'monthly' as const },
-	{ path: '/reinstatement', priority: 0.8, changeFrequency: 'monthly' as const },
 ] as const;
 
 function getSiteUrl() {

@@ -78,15 +78,6 @@ export const contentApi = {
 	delete: (id: string) => apiClient.delete(`/content/${id}`),
 };
 
-export const blogsApi = {
-	list: (params?: { search?: string; category?: string; skip?: number; limit?: number }) =>
-		contentApi.list({ type: 'BLOG', ...params }),
-	get: (id: string) => contentApi.get(id, 'BLOG'),
-	create: (data: Record<string, unknown>) => contentApi.create({ ...data, type: 'BLOG' }),
-	update: (id: string, data: Record<string, unknown>) => contentApi.update(id, { ...data, type: 'BLOG' }),
-	delete: (id: string) => contentApi.delete(id),
-};
-
 export const categoriesApi = {
 	list: () => apiClient.get('/categories'),
 	get: (id: string) => apiClient.get(`/categories/${id}`),

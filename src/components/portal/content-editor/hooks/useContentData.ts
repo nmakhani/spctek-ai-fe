@@ -1,16 +1,16 @@
+import toast from 'react-hot-toast';
 import { useState, useCallback } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
-import toast from 'react-hot-toast';
 
-import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
 import { parseEditorData } from '../utils';
-import type { Blog, BlogFormData, Category } from '../types';
-import { EMPTY_BLOG_FORM, EMPTY_EDITOR_DATA } from '../types';
+import { EMPTY_CONTENT_FORM, EMPTY_EDITOR_DATA } from '../types';
+import type { Content, ContentFormData, Category } from '../types';
+import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
 
-export function useBlogData(mode: 'create' | 'edit', blogId: string | undefined, contentType: ContentType) {
+export function useContentData(mode: 'create' | 'edit', contentId: string | undefined, contentType: ContentType) {
 	const [loading, setLoading] = useState(mode === 'edit');
 	const [error, setError] = useState('');
-	const [formData, setFormData] = useState<BlogFormData>(EMPTY_BLOG_FORM);
+	const [formData, setFormData] = useState<ContentFormData>(EMPTY_CONTENT_FORM);
 	const [editorData, setEditorData] = useState<OutputData>({ ...EMPTY_EDITOR_DATA });
 	const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState('');
 	const [slugManuallyEdited, setSlugManuallyEdited] = useState(mode === 'edit');
@@ -26,35 +26,35 @@ export function useBlogData(mode: 'create' | 'edit', blogId: string | undefined,
 		}
 	}, []);
 
-	const loadBlog = useCallback(async () => {
-		if (mode !== 'edit' || !blogId) return;
+	const loadContent = useCallback(async () => {
+		if (mode !== 'edit' || !contentId) return;
 
 		try {
 			setLoading(true);
-			const response = await contentApi.get(blogId, contentType);
-			const blog = response.data as Blog;
+			const response = await contentApi.get(contentId, contentType);
+			const content = response.data as Content;
 
 			setFormData({
-				title: blog.title,
-				slug: blog.slug,
-				summary: blog.summary || '',
-				author: blog.author || '',
-				thumbnail_url: blog.thumbnail_url || '',
-				is_published: blog.is_published,
-				category_ids: (blog.categories || []).map((category) => category.id),
+				title: content.title,
+				slug: content.slug,
+				summary: content.summary || '',
+				author: content.author || '',
+				thumbnail_url: content.thumbnail_url || '',
+				is_published: content.is_published,
+				category_ids: (content.categories || []).map((category) => category.id),
 			});
-			setCurrentThumbnailUrl(blog.thumbnail_url || '');
-			setEditorData(parseEditorData(blog.content));
+			setCurrentThumbnailUrl(content.thumbnail_url || '');
+			setEditorData(parseEditorData(content.content));
 			setSlugManuallyEdited(true);
 			setError('');
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : 'Failed to load blog';
+			const message = err instanceof Error ? err.message : 'Failed to load content';
 			setError(message);
 			toast.error(message);
 		} finally {
 			setLoading(false);
 		}
-	}, [mode, blogId, contentType]);
+	}, [mode, contentId, contentType]);
 
 	return {
 		loading,
@@ -70,6 +70,6 @@ export function useBlogData(mode: 'create' | 'edit', blogId: string | undefined,
 		setSlugManuallyEdited,
 		categories,
 		loadCategories,
-		loadBlog,
+		loadContent,
 	};
 }

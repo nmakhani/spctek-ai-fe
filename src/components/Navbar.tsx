@@ -26,17 +26,17 @@ export default function Navbar() {
 	const navLinks = [
 		{ name: 'Amazon Recovery', href: '/reinstatement' },
 		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
-		{ name: 'Blog', href: '/blog' },
-		{ name: 'Case Studies', href: '/case-studies' },
+		{ name: 'Blogs', href: '/blog' },
 		{ name: 'About', href: '/about' },
 		{ name: 'Contact', href: '/contact' },
+		{ name: 'Case Studies', href: '/case-studies' },
 		{ name: 'Rate my Process', href: '/process-rating' },
 	];
 
 	return (
 		<header className="fixed left-0 right-0 top-0 z-50">
 			<div
-				className="border-white/12 relative flex min-h-16 items-center justify-between overflow-visible border-b bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_22%,rgba(15,17,36,0.72)_55%,rgba(6,8,18,0.82)_100%)] px-4 md:px-6 lg:h-20 lg:px-8"
+				className="border-white/12 relative flex min-h-16 items-center justify-between overflow-visible border-b bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_22%,rgba(15,17,36,0.72)_55%,rgba(6,8,18,0.82)_100%)] md:px-6 lg:h-20"
 				style={{
 					backdropFilter: 'blur(22px) saturate(145%)',
 					boxShadow:
@@ -52,7 +52,7 @@ export default function Navbar() {
 					}}
 				/>
 
-				<div className="relative z-10 flex h-full w-full min-w-0 items-center justify-between py-3 pl-4 lg:py-0">
+				<div className="relative z-10 flex h-full w-full min-w-0 items-center justify-between">
 					<Link href="/" className="flex shrink-0 items-center">
 						<Image
 							src="/logo.png"

@@ -1,16 +1,9 @@
 'use client';
 
-import React from 'react';
-
-import { Hero, ListingSection } from '@/components/blog';
+import { Hero, ListingSection } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function CaseStudiesPage() {
-	const SECTIONS = [
-		{ Component: Hero, id: 'hero' },
-		{ Component: ListingSection, id: 'listing' },
-	];
-
 	return (
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { contentApi } from '@/lib/api';
 import { SectionDivider } from '@/components/ui/SectionDivider';
-import { DetailHero, ArticleSection, type PublicBlog } from '@/components/blog';
+import { DetailHero, ArticleSection, type PublicContent } from '@/components/content';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
@@ -15,7 +15,7 @@ function getErrorMessage(err: unknown, fallback: string): string {
 export default function DetailPage() {
 	const params = useParams<{ slug: string }>();
 	const slug = params?.slug || '';
-	const [blogs, setBlogs] = useState<PublicBlog[]>([]);
+	const [blogs, setBlogs] = useState<PublicContent[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 
@@ -33,7 +33,7 @@ export default function DetailPage() {
 				if (!isMounted) {
 					return;
 				}
-				setBlogs(response.data as PublicBlog[]);
+				setBlogs(response.data as PublicContent[]);
 				setError('');
 			} catch (err: unknown) {
 				if (!isMounted) {
@@ -102,11 +102,11 @@ export default function DetailPage() {
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">
 				<section id="hero">
-					<DetailHero blog={blog} />
+					<DetailHero content={blog} />
 				</section>
 				<SectionDivider />
 				<section id="article">
-					<ArticleSection blog={blog} />
+					<ArticleSection content={blog} />
 				</section>
 			</main>
 		</div>

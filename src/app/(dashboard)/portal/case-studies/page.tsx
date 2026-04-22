@@ -10,8 +10,8 @@ import { StatCard } from '@/components/portal/StatCard';
 import { PageHeader } from '@/components/portal/PageHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { type Blog } from '@/components/portal/blog-editor/types';
-import { extractPreviewText } from '@/components/portal/blog-editor/utils';
+import { type Content } from '@/components/portal/content-editor/types';
+import { extractPreviewText } from '@/components/portal/content-editor/utils';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
@@ -19,7 +19,7 @@ function getErrorMessage(err: unknown, fallback: string): string {
 
 function CaseStudiesContent() {
 	const router = useRouter();
-	const [items, setItems] = useState<Blog[]>([]);
+	const [items, setItems] = useState<Content[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [deletingId, setDeletingId] = useState<string | null>(null);

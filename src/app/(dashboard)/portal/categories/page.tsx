@@ -8,7 +8,7 @@ import { StatCard } from '@/components/portal/StatCard';
 import { PageHeader } from '@/components/portal/PageHeader';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { type Category } from '@/components/portal/blog-editor/types';
+import { type Category } from '@/components/portal/content-editor/types';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;

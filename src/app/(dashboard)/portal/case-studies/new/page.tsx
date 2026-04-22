@@ -1,12 +1,12 @@
 'use client';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { BlogEditorScreen } from '@/components/portal/blog-editor/BlogEditorScreen';
+import { ContentEditorScreen } from '@/components/portal/content-editor/ContentEditorScreen';
 
 export default function NewCaseStudyPage() {
 	return (
 		<ProtectedRoute>
-			<BlogEditorScreen
+			<ContentEditorScreen
 				mode="create"
 				contentType="CASE_STUDY"
 				entityLabel="Case Study"
