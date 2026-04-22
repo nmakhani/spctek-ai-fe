@@ -26,7 +26,7 @@ export default function Navbar() {
 	const navLinks = [
 		{ name: 'Amazon Recovery', href: '/reinstatement' },
 		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
-		{ name: 'Blogs', href: '/blog' },
+		{ name: 'Blogs', href: '/blogs' },
 		{ name: 'About', href: '/about' },
 		{ name: 'Contact', href: '/contact' },
 		{ name: 'Case Studies', href: '/case-studies' },

@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, ListingSection } from '@/components/content';
+import { Hero, BlogListing } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function BlogsPage() {
@@ -9,8 +9,11 @@ export default function BlogsPage() {
 			<main className="flex-1">
 				<section id="hero">
 					<Hero
-						titlePrefix="Practical Insights on"
-						titleAccent="AI, Operations, and Scalable Growth"
+						titleContent={
+							<>
+								Practical Insights on <span className="text-[#606bfa]">AI, Operations, and Scalable Growth</span>
+							</>
+						}
 						description="Practical ideas, real-world strategies, and actionable guides to help you improve processes and implement AI effectively."
 					/>
 				</section>
@@ -18,13 +21,7 @@ export default function BlogsPage() {
 				<SectionDivider />
 
 				<section id="listing">
-					<ListingSection
-						contentType="BLOG"
-						basePath="/blog"
-						emptyText="No published blogs yet. Please check back soon."
-						errorText="Failed to load blogs"
-						loadingText="Loading articles..."
-					/>
+					<BlogListing />
 				</section>
 			</main>
 		</div>

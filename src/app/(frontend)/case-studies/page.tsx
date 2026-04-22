@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, ListingSection } from '@/components/content';
+import { Hero, StudyListing } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function CaseStudiesPage() {
@@ -9,20 +9,17 @@ export default function CaseStudiesPage() {
 			<main className="flex-1">
 				<section id="hero">
 					<Hero
-						titlePrefix="Real Outcomes from"
-						titleAccent="AI, Automation, and Operational Execution"
-						description="Case studies from implementation work that show what changed, how it was delivered, and what results were achieved."
+						titleContent={
+							<>
+								<span className="text-[#606bfa]">Real Results</span> from <br /> Real Business Operations
+							</>
+						}
+						description="See how we identify process gaps, fix inefficiencies, and implement AI systems that drive measurable impact."
 					/>
 				</section>
 				<SectionDivider />
 				<section id="listing">
-					<ListingSection
-						contentType="CASE_STUDY"
-						basePath="/case-studies"
-						emptyText="No published case studies yet. Please check back soon."
-						errorText="Failed to load case studies"
-						loadingText="Loading case studies..."
-					/>
+					<StudyListing />
 				</section>
 			</main>
 		</div>

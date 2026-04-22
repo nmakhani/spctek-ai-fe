@@ -27,15 +27,7 @@ function formatContentDate(value?: string) {
 	});
 }
 
-export default function ContentCard({
-	index,
-	content,
-	basePath,
-}: {
-	index: number;
-	content: PublicContent;
-	basePath: string;
-}) {
+export default function BlogCard({ index, content }: { index: number; content: PublicContent }) {
 	const previewText = extractPreviewText(content.content);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 	const publishedDate = formatContentDate(content.updated_at || content.created_at);
@@ -43,7 +35,7 @@ export default function ContentCard({
 	const displayText = content.summary || previewText;
 
 	return (
-		<Link href={`${basePath}/${content.slug}`} className="group block">
+		<Link href={`/blogs/${content.slug}`} className="group block">
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />

@@ -2,34 +2,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import BlogCard from './BlogCard';
 import FilterBar from './FilterBar';
-import ContentCard from './ContentCard';
 import Playbook from '../generic-sections/Playbook';
 import Newsletter from '../generic-sections/Newsletter';
 
 import type { PublicContent } from './types';
-import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
+import { categoriesApi, contentApi } from '@/lib/api';
 import type { Category } from '@/components/portal/content-editor/types';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
 }
 
-interface ListingSectionProps {
-	contentType: ContentType;
-	basePath: string;
-	emptyText: string;
-	errorText: string;
-	loadingText: string;
-}
-
-export default function ListingSection({
-	contentType,
-	basePath,
-	emptyText,
-	errorText,
-	loadingText,
-}: ListingSectionProps) {
+export default function BlogListing() {
 	const [contents, setContents] = useState<PublicContent[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -37,6 +23,9 @@ export default function ListingSection({
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
+
+	const contentType = 'BLOG';
+	const errorText = 'Failed to load blogs';
 
 	const handleSearchSubmit = () => {
 		setSearchTerm(searchInput.trim());
@@ -129,16 +118,16 @@ export default function ListingSection({
 
 						{loading ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
-								{loadingText}
+								Loading articles...
 							</div>
 						) : publishedContents.length === 0 ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
-								{emptyText}
+								No published blogs yet. Please check back soon.
 							</div>
 						) : (
 							<div className="flex flex-col gap-12">
 								{publishedContents.map((content, index) => (
-									<ContentCard key={content.id} content={content} index={index} basePath={basePath} />
+									<BlogCard key={content.id} content={content} index={index} />
 								))}
 							</div>
 						)}
