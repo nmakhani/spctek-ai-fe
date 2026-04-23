@@ -17,11 +17,9 @@ $table = $table ^| Sort-Object Lines -Descending; ^
 Write-Host ''; ^
 Write-Host ('{0,-80} {1,10}' -f 'File', 'Lines') -ForegroundColor Cyan; ^
 Write-Host ('{0,-80} {1,10}' -f '----', '-----') -ForegroundColor Cyan; ^
-$index = 0; ^
 foreach ($row in $table) { ^
-    $index++; ^
-    if ($index -le 10) { $color='Red' } ^
-    elseif ($index -le 20) { $color='Yellow' } ^
+    if ($row.Lines -gt 500) { $color='Red' } ^
+    elseif ($row.Lines -gt 300) { $color='Yellow' } ^
     else { $color='White' } ^
     Write-Host ('{0,-80} {1,10}' -f $row.File, $row.Lines) -ForegroundColor $color; ^
 }; ^

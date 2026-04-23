@@ -1,5 +1,6 @@
 interface GradientNumberProps {
-	id: string | number;
+	value: string | number;
+	subValue?: string;
 	width?: string;
 	height?: string;
 	rotation?: number;
@@ -7,7 +8,17 @@ interface GradientNumberProps {
 	className?: string;
 }
 
-export function GradientNumber({ id, width, height, rotation, borderRadius, className = '' }: GradientNumberProps) {
+export function GradientNumber({
+	value,
+	subValue,
+	width,
+	height,
+	rotation,
+	borderRadius,
+	className = '',
+}: GradientNumberProps) {
+	const hasSubValue = Boolean(subValue?.trim());
+
 	return (
 		<div
 			className={`relative flex shrink-0 items-center justify-center overflow-hidden border border-white ${className}`}
@@ -25,8 +36,18 @@ export function GradientNumber({ id, width, height, rotation, borderRadius, clas
 				}}
 			/>
 
-			{/* ID Text */}
-			<span className="relative z-10 text-4xl font-bold text-white md:text-6xl">{id}</span>
+			<div className="relative z-10 flex flex-col items-center justify-center px-2 text-center">
+				<span
+					className={
+						hasSubValue ? 'text-3xl font-bold text-white md:text-4xl' : 'text-4xl font-bold text-white md:text-6xl'
+					}
+				>
+					{value}
+				</span>
+				{hasSubValue && (
+					<span className="mt-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/75">{subValue}</span>
+				)}
+			</div>
 		</div>
 	);
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { resolveR2PublicUrl } from '@/lib/r2';
-import { extractPreviewText } from '@/components/portal/content-editor/utils';
+import { extractPreviewText, parseContentPayload } from '@/components/portal/content-editor/utils';
 
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
@@ -26,6 +26,7 @@ function formatContentDate(value?: string) {
 
 export default function StudyCard({ index, content }: { index: number; content: PublicContent }) {
 	const previewText = extractPreviewText(content.content);
+	const { kpis } = parseContentPayload(content.content);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 	const publishedDate = formatContentDate(content.updated_at || content.created_at);
 	const displayText = content.summary || previewText;
@@ -33,7 +34,10 @@ export default function StudyCard({ index, content }: { index: number; content: 
 	const reversed = index % 2 === 1;
 
 	return (
-		<Link href={`/case-studies/${content.slug}`} className="group mb-16 block">
+		<Link
+			href={`/case-studies/${content.slug}`}
+			className={`group mb-16 block transition-transform duration-500 ${reversed ? 'md:ml-36' : 'md:mr-36'}`}
+		>
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
@@ -44,12 +48,18 @@ export default function StudyCard({ index, content }: { index: number; content: 
 						reversed ? '-left-24' : '-right-24'
 					}`}
 				>
-					<div className="relative">
-						<GradientNumber id="99%" width="160px" height="80px" borderRadius="12px" rotation={0} />
-					</div>
-					<div className="relative mt-4">
-						<GradientNumber id="99%" width="160px" height="80px" borderRadius="12px" rotation={0} />
-					</div>
+					{kpis.map((item, idx) => (
+						<div key={idx} className={idx === 1 ? 'relative mt-4' : 'relative'}>
+							<GradientNumber
+								value={item.stat || '0%'}
+								subValue={item.description}
+								width="160px"
+								height="80px"
+								borderRadius="12px"
+								rotation={0}
+							/>
+						</div>
+					))}
 				</div>
 
 				<div
@@ -74,9 +84,17 @@ export default function StudyCard({ index, content }: { index: number; content: 
 					)}
 
 					{/* Content Section */}
-					<div className={`flex flex-1 flex-col justify-center p-6 md:p-12 ${reversed ? 'md:pl-8' : 'md:pr-20'}`}>
+					<div
+						className={`flex flex-1 flex-col justify-center p-6 md:p-12 ${
+							reversed ? 'items-start text-left md:pl-28 md:pr-12' : 'items-end text-right md:pl-12 md:pr-28'
+						}`}
+					>
 						<div>
-							<div className="mb-4 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
+							<div
+								className={`mb-4 flex flex-wrap gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 ${
+									!reversed && 'md:justify-end'
+								}`}
+							>
 								<span className="text-[#a9b2ff]">{content.author?.trim() ? content.author : 'SPCTEK Team'}</span>
 								{publishedDate && (
 									<>

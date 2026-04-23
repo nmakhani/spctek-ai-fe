@@ -5,7 +5,7 @@ import { useRef, useState, useCallback } from 'react';
 
 import { uploadFileToR2 } from '@/lib/r2';
 import type { ContentFormData } from '../types';
-import { replaceBlobUrlsRecursively } from '../utils';
+import { replaceBlobUrlsRecursively, serializeContentPayload } from '../utils';
 import { contentApi, type ContentType } from '@/lib/api';
 
 export function useContentSave(
@@ -53,7 +53,7 @@ export function useContentSave(
 					type: contentType,
 					is_published: formData.is_published,
 					category_ids: formData.category_ids,
-					content: JSON.stringify(swapped),
+					content: serializeContentPayload(contentType, swapped, formData.kpis),
 				};
 
 				if (mode === 'edit' && contentId) {

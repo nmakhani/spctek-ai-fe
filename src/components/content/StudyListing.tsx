@@ -94,7 +94,7 @@ export default function StudyListing() {
 					onSearchSubmit={handleSearchSubmit}
 				/>
 
-				<div className="mx-auto max-w-4xl pt-2">
+				<div className="mx-auto max-w-5xl pt-2">
 					{error && (
 						<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">
 							{error}

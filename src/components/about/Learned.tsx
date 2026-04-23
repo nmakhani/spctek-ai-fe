@@ -41,7 +41,7 @@ export default function Learned() {
 								className="group flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6 md:gap-8"
 							>
 								<div className="hidden shrink-0 self-start sm:block sm:self-center">
-									<GradientNumber id={item.id} width="96px" height="80px" rotation={105} borderRadius="8px" />
+									<GradientNumber value={item.id} width="96px" height="80px" rotation={105} borderRadius="8px" />
 								</div>
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-4 py-4 text-white shadow-inner sm:px-6 sm:py-5 md:px-8 md:py-6">

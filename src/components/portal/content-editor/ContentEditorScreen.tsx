@@ -107,17 +107,25 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		}
 	}, [formData.title, slugManuallyEdited, setFormData]);
 
+	const hasInvalidCaseStudyKpi =
+		contentType === 'CASE_STUDY' && formData.kpis.some((item) => !item.stat.trim() || !item.description.trim());
+
 	const isSaveDisabled =
 		saving ||
 		!formData.title.trim() ||
 		!formData.slug.trim() ||
 		!formData.author.trim() ||
 		!formData.summary.trim() ||
-		!currentThumbnailUrl.trim();
+		!currentThumbnailUrl.trim() ||
+		hasInvalidCaseStudyKpi;
 
 	const handleSave = async () => {
 		if (isSaveDisabled) {
-			setError('Fill title, slug, author, summary, and thumbnail before saving.');
+			setError(
+				contentType === 'CASE_STUDY'
+					? 'Fill title, slug, author, summary, thumbnail, and both KPI stats before saving.'
+					: 'Fill title, slug, author, summary, and thumbnail before saving.'
+			);
 			setHighlightErrors(true);
 			return;
 		}
@@ -203,6 +211,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
 					<ContentMetaForm
 						formData={formData}
+						contentType={contentType}
 						categories={categories}
 						highlightErrors={highlightErrors}
 						onTitleChange={(value) => setFormData((prev) => ({ ...prev, title: value }))}
@@ -218,6 +227,18 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 								category_ids: prev.category_ids.includes(categoryId)
 									? prev.category_ids.filter((id) => id !== categoryId)
 									: [...prev.category_ids, categoryId],
+							}))
+						}
+						onKpiStatChange={(index, value) =>
+							setFormData((prev) => ({
+								...prev,
+								kpis: prev.kpis.map((item, i) => (i === index ? { ...item, stat: value } : item)),
+							}))
+						}
+						onKpiDescriptionChange={(index, value) =>
+							setFormData((prev) => ({
+								...prev,
+								kpis: prev.kpis.map((item, i) => (i === index ? { ...item, description: value } : item)),
 							}))
 						}
 						onThumbnailUrlChange={(value, file) => {

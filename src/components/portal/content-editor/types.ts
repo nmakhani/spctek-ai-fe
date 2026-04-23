@@ -22,6 +22,11 @@ export interface Content {
 	updated_at?: string;
 }
 
+export type CaseStudyKpi = {
+	stat: string;
+	description: string;
+};
+
 export type ContentFormData = {
 	title: string;
 	slug: string;
@@ -30,7 +35,13 @@ export type ContentFormData = {
 	thumbnail_url: string;
 	is_published: boolean;
 	category_ids: string[];
+	kpis: CaseStudyKpi[];
 };
+
+export const EMPTY_KPIS: CaseStudyKpi[] = [
+	{ stat: '', description: '' },
+	{ stat: '', description: '' },
+];
 
 export const EMPTY_EDITOR_DATA: OutputData = {
 	time: 0,
@@ -46,4 +57,5 @@ export const EMPTY_CONTENT_FORM: ContentFormData = {
 	thumbnail_url: '',
 	is_published: false,
 	category_ids: [],
+	kpis: EMPTY_KPIS.map((item) => ({ ...item })),
 };

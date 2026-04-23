@@ -1,9 +1,40 @@
 import type { OutputData } from '@editorjs/editorjs';
 import { uploadFileToR2 } from '@/lib/r2';
 
-import { EMPTY_EDITOR_DATA } from './types';
+import type { ContentType } from '@/lib/api';
+import type { CaseStudyKpi } from './types';
+import { EMPTY_EDITOR_DATA, EMPTY_KPIS } from './types';
 
 type JsonObject = Record<string, unknown>;
+
+type ParsedContentPayload = {
+	editorData: OutputData;
+	kpis: CaseStudyKpi[];
+};
+
+function hasEditorBlocks(value: unknown): value is OutputData {
+	return Boolean(value && typeof value === 'object' && Array.isArray((value as OutputData).blocks));
+}
+
+function extractEditorDataCandidate(parsed: unknown): OutputData | null {
+	if (hasEditorBlocks(parsed)) {
+		return parsed;
+	}
+
+	if (!parsed || typeof parsed !== 'object') {
+		return null;
+	}
+
+	const record = parsed as Record<string, unknown>;
+	const nestedCandidates = [record.editor_data, record.editorData, record.data, record.content];
+	for (const candidate of nestedCandidates) {
+		if (hasEditorBlocks(candidate)) {
+			return candidate;
+		}
+	}
+
+	return null;
+}
 
 export function slugify(input: string): string {
 	return input
@@ -20,9 +51,10 @@ export function parseEditorData(content: string): OutputData {
 	}
 
 	try {
-		const parsed = JSON.parse(content) as OutputData;
-		if (parsed && Array.isArray(parsed.blocks)) {
-			return parsed;
+		const parsed = JSON.parse(content) as unknown;
+		const editorData = extractEditorDataCandidate(parsed);
+		if (editorData) {
+			return editorData;
 		}
 	} catch {
 		// Fall back to a paragraph block for plain text content.
@@ -40,10 +72,82 @@ export function parseEditorData(content: string): OutputData {
 	};
 }
 
+function normalizeKpis(value: unknown): CaseStudyKpi[] {
+	if (!Array.isArray(value)) {
+		return EMPTY_KPIS.map((item) => ({ ...item }));
+	}
+
+	const normalized = value.slice(0, 2).map((item) => {
+		if (!item || typeof item !== 'object') {
+			return { stat: '', description: '' };
+		}
+		const record = item as Record<string, unknown>;
+		return {
+			stat: String(record.stat ?? '').slice(0, 10),
+			description: String(record.description ?? '').slice(0, 20),
+		};
+	});
+
+	while (normalized.length < 2) {
+		normalized.push({ stat: '', description: '' });
+	}
+
+	return normalized;
+}
+
+export function parseContentPayload(content: string): ParsedContentPayload {
+	if (!content.trim()) {
+		return {
+			editorData: { ...EMPTY_EDITOR_DATA },
+			kpis: EMPTY_KPIS.map((item) => ({ ...item })),
+		};
+	}
+
+	try {
+		const parsed = JSON.parse(content) as unknown;
+		if (parsed && typeof parsed === 'object') {
+			const record = parsed as Record<string, unknown>;
+			const editorData = extractEditorDataCandidate(parsed);
+			return {
+				editorData: editorData || { ...EMPTY_EDITOR_DATA },
+				kpis: normalizeKpis(record.kpis),
+			};
+		}
+	} catch {
+		// Fallback to existing parser for legacy plain-text or legacy editor JSON content.
+	}
+
+	return {
+		editorData: parseEditorData(content),
+		kpis: EMPTY_KPIS.map((item) => ({ ...item })),
+	};
+}
+
+export function serializeContentPayload(
+	contentType: ContentType,
+	editorData: OutputData,
+	kpis: CaseStudyKpi[]
+): string {
+	if (contentType !== 'CASE_STUDY') {
+		return JSON.stringify(editorData);
+	}
+
+	return JSON.stringify({
+		time: editorData.time,
+		blocks: editorData.blocks,
+		kpis: normalizeKpis(kpis),
+		version: editorData.version,
+	});
+}
+
 export function extractPreviewText(content: string): string {
 	try {
-		const parsed = JSON.parse(content) as OutputData;
-		const firstParagraph = parsed.blocks.find((block) => block.type === 'paragraph');
+		const parsed = JSON.parse(content) as unknown;
+		const editorData = extractEditorDataCandidate(parsed);
+		if (!editorData) {
+			return content;
+		}
+		const firstParagraph = editorData.blocks.find((block) => block.type === 'paragraph');
 		if (!firstParagraph) {
 			return content;
 		}

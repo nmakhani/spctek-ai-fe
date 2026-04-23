@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import { useState, useCallback } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
 
-import { parseEditorData } from '../utils';
+import { parseContentPayload, parseEditorData } from '../utils';
 import { EMPTY_CONTENT_FORM, EMPTY_EDITOR_DATA } from '../types';
 import type { Content, ContentFormData, Category } from '../types';
 import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
@@ -33,6 +33,7 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 			setLoading(true);
 			const response = await contentApi.get(contentId, contentType);
 			const content = response.data as Content;
+			const parsedPayload = contentType === 'CASE_STUDY' ? parseContentPayload(content.content) : null;
 
 			setFormData({
 				title: content.title,
@@ -42,9 +43,10 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 				thumbnail_url: content.thumbnail_url || '',
 				is_published: content.is_published,
 				category_ids: (content.categories || []).map((category) => category.id),
+				kpis: parsedPayload ? parsedPayload.kpis : EMPTY_CONTENT_FORM.kpis.map((item) => ({ ...item })),
 			});
 			setCurrentThumbnailUrl(content.thumbnail_url || '');
-			setEditorData(parseEditorData(content.content));
+			setEditorData(parsedPayload ? parsedPayload.editorData : parseEditorData(content.content));
 			setSlugManuallyEdited(true);
 			setError('');
 		} catch (err: unknown) {

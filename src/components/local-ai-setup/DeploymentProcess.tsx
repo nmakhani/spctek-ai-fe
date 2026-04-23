@@ -46,7 +46,7 @@ export default function DeploymentProcess() {
 								</div> */}
 
 								<div className="hidden sm:block">
-									<GradientNumber id={item.id} width="144px" height="96px" rotation={105} borderRadius="12px" />
+									<GradientNumber value={item.id} width="144px" height="96px" rotation={105} borderRadius="12px" />
 								</div>
 
 								<div className="relative flex flex-grow items-center overflow-hidden px-4 py-4 text-white shadow-inner sm:px-6 sm:py-5 md:px-8 md:py-6">

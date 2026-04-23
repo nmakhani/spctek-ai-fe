@@ -1,27 +1,34 @@
 import type { ContentFormData } from './types';
 import { R2ImageUpload } from './R2ImageUpload';
 import type { Category } from './types';
+import type { ContentType } from '@/lib/api';
 
 interface ContentMetaFormProps {
 	formData: ContentFormData;
+	contentType: ContentType;
 	categories: Category[];
 	onTitleChange: (value: string) => void;
 	onSlugChange: (value: string) => void;
 	onSummaryChange: (value: string) => void;
 	onAuthorChange: (value: string) => void;
 	onToggleCategory: (categoryId: string) => void;
+	onKpiStatChange: (index: number, value: string) => void;
+	onKpiDescriptionChange: (index: number, value: string) => void;
 	onThumbnailUrlChange: (value: string, file?: File | null) => void;
 	highlightErrors?: boolean;
 }
 
 export function ContentMetaForm({
 	formData,
+	contentType,
 	categories,
 	onTitleChange,
 	onSlugChange,
 	onSummaryChange,
 	onAuthorChange,
 	onToggleCategory,
+	onKpiStatChange,
+	onKpiDescriptionChange,
 	onThumbnailUrlChange,
 	highlightErrors = false,
 }: ContentMetaFormProps) {
@@ -128,6 +135,52 @@ export function ContentMetaForm({
 					</div>
 				</details>
 			</div>
+
+			{contentType === 'CASE_STUDY' && (
+				<div>
+					<label className="mb-2 block text-sm font-medium text-white/75">KPI Stats *</label>
+					<div className="space-y-3">
+						{formData.kpis.map((item, index) => {
+							const statInvalid = highlightErrors && !item.stat.trim();
+							const descriptionInvalid = highlightErrors && !item.description.trim();
+
+							return (
+								<div key={index} className="rounded-xl border border-white/15 bg-white/[0.06] p-3">
+									<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/60">Stat {index + 1}</p>
+									<div className="space-y-2">
+										<input
+											type="text"
+											required
+											value={item.stat}
+											onChange={(e) => onKpiStatChange(index, e.target.value.slice(0, 10))}
+											maxLength={10}
+											className={`w-full rounded-lg border px-3 py-2 text-sm text-white outline-none transition focus:ring-2 ${
+												statInvalid
+													? 'border-red-500/80 bg-red-500/10 focus:border-red-500 focus:ring-red-500/40'
+													: 'border-white/15 bg-white/[0.06] focus:border-[#8c96ff] focus:ring-[#606bfa]/45'
+											}`}
+											placeholder="67%"
+										/>
+										<textarea
+											required
+											value={item.description}
+											onChange={(e) => onKpiDescriptionChange(index, e.target.value.slice(0, 40))}
+											maxLength={40}
+											rows={2}
+											className={`w-full rounded-lg border px-3 py-2 text-sm text-white outline-none transition focus:ring-2 ${
+												descriptionInvalid
+													? 'border-red-500/80 bg-red-500/10 focus:border-red-500 focus:ring-red-500/40'
+													: 'border-white/15 bg-white/[0.06] focus:border-[#8c96ff] focus:ring-[#606bfa]/45'
+											}`}
+											placeholder="Sales increased"
+										/>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			)}
 
 			<div
 				className={

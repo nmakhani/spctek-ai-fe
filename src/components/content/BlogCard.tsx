@@ -42,7 +42,7 @@ export default function BlogCard({ index, content }: { index: number; content: P
 
 				{/* ID Badge */}
 				<div className="absolute right-4 top-0 z-30 hidden -translate-y-1/2 sm:right-6 sm:block">
-					<GradientNumber id={displayId} width="108px" height="72px" borderRadius="8px" rotation={0} />
+					<GradientNumber value={displayId} width="108px" height="72px" borderRadius="8px" rotation={0} />
 				</div>
 
 				<div className="relative z-10 flex flex-col overflow-hidden md:flex-row">
