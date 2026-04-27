@@ -2,11 +2,10 @@
 
 import { motion } from 'framer-motion';
 
-import type { Category, Pointer } from './types';
-
 import { GlassGlow } from '../../ui/GlassGlow';
-import { PrimaryButton } from '../../ui/PrimaryButton';
 import { GradientBorder } from '../../ui/GradientBorder';
+import { PrimaryButton } from '../../ui/PrimaryButton';
+import type { Category, Pointer } from './types';
 
 type ResultsStateProps = {
 	score: number;

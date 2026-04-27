@@ -2,8 +2,8 @@
 
 import { useParams } from 'next/navigation';
 
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ContentEditorScreen } from '@/components/portal/content-editor/ContentEditorScreen';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 export default function EditCaseStudyPage() {
 	const params = useParams<{ id: string }>();

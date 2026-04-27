@@ -1,13 +1,13 @@
 'use client';
 
-import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { contactsApi } from '@/lib/api';
-import { StatCard } from '@/components/portal/StatCard';
 import { PageHeader } from '@/components/portal/PageHeader';
+import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { contactsApi } from '@/lib/api';
 
 interface Contact {
 	id: string;
@@ -17,6 +17,7 @@ interface Contact {
 	company?: string;
 	message?: string;
 	source?: string;
+	journey?: Record<string, unknown>;
 	created_at?: string;
 }
 

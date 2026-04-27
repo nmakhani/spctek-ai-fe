@@ -1,8 +1,8 @@
 'use client';
 
-import { FormData, Step } from './types';
-import { RadioCard } from '../../ui/form-parts/RadioCard';
 import { DarkDropdown } from '../../ui/form-parts/DarkDropdown';
+import { RadioCard } from '../../ui/form-parts/RadioCard';
+import { FormData, Step } from './types';
 
 type Step1Props = {
 	form: FormData;

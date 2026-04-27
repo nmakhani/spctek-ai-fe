@@ -1,8 +1,8 @@
 import { GlassGlow } from '../ui/GlassGlow';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { GradientBorder } from '../ui/GradientBorder';
-import { SectionHeading } from '../ui/SectionHeading';
 import { GradientNumber } from '../ui/GradientNumber';
+import { PrimaryButton } from '../ui/PrimaryButton';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const deploymentSteps = [
 	{ id: '01', text: 'Discovery & Requirements Mapping' },

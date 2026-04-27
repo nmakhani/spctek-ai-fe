@@ -1,6 +1,6 @@
-import type { PublicContent } from './types';
-import { parseEditorData } from '@/components/portal/content-editor/utils';
 import { ContentRenderer } from '@/components/portal/content-editor/ContentRenderer';
+import { parseEditorData } from '@/components/portal/content-editor/utils';
+import type { PublicContent } from './types';
 
 export default function ArticleSection({ content }: { content: PublicContent }) {
 	const data = parseEditorData(content.content);

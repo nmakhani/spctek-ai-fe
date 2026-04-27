@@ -1,4 +1,5 @@
 {
+	"$schema": "https://json.schemastore.org/prettierrc",
 	"semi": true,
 	"tabWidth": 2,
 	"useTabs": true,
@@ -7,5 +8,8 @@
 	"bracketSpacing": true,
 	"trailingComma": "es5",
 	"arrowParens": "always",
-	"plugins": ["prettier-plugin-tailwindcss"]
+	"plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+	"importOrder": ["^(react|react-dom)$", "<THIRD_PARTY_MODULES>", "", "^@/(.*)$", "^[./]", "", "\\.css$"],
+	"importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+	"importOrderTypeScriptVersion": "5.0.0"
 }

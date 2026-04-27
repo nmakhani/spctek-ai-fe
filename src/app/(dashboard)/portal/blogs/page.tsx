@@ -1,17 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-import toast from 'react-hot-toast';
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
-import { contentApi } from '@/lib/api';
-import { StatCard } from '@/components/portal/StatCard';
-import { PageHeader } from '@/components/portal/PageHeader';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { type Content } from '@/components/portal/content-editor/types';
 import { extractPreviewText } from '@/components/portal/content-editor/utils';
+import { PageHeader } from '@/components/portal/PageHeader';
+import { StatCard } from '@/components/portal/StatCard';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { contentApi } from '@/lib/api';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
@@ -26,6 +26,11 @@ function BlogsContent() {
 	const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
 	const publishedCount = useMemo(() => blogs.filter((item) => item.is_published).length, [blogs]);
+
+	const handleAuthorClick = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		router.push(`/portal/authors`);
+	};
 
 	const fetchBlogs = async () => {
 		try {
@@ -131,7 +136,21 @@ function BlogsContent() {
 								<div className="flex flex-1 flex-col p-6">
 									<h3 className="mb-2 line-clamp-2 text-xl font-semibold text-white">{blog.title}</h3>
 									<p className="mb-2 text-xs text-[#a9b2ff]">/{blog.slug}</p>
-									{blog.author && <p className="mb-3 text-sm text-white/60">By {blog.author}</p>}
+									{blog.author && (
+										<p className="mb-3 text-sm text-white/60">
+											By{' '}
+											{blog.author_id ? (
+												<span
+													className="cursor-pointer text-[#a9b2ff] transition hover:text-white"
+													onClick={(e) => handleAuthorClick(e)}
+												>
+													{blog.author.name}
+												</span>
+											) : (
+												<span>{blog.author.name}</span>
+											)}
+										</p>
+									)}
 									{blog.summary && <p className="text-white/78 mb-3 line-clamp-2 text-sm">{blog.summary}</p>}
 									{blog.categories && blog.categories.length > 0 && (
 										<div className="mb-3 flex flex-wrap gap-1.5">
@@ -145,7 +164,9 @@ function BlogsContent() {
 											))}
 										</div>
 									)}
-									<p className="mb-4 line-clamp-3 flex-1 text-sm text-white/65">{extractPreviewText(blog.content)}</p>
+									<p className="mb-4 line-clamp-3 flex-1 text-sm text-white/65">
+										{extractPreviewText(typeof blog.content === 'string' ? blog.content : JSON.stringify(blog.content))}
+									</p>
 
 									<div className="mb-4 flex items-center justify-between text-xs">
 										<span

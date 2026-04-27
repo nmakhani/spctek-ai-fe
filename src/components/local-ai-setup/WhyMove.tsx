@@ -2,8 +2,8 @@
 
 import { GlassGlow } from '../ui/GlassGlow';
 import { GlassNumber } from '../ui/GlassNumber';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { GradientBorder } from '../ui/GradientBorder';
+import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 const benefits = [

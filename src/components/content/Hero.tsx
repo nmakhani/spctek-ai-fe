@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { SectionHeading } from '../ui/SectionHeading';
+
 import { GlowBackground } from '../ui/GlowBackground';
+import { SectionHeading } from '../ui/SectionHeading';
 
 interface HeroProps {
 	titleContent: ReactNode;

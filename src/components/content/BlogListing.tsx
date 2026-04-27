@@ -2,14 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import type { Category } from '@/components/portal/content-editor/types';
+import { categoriesApi, contentApi } from '@/lib/api';
+import Newsletter from '../generic-sections/Newsletter';
+import Playbook from '../generic-sections/Playbook';
 import BlogCard from './BlogCard';
 import FilterBar from './FilterBar';
-import Playbook from '../generic-sections/Playbook';
-import Newsletter from '../generic-sections/Newsletter';
-
 import type { PublicContent } from './types';
-import { categoriesApi, contentApi } from '@/lib/api';
-import type { Category } from '@/components/portal/content-editor/types';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;

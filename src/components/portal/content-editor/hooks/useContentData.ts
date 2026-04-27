@@ -1,11 +1,10 @@
-import toast from 'react-hot-toast';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
+import toast from 'react-hot-toast';
 
-import { parseContentPayload, parseEditorData } from '../utils';
-import { EMPTY_CONTENT_FORM, EMPTY_EDITOR_DATA } from '../types';
-import type { Content, ContentFormData, Category } from '../types';
 import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
+import { EMPTY_CONTENT_FORM, EMPTY_EDITOR_DATA, type Category, type Content, type ContentFormData } from '../types';
+import { parseContentPayload, parseEditorData } from '../utils';
 
 export function useContentData(mode: 'create' | 'edit', contentId: string | undefined, contentType: ContentType) {
 	const [loading, setLoading] = useState(mode === 'edit');
@@ -39,7 +38,7 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 				title: content.title,
 				slug: content.slug,
 				summary: content.summary || '',
-				author: content.author || '',
+				author_id: contentType === 'CASE_STUDY' ? '' : content.author_id || content.author?.id || '',
 				thumbnail_url: content.thumbnail_url || '',
 				is_published: content.is_published,
 				category_ids: (content.categories || []).map((category) => category.id),

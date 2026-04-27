@@ -1,11 +1,10 @@
 ﻿'use client';
 
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { GlassPill } from '@/components/ui/GlassPill';
-
-import { useEffect, useState } from 'react';
 
 export default function Navbar() {
 	const [scrollProgress, setScrollProgress] = useState(0);

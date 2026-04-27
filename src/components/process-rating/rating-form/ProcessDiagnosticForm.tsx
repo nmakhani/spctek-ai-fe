@@ -3,23 +3,22 @@
 import { AnimatePresence } from 'framer-motion';
 
 import {
+	ResultsState,
 	Step1,
 	Step2,
 	Step3,
 	Step4,
 	Step5,
 	StepWrapper,
-	ResultsState,
 	TOTAL_STEPS,
 	type Category,
 	type FormData,
-	type Pointer,
 	type Phase,
+	type Pointer,
 	type Step,
 } from '.';
-
-import FormProgressBar from '../../ui/form-parts/FormProgressBar';
 import FormLoadingState from '../../ui/form-parts/FormLoadingState';
+import FormProgressBar from '../../ui/form-parts/FormProgressBar';
 
 type ProcessDiagnosticFormProps = {
 	form: FormData;

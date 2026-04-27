@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Contact } from '@/components/contact';
-
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function ContactPage() {

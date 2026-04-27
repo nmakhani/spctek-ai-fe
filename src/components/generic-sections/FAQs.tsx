@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 
-import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
+import { SectionHeading } from '../ui/SectionHeading';
 
 export type FAQEntry = {
 	question: string;

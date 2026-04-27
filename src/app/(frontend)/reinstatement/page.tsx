@@ -3,15 +3,14 @@
 import React from 'react';
 
 import {
-	Hero,
 	AccountRisk,
-	ReinstatementProcess,
-	Intelligence,
-	FreeAssessment,
 	ExpertHelp,
 	FAQs,
+	FreeAssessment,
+	Hero,
+	Intelligence,
+	ReinstatementProcess,
 } from '@/components/reinstatement';
-
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function ReinstatementPage() {

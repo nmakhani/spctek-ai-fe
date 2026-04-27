@@ -1,7 +1,7 @@
 import './globals.css';
 
-import type { Metadata } from 'next';
 import { GoogleTagManager } from '@next/third-parties/google';
+import type { Metadata } from 'next';
 
 import { ToastProvider } from '@/components/ui/ToastProvider';
 

@@ -1,9 +1,8 @@
 import type { OutputData } from '@editorjs/editorjs';
-import { uploadFileToR2 } from '@/lib/r2';
 
 import type { ContentType } from '@/lib/api';
-import type { CaseStudyKpi } from './types';
-import { EMPTY_EDITOR_DATA, EMPTY_KPIS } from './types';
+import { uploadFileToR2 } from '@/lib/r2';
+import { EMPTY_EDITOR_DATA, EMPTY_KPIS, type CaseStudyKpi } from './types';
 
 type JsonObject = Record<string, unknown>;
 
@@ -45,13 +44,14 @@ export function slugify(input: string): string {
 		.replace(/-+/g, '-');
 }
 
-export function parseEditorData(content: string): OutputData {
-	if (!content.trim()) {
+export function parseEditorData(content: string | Record<string, unknown>): OutputData {
+	const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+	if (!contentStr.trim()) {
 		return { ...EMPTY_EDITOR_DATA };
 	}
 
 	try {
-		const parsed = JSON.parse(content) as unknown;
+		const parsed = JSON.parse(contentStr) as unknown;
 		const editorData = extractEditorDataCandidate(parsed);
 		if (editorData) {
 			return editorData;
@@ -66,7 +66,7 @@ export function parseEditorData(content: string): OutputData {
 		blocks: [
 			{
 				type: 'paragraph',
-				data: { text: content },
+				data: { text: contentStr },
 			},
 		],
 	};
@@ -95,8 +95,9 @@ function normalizeKpis(value: unknown): CaseStudyKpi[] {
 	return normalized;
 }
 
-export function parseContentPayload(content: string): ParsedContentPayload {
-	if (!content.trim()) {
+export function parseContentPayload(content: string | Record<string, unknown>): ParsedContentPayload {
+	const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+	if (!contentStr.trim()) {
 		return {
 			editorData: { ...EMPTY_EDITOR_DATA },
 			kpis: EMPTY_KPIS.map((item) => ({ ...item })),
@@ -104,7 +105,7 @@ export function parseContentPayload(content: string): ParsedContentPayload {
 	}
 
 	try {
-		const parsed = JSON.parse(content) as unknown;
+		const parsed = JSON.parse(contentStr) as unknown;
 		if (parsed && typeof parsed === 'object') {
 			const record = parsed as Record<string, unknown>;
 			const editorData = extractEditorDataCandidate(parsed);
@@ -118,7 +119,7 @@ export function parseContentPayload(content: string): ParsedContentPayload {
 	}
 
 	return {
-		editorData: parseEditorData(content),
+		editorData: parseEditorData(contentStr),
 		kpis: EMPTY_KPIS.map((item) => ({ ...item })),
 	};
 }
@@ -140,21 +141,22 @@ export function serializeContentPayload(
 	});
 }
 
-export function extractPreviewText(content: string): string {
+export function extractPreviewText(content: string | Record<string, unknown>): string {
+	const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
 	try {
-		const parsed = JSON.parse(content) as unknown;
+		const parsed = JSON.parse(contentStr) as unknown;
 		const editorData = extractEditorDataCandidate(parsed);
 		if (!editorData) {
-			return content;
+			return contentStr;
 		}
 		const firstParagraph = editorData.blocks.find((block) => block.type === 'paragraph');
 		if (!firstParagraph) {
-			return content;
+			return contentStr;
 		}
 		const raw = String((firstParagraph.data as Record<string, unknown>)?.text || '');
 		return raw.replace(/<[^>]+>/g, '');
 	} catch {
-		return content;
+		return contentStr;
 	}
 }
 

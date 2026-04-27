@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import toast from 'react-hot-toast';
 
-import { SectionHeading } from '../ui/SectionHeading';
-import { GradientBorder } from '../ui/GradientBorder';
-import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
-
 import { contactsApi } from '@/lib/api';
 import { validateContactForm } from '@/lib/validation';
+import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
+import { GradientBorder } from '../ui/GradientBorder';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const CONTACT_FIELDS: FieldConfig[] = [
 	{ name: 'name', label: 'Full Name', type: 'text', placeholder: 'Name', required: true },

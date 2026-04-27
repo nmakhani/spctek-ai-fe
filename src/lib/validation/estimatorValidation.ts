@@ -1,4 +1,4 @@
-import type { FormValues, FormErrors } from '@/components/ui/GenericForm';
+import type { FormErrors, FormValues } from '@/components/ui/GenericForm';
 
 export function validateEstimatorForm(values: FormValues): FormErrors {
 	const errors: FormErrors = {};

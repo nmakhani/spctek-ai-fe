@@ -1,14 +1,14 @@
 'use client';
 
-import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { categoriesApi } from '@/lib/api';
-import { StatCard } from '@/components/portal/StatCard';
+import { type Category } from '@/components/portal/content-editor/types';
 import { PageHeader } from '@/components/portal/PageHeader';
+import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { type Category } from '@/components/portal/content-editor/types';
+import { categoriesApi } from '@/lib/api';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;

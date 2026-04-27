@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
+import { SectionDivider } from '@/components/ui/SectionDivider';
+import { GlowBackground } from '../ui/GlowBackground';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
-import { GlowBackground } from '../ui/GlowBackground';
-import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function OperationalFramework() {
 	const paragraphStyles =

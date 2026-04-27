@@ -1,4 +1,5 @@
 import { KeyboardEvent } from 'react';
+
 import { GradientBorder } from '../ui/GradientBorder';
 
 interface FilterCategory {

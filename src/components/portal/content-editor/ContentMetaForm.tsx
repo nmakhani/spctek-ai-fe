@@ -1,12 +1,12 @@
-import type { ContentFormData } from './types';
-import { R2ImageUpload } from './R2ImageUpload';
-import type { Category } from './types';
 import type { ContentType } from '@/lib/api';
+import { R2ImageUpload } from './R2ImageUpload';
+import type { AuthorRead, Category, ContentFormData } from './types';
 
 interface ContentMetaFormProps {
 	formData: ContentFormData;
 	contentType: ContentType;
 	categories: Category[];
+	authors: AuthorRead[];
 	onTitleChange: (value: string) => void;
 	onSlugChange: (value: string) => void;
 	onSummaryChange: (value: string) => void;
@@ -22,6 +22,7 @@ export function ContentMetaForm({
 	formData,
 	contentType,
 	categories,
+	authors,
 	onTitleChange,
 	onSlugChange,
 	onSummaryChange,
@@ -66,21 +67,49 @@ export function ContentMetaForm({
 				/>
 			</div>
 
-			<div>
-				<label className="mb-2 block text-sm font-medium text-white/75">Author *</label>
-				<input
-					type="text"
-					required
-					value={formData.author}
-					onChange={(e) => onAuthorChange(e.target.value)}
-					className={`w-full rounded-xl border px-4 py-2.5 text-white outline-none transition focus:ring-2 ${
-						highlightErrors && !formData.author.trim()
-							? 'border-red-500/80 bg-red-500/10 focus:border-red-500 focus:ring-red-500/40'
-							: 'border-white/15 bg-white/[0.06] focus:border-[#8c96ff] focus:ring-[#606bfa]/45'
-					}`}
-					placeholder="Author name"
-				/>
-			</div>
+			{contentType !== 'CASE_STUDY' && (
+				<div>
+					<label className="mb-2 block text-sm font-medium text-white/75">Author *</label>
+					<details className="group rounded-xl border border-white/15 bg-white/[0.06]">
+						<summary className="cursor-pointer list-none px-4 py-2.5 text-sm text-white/85">
+							<div className="flex items-center justify-between gap-2">
+								<span>
+									{formData.author_id
+										? authors.find((a) => a.id === formData.author_id)?.name || 'Select an author'
+										: 'Select an author'}
+								</span>
+								<span className="text-white/50 transition group-open:rotate-180">▾</span>
+							</div>
+						</summary>
+						<div className="max-h-52 overflow-auto border-t border-white/10 px-3 py-2">
+							{authors.length === 0 ? (
+								<p className="px-1 py-2 text-sm text-white/50">No authors yet</p>
+							) : (
+								<div className="space-y-1.5">
+									{authors.map((author) => (
+										<label
+											key={author.id}
+											className={`flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white/90 hover:bg-white/10 ${
+												formData.author_id === author.id ? 'bg-white/10' : ''
+											}`}
+											onClick={(e) => {
+												e.preventDefault();
+												onAuthorChange(author.id);
+												const details = e.currentTarget.closest('details');
+												if (details) details.removeAttribute('open');
+											}}
+										>
+											<span>{author.name}</span>
+											{author.position && <span className="text-white/50">- {author.position}</span>}
+											{author.organization && <span className="text-white/50">({author.organization})</span>}
+										</label>
+									))}
+								</div>
+							)}
+						</div>
+					</details>
+				</div>
+			)}
 
 			<div>
 				<label className="mb-2 block text-sm font-medium text-white/75">Summary *</label>

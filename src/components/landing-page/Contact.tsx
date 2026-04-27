@@ -1,11 +1,11 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
-import { SectionHeading } from '../ui/SectionHeading';
 
 import { contactsApi } from '@/lib/api';
 import { validateContactForm } from '@/lib/validation';
+import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const CONTACT_FIELDS: FieldConfig[] = [
 	{

@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { Hero, WhyMove, DeploymentProcess, RoadmapForm, AiPowered, FAQs } from '@/components/local-ai-setup';
-
+import { AiPowered, DeploymentProcess, FAQs, Hero, RoadmapForm, WhyMove } from '@/components/local-ai-setup';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function LocalAiSetupPage() {

@@ -1,12 +1,12 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
 
-import { contentApi } from '@/lib/api';
+import { ArticleSection, DetailHero, type PublicContent } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
-import { DetailHero, ArticleSection, type PublicContent } from '@/components/content';
+import { contentApi } from '@/lib/api';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;

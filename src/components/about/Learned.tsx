@@ -1,8 +1,8 @@
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
-import { SectionHeading } from '../ui/SectionHeading';
-import { LeftTextSection } from '../ui/LeftTextSection';
 import { GradientNumber } from '../ui/GradientNumber';
+import { LeftTextSection } from '../ui/LeftTextSection';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const aiChallenges = [
 	{ id: '01', text: 'Trying AI without a clear process' },

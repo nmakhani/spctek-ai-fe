@@ -1,8 +1,8 @@
 'use client';
 
-import { SectionHeading } from '../ui/SectionHeading';
 import { GlowBackground } from '../ui/GlowBackground';
 import { GradientBorder } from '../ui/GradientBorder';
+import { SectionHeading } from '../ui/SectionHeading';
 
 const stats = [
 	{

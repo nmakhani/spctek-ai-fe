@@ -3,9 +3,9 @@
 import Image from 'next/image';
 
 import { GlassNumber } from '../ui/GlassNumber';
+import { GlowBackground } from '../ui/GlowBackground';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
-import { GlowBackground } from '../ui/GlowBackground';
 
 const issuesList = [
 	{ number: '1', title: 'Waste time with manual assessment & chasing experts' },

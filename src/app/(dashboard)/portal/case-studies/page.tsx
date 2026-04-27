@@ -1,17 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-import toast from 'react-hot-toast';
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
-import { contentApi } from '@/lib/api';
-import { StatCard } from '@/components/portal/StatCard';
-import { PageHeader } from '@/components/portal/PageHeader';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { type Content } from '@/components/portal/content-editor/types';
 import { extractPreviewText } from '@/components/portal/content-editor/utils';
+import { PageHeader } from '@/components/portal/PageHeader';
+import { StatCard } from '@/components/portal/StatCard';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { contentApi } from '@/lib/api';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
@@ -131,7 +131,7 @@ function CaseStudiesContent() {
 								<div className="flex flex-1 flex-col p-6">
 									<h3 className="mb-2 line-clamp-2 text-xl font-semibold text-white">{item.title}</h3>
 									<p className="mb-2 text-xs text-[#a9b2ff]">/{item.slug}</p>
-									{item.author && <p className="mb-3 text-sm text-white/60">By {item.author}</p>}
+									{item.author && <p className="mb-3 text-sm text-white/60">By {item.author.name}</p>}
 									{item.summary && <p className="text-white/78 mb-3 line-clamp-2 text-sm">{item.summary}</p>}
 									{item.categories && item.categories.length > 0 && (
 										<div className="mb-3 flex flex-wrap gap-1.5">
@@ -145,7 +145,9 @@ function CaseStudiesContent() {
 											))}
 										</div>
 									)}
-									<p className="mb-4 line-clamp-3 flex-1 text-sm text-white/65">{extractPreviewText(item.content)}</p>
+									<p className="mb-4 line-clamp-3 flex-1 text-sm text-white/65">
+										{extractPreviewText(typeof item.content === 'string' ? item.content : JSON.stringify(item.content))}
+									</p>
 
 									<div className="mb-4 flex items-center justify-between text-xs">
 										<span

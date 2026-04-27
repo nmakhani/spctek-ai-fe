@@ -1,8 +1,8 @@
 'use client';
 
-import type { FormData, Step } from './types';
-import { RadioCard } from '../../ui/form-parts/RadioCard';
 import GlowTextField from '../../ui/form-parts/GlowTextField';
+import { RadioCard } from '../../ui/form-parts/RadioCard';
+import type { FormData, Step } from './types';
 
 type Step4Props = {
 	form: FormData;

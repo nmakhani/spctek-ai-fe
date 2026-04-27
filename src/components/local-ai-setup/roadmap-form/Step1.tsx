@@ -1,8 +1,8 @@
 'use client';
 
-import type { FormData, Step } from './types';
 import { RadioCard } from '../../ui/form-parts/RadioCard';
-import { USE_CASES, TEAM_SIZE_OPTIONS } from './data';
+import { TEAM_SIZE_OPTIONS, USE_CASES } from './data';
+import type { FormData, Step } from './types';
 
 type Step1Props = {
 	form: FormData;

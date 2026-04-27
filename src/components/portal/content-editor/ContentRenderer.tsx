@@ -1,4 +1,5 @@
 import type { OutputData } from '@editorjs/editorjs';
+
 import { resolveR2PublicUrl } from '@/lib/r2';
 
 interface ContentRendererProps {

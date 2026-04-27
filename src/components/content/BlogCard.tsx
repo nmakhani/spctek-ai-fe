@@ -1,13 +1,14 @@
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { resolveR2PublicUrl } from '@/lib/r2';
 import { extractPreviewText } from '@/components/portal/content-editor/utils';
-
+import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
 import { GradientNumber } from '../ui/GradientNumber';
-
 import type { PublicContent } from './types';
 
 function formatContentDate(value?: string) {
@@ -28,11 +29,22 @@ function formatContentDate(value?: string) {
 }
 
 export default function BlogCard({ index, content }: { index: number; content: PublicContent }) {
+	const router = useRouter();
 	const previewText = extractPreviewText(content.content);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 	const publishedDate = formatContentDate(content.updated_at || content.created_at);
 	const displayId = String(index + 1).padStart(2, '0');
 	const displayText = content.summary || previewText;
+	const authorName = content.author?.name || 'SPCTEK Team';
+	const authorId = content.author_id;
+	const authorLink = authorId ? `/authors/${authorId}` : null;
+
+	const handleAuthorClick = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (authorLink) {
+			router.push(authorLink);
+		}
+	};
 
 	return (
 		<Link href={`/blogs/${content.slug}`} className="group block">
@@ -67,7 +79,13 @@ export default function BlogCard({ index, content }: { index: number; content: P
 					{/* Changed justify-center to justify-start and matched padding (p-6) */}
 					<div className="flex flex-1 flex-col justify-start p-4 sm:p-6 md:pl-2 md:pr-10 md:pt-7">
 						<div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
-							<span className="text-[#a9b2ff]">{content.author?.trim() ? content.author : 'SPCTEK Team'}</span>
+							{authorLink ? (
+								<span className="cursor-pointer text-[#a9b2ff] transition hover:text-white" onClick={handleAuthorClick}>
+									{authorName}
+								</span>
+							) : (
+								<span className="text-[#a9b2ff]">{authorName}</span>
+							)}
 							{publishedDate && (
 								<>
 									<span className="h-1 w-1 rounded-full bg-white/20" />

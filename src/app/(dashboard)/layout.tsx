@@ -1,8 +1,8 @@
 'use client';
 
-import { AuthProvider } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { GlowBackground } from '@/components/portal/GlowBackground';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
 	return (

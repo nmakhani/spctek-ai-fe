@@ -1,6 +1,6 @@
+import { LeftTextSection } from '../ui/LeftTextSection';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
-import { LeftTextSection } from '../ui/LeftTextSection';
 
 export default function Building() {
 	return (

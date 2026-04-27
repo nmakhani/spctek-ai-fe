@@ -2,25 +2,23 @@
 
 import React, { useEffect, useState } from 'react';
 
-import {
-	Hero,
-	Problems,
-	Issues,
-	Testimonials,
-	OperationalFramework,
-	TargetedSolutions,
-	CuratedTechnologies,
-	BusinessAdoption,
-	Tools,
-	PrivateAiStack,
-	AIPlaybook,
-	Contact,
-	FAQs,
-} from '@/components/landing-page';
-
-import { SectionDivider } from '@/components/ui/SectionDivider';
-
 import Newsletter from '@/components/generic-sections/Newsletter';
+import {
+	AIPlaybook,
+	BusinessAdoption,
+	Contact,
+	CuratedTechnologies,
+	FAQs,
+	Hero,
+	Issues,
+	OperationalFramework,
+	PrivateAiStack,
+	Problems,
+	TargetedSolutions,
+	Testimonials,
+	Tools,
+} from '@/components/landing-page';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 
 const NEWSLETTER_STORAGE_KEY = 'spctek-newsletter-seen';
 

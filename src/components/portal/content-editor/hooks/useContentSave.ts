@@ -1,12 +1,12 @@
-import toast from 'react-hot-toast';
+import { useCallback, useRef, useState } from 'react';
 import type EditorJS from '@editorjs/editorjs';
 import type { OutputData } from '@editorjs/editorjs';
-import { useRef, useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
 
+import { contentApi, type ContentType } from '@/lib/api';
 import { uploadFileToR2 } from '@/lib/r2';
 import type { ContentFormData } from '../types';
 import { replaceBlobUrlsRecursively, serializeContentPayload } from '../utils';
-import { contentApi, type ContentType } from '@/lib/api';
 
 export function useContentSave(
 	mode: 'create' | 'edit',
@@ -44,17 +44,24 @@ export function useContentSave(
 				const rawEditorData = await syncEditorState(editorDataForSync);
 				const swapped = (await replaceBlobUrlsRecursively(rawEditorData, blobFileMapRef.current)) as OutputData;
 
+				const serializedContent = serializeContentPayload(contentType, swapped, formData.kpis);
+				const contentObject = JSON.parse(serializedContent);
+
 				const payload: Record<string, unknown> = {
 					title: formData.title,
 					slug: formData.slug,
 					summary: formData.summary,
-					author: formData.author,
 					thumbnail_url: finalThumbnailUrl,
 					type: contentType,
 					is_published: formData.is_published,
 					category_ids: formData.category_ids,
-					content: serializeContentPayload(contentType, swapped, formData.kpis),
+					content: contentObject,
 				};
+
+				// Only include author_id for blogs if it has a value
+				if (contentType !== 'CASE_STUDY' && formData.author_id && formData.author_id.trim()) {
+					payload.author_id = formData.author_id.trim();
+				}
 
 				if (mode === 'edit' && contentId) {
 					await contentApi.update(contentId, payload);
@@ -67,8 +74,8 @@ export function useContentSave(
 				return true;
 			} catch (err: unknown) {
 				const message = err instanceof Error ? err.message : 'Failed to save content';
+				console.error('Save error:', err);
 				setError(message);
-				toast.error(message);
 				return false;
 			} finally {
 				setSaving(false);

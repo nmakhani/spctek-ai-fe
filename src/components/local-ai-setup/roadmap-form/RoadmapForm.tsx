@@ -4,22 +4,19 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 
 import { contactsApi } from '../../../lib/api';
-
+import FormLoadingState from '../../ui/form-parts/FormLoadingState';
+import FormProgressBar from '../../ui/form-parts/FormProgressBar';
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
-
-import FormProgressBar from '../../ui/form-parts/FormProgressBar';
-import FormLoadingState from '../../ui/form-parts/FormLoadingState';
-
 import {
+	buildArchitectureRecommendation,
+	INITIAL_FORM_DATA,
+	ResultsState,
 	Step1,
 	Step2,
 	Step3,
 	StepWrapper,
-	ResultsState,
 	TOTAL_STEPS,
-	INITIAL_FORM_DATA,
-	buildArchitectureRecommendation,
 	type ArchitectureRecommendation,
 	type FormData,
 	type Phase,

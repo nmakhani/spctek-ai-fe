@@ -2,12 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import StudyCard from './StudyCard';
-import FilterBar from './FilterBar';
-
-import type { PublicContent } from './types';
-import { categoriesApi, contentApi } from '@/lib/api';
 import type { Category } from '@/components/portal/content-editor/types';
+import { categoriesApi, contentApi } from '@/lib/api';
+import FilterBar from './FilterBar';
+import StudyCard from './StudyCard';
+import type { PublicContent } from './types';
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;

@@ -1,5 +1,5 @@
-import { SectionHeading } from '../ui/SectionHeading';
 import { LeftTextSection } from '../ui/LeftTextSection';
+import { SectionHeading } from '../ui/SectionHeading';
 
 export default function Started() {
 	return (

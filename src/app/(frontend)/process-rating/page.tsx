@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { Hero, Bottlenecks, ProcessDiagnostics, FixGaps, FAQs } from '@/components/process-rating';
-
+import { Bottlenecks, FAQs, FixGaps, Hero, ProcessDiagnostics } from '@/components/process-rating';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function ProcessRatingPage() {

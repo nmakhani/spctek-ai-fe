@@ -1,12 +1,10 @@
 import { useState } from 'react';
-
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
-
 import { GlassGlow } from '../ui/GlassGlow';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { GradientBorder } from '../ui/GradientBorder';
+import { PrimaryButton } from '../ui/PrimaryButton';
 
 interface NewsletterProps {
 	onClose?: () => void;

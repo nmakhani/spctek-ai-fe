@@ -1,15 +1,13 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
-import { resolveR2PublicUrl } from '@/lib/r2';
 import { extractPreviewText, parseContentPayload } from '@/components/portal/content-editor/utils';
-
+import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
 import { GradientNumber } from '../ui/GradientNumber';
-
 import type { PublicContent } from './types';
 
 function formatContentDate(value?: string) {
@@ -90,19 +88,15 @@ export default function StudyCard({ index, content }: { index: number; content: 
 						}`}
 					>
 						<div>
-							<div
-								className={`mb-4 flex flex-wrap gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 ${
-									!reversed && 'md:justify-end'
-								}`}
-							>
-								<span className="text-[#a9b2ff]">{content.author?.trim() ? content.author : 'SPCTEK Team'}</span>
-								{publishedDate && (
-									<>
-										<span className="h-1 w-1 rounded-full bg-white/20" />
-										<span>{publishedDate}</span>
-									</>
-								)}
-							</div>
+							{publishedDate && (
+								<div
+									className={`mb-4 flex flex-wrap gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 ${
+										!reversed && 'md:justify-end'
+									}`}
+								>
+									<span>{publishedDate}</span>
+								</div>
+							)}
 
 							<h3 className="line-clamp-2 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-4xl">
 								{content.title}

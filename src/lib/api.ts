@@ -70,8 +70,14 @@ export const contactsApi = {
 export type ContentType = 'BLOG' | 'CASE_STUDY';
 
 export const contentApi = {
-	list: (params: { type: ContentType; search?: string; category?: string; skip?: number; limit?: number }) =>
-		apiClient.get('/content', { params }),
+	list: (params: {
+		type: ContentType;
+		search?: string;
+		category?: string;
+		author?: string;
+		skip?: number;
+		limit?: number;
+	}) => apiClient.get('/content', { params }),
 	get: (id: string, type: ContentType) => apiClient.get(`/content/${id}`, { params: { type } }),
 	create: (data: Record<string, unknown>) => apiClient.post('/content', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/content/${id}`, data),
@@ -95,6 +101,18 @@ export const reinstatementApi = {
 	createLog: (data: Record<string, unknown>) => apiClient.post('/reinstatement/logs', data),
 	listLogs: (contactId: string) => apiClient.get(`/reinstatement/logs/${contactId}`),
 	generateReportFromLog: (data: Record<string, unknown>) => apiClient.post('/reinstatement/generate-from-log', data),
+};
+
+export const authorsApi = {
+	list: () => apiClient.get('/authors'),
+	get: (id: string) => apiClient.get(`/authors/${id}`),
+	create: (data: Record<string, unknown>) => apiClient.post('/authors', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/authors/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/authors/${id}`),
+};
+
+export const r2Api = {
+	getUploadUrl: (data: { filename: string; content_type: string }) => apiClient.post('/get-upload-url', data),
 };
 
 export default apiClient;

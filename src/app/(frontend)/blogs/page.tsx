@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, BlogListing } from '@/components/content';
+import { BlogListing, Hero } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function BlogsPage() {

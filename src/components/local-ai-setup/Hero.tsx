@@ -1,6 +1,6 @@
-﻿import { PrimaryButton } from '../ui/PrimaryButton';
+﻿import { GlowBackground } from '../ui/GlowBackground';
+import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
-import { GlowBackground } from '../ui/GlowBackground';
 
 export default function Hero() {
 	return (

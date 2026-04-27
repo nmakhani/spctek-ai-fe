@@ -1,7 +1,7 @@
 'use client';
 
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ContentEditorScreen } from '@/components/portal/content-editor/ContentEditorScreen';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 export default function NewBlogPage() {
 	return (

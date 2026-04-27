@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';

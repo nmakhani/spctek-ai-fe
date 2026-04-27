@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+
 import { GlassGlow } from '../ui/GlassGlow';
 import { GlowBackground } from '../ui/GlowBackground';
 import { SectionHeading } from '../ui/SectionHeading';

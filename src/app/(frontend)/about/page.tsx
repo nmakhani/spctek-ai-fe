@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-import { Hero, Learned, Started, Approach, Building } from '@/components/about';
-
+import { Approach, Building, Hero, Learned, Started } from '@/components/about';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function AboutPage() {

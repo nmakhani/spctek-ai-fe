@@ -2,22 +2,20 @@
 
 import { useState } from 'react';
 
+import {
+	buildPointers,
+	calculateScore,
+	getCategory,
+	INITIAL_FORM_DATA,
+	ProcessDiagnosticForm,
+	type FormData,
+	type Phase,
+	type Step,
+} from '.';
 import { contactsApi } from '../../../lib/api';
-
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
 import { SectionHeading } from '../../ui/SectionHeading';
-
-import {
-	type Step,
-	type Phase,
-	type FormData,
-	getCategory,
-	buildPointers,
-	calculateScore,
-	ProcessDiagnosticForm,
-	INITIAL_FORM_DATA,
-} from '.';
 
 const LOADING_MESSAGES = [
 	'Scanning for process bottlenecks...',

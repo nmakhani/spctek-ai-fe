@@ -1,15 +1,16 @@
 'use client';
 
+import { useEffect, useId, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useId, useState } from 'react';
 
-import { slugify } from './utils';
-import type { ContentType } from '@/lib/api';
-import { ContentRenderer } from './ContentRenderer';
-import { ContentMetaForm } from './ContentMetaForm';
+import { authorsApi, type ContentType } from '@/lib/api';
 import { createEditorTools } from './config/editorTools';
-import { useContentData, useEditorInit, useContentSave } from './hooks';
+import { ContentMetaForm } from './ContentMetaForm';
+import { ContentRenderer } from './ContentRenderer';
+import { useContentData, useContentSave, useEditorInit } from './hooks';
+import type { AuthorRead } from './types';
+import { slugify } from './utils';
 
 interface ContentEditorScreenProps {
 	mode: 'create' | 'edit';
@@ -29,6 +30,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 	const [tools, setTools] = useState<Record<string, any> | null>(null);
 	const [blobFileMap, setBlobFileMap] = useState<Record<string, File>>({});
 	const [highlightErrors, setHighlightErrors] = useState(false);
+	const [authors, setAuthors] = useState<AuthorRead[]>([]);
 
 	// Ensure we have a stable, client-side only ID
 	useEffect(() => {
@@ -88,6 +90,19 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		void loadContent();
 	}, [mode, contentId, loadContent, loadCategories]);
 
+	// Load authors
+	useEffect(() => {
+		const loadAuthors = async () => {
+			try {
+				const response = await authorsApi.list();
+				setAuthors(response.data as AuthorRead[]);
+			} catch {
+				setAuthors([]);
+			}
+		};
+		void loadAuthors();
+	}, []);
+
 	// Initialize editor only after component is mounted and ID is set and loading is done
 	useEditorInit(
 		editorHolderId,
@@ -114,7 +129,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		saving ||
 		!formData.title.trim() ||
 		!formData.slug.trim() ||
-		!formData.author.trim() ||
+		(contentType === 'BLOG' && !formData.author_id.trim()) ||
 		!formData.summary.trim() ||
 		!currentThumbnailUrl.trim() ||
 		hasInvalidCaseStudyKpi;
@@ -123,7 +138,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		if (isSaveDisabled) {
 			setError(
 				contentType === 'CASE_STUDY'
-					? 'Fill title, slug, author, summary, thumbnail, and both KPI stats before saving.'
+					? 'Fill title, slug, summary, thumbnail, and both KPI stats before saving.'
 					: 'Fill title, slug, author, summary, and thumbnail before saving.'
 			);
 			setHighlightErrors(true);
@@ -213,6 +228,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 						formData={formData}
 						contentType={contentType}
 						categories={categories}
+						authors={authors}
 						highlightErrors={highlightErrors}
 						onTitleChange={(value) => setFormData((prev) => ({ ...prev, title: value }))}
 						onSlugChange={(value) => {
@@ -220,7 +236,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 							setFormData((prev) => ({ ...prev, slug: slugify(value) }));
 						}}
 						onSummaryChange={(value) => setFormData((prev) => ({ ...prev, summary: value }))}
-						onAuthorChange={(value) => setFormData((prev) => ({ ...prev, author: value }))}
+						onAuthorChange={(value) => setFormData((prev) => ({ ...prev, author_id: value }))}
 						onToggleCategory={(categoryId) =>
 							setFormData((prev) => ({
 								...prev,

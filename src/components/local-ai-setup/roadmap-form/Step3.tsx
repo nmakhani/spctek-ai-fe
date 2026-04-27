@@ -1,7 +1,7 @@
 'use client';
 
-import type { FormData, Step } from './types';
 import GlowTextField from '../../ui/form-parts/GlowTextField';
+import type { FormData, Step } from './types';
 
 type Step3Props = {
 	form: FormData;

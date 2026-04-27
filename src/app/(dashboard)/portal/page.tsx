@@ -1,11 +1,11 @@
 'use client';
 
+import { BookOpen, BriefcaseBusiness, FileText, FolderTree, LucideIcon, MessageSquare, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BookOpen, MessageSquare, FileText, FolderTree, BriefcaseBusiness, LucideIcon } from 'lucide-react';
 
-import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardCardProps {
 	href: string;
@@ -74,6 +74,13 @@ const DASHBOARD_ITEMS: DashboardCardProps[] = [
 		linkText: 'Open Case Studies',
 		description: 'Create and publish client-focused case studies with the same editor and workflow as blogs.',
 		icon: BriefcaseBusiness,
+	},
+	{
+		title: 'Authors',
+		href: '/portal/authors',
+		linkText: 'Open Authors',
+		description: 'Manage author profiles with profile pictures, social links, and organization details.',
+		icon: Users,
 	},
 ];
 
