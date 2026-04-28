@@ -1,6 +1,15 @@
 'use client';
 
-import { BookOpen, BriefcaseBusiness, FileText, FolderTree, LucideIcon, MessageSquare, Users } from 'lucide-react';
+import {
+	BookOpen,
+	BriefcaseBusiness,
+	FileText,
+	FolderTree,
+	Layout,
+	LucideIcon,
+	MessageSquare,
+	Users,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -81,6 +90,13 @@ const DASHBOARD_ITEMS: DashboardCardProps[] = [
 		linkText: 'Open Authors',
 		description: 'Manage author profiles with profile pictures, social links, and organization details.',
 		icon: Users,
+	},
+	{
+		title: 'Metadata',
+		href: '/portal/metadeck',
+		linkText: 'Open Metadata',
+		description: 'Manage page metadata including titles and descriptions for SEO optimization across the site.',
+		icon: Layout,
 	},
 ];
 

@@ -69,6 +69,8 @@ export const contactsApi = {
 
 export type ContentType = 'BLOG' | 'CASE_STUDY';
 
+export type ContentLookupField = 'slug' | 'id';
+
 export const contentApi = {
 	list: (params: {
 		type: ContentType;
@@ -78,7 +80,8 @@ export const contentApi = {
 		skip?: number;
 		limit?: number;
 	}) => apiClient.get('/content', { params }),
-	get: (id: string, type: ContentType) => apiClient.get(`/content/${id}`, { params: { type } }),
+	get: (id: string, type: ContentType, lookup_field: ContentLookupField = 'id') =>
+		apiClient.get(`/content/${id}`, { params: { type, lookup_field } }),
 	create: (data: Record<string, unknown>) => apiClient.post('/content', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/content/${id}`, data),
 	delete: (id: string) => apiClient.delete(`/content/${id}`),
@@ -113,6 +116,15 @@ export const authorsApi = {
 
 export const r2Api = {
 	getUploadUrl: (data: { filename: string; content_type: string }) => apiClient.post('/get-upload-url', data),
+};
+
+export const metadeckApi = {
+	list: () => apiClient.get('/metadeck'),
+	get: (id: string) => apiClient.get(`/metadeck/${id}`),
+	getByPath: (path: string) => apiClient.get(`/metadeck/page/${path}`),
+	create: (data: Record<string, unknown>) => apiClient.post('/metadeck', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/metadeck/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/metadeck/${id}`),
 };
 
 export default apiClient;

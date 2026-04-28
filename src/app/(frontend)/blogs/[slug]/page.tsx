@@ -1,114 +1,51 @@
-'use client';
+import { cache } from 'react';
+import { notFound } from 'next/navigation';
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-
-import { ArticleSection, DetailHero, type PublicContent } from '@/components/content';
-import { SectionDivider } from '@/components/ui/SectionDivider';
+import type { PublicContent } from '@/components/content/types';
 import { contentApi } from '@/lib/api';
+import { generateMetadata as generateSeoMetadata } from '@/lib/metadata';
+import DetailClient from './DetailClient';
 
-function getErrorMessage(err: unknown, fallback: string): string {
-	return err instanceof Error ? err.message : fallback;
+export const getBlogData = cache(async (slug: string) => {
+	const response = await contentApi.get(slug, 'BLOG', 'slug');
+	return response.data as PublicContent;
+});
+
+interface Props {
+	params: Promise<{ slug: string }>;
 }
 
-export default function DetailPage() {
-	const params = useParams<{ slug: string }>();
-	const slug = params?.slug || '';
-	const [blogs, setBlogs] = useState<PublicContent[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState('');
+export async function generateMetadata({ params }: Props) {
+	const { slug } = await params;
 
-	useEffect(() => {
-		if (!slug) {
-			return;
-		}
+	try {
+		const blog = await getBlogData(slug);
 
-		let isMounted = true;
+		return generateSeoMetadata({
+			title: blog.title,
+			description: blog.summary || '',
+			pageUrl: `blogs/${slug}`,
+			type: 'article',
+		});
+	} catch {
+		return { title: 'Post Not Found' };
+	}
+}
 
-		const fetchBlogs = async () => {
-			try {
-				setLoading(true);
-				const response = await contentApi.list({ type: 'BLOG' });
-				if (!isMounted) {
-					return;
-				}
-				setBlogs(response.data as PublicContent[]);
-				setError('');
-			} catch (err: unknown) {
-				if (!isMounted) {
-					return;
-				}
-				setError(getErrorMessage(err, 'Failed to load blog'));
-			} finally {
-				if (isMounted) {
-					setLoading(false);
-				}
-			}
-		};
+export default async function Page({ params }: Props) {
+	const { slug } = await params;
 
-		void fetchBlogs();
+	let blog: PublicContent | null = null;
 
-		return () => {
-			isMounted = false;
-		};
-	}, [slug]);
-
-	const blog = useMemo(() => {
-		if (!slug) {
-			return null;
-		}
-		return blogs.find((item) => item.slug === slug && item.is_published) ?? null;
-	}, [blogs, slug]);
-
-	if (loading || !slug) {
-		return (
-			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="flex flex-1 items-center justify-center px-4 pt-24 text-white/65 md:px-6">
-					Loading article...
-				</main>
-			</div>
-		);
+	try {
+		blog = await getBlogData(slug);
+	} catch {
+		notFound();
 	}
 
-	if (error) {
-		return (
-			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="mx-auto flex w-full max-w-3xl flex-1 items-center justify-center px-4 pt-24 md:px-6">
-					<div className="border-red-300/35 bg-red-500/18 text-red-200 rounded-2xl border px-5 py-4">{error}</div>
-				</main>
-			</div>
-		);
+	if (!blog || !blog.is_published) {
+		notFound();
 	}
 
-	if (!blog) {
-		return (
-			<div className="noise-overlay relative flex min-h-screen flex-col">
-				<main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 pt-24 text-center md:px-6">
-					<h1 className="text-3xl font-semibold text-white">Blog not found</h1>
-					<p className="mt-3 text-white/65">This article is unavailable or not published yet.</p>
-					<Link
-						href="/blog"
-						className="mt-6 rounded-xl bg-[#606bfa] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#6f79ff]"
-					>
-						Back to Blogs
-					</Link>
-				</main>
-			</div>
-		);
-	}
-
-	return (
-		<div className="noise-overlay relative flex min-h-screen flex-col">
-			<main className="flex-1">
-				<section id="hero">
-					<DetailHero content={blog} />
-				</section>
-				<SectionDivider />
-				<section id="article">
-					<ArticleSection content={blog} />
-				</section>
-			</main>
-		</div>
-	);
+	return <DetailClient initialBlog={blog} />;
 }

@@ -22,7 +22,7 @@ export default function Playbook() {
 						</p>
 					</div>
 
-					<PrimaryButton href="/contact" className="w-full">
+					<PrimaryButton href="/ai-playbook" className="w-full">
 						Claim my Playbook
 					</PrimaryButton>
 				</div>

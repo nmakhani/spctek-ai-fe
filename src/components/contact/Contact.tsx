@@ -73,10 +73,10 @@ export default function Contact() {
 						<div className="relative mt-5 flex flex-col gap-3 p-4 text-sm text-white/80 sm:gap-4 sm:text-base">
 							<GradientBorder thickness={2} radius="24px" />
 							<div className="flex items-center gap-3 break-words">
-								<span className="text-xl">📞</span> +1-469-909-2002
+								<span className="text-xl">📞</span> +1-469-545-1517
 							</div>
 							<div className="flex items-center gap-3 break-words">
-								<span className="text-xl">📧</span> contact@spctek.com
+								<span className="text-xl">📧</span> info@spctek.ai
 							</div>
 							<div className="flex items-center gap-3 break-words">
 								<span className="text-xl">📍</span> 17714 Bannister St, Dallas, TX

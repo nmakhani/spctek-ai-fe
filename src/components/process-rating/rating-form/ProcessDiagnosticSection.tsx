@@ -83,6 +83,21 @@ export default function ProcessDiagnosticSection() {
 				company: form.company || null,
 				message: `Process Diagnostic — Motive: ${form.motive} | Team: ${form.teamSize} | Industry: ${form.industry} | SOPs: ${form.sopLocation} | Tools: ${form.toolIntegration} | Score: ${calculateScore(form)} | Broken process: ${form.brokenProcess}`,
 				source: 'process_diagnostic',
+				journey: {
+					motive: form.motive,
+					teamSize: form.teamSize,
+					industry: form.industry,
+					sopLocation: form.sopLocation,
+					decisionMaking: form.decisionMaking,
+					onboardingTime: form.onboardingTime,
+					toolIntegration: form.toolIntegration,
+					founderBottleneck: form.founderBottleneck,
+					customerComms: form.customerComms,
+					brokenProcess: form.brokenProcess,
+					timeWasted: form.timeWasted,
+					triedToFix: form.triedToFix,
+					score: calculateScore(form),
+				},
 			});
 		} catch {
 			// Non-blocking — still show results
@@ -114,7 +129,7 @@ export default function ProcessDiagnosticSection() {
 
 				<div className="relative z-10">
 					<GradientBorder thickness={2} radius="40px" />
-					<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
+					<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="40px" />
 
 					<div
 						className="relative p-5 pb-8 shadow-2xl sm:p-6 sm:pb-10 md:p-8 md:pb-12"

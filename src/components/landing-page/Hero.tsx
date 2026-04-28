@@ -27,7 +27,7 @@ export default function Hero() {
 			</p>
 
 			<div className="mb-8 w-full max-w-[360px]">
-				<PrimaryButton href="/contact">Get My AI Playbook</PrimaryButton>
+				<PrimaryButton href="/ai-playbook">Get My AI Playbook</PrimaryButton>
 			</div>
 
 			<div className="flex flex-col items-center justify-center gap-4 md:flex-row">

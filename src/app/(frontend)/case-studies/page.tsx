@@ -1,7 +1,8 @@
-'use client';
-
 import { Hero, StudyListing } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/case-studies');
 
 export default function CaseStudiesPage() {
 	return (

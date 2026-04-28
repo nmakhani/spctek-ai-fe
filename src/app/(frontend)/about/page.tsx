@@ -1,9 +1,10 @@
-'use client';
-
 import React from 'react';
 
 import { Approach, Building, Hero, Learned, Started } from '@/components/about';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/about');
 
 export default function AboutPage() {
 	const SECTIONS = [

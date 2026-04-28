@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import {
@@ -12,6 +10,9 @@ import {
 	ReinstatementProcess,
 } from '@/components/reinstatement';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/reinstatement');
 
 export default function ReinstatementPage() {
 	const SECTIONS = [

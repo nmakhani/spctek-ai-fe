@@ -1,7 +1,8 @@
-'use client';
-
 import { BlogListing, Hero } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/blogs');
 
 export default function BlogsPage() {
 	return (

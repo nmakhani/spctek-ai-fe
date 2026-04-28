@@ -1,29 +1,58 @@
 'use client';
 
-import GlowTextField from '../../ui/form-parts/GlowTextField';
-import type { FormData, Step } from './types';
+import GlowTextField from './GlowTextField';
 
-type Step3Props = {
-	form: FormData;
-	submitting: boolean;
-	onChange: (name: keyof FormData, value: string) => void;
-	onBack: (step: Step) => void;
+export interface ContactStepProps<T = number> {
+	name: string;
+	email: string;
+	company: string;
+	phone: string;
+	onChange: (name: 'name' | 'email' | 'company' | 'phone', value: string) => void;
+	onBack: (step: T) => void;
 	onSubmit: () => void;
-};
+	submitting: boolean;
+	submitError?: string;
+	title: string;
+	subtitle: string;
+	infoCardTitle: string;
+	infoCardSubtitle: string;
+	privacyText: string;
+	submitButtonText: string;
+	submittingButtonText: string;
+	backStep: T;
+}
 
-export default function Step3({ form, submitting, onChange, onBack, onSubmit }: Step3Props) {
-	const trimmedName = form.name.trim();
-	const trimmedEmail = form.email.trim();
+export default function ContactStep<T = number>({
+	name,
+	email,
+	company,
+	phone,
+	onChange,
+	onBack,
+	onSubmit,
+	submitting,
+	submitError,
+	title,
+	subtitle,
+	infoCardTitle,
+	infoCardSubtitle,
+	privacyText,
+	submitButtonText,
+	submittingButtonText,
+	backStep,
+}: ContactStepProps<T>) {
+	const trimmedName = name.trim();
+	const trimmedEmail = email.trim();
 	const hasName = trimmedName.length > 0;
 	const hasEmail = trimmedEmail.length > 0;
-	const hasPhone = form.phone.trim().length > 0;
+	const hasPhone = phone.trim().length > 0;
 	const isNameValid = /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(trimmedName);
 	const isEmailValid =
 		/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail) && !/\.\./.test(trimmedEmail);
-	const phoneDigits = form.phone.replace(/\D/g, '');
+	const phoneDigits = phone.replace(/\D/g, '');
 	const isPhoneValid =
 		!hasPhone ||
-		(/^[+]?[\d()\-\s]{10,25}$/.test(form.phone.trim()) &&
+		(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
 			phoneDigits.length >= 10 &&
 			phoneDigits.length <= 15 &&
 			!/^(\d)\1+$/.test(phoneDigits));
@@ -32,8 +61,8 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
-				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">Contact Details</h2>
-				<p className="text-gray-400 text-sm">Enter your details to generate your architecture recommendation.</p>
+				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">{title}</h2>
+				<p className="text-gray-400 text-sm">{subtitle}</p>
 			</div>
 
 			<div className="border-indigo-500/20 bg-indigo-500/5 rounded-2xl border p-4 backdrop-blur-sm sm:p-6">
@@ -42,10 +71,8 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 						<div className="text-2xl font-bold text-white sm:text-3xl">?</div>
 					</div>
 					<div>
-						<p className="text-base font-semibold text-white sm:text-lg">Your recommendation is ready</p>
-						<p className="text-indigo-200 mt-1 text-sm">
-							Enter your email below to reveal your full architecture recommendation.
-						</p>
+						<p className="text-base font-semibold text-white sm:text-lg">{infoCardTitle}</p>
+						<p className="text-indigo-200 mt-1 text-sm">{infoCardSubtitle}</p>
 					</div>
 				</div>
 			</div>
@@ -56,7 +83,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 						<label className="text-left text-sm font-bold text-white">
 							Full Name <span className="text-red-400">*</span>
 						</label>
-						<GlowTextField value={form.name} onChange={(value) => onChange('name', value)} placeholder="Jane Smith" />
+						<GlowTextField value={name} onChange={(value) => onChange('name', value)} placeholder="Jane Smith" />
 						{hasName && !isNameValid ? (
 							<p className="text-red-400 text-xs font-medium">
 								Enter a valid name using letters, spaces, apostrophes, or hyphens.
@@ -70,7 +97,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 						</label>
 						<GlowTextField
 							type="email"
-							value={form.email}
+							value={email}
 							onChange={(value) => onChange('email', value)}
 							placeholder="jane@company.com"
 						/>
@@ -83,18 +110,14 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div className="flex flex-col gap-3">
 						<label className="text-left text-sm font-bold text-white">Company</label>
-						<GlowTextField
-							value={form.company}
-							onChange={(value) => onChange('company', value)}
-							placeholder="Acme Corp"
-						/>
+						<GlowTextField value={company} onChange={(value) => onChange('company', value)} placeholder="Acme Corp" />
 					</div>
 
 					<div className="flex flex-col gap-3">
 						<label className="text-left text-sm font-bold text-white">Phone</label>
 						<GlowTextField
 							type="tel"
-							value={form.phone}
+							value={phone}
 							onChange={(value) => onChange('phone', value)}
 							placeholder="+1 (555) 123-4567"
 						/>
@@ -107,15 +130,14 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 				</div>
 			</div>
 
-			<p className="text-gray-500 text-xs leading-relaxed">
-				We take privacy seriously. Your details are only used to send your roadmap and optional follow-up. No spam,
-				ever.
-			</p>
+			{submitError ? <p className="text-red-500 text-sm font-medium">{submitError}</p> : null}
+
+			<p className="text-gray-500 text-xs leading-relaxed">{privacyText}</p>
 
 			<div className="flex flex-col gap-3 pt-2 sm:flex-row sm:gap-4">
 				<button
 					type="button"
-					onClick={() => onBack(2)}
+					onClick={() => onBack(backStep)}
 					className="flex-1 rounded-xl border border-white/20 bg-transparent px-6 py-4 font-medium text-white transition-all hover:bg-white/5"
 				>
 					← Back
@@ -126,7 +148,7 @@ export default function Step3({ form, submitting, onChange, onBack, onSubmit }: 
 					disabled={!canSubmit}
 					className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-[2]"
 				>
-					{submitting ? 'Generating...' : 'Generate My Architecture →'}
+					{submitting ? submittingButtonText : submitButtonText}
 				</button>
 			</div>
 		</div>

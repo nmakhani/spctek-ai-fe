@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { PageHeader } from '@/components/portal/PageHeader';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { DarkDropdown } from '@/components/ui/form-parts/DarkDropdown';
 import { contactsApi } from '@/lib/api';
 
 interface Contact {
@@ -42,6 +43,9 @@ function ContactsContent() {
 		message: '',
 		source: 'landing_page',
 	});
+	const [sourceFilter, setSourceFilter] = useState<string>('all');
+	const [selectedJourney, setSelectedJourney] = useState<Contact | null>(null);
+	const journeyModalRef = useRef<HTMLDivElement>(null);
 
 	// Fetch contacts
 	const fetchContacts = async () => {
@@ -58,6 +62,35 @@ function ContactsContent() {
 			setLoading(false);
 		}
 	};
+
+	const filteredContacts = sourceFilter === 'all' ? contacts : contacts.filter((c) => c.source === sourceFilter);
+
+	const sources = Array.from(new Set(contacts.map((c) => c.source).filter((s): s is string => Boolean(s))));
+
+	const handleViewJourney = (contact: Contact) => {
+		setSelectedJourney(contact);
+	};
+
+	const closeJourneyModal = () => {
+		setSelectedJourney(null);
+	};
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (journeyModalRef.current && !journeyModalRef.current.contains(event.target as Node)) {
+				closeJourneyModal();
+			}
+		};
+
+		if (selectedJourney) {
+			document.addEventListener('mousedown', handleClickOutside);
+			document.body.style.overflow = 'hidden';
+			return () => {
+				document.removeEventListener('mousedown', handleClickOutside);
+				document.body.style.overflow = '';
+			};
+		}
+	}, [selectedJourney]);
 
 	useEffect(() => {
 		fetchContacts();
@@ -172,6 +205,168 @@ function ContactsContent() {
 				onCancel={cancelDelete}
 			/>
 
+			{selectedJourney && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 pt-24 backdrop-blur-sm">
+					<div
+						ref={journeyModalRef}
+						className="flex max-h-[75vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+					>
+						<div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-black/25 px-6 py-4">
+							<h3 className="text-lg font-semibold text-white">
+								User Journey -{' '}
+								{selectedJourney.source === 'ai_deployment_roadmap'
+									? 'AI Deployment Roadmap'
+									: selectedJourney.source === 'process_diagnostic'
+										? 'Process Diagnostic'
+										: selectedJourney.source === 'ai_playbook'
+											? 'AI Playbook'
+											: selectedJourney.source}
+							</h3>
+							<button
+								onClick={closeJourneyModal}
+								className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Close
+							</button>
+						</div>
+						<div className="overflow-y-auto p-6">
+							{selectedJourney.source === 'ai_deployment_roadmap' && selectedJourney.journey ? (
+								<div className="space-y-4">
+									<div>
+										<h4 className="mb-2 text-sm font-semibold text-white/90">Use Cases</h4>
+										<div className="flex flex-wrap gap-2">
+											{Array.isArray(selectedJourney.journey.useCases) ? (
+												selectedJourney.journey.useCases.map((uc: string, i: number) => (
+													<span
+														key={i}
+														className="rounded-full border border-[#606bfa]/30 bg-[#606bfa]/20 px-3 py-1 text-sm text-white/80"
+													>
+														{uc}
+													</span>
+												))
+											) : (
+												<span className="text-white/60">—</span>
+											)}
+										</div>
+									</div>
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Team Size</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.teamSize || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Data Sensitivity</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.dataSensitivity || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Deployment Model</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.deploymentModel || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Recommended Tier</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.recommendedTier || '—')}</p>
+										</div>
+									</div>
+									<div>
+										<h4 className="mb-1 text-sm font-semibold text-white/90">Current Stack</h4>
+										<p className="text-white/70">{String(selectedJourney.journey.currentStack || '—')}</p>
+									</div>
+								</div>
+							) : selectedJourney.source === 'process_diagnostic' && selectedJourney.journey ? (
+								<div className="space-y-4">
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Motive</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.motive || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Team Size</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.teamSize || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Industry</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.industry || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">SOP Location</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.sopLocation || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Decision Making</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.decisionMaking || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Onboarding Time</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.onboardingTime || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Tool Integration</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.toolIntegration || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Founder Bottleneck</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.founderBottleneck || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Customer Comms</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.customerComms || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Time Wasted</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.timeWasted || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Tried to Fix</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.triedToFix || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Score</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.score || '—')}</p>
+										</div>
+									</div>
+									<div>
+										<h4 className="mb-1 text-sm font-semibold text-white/90">Broken Process</h4>
+										<p className="text-white/70">{String(selectedJourney.journey.brokenProcess || '—')}</p>
+									</div>
+								</div>
+							) : selectedJourney.source === 'ai_playbook' && selectedJourney.journey ? (
+								<div className="space-y-4">
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Business Type</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.businessType || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Revenue Range</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.revenueRange || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Playbook Focus</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.playbookFocus || '—')}</p>
+										</div>
+										<div>
+											<h4 className="mb-1 text-sm font-semibold text-white/90">Urgency</h4>
+											<p className="text-white/70">{String(selectedJourney.journey.urgency || '—')}</p>
+										</div>
+									</div>
+									<div>
+										<h4 className="mb-1 text-sm font-semibold text-white/90">Operational Challenge</h4>
+										<p className="text-white/70">{String(selectedJourney.journey.operationalChallenge || '—')}</p>
+									</div>
+								</div>
+							) : (
+								<div>
+									<h4 className="mb-2 text-sm font-semibold text-white/90">Raw Journey Data</h4>
+									<pre className="overflow-auto rounded-xl bg-black/30 p-4 text-xs text-white/70">
+										{JSON.stringify(selectedJourney.journey, null, 2)}
+									</pre>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+			)}
+
 			<PageHeader
 				title="Contacts"
 				subtitle="Dashboard"
@@ -184,6 +379,19 @@ function ContactsContent() {
 
 			<main className="mx-auto max-w-7xl px-6 py-10">
 				<StatCard label="Total Contacts" loading={loading} count={contacts.length} />
+
+				{sources.length > 0 && (
+					<div className="mb-6 flex items-center gap-4">
+						<label className="text-sm font-medium text-white/75">Filter by Source:</label>
+						<div className="w-64">
+							<DarkDropdown
+								value={sourceFilter === 'all' ? 'All Sources' : (sourceFilter ?? 'All Sources')}
+								options={['All Sources', ...sources]}
+								onChange={(value) => setSourceFilter(value === 'All Sources' ? 'all' : value)}
+							/>
+						</div>
+					</div>
+				)}
 
 				{error && (
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
@@ -283,8 +491,8 @@ function ContactsContent() {
 
 				{loading ? (
 					<div className="py-12 text-center text-white/55">Loading contacts...</div>
-				) : contacts.length === 0 ? (
-					<div className="py-12 text-center text-white/55">No contacts yet</div>
+				) : filteredContacts.length === 0 ? (
+					<div className="py-12 text-center text-white/55">No contacts found</div>
 				) : (
 					<div className="overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
 						<table className="w-full">
@@ -300,7 +508,7 @@ function ContactsContent() {
 								</tr>
 							</thead>
 							<tbody>
-								{contacts.map((contact) => (
+								{filteredContacts.map((contact) => (
 									<tr key={contact.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
 										<td className="px-6 py-3 text-white">{contact.name || '—'}</td>
 										<td className="px-6 py-3 text-white/75">{contact.email || '—'}</td>
@@ -312,6 +520,14 @@ function ContactsContent() {
 										</td>
 										<td className="px-6 py-3">
 											<div className="flex gap-2">
+												{contact.journey && (
+													<button
+														onClick={() => handleViewJourney(contact)}
+														className="rounded-lg bg-[#10b981] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#34d399] disabled:opacity-60"
+													>
+														Track Journey
+													</button>
+												)}
 												<button
 													onClick={() => handleEdit(contact)}
 													disabled={deletingId === contact.id}

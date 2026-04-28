@@ -1,9 +1,10 @@
-'use client';
-
 import React from 'react';
 
 import { Bottlenecks, FAQs, FixGaps, Hero, ProcessDiagnostics } from '@/components/process-rating';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/process-rating');
 
 export default function ProcessRatingPage() {
 	const SECTIONS = [

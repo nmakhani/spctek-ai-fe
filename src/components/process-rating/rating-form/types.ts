@@ -41,7 +41,7 @@ export type Pointer = {
 export const INITIAL_FORM_DATA: FormData = {
 	motive: 'Scaling without burnout',
 	teamSize: 'Solo',
-	industry: 'eCommerce',
+	industry: 'Ecommerce',
 	sopLocation: 'Heads',
 	decisionMaking: 'Founder',
 	onboardingTime: 'Long',

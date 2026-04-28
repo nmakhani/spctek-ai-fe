@@ -1,9 +1,10 @@
-'use client';
-
 import React from 'react';
 
 import { AiPowered, DeploymentProcess, FAQs, Hero, RoadmapForm, WhyMove } from '@/components/local-ai-setup';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generateStaticMetadata } from '@/lib/metadata';
+
+export const generateMetadata = async () => await generateStaticMetadata('/local-ai-setup');
 
 export default function LocalAiSetupPage() {
 	const SECTIONS = [

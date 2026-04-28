@@ -26,7 +26,7 @@ export default function Learned() {
 				decisions were delayed because information was scattered. <br />
 				<br /> At the same time, AI was rapidly gaining attention. Businesses wanted to adopt it, but many did not know
 				where it actually fit within their operations. <br /> <br /> <br />
-				<p className="font-bold">We saw companies:</p>
+				<span className="font-bold">We saw companies:</span>
 			</LeftTextSection>
 
 			<div className="relative z-10 my-6 w-full max-w-5xl">

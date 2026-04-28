@@ -3,25 +3,25 @@
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 
-import { contactsApi } from '../../../lib/api';
-import FormLoadingState from '../../ui/form-parts/FormLoadingState';
-import FormProgressBar from '../../ui/form-parts/FormProgressBar';
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
 import {
 	buildArchitectureRecommendation,
 	INITIAL_FORM_DATA,
 	ResultsState,
 	Step1,
 	Step2,
-	Step3,
-	StepWrapper,
 	TOTAL_STEPS,
 	type ArchitectureRecommendation,
 	type FormData,
 	type Phase,
 	type Step,
-} from './';
+} from '.';
+import { contactsApi } from '../../../lib/api';
+import ContactStep from '../../ui/form-parts/ContactStep';
+import FormLoadingState from '../../ui/form-parts/FormLoadingState';
+import FormProgressBar from '../../ui/form-parts/FormProgressBar';
+import StepWrapper from '../../ui/form-parts/StepWrapper';
+import { GlassGlow } from '../../ui/GlassGlow';
+import { GradientBorder } from '../../ui/GradientBorder';
 
 const LOADING_MESSAGES = [
 	'Understanding your deployment goals...',
@@ -83,6 +83,14 @@ export default function RoadmapForm() {
 				company: form.company || null,
 				message: `AI Deployment Roadmap — Use Cases: ${form.useCases.join(', ')} | Team Size: ${form.teamSize} | Data Sensitivity: ${form.dataSensitivity} | Deployment Model: ${form.deploymentModel} | Recommended Tier: ${nextRecommendation.tier.label} | Current Stack: ${form.currentStack || 'N/A'}`,
 				source: 'ai_deployment_roadmap',
+				journey: {
+					useCases: form.useCases,
+					teamSize: form.teamSize,
+					dataSensitivity: form.dataSensitivity,
+					deploymentModel: form.deploymentModel,
+					currentStack: form.currentStack,
+					recommendedTier: nextRecommendation.tier.label,
+				},
 			});
 		} catch {
 			// Non-blocking
@@ -115,7 +123,24 @@ export default function RoadmapForm() {
 							{step === 1 && <Step1 form={form} onChange={setField} onNext={goToStep} />}
 							{step === 2 && <Step2 form={form} onChange={setField} onNext={goToStep} onBack={goToStep} />}
 							{step === 3 && (
-								<Step3 form={form} submitting={submitting} onChange={setField} onBack={goToStep} onSubmit={runSubmit} />
+								<ContactStep
+									name={form.name}
+									email={form.email}
+									company={form.company}
+									phone={form.phone}
+									onChange={(field, value) => setField(field, value)}
+									onBack={goToStep}
+									onSubmit={runSubmit}
+									submitting={submitting}
+									title="Contact Details"
+									subtitle="Enter your details to generate your architecture recommendation."
+									infoCardTitle="Your recommendation is ready"
+									infoCardSubtitle="Enter your email below to reveal your full architecture recommendation."
+									privacyText="We take privacy seriously. Your details are only used to send your roadmap and optional follow-up. No spam, ever."
+									submitButtonText="Generate My Architecture →"
+									submittingButtonText="Generating..."
+									backStep={2}
+								/>
 							)}
 						</StepWrapper>
 					)}
