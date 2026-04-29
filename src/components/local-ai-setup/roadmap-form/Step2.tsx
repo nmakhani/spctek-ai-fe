@@ -8,11 +8,11 @@ import type { FormData, Step } from './types';
 type Step2Props = {
 	form: FormData;
 	onChange: (name: keyof FormData, value: string) => void;
-	onNext: (step: Step) => void;
 	onBack: (step: Step) => void;
+	onSubmit: () => void;
 };
 
-export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
+export default function Step2({ form, onChange, onBack, onSubmit }: Step2Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
@@ -57,10 +57,10 @@ export default function Step2({ form, onChange, onNext, onBack }: Step2Props) {
 				</button>
 				<button
 					type="button"
-					onClick={() => onNext(3)}
+					onClick={onSubmit}
 					className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] sm:flex-[2]"
 				>
-					Next: Contact Details <span className="ml-1">→</span>
+					Generate Roadmap <span className="ml-1">→</span>
 				</button>
 			</div>
 		</div>

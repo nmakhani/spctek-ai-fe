@@ -10,8 +10,8 @@ export default function AiPlaybookPage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Breaks, id: 'breaks' },
-		{ Component: FixGaps, id: 'fix-gaps' },
 		{ Component: PlaybookFormSection, id: 'playbook-form' },
+		{ Component: FixGaps, id: 'fix-gaps' },
 	];
 
 	return (

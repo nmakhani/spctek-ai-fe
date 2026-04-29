@@ -1,12 +1,14 @@
 'use client';
 
-import type { PlaybookRecommendation } from './types';
+import EmbeddedContactForm from '../../ui/form-parts/EmbeddedContactForm';
+import type { FormData, PlaybookRecommendation } from './types';
 
 type ResultsStateProps = {
 	recommendation: PlaybookRecommendation | null;
+	formData: FormData;
 };
 
-export default function ResultsState({ recommendation }: ResultsStateProps) {
+export default function ResultsState({ recommendation, formData }: ResultsStateProps) {
 	if (!recommendation) return null;
 
 	return (
@@ -17,6 +19,20 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 					<p className="text-gray-300 text-lg leading-relaxed">{recommendation.message}</p>
 				</div>
 			</div>
+
+			<EmbeddedContactForm
+				formData={formData}
+				source="ai_playbook"
+				message={`AI Playbook — Business Type: ${formData.businessType} | Revenue Range: ${formData.revenueRange} | Playbook Focus: ${formData.playbookFocus} | Operational Challenge: ${formData.operationalChallenge} | Urgency: ${formData.urgency}`}
+				journeyData={{
+					...formData,
+					recommendation,
+				}}
+				title="Get your full playbook via email"
+				subtitle="Enter your details to receive your personalized AI automation playbook."
+				buttonText="Get My Full Playbook →"
+				successMessage="Your submission has been recorded. You will receive the full playbook on your email."
+			/>
 		</div>
 	);
 }

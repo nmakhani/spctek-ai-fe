@@ -12,9 +12,7 @@ import {
 	type Phase,
 	type Step,
 } from '.';
-import { contactsApi } from '../../../lib/api';
-import { GlassGlow } from '../../ui/GlassGlow';
-import { GradientBorder } from '../../ui/GradientBorder';
+import FormContainer from '../../ui/form-parts/FormContainer';
 import { SectionHeading } from '../../ui/SectionHeading';
 
 const LOADING_MESSAGES = [
@@ -24,50 +22,16 @@ const LOADING_MESSAGES = [
 	'Generating your personalized scorecard...',
 ];
 
-const isValidName = (name: string) => /^[A-Za-z][A-Za-z\s.'-]{1,79}$/.test(name.trim());
-const isValidEmail = (email: string) =>
-	/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email.trim()) && !/\.\./.test(email.trim());
-const isValidPhone = (phone: string) =>
-	!phone.trim() ||
-	(/^[+]?[\d()\-\s]{10,25}$/.test(phone.trim()) &&
-		phone.replace(/\D/g, '').length >= 10 &&
-		phone.replace(/\D/g, '').length <= 15 &&
-		!/^(\d)\1+$/.test(phone.replace(/\D/g, '')));
-
 export default function ProcessDiagnosticSection() {
 	const [form, setForm] = useState<FormData>(INITIAL_FORM_DATA);
 	const [step, setStep] = useState<Step>(1);
 	const [phase, setPhase] = useState<Phase>('form');
-	const [submitting, setSubmitting] = useState(false);
-	const [submitError, setSubmitError] = useState('');
 	const [loadingIdx, setLoadingIdx] = useState(0);
 
 	const setField = (name: keyof FormData, value: string) => setForm((prev) => ({ ...prev, [name]: value }));
 	const goToStep = (nextStep: Step) => setStep(nextStep);
 
 	const runAnalysis = async () => {
-		if (!form.email.trim() || !form.name.trim()) {
-			setSubmitError('Name and email are required.');
-			return;
-		}
-
-		if (!isValidName(form.name)) {
-			setSubmitError('Please enter a valid full name.');
-			return;
-		}
-
-		if (!isValidEmail(form.email)) {
-			setSubmitError('Please enter a valid email address.');
-			return;
-		}
-
-		if (!isValidPhone(form.phone)) {
-			setSubmitError('Please enter a valid phone number (10 to 15 digits) or leave it empty.');
-			return;
-		}
-
-		setSubmitting(true);
-		setSubmitError('');
 		setPhase('loading');
 		setLoadingIdx(0);
 
@@ -75,38 +39,9 @@ export default function ProcessDiagnosticSection() {
 			setLoadingIdx((current) => Math.min(current + 1, LOADING_MESSAGES.length - 1));
 		}, 1200);
 
-		try {
-			await contactsApi.create({
-				name: form.name.trim(),
-				email: form.email.trim(),
-				phone: form.phone.trim() || null,
-				company: form.company || null,
-				message: `Process Diagnostic — Motive: ${form.motive} | Team: ${form.teamSize} | Industry: ${form.industry} | SOPs: ${form.sopLocation} | Tools: ${form.toolIntegration} | Score: ${calculateScore(form)} | Broken process: ${form.brokenProcess}`,
-				source: 'process_diagnostic',
-				journey: {
-					motive: form.motive,
-					teamSize: form.teamSize,
-					industry: form.industry,
-					sopLocation: form.sopLocation,
-					decisionMaking: form.decisionMaking,
-					onboardingTime: form.onboardingTime,
-					toolIntegration: form.toolIntegration,
-					founderBottleneck: form.founderBottleneck,
-					customerComms: form.customerComms,
-					brokenProcess: form.brokenProcess,
-					timeWasted: form.timeWasted,
-					triedToFix: form.triedToFix,
-					score: calculateScore(form),
-				},
-			});
-		} catch {
-			// Non-blocking — still show results
-		}
-
 		await new Promise((resolve) => setTimeout(resolve, 4000));
 		clearInterval(msgInterval);
 		setPhase('results');
-		setSubmitting(false);
 	};
 
 	const score = calculateScore(form);
@@ -127,31 +62,21 @@ export default function ProcessDiagnosticSection() {
 					</p>
 				</div>
 
-				<div className="relative z-10">
-					<GradientBorder thickness={2} radius="40px" />
-					<GlassGlow angle={105} opacity={0.5} start={8} end={92} radius="40px" />
-
-					<div
-						className="relative p-5 pb-8 shadow-2xl sm:p-6 sm:pb-10 md:p-8 md:pb-12"
-						style={{ borderRadius: '38px', background: 'transparent' }}
-					>
-						<ProcessDiagnosticForm
-							form={form}
-							step={step}
-							phase={phase}
-							submitting={submitting}
-							submitError={submitError}
-							loadingMessage={LOADING_MESSAGES[loadingIdx]}
-							score={score}
-							category={category}
-							pointers={pointers}
-							onChange={setField}
-							onGoToStep={goToStep}
-							onSubmit={runAnalysis}
-						/>
-						{phase === 'form' ? <div aria-hidden="true" /> : null}
-					</div>
-				</div>
+				<FormContainer>
+					<ProcessDiagnosticForm
+						form={form}
+						step={step}
+						phase={phase}
+						loadingMessage={LOADING_MESSAGES[loadingIdx]}
+						score={score}
+						category={category}
+						pointers={pointers}
+						onChange={setField}
+						onGoToStep={goToStep}
+						onSubmit={runAnalysis}
+					/>
+					{phase === 'form' ? <div aria-hidden="true" /> : null}
+				</FormContainer>
 			</main>
 		</div>
 	);

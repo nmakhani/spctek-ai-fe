@@ -58,10 +58,10 @@ export default function Contact() {
 	};
 
 	return (
-		<section className="font-poppins relative mt-20 md:mt-24" id="contact">
+		<section className="font-poppins relative mt-24 md:mt-32" id="contact">
 			<div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-12">
 				<div className="grid grid-cols-1 items-start gap-8 md:gap-10 lg:grid-cols-2 lg:gap-14">
-					<div className="relative w-full p-4 sm:p-6 lg:sticky lg:top-28 lg:self-start lg:p-6">
+					<div className="relative w-full p-4 sm:p-6 lg:sticky lg:top-32 lg:self-start lg:p-6">
 						<GradientBorder thickness={2} radius="24px" />
 						<SectionHeading size="large" align="left">
 							We&apos;d <span className="text-[#606bfa]">Love</span> to Hear <br className="hidden sm:block" /> From You

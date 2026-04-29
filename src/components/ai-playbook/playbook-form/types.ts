@@ -15,10 +15,10 @@ export type PlaybookRecommendation = {
 	message: string;
 };
 
-export type Step = 1 | 2 | 3 | 4;
+export type Step = 1 | 2 | 3;
 export type Phase = 'form' | 'loading' | 'results';
 
-export const TOTAL_STEPS = 4;
+export const TOTAL_STEPS = 3;
 
 export const INITIAL_FORM_DATA: FormData = {
 	businessType: 'eCommerce/Digital Marketing',

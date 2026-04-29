@@ -1,15 +1,18 @@
 'use client';
 
+import EmbeddedContactForm from '../../ui/form-parts/EmbeddedContactForm';
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
-import { PrimaryButton } from '../../ui/PrimaryButton';
-import type { ArchitectureRecommendation } from './types';
+import type { ArchitectureRecommendation, FormData } from './types';
 
 type ResultsStateProps = {
 	recommendation: ArchitectureRecommendation;
+	formData: FormData;
 };
 
-export default function ResultsState({ recommendation }: ResultsStateProps) {
+const loremIpsumText = 'Lorem ipsum dolor sit amet.';
+
+export default function ResultsState({ recommendation, formData }: ResultsStateProps) {
 	return (
 		<div className="flex flex-col gap-10 text-left">
 			<div className="flex flex-col gap-3 border-b border-white/10 pb-8 md:flex-row md:items-center md:justify-between">
@@ -34,11 +37,13 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 						<div className="relative overflow-hidden rounded-[15px] p-5">
 							<p className="text-xs font-bold uppercase tracking-widest text-[#606bfa]">{group.modality}</p>
 							<ul className="mt-3 space-y-2">
-								{group.models.map((model) => (
-									<li key={model} className="text-sm text-white">
-										• {model}
-									</li>
-								))}
+								{group.models.map((_, index) => {
+									return (
+										<li key={index} className="select-none text-sm text-white blur-sm">
+											• {loremIpsumText}
+										</li>
+									);
+								})}
 							</ul>
 							<p className="text-gray-400 mt-3 text-xs leading-relaxed">{group.notes}</p>
 						</div>
@@ -46,17 +51,19 @@ export default function ResultsState({ recommendation }: ResultsStateProps) {
 				))}
 			</div>
 
-			<div className="relative z-10 mt-2 text-center">
-				<GlassGlow angle={120} opacity={0.35} start={20} end={80} radius="24px" />
-				<div className="relative flex flex-col items-center gap-4 rounded-[23px] bg-white/[0.03] p-5 backdrop-blur-xl sm:p-6 md:p-8">
-					<p className="text-xl font-bold text-white sm:text-2xl">Ready to implement this roadmap?</p>
-					<p className="text-gray-400 max-w-lg text-sm leading-relaxed">
-						We can turn this architecture into a concrete rollout plan with stack choices, security controls, and
-						deployment milestones.
-					</p>
-					<PrimaryButton href="/contact">Book My Deployment Call</PrimaryButton>
-				</div>
-			</div>
+			<EmbeddedContactForm
+				formData={formData}
+				source="ai_deployment_roadmap"
+				message={`AI Deployment Roadmap — Use Cases: ${formData.useCases.join(', ')} | Team Size: ${formData.teamSize} | Data Sensitivity: ${formData.dataSensitivity} | Deployment Model: ${formData.deploymentModel} | Recommended Tier: ${recommendation.tier.label} | Current Stack: ${formData.currentStack || 'N/A'}`}
+				journeyData={{
+					...formData,
+					recommendation,
+				}}
+				title="Get your full roadmap via email"
+				subtitle="Enter your details to receive your complete AI deployment architecture recommendation."
+				buttonText="Get My Full Roadmap →"
+				successMessage="Your submission has been recorded. You will receive the full plan on your email."
+			/>
 		</div>
 	);
 }

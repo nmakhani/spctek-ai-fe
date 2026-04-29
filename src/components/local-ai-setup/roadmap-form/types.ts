@@ -12,10 +12,10 @@ export type FormData = {
 	company: string;
 };
 
-export type Step = 1 | 2 | 3;
+export type Step = 1 | 2;
 export type Phase = 'form' | 'loading' | 'results';
 
-export const TOTAL_STEPS = 3;
+export const TOTAL_STEPS = 2;
 
 export type UseCaseOption = {
 	id: string;

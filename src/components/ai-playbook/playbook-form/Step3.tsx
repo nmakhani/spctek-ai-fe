@@ -7,18 +7,18 @@ import type { FormData, Step } from './types';
 type Step3Props = {
 	form: FormData;
 	onChange: (name: keyof FormData, value: string) => void;
-	onNext: (step: Step) => void;
 	onBack: (step: Step) => void;
+	onSubmit: () => void;
 };
 
-export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
+export default function Step3({ form, onChange, onBack, onSubmit }: Step3Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div>
 				<h2 className="mb-2 text-2xl font-semibold tracking-tight text-white">
 					Describe the Challenge Holding You Back
 				</h2>
-				<p className="text-gray-400 text-sm">3–5 sentences to help us understand your challenge.</p>
+				<p className="text-gray-400 text-sm">3-5 sentences to help us understand your challenge.</p>
 			</div>
 
 			<div className="flex flex-col gap-3">
@@ -35,9 +35,6 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 				<label className="text-sm font-semibold text-white">
 					If this problem were solved, what would it mean for your business?
 				</label>
-				<p className="text-gray-400 mb-2 text-xs">
-					This helps us calibrate the urgency and ROI framing in your playbook.
-				</p>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					{URGENCIES.map(({ label, desc }) => (
 						<RadioCard
@@ -63,11 +60,11 @@ export default function Step3({ form, onChange, onNext, onBack }: Step3Props) {
 				</button>
 				<button
 					type="button"
-					onClick={() => onNext(4 as Step)}
+					onClick={onSubmit}
 					disabled={!form.operationalChallenge || !form.urgency}
 					className="flex w-2/3 items-center justify-center gap-2 rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-40"
 				>
-					Next: Contact Info <span className="ml-1">→</span>
+					Get My Playbook <span className="ml-1">→</span>
 				</button>
 			</div>
 		</div>

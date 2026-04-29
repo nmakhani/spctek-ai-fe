@@ -2,15 +2,16 @@
 
 import { motion } from 'framer-motion';
 
+import EmbeddedContactForm from '../../ui/form-parts/EmbeddedContactForm';
 import { GlassGlow } from '../../ui/GlassGlow';
 import { GradientBorder } from '../../ui/GradientBorder';
-import { PrimaryButton } from '../../ui/PrimaryButton';
-import type { Category, Pointer } from './types';
+import type { Category, FormData, Pointer } from './types';
 
 type ResultsStateProps = {
 	score: number;
 	category: Category;
 	pointers: Pointer[];
+	formData: FormData;
 };
 
 const HeroSection = ({ score, category }: { score: number; category: Category }) => {
@@ -99,7 +100,7 @@ const ChallengeCard = ({ pointer, index }: { pointer: Pointer; index: number }) 
 	);
 };
 
-export default function ResultsState({ score, category, pointers }: ResultsStateProps) {
+export default function ResultsState({ score, category, pointers, formData }: ResultsStateProps) {
 	const basePointers = pointers.slice(0, 4);
 
 	const placeholderText =
@@ -134,20 +135,18 @@ export default function ResultsState({ score, category, pointers }: ResultsState
 				</div>
 			</div>
 
-			{/* Call to Action Section */}
-			<div className="relative z-10 mt-6 text-center">
-				<GlassGlow angle={120} opacity={0.4} start={20} end={80} radius="24px" />
-
-				<div className="relative flex flex-col items-center gap-4 rounded-[23px] bg-white/[0.03] p-5 backdrop-blur-xl sm:p-6 md:p-8">
-					<p className="text-xl font-bold text-white sm:text-2xl">Ready to fix these in less than 30 days?</p>
-					<p className="text-gray-400 max-w-lg text-sm leading-relaxed">
-						We&apos;ll map your entire process landscape and identify which automations give you the fastest payback,
-						all in a single 30 minute session.
-					</p>
-					<PrimaryButton href="/contact">Book My Free Strategy Call</PrimaryButton>
-					<p className="text-gray-500 text-xs font-medium">No hard sell. No commitment required.</p>
-				</div>
-			</div>
+			<EmbeddedContactForm
+				formData={formData}
+				source="process_diagnostic"
+				message={`Process Diagnostic — Motive: ${formData.motive} | Team: ${formData.teamSize} | Industry: ${formData.industry} | SOPs: ${formData.sopLocation} | Tools: ${formData.toolIntegration} | Score: ${score} | Broken process: ${formData.brokenProcess}`}
+				journeyData={{
+					...formData,
+					score,
+					category: category.label,
+					pointers: basePointers,
+				}}
+				subtitle="Enter your details to receive your complete process health scorecard and personalized automation playbook."
+			/>
 		</div>
 	);
 }

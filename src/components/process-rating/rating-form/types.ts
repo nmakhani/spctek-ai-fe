@@ -17,10 +17,10 @@ export type FormData = {
 	phone: string;
 };
 
-export type Step = 1 | 2 | 3 | 4 | 5;
+export type Step = 1 | 2 | 3 | 4;
 export type Phase = 'form' | 'loading' | 'results';
 
-export const TOTAL_STEPS = 5;
+export const TOTAL_STEPS = 4;
 
 export type Category = {
 	label: string;
