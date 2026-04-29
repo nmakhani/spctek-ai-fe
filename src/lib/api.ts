@@ -69,7 +69,7 @@ export const contactsApi = {
 
 export type ContentType = 'BLOG' | 'CASE_STUDY';
 
-export type ContentLookupField = 'slug' | 'id';
+export type ContentLookupField = 'slug' | 'uuid';
 
 export const contentApi = {
 	list: (params: {
@@ -80,7 +80,7 @@ export const contentApi = {
 		skip?: number;
 		limit?: number;
 	}) => apiClient.get('/content', { params }),
-	get: (id: string, type: ContentType, lookup_field: ContentLookupField = 'id') =>
+	get: (id: string, type: ContentType, lookup_field: ContentLookupField = 'uuid') =>
 		apiClient.get(`/content/${id}`, { params: { type, lookup_field } }),
 	create: (data: Record<string, unknown>) => apiClient.post('/content', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/content/${id}`, data),

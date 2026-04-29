@@ -8,7 +8,7 @@ import { ToastProvider } from '@/components/ui/ToastProvider';
 export const metadata: Metadata = {
 	title: 'SPCTEK AI - Build a System. Not a Spreadsheet.',
 	description: 'AI-native operations platform.',
-	icons: { icon: 'favicon.png' },
+	icons: { icon: '/favicon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
