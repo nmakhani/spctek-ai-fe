@@ -46,11 +46,14 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 					if (block.type === 'header') {
 						const level = Number(blockData.level) || 2;
 						const text = String(blockData.text || '');
+						const blockId = block.id || `block-${index}`;
+						const id = `heading-${blockId}`;
 						if (level === 1) {
 							return (
 								<h1
 									key={key}
-									className="text-3xl font-semibold text-white md:text-4xl"
+									id={id}
+									className="scroll-mt-24 text-3xl font-semibold text-white md:text-4xl"
 									dangerouslySetInnerHTML={{ __html: text }}
 								/>
 							);
@@ -59,7 +62,8 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 							return (
 								<h2
 									key={key}
-									className="text-2xl font-semibold text-white md:text-3xl"
+									id={id}
+									className="scroll-mt-24 text-2xl font-semibold text-white md:text-3xl"
 									dangerouslySetInnerHTML={{ __html: text }}
 								/>
 							);
@@ -68,7 +72,8 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 							return (
 								<h3
 									key={key}
-									className="text-xl font-semibold text-white md:text-2xl"
+									id={id}
+									className="scroll-mt-24 text-xl font-semibold text-white md:text-2xl"
 									dangerouslySetInnerHTML={{ __html: text }}
 								/>
 							);
@@ -76,7 +81,8 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 						return (
 							<h4
 								key={key}
-								className="text-lg font-semibold text-white md:text-xl"
+								id={id}
+								className="scroll-mt-24 text-lg font-semibold text-white md:text-xl"
 								dangerouslySetInnerHTML={{ __html: text }}
 							/>
 						);

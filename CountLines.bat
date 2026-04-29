@@ -13,11 +13,12 @@ foreach ($file in $files) { ^
     $table += [PSCustomObject]@{ File = $file.FullName.Substring((Get-Location).Path.Length); Lines = $lineCount }; ^
     $totalLines += $lineCount; ^
 }; ^
-$table = $table ^| Sort-Object Lines -Descending; ^
+$top50 = $table ^| Sort-Object Lines -Descending ^| Select-Object -First 50; ^
 Write-Host ''; ^
+Write-Host '--- TOP 50 LARGEST FILES ---' -ForegroundColor Magenta; ^
 Write-Host ('{0,-80} {1,10}' -f 'File', 'Lines') -ForegroundColor Cyan; ^
 Write-Host ('{0,-80} {1,10}' -f '----', '-----') -ForegroundColor Cyan; ^
-foreach ($row in $table) { ^
+foreach ($row in $top50) { ^
     if ($row.Lines -gt 500) { $color='Red' } ^
     elseif ($row.Lines -gt 300) { $color='Yellow' } ^
     else { $color='White' } ^

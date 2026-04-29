@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { ContactForm } from '@/components/portal/contacts/ContactForm';
+import { JourneyModal } from '@/components/portal/contacts/JourneyModal';
 import { PageHeader } from '@/components/portal/PageHeader';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -45,7 +47,6 @@ function ContactsContent() {
 	});
 	const [sourceFilter, setSourceFilter] = useState<string>('all');
 	const [selectedJourney, setSelectedJourney] = useState<Contact | null>(null);
-	const journeyModalRef = useRef<HTMLDivElement>(null);
 
 	// Fetch contacts
 	const fetchContacts = async () => {
@@ -74,23 +75,6 @@ function ContactsContent() {
 	const closeJourneyModal = () => {
 		setSelectedJourney(null);
 	};
-
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (journeyModalRef.current && !journeyModalRef.current.contains(event.target as Node)) {
-				closeJourneyModal();
-			}
-		};
-
-		if (selectedJourney) {
-			document.addEventListener('mousedown', handleClickOutside);
-			document.body.style.overflow = 'hidden';
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside);
-				document.body.style.overflow = '';
-			};
-		}
-	}, [selectedJourney]);
 
 	useEffect(() => {
 		fetchContacts();
@@ -205,167 +189,7 @@ function ContactsContent() {
 				onCancel={cancelDelete}
 			/>
 
-			{selectedJourney && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 pt-24 backdrop-blur-sm">
-					<div
-						ref={journeyModalRef}
-						className="flex max-h-[75vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl"
-					>
-						<div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-black/25 px-6 py-4">
-							<h3 className="text-lg font-semibold text-white">
-								User Journey -{' '}
-								{selectedJourney.source === 'ai_deployment_roadmap'
-									? 'AI Deployment Roadmap'
-									: selectedJourney.source === 'process_diagnostic'
-										? 'Process Diagnostic'
-										: selectedJourney.source === 'ai_playbook'
-											? 'AI Playbook'
-											: selectedJourney.source}
-							</h3>
-							<button
-								onClick={closeJourneyModal}
-								className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
-							>
-								Close
-							</button>
-						</div>
-						<div className="overflow-y-auto p-6">
-							{selectedJourney.source === 'ai_deployment_roadmap' && selectedJourney.journey ? (
-								<div className="space-y-4">
-									<div>
-										<h4 className="mb-2 text-sm font-semibold text-white/90">Use Cases</h4>
-										<div className="flex flex-wrap gap-2">
-											{Array.isArray(selectedJourney.journey.useCases) ? (
-												selectedJourney.journey.useCases.map((uc: string, i: number) => (
-													<span
-														key={i}
-														className="rounded-full border border-[#606bfa]/30 bg-[#606bfa]/20 px-3 py-1 text-sm text-white/80"
-													>
-														{uc}
-													</span>
-												))
-											) : (
-												<span className="text-white/60">—</span>
-											)}
-										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-4">
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Team Size</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.teamSize || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Data Sensitivity</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.dataSensitivity || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Deployment Model</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.deploymentModel || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Recommended Tier</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.recommendedTier || '—')}</p>
-										</div>
-									</div>
-									<div>
-										<h4 className="mb-1 text-sm font-semibold text-white/90">Current Stack</h4>
-										<p className="text-white/70">{String(selectedJourney.journey.currentStack || '—')}</p>
-									</div>
-								</div>
-							) : selectedJourney.source === 'process_diagnostic' && selectedJourney.journey ? (
-								<div className="space-y-4">
-									<div className="grid grid-cols-2 gap-4">
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Motive</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.motive || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Team Size</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.teamSize || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Industry</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.industry || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">SOP Location</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.sopLocation || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Decision Making</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.decisionMaking || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Onboarding Time</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.onboardingTime || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Tool Integration</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.toolIntegration || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Founder Bottleneck</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.founderBottleneck || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Customer Comms</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.customerComms || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Time Wasted</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.timeWasted || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Tried to Fix</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.triedToFix || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Score</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.score || '—')}</p>
-										</div>
-									</div>
-									<div>
-										<h4 className="mb-1 text-sm font-semibold text-white/90">Broken Process</h4>
-										<p className="text-white/70">{String(selectedJourney.journey.brokenProcess || '—')}</p>
-									</div>
-								</div>
-							) : selectedJourney.source === 'ai_playbook' && selectedJourney.journey ? (
-								<div className="space-y-4">
-									<div className="grid grid-cols-2 gap-4">
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Business Type</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.businessType || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Revenue Range</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.revenueRange || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Playbook Focus</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.playbookFocus || '—')}</p>
-										</div>
-										<div>
-											<h4 className="mb-1 text-sm font-semibold text-white/90">Urgency</h4>
-											<p className="text-white/70">{String(selectedJourney.journey.urgency || '—')}</p>
-										</div>
-									</div>
-									<div>
-										<h4 className="mb-1 text-sm font-semibold text-white/90">Operational Challenge</h4>
-										<p className="text-white/70">{String(selectedJourney.journey.operationalChallenge || '—')}</p>
-									</div>
-								</div>
-							) : (
-								<div>
-									<h4 className="mb-2 text-sm font-semibold text-white/90">Raw Journey Data</h4>
-									<pre className="overflow-auto rounded-xl bg-black/30 p-4 text-xs text-white/70">
-										{JSON.stringify(selectedJourney.journey, null, 2)}
-									</pre>
-								</div>
-							)}
-						</div>
-					</div>
-				</div>
-			)}
+			<JourneyModal contact={selectedJourney} onClose={closeJourneyModal} />
 
 			<PageHeader
 				title="Contacts"
@@ -398,95 +222,14 @@ function ContactsContent() {
 				)}
 
 				{showForm && (
-					<div className="mb-8 overflow-hidden rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_46%,rgba(96,107,250,0.12)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl md:p-8">
-						<h2 className="mb-4 text-xl font-semibold text-white">{editingId ? 'Edit Contact' : 'New Contact'}</h2>
-						<form onSubmit={handleSubmit} className="space-y-5">
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Name</label>
-								<input
-									type="text"
-									value={formData.name}
-									onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-									className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="John Doe"
-								/>
-							</div>
-
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Email</label>
-								<input
-									type="email"
-									value={formData.email}
-									onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-									className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="john@example.com"
-								/>
-							</div>
-
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Phone</label>
-								<input
-									type="tel"
-									value={formData.phone}
-									onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-									className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="+1 555 123 4567"
-								/>
-							</div>
-
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Company</label>
-								<input
-									type="text"
-									value={formData.company}
-									onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-									className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="Acme Inc."
-								/>
-							</div>
-
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Message</label>
-								<textarea
-									value={formData.message}
-									onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-									className="h-28 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="Message details"
-								/>
-							</div>
-
-							<div>
-								<label className="mb-2 block text-sm font-medium text-white/75">Source</label>
-								<input
-									type="text"
-									value={formData.source}
-									onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-									className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-									placeholder="landing_page"
-								/>
-							</div>
-
-							<p className="text-xs text-white/60">Note: backend requires at least one of Email or Phone.</p>
-
-							<div className="flex gap-3 pt-4">
-								<button
-									type="submit"
-									disabled={saving}
-									className="rounded-xl bg-[#606bfa] px-4 py-2 font-semibold text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-								>
-									{saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
-								</button>
-								<button
-									type="button"
-									onClick={handleCancel}
-									disabled={saving}
-									className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2 text-white/85 transition hover:bg-white/[0.14] disabled:opacity-60"
-								>
-									Cancel
-								</button>
-							</div>
-						</form>
-					</div>
+					<ContactForm
+						formData={formData}
+						editingId={editingId}
+						saving={saving}
+						onChange={setFormData}
+						onSubmit={handleSubmit}
+						onCancel={handleCancel}
+					/>
 				)}
 
 				{loading ? (

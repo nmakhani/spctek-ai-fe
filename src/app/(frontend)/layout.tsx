@@ -5,7 +5,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
 	return (
 		<>
 			<Navbar />
-			<main className="overflow-x-hidden">{children}</main>
+			<main>{children}</main>
 			<Footer />
 		</>
 	);
