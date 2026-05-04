@@ -1,16 +1,15 @@
 import { useCallback, useState } from 'react';
-import type { OutputData } from '@editorjs/editorjs';
 import toast from 'react-hot-toast';
 
 import { categoriesApi, contentApi, type ContentType } from '@/lib/api';
-import { EMPTY_CONTENT_FORM, EMPTY_EDITOR_DATA, type Category, type Content, type ContentFormData } from '../types';
-import { parseContentPayload, parseEditorData } from '../utils';
+import { EMPTY_CONTENT_FORM, type Category, type Content, type ContentFormData } from '../types';
+import { parseContentPayload } from '../utils';
 
 export function useContentData(mode: 'create' | 'edit', contentId: string | undefined, contentType: ContentType) {
 	const [loading, setLoading] = useState(mode === 'edit');
 	const [error, setError] = useState('');
 	const [formData, setFormData] = useState<ContentFormData>(EMPTY_CONTENT_FORM);
-	const [editorData, setEditorData] = useState<OutputData>({ ...EMPTY_EDITOR_DATA });
+	const [htmlContent, setHtmlContent] = useState('');
 	const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState('');
 	const [slugManuallyEdited, setSlugManuallyEdited] = useState(mode === 'edit');
 	const [categories, setCategories] = useState<Category[]>([]);
@@ -32,7 +31,7 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 			setLoading(true);
 			const response = await contentApi.get(contentId, contentType);
 			const content = response.data as Content;
-			const parsedPayload = contentType === 'CASE_STUDY' ? parseContentPayload(content.content) : null;
+			const parsedPayload = parseContentPayload(content.content);
 
 			setFormData({
 				title: content.title,
@@ -42,10 +41,12 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 				thumbnail_url: content.thumbnail_url || '',
 				is_published: content.is_published,
 				category_ids: (content.categories || []).map((category) => category.id),
-				kpis: parsedPayload ? parsedPayload.kpis : EMPTY_CONTENT_FORM.kpis.map((item) => ({ ...item })),
+				kpis: parsedPayload.kpis,
+				meta_title: content.meta_tags?.title || '',
+				meta_description: content.meta_tags?.description || '',
 			});
 			setCurrentThumbnailUrl(content.thumbnail_url || '');
-			setEditorData(parsedPayload ? parsedPayload.editorData : parseEditorData(content.content));
+			setHtmlContent(parsedPayload.html);
 			setSlugManuallyEdited(true);
 			setError('');
 		} catch (err: unknown) {
@@ -63,8 +64,8 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 		setError,
 		formData,
 		setFormData,
-		editorData,
-		setEditorData,
+		htmlContent,
+		setHtmlContent,
 		currentThumbnailUrl,
 		setCurrentThumbnailUrl,
 		slugManuallyEdited,

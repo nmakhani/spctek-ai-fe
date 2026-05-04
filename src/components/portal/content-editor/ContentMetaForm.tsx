@@ -15,6 +15,8 @@ interface ContentMetaFormProps {
 	onKpiStatChange: (index: number, value: string) => void;
 	onKpiDescriptionChange: (index: number, value: string) => void;
 	onThumbnailUrlChange: (value: string, file?: File | null) => void;
+	onMetaTitleChange?: (value: string) => void;
+	onMetaDescriptionChange?: (value: string) => void;
 	highlightErrors?: boolean;
 }
 
@@ -31,6 +33,8 @@ export function ContentMetaForm({
 	onKpiStatChange,
 	onKpiDescriptionChange,
 	onThumbnailUrlChange,
+	onMetaTitleChange,
+	onMetaDescriptionChange,
 	highlightErrors = false,
 }: ContentMetaFormProps) {
 	return (
@@ -210,6 +214,25 @@ export function ContentMetaForm({
 					</div>
 				</div>
 			)}
+
+			{/* Meta tags section */}
+			<div>
+				<label className="mb-2 block text-sm font-medium text-white/75">Meta Title</label>
+				<input
+					type="text"
+					value={formData.meta_title || ''}
+					onChange={(e) => onMetaTitleChange && onMetaTitleChange(e.target.value)}
+					className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-[#606bfa]/45"
+					placeholder="Optional meta title"
+				/>
+				<label className="mb-2 mt-3 block text-sm font-medium text-white/75">Meta Description</label>
+				<textarea
+					value={formData.meta_description || ''}
+					onChange={(e) => onMetaDescriptionChange && onMetaDescriptionChange(e.target.value)}
+					className="h-24 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
+					placeholder="Optional meta description"
+				/>
+			</div>
 
 			<div
 				className={

@@ -4,14 +4,13 @@ import { useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { authorsApi, type ContentType } from '@/lib/api';
-import { createEditorTools } from './config/editorTools';
 import { ContentMetaForm } from './ContentMetaForm';
 import { EditorHeader } from './EditorHeader';
 import { EditorStyles } from './EditorStyles';
 import { EditorWorkspace } from './EditorWorkspace';
-import { useContentData, useContentSave, useEditorInit } from './hooks';
+import { useContentData, useContentSave } from './hooks';
 import type { AuthorRead } from './types';
-import { slugify } from './utils';
+import { minifyHtml, slugify } from './utils';
 
 interface ContentEditorScreenProps {
 	mode: 'create' | 'edit';
@@ -25,10 +24,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 	const router = useRouter();
 	const baseId = useId().replace(/:/g, '');
 	const [mounted, setMounted] = useState(false);
-	const editorHolderId = mounted ? `editor-${baseId}` : '';
 	const [previewMode, setPreviewMode] = useState(false);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const [tools, setTools] = useState<Record<string, any> | null>(null);
 	const [blobFileMap, setBlobFileMap] = useState<Record<string, File>>({});
 	const [highlightErrors, setHighlightErrors] = useState(false);
 	const [authors, setAuthors] = useState<AuthorRead[]>([]);
@@ -46,8 +42,8 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		setError,
 		formData,
 		setFormData,
-		editorData,
-		setEditorData,
+		htmlContent,
+		setHtmlContent,
 		currentThumbnailUrl,
 		setCurrentThumbnailUrl,
 		slugManuallyEdited,
@@ -58,32 +54,12 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 	} = useContentData(mode, contentId, contentType);
 
 	// Save management
-	const { editorRef, blobFileMapRef, saving, saveContent, syncEditorState } = useContentSave(
-		mode,
-		contentId,
-		contentType,
-		entityLabel
-	);
+	const { blobFileMapRef, saving, saveContent } = useContentSave(mode, contentId, contentType, entityLabel);
 
 	// Update blob file map refs when state changes
 	useEffect(() => {
 		blobFileMapRef.current = blobFileMap;
 	}, [blobFileMap, blobFileMapRef]);
-
-	// Initialize tools
-	useEffect(() => {
-		let mounted = true;
-
-		const initTools = async () => {
-			const toolsConfig = await createEditorTools();
-			if (mounted) setTools(toolsConfig);
-		};
-
-		void initTools();
-		return () => {
-			mounted = false;
-		};
-	}, []);
 
 	// Load content when needed
 	useEffect(() => {
@@ -103,18 +79,6 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		};
 		void loadAuthors();
 	}, []);
-
-	// Initialize editor only after component is mounted and ID is set and loading is done
-	useEditorInit(
-		editorHolderId,
-		editorData,
-		mode,
-		(editor) => {
-			editorRef.current = editor;
-		},
-		tools || {},
-		!tools || !mounted || !editorHolderId || loading
-	);
 
 	// Auto-generate slug
 	useEffect(() => {
@@ -146,8 +110,10 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 			return;
 		}
 
-		const synced = await syncEditorState(editorData);
-		const success = await saveContent(formData, currentThumbnailUrl, editorData, synced);
+		// Ensure HTML is minified before saving so DB stores compact/raw HTML
+		const compactHtml = minifyHtml(htmlContent || '');
+		setHtmlContent(compactHtml);
+		const success = await saveContent(formData, currentThumbnailUrl, compactHtml);
 		if (success) {
 			setHighlightErrors(false);
 			router.back();
@@ -163,7 +129,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 	}
 
 	// Don't render editor until we have a proper client-side ID
-	if (!mounted || !editorHolderId) {
+	if (!mounted) {
 		return (
 			<div className="flex min-h-[40vh] items-center justify-center">
 				<p className="text-white/70">Initializing...</p>
@@ -181,10 +147,6 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 				onPublishedChange={(published) => setFormData((prev) => ({ ...prev, is_published: published }))}
 				previewMode={previewMode}
 				onPreviewToggle={async () => {
-					if (!previewMode) {
-						const synced = await syncEditorState(editorData);
-						setEditorData(synced);
-					}
 					setPreviewMode((prev) => !prev);
 				}}
 				saving={saving}
@@ -236,18 +198,20 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 							setFormData((prev) => ({ ...prev, thumbnail_url: value }));
 							if (file) setBlobFileMap((prev) => ({ ...prev, [value]: file }));
 						}}
+						onMetaTitleChange={(value) => setFormData((prev) => ({ ...prev, meta_title: value }))}
+						onMetaDescriptionChange={(value) => setFormData((prev) => ({ ...prev, meta_description: value }))}
 					/>
 
 					<EditorWorkspace
-						editorHolderId={editorHolderId}
+						htmlContent={htmlContent}
+						onChange={setHtmlContent}
+						onBlobFileMapChange={setBlobFileMap}
 						previewMode={previewMode}
-						editorData={editorData}
-						title={formData.title}
 					/>
 				</div>
 			</main>
 
-			<EditorStyles editorHolderId={editorHolderId} />
+			<EditorStyles editorHolderId={baseId} />
 		</div>
 	);
 }

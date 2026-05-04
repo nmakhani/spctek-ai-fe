@@ -10,9 +10,10 @@ import { PrimaryButton } from '../ui/PrimaryButton';
 
 interface NewsletterProps {
 	onClose?: () => void;
+	compact?: boolean;
 }
 
-export default function Newsletter({ onClose }: NewsletterProps) {
+export default function Newsletter({ onClose, compact = false }: NewsletterProps) {
 	const [email, setEmail] = useState('');
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -57,25 +58,33 @@ export default function Newsletter({ onClose }: NewsletterProps) {
 	};
 
 	return (
-		<div className="relative z-10 my-2 w-full max-w-md">
+		<div className={`relative z-10 my-2 w-full ${compact ? 'max-w-sm' : 'max-w-md'}`}>
 			<GradientBorder thickness={1.5} radius="24px" subtle={true} />
 			<GlassGlow angle={105} opacity={0.3} start={8} end={92} radius="24px" />
 
 			<div className="relative z-10 rounded-3xl p-4 sm:p-7 md:p-8">
-				<div className="flex flex-col gap-6 sm:gap-5">
-					<div className="space-y-4 text-center sm:space-y-6">
-						<p className="text-sm font-medium text-slate-300 sm:text-base">Weekly Newsletter</p>
-						<h2 className="text-3xl font-semibold leading-[1.08] text-white sm:text-4xl md:text-4xl">
+				<div className={`flex flex-col gap-6 sm:gap-5 ${compact ? 'py-2' : ''}`}>
+					<div className={`space-y-4 text-center ${compact ? 'sm:space-y-2' : 'sm:space-y-6'}`}>
+						<p className={`text-sm font-medium text-slate-300 ${compact ? 'sm:text-sm' : 'sm:text-base'}`}>
+							Weekly Newsletter
+						</p>
+						<h2 className={`${compact ? 'text-xl' : 'text-3xl'} font-semibold leading-[1.08] text-white`}>
 							Scale Without
-							<br />
-							Operational Chaos
+							{!compact && (
+								<>
+									<br />
+									Operational Chaos
+								</>
+							)}
 						</h2>
-						<p className="mx-auto max-w-md text-sm leading-relaxed text-slate-200/90 sm:text-lg md:text-lg">
+						<p
+							className={`mx-auto ${compact ? 'max-w-xs text-sm' : 'max-w-md text-sm'} leading-relaxed text-slate-200/90`}
+						>
 							Get weekly actionable insights and AI updates to improve operations and grow with better systems.
 						</p>
 					</div>
 
-					<div className="space-y-2.5 sm:space-y-4">
+					<div className={`space-y-2.5 ${compact ? '' : 'sm:space-y-4'}`}>
 						<div className={`group relative w-full transition-all duration-300 ${isError ? 'scale-[1.01]' : ''}`}>
 							<GradientBorder thickness={1.5} radius="12px" hasError={isError} />
 							<GlassGlow angle={105} opacity={0.5} start={10} end={90} radius="12px" />

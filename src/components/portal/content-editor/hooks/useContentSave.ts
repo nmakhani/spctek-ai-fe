@@ -1,12 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import type EditorJS from '@editorjs/editorjs';
-import type { OutputData } from '@editorjs/editorjs';
 import toast from 'react-hot-toast';
 
 import { contentApi, type ContentType } from '@/lib/api';
 import { uploadFileToR2 } from '@/lib/r2';
 import type { ContentFormData } from '../types';
-import { replaceBlobUrlsRecursively, serializeContentPayload } from '../utils';
+import { minifyHtml, replaceBlobUrlsInHtml } from '../utils';
 
 export function useContentSave(
 	mode: 'create' | 'edit',
@@ -14,23 +12,12 @@ export function useContentSave(
 	contentType: ContentType,
 	entityLabel: string
 ) {
-	const editorRef = useRef<EditorJS | null>(null);
 	const blobFileMapRef = useRef<Record<string, File>>({});
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState('');
 
-	const syncEditorState = useCallback(async (editorData: OutputData): Promise<OutputData> => {
-		if (!editorRef.current) return editorData;
-		return await editorRef.current.save();
-	}, []);
-
 	const saveContent = useCallback(
-		async (
-			formData: ContentFormData,
-			currentThumbnailUrl: string,
-			editorData: OutputData,
-			editorDataForSync: OutputData
-		): Promise<boolean> => {
+		async (formData: ContentFormData, currentThumbnailUrl: string, htmlContent: string): Promise<boolean> => {
 			try {
 				setSaving(true);
 				setError('');
@@ -41,11 +28,9 @@ export function useContentSave(
 					finalThumbnailUrl = uploaded.publicUrl || uploaded.key;
 				}
 
-				const rawEditorData = await syncEditorState(editorDataForSync);
-				const swapped = (await replaceBlobUrlsRecursively(rawEditorData, blobFileMapRef.current)) as OutputData;
-
-				const serializedContent = serializeContentPayload(contentType, swapped, formData.kpis);
-				const contentObject = JSON.parse(serializedContent);
+				// Minify HTML before uploading / saving to reduce unnecessary whitespace
+				const compact = minifyHtml(htmlContent);
+				const finalHtml = await replaceBlobUrlsInHtml(compact, blobFileMapRef.current);
 
 				const payload: Record<string, unknown> = {
 					title: formData.title,
@@ -55,8 +40,17 @@ export function useContentSave(
 					type: contentType,
 					is_published: formData.is_published,
 					category_ids: formData.category_ids,
-					content: contentObject,
+					content: finalHtml,
+					kpis: formData.kpis,
 				};
+
+				// include meta tags if provided
+				if (formData.meta_title || formData.meta_description) {
+					payload.meta_tags = {
+						title: formData.meta_title || undefined,
+						description: formData.meta_description || undefined,
+					};
+				}
 
 				// Only include author_id for blogs if it has a value
 				if (contentType !== 'CASE_STUDY' && formData.author_id && formData.author_id.trim()) {
@@ -81,16 +75,14 @@ export function useContentSave(
 				setSaving(false);
 			}
 		},
-		[mode, contentId, contentType, entityLabel, syncEditorState]
+		[mode, contentId, contentType, entityLabel]
 	);
 
 	return {
-		editorRef,
 		blobFileMapRef,
 		saving,
 		error,
 		setError,
 		saveContent,
-		syncEditorState,
 	};
 }

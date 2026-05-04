@@ -1,5 +1,3 @@
-import type { OutputData } from '@editorjs/editorjs';
-
 import type { ContentType } from '@/lib/api';
 
 export interface Category {
@@ -20,6 +18,11 @@ export interface Content {
 	type: ContentType;
 	is_published: boolean;
 	categories?: Category[];
+	kpis?: CaseStudyKpi[];
+	meta_tags?: {
+		title?: string;
+		description?: string;
+	} | null;
 	created_at?: string;
 	updated_at?: string;
 }
@@ -50,18 +53,14 @@ export type ContentFormData = {
 	is_published: boolean;
 	category_ids: string[];
 	kpis: CaseStudyKpi[];
+	meta_title?: string;
+	meta_description?: string;
 };
 
 export const EMPTY_KPIS: CaseStudyKpi[] = [
 	{ stat: '', description: '' },
 	{ stat: '', description: '' },
 ];
-
-export const EMPTY_EDITOR_DATA: OutputData = {
-	time: 0,
-	blocks: [],
-	version: '2.31.0',
-};
 
 export const EMPTY_CONTENT_FORM: ContentFormData = {
 	title: '',
@@ -72,4 +71,6 @@ export const EMPTY_CONTENT_FORM: ContentFormData = {
 	is_published: false,
 	category_ids: [],
 	kpis: EMPTY_KPIS.map((item) => ({ ...item })),
+	meta_title: '',
+	meta_description: '',
 };

@@ -20,10 +20,15 @@ export async function generateMetadata({ params }: Props) {
 
 	try {
 		const caseStudy = await getCaseStudyData(slug);
+		const metaTitle = typeof caseStudy.meta_tags?.title === 'string' ? caseStudy.meta_tags.title : caseStudy.title;
+		const metaDescription =
+			typeof caseStudy.meta_tags?.description === 'string'
+				? caseStudy.meta_tags.description
+				: (caseStudy.summary ?? '');
 
 		return generateSeoMetadata({
-			title: caseStudy.title,
-			description: caseStudy.summary || '',
+			title: metaTitle,
+			description: metaDescription,
 			pageUrl: `case-studies/${slug}`,
 			type: 'article',
 		});

@@ -20,10 +20,13 @@ export async function generateMetadata({ params }: Props) {
 
 	try {
 		const blog = await getBlogData(slug);
+		const metaTitle = typeof blog.meta_tags?.title === 'string' ? blog.meta_tags.title : blog.title;
+		const metaDescription =
+			typeof blog.meta_tags?.description === 'string' ? blog.meta_tags.description : (blog.summary ?? '');
 
 		return generateSeoMetadata({
-			title: blog.title,
-			description: blog.summary || '',
+			title: metaTitle,
+			description: metaDescription,
 			pageUrl: `blogs/${slug}`,
 			type: 'article',
 		});

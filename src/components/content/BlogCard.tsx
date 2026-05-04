@@ -8,7 +8,6 @@ import { extractPreviewText } from '@/components/portal/content-editor/utils';
 import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
-import { GradientNumber } from '../ui/GradientNumber';
 import type { PublicContent } from './types';
 
 function formatContentDate(value?: string) {
@@ -28,16 +27,20 @@ function formatContentDate(value?: string) {
 	});
 }
 
-export default function BlogCard({ index, content }: { index: number; content: PublicContent }) {
+export default function BlogCard({ content }: { index: number; content: PublicContent }) {
 	const router = useRouter();
 	const previewText = extractPreviewText(content.content);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 	const publishedDate = formatContentDate(content.updated_at || content.created_at);
-	const displayId = String(index + 1).padStart(2, '0');
 	const displayText = content.summary || previewText;
 	const authorName = content.author?.name || 'SPCTEK Team';
 	const authorId = content.author_id;
 	const authorLink = authorId ? `/authors/${authorId}` : null;
+
+	// Category pills logic
+	const categories = content.categories || [];
+	const displayedCategories = categories.slice(0, 2);
+	const remainingCount = categories.length - displayedCategories.length;
 
 	const handleAuthorClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -51,11 +54,6 @@ export default function BlogCard({ index, content }: { index: number; content: P
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
-
-				{/* ID Badge */}
-				<div className="absolute right-4 top-0 z-30 hidden -translate-y-1/2 sm:right-6 sm:block">
-					<GradientNumber value={displayId} width="108px" height="72px" borderRadius="8px" rotation={0} />
-				</div>
 
 				<div className="relative z-10 flex flex-col overflow-hidden md:flex-row">
 					{thumbnailUrl && (
@@ -93,6 +91,24 @@ export default function BlogCard({ index, content }: { index: number; content: P
 								</>
 							)}
 						</div>
+
+						{categories.length > 0 && (
+							<div className="mb-3 flex flex-wrap gap-2">
+								{displayedCategories.map((category) => (
+									<span
+										key={category.id}
+										className="rounded-full border border-[#7d89ff]/45 bg-[#606bfa]/20 px-3 py-1 text-[11px] font-medium text-[#cfd5ff]"
+									>
+										{category.name}
+									</span>
+								))}
+								{remainingCount > 0 && (
+									<span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/60">
+										+{remainingCount} more
+									</span>
+								)}
+							</div>
+						)}
 
 						<div>
 							<h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-2xl">

@@ -79,7 +79,7 @@ export default function Contact() {
 								<span className="text-xl">📧</span> info@spctek.ai
 							</div>
 							<div className="flex items-center gap-3 break-words">
-								<span className="text-xl">📍</span> 17714 Bannister St, Dallas, TX
+								<span className="text-xl">📍</span> 11311 Harry Hines Blvd, Dallas, TX
 							</div>
 						</div>
 					</div>
