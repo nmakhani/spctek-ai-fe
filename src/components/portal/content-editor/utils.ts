@@ -149,7 +149,12 @@ export async function replaceBlobUrlsInHtml(
 
 	let result = html;
 	for (const blobUrl of matches) {
-		if (!blobFileMap[blobUrl]) continue;
+		if (!blobFileMap[blobUrl]) {
+			console.warn('[content-editor] No file found for blob URL during replacement', {
+				blobUrl,
+			});
+			continue;
+		}
 
 		const cached = uploadedUrlMap.get(blobUrl);
 		if (cached) {
@@ -159,6 +164,10 @@ export async function replaceBlobUrlsInHtml(
 
 		const uploaded = await uploadFileToR2(blobFileMap[blobUrl]);
 		const uploadedUrl = uploaded.publicUrl || uploaded.key;
+		console.info('[content-editor] Uploaded blob image to R2', {
+			blobUrl,
+			uploadedUrl,
+		});
 		uploadedUrlMap.set(blobUrl, uploadedUrl);
 		result = result.replace(new RegExp(blobUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), uploadedUrl);
 	}
@@ -381,12 +390,17 @@ export function sanitizePastedHtml(html: string, onDataImage?: PastedImageHandle
 
 export function minifyHtml(html: string): string {
 	if (!html) return html;
-	const compact = html
+
+	// Preserve empty lines by converting them to <br> tags before minifying
+	// This ensures line breaks are preserved as semantic HTML rather than whitespace
+	const preprocessed = html
 		.trim()
+		// Convert one or more consecutive newlines to <br> tags
+		.replace(/(\r?\n\s*)+/g, '<br>');
+
+	const compact = preprocessed
 		.replace(/\r?\n+\s*/g, ' ')
 		.replace(/>\s+</g, '><')
-		.replace(/>\s+/g, '>')
-		.replace(/\s+</g, '<')
 		.replace(/\s{2,}/g, ' ')
 		.trim();
 
@@ -400,8 +414,6 @@ export function minifyHtml(html: string): string {
 		.trim()
 		.replace(/\r?\n+\s*/g, ' ')
 		.replace(/>\s+</g, '><')
-		.replace(/>\s+/g, '>')
-		.replace(/\s+</g, '<')
 		.replace(/\s{2,}/g, ' ')
 		.trim();
 }

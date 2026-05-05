@@ -21,7 +21,6 @@ function formatContentDate(value?: string) {
 }
 
 export default function DetailHero({ content }: { content: PublicContent }) {
-	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 	const publishedDate = formatContentDate(content.created_at || content.updated_at);
 	const authorName = content.author?.name || 'SPCTEK Team';
 	const authorPosition = content.author?.position;
@@ -38,55 +37,43 @@ export default function DetailHero({ content }: { content: PublicContent }) {
 				<h1 className="mt-4 text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
 					{content.title}
 				</h1>
-				{content.summary && (
-					<p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base md:mt-5 md:text-lg">
-						{content.summary}
-					</p>
-				)}
 
-				{authorLink && (
-					<div className="mt-6 flex items-center justify-between gap-4">
-						<Link
-							href={authorLink}
-							className="inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/90 transition hover:bg-white/10 hover:text-white"
-						>
-							{authorPictureUrl ? (
-								<div className="relative h-8 w-8 overflow-hidden rounded-full">
-									<Image src={authorPictureUrl} alt={authorName} fill unoptimized className="object-cover" />
+				<div className="mt-4 flex flex-col justify-between gap-8 md:mt-6 md:flex-row md:items-stretch">
+					{content.summary && (
+						<p className="max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base md:text-lg">{content.summary}</p>
+					)}
+
+					<div className="flex shrink-0 flex-col items-start justify-between gap-4 md:items-end">
+						{authorLink ? (
+							<Link
+								href={authorLink}
+								className="inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/90 transition hover:bg-white/10 hover:text-white"
+							>
+								{authorPictureUrl ? (
+									<div className="relative h-8 w-8 overflow-hidden rounded-full">
+										<Image src={authorPictureUrl} alt={authorName} fill unoptimized className="object-cover" />
+									</div>
+								) : (
+									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+										<span className="text-sm font-bold text-white/50">{authorName.charAt(0).toUpperCase()}</span>
+									</div>
+								)}
+								<div className="flex flex-col text-left">
+									<span className="font-medium text-white">{authorName}</span>
+									{authorPosition && <span className="text-xs text-white/60">{authorPosition}</span>}
 								</div>
-							) : (
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
-									<span className="text-sm font-bold text-white/50">{authorName.charAt(0).toUpperCase()}</span>
-								</div>
-							)}
-							<div className="flex flex-col">
-								<span className="font-medium text-white">{authorName}</span>
-								{authorPosition && <span className="text-xs text-white/60">{authorPosition}</span>}
+							</Link>
+						) : (
+							<div className="text-sm text-white/60">
+								By <span className="text-white">{authorName}</span>
 							</div>
-						</Link>
-						{publishedDate && <div className="text-sm text-white/60">{publishedDate}</div>}
+						)}
+
+						{publishedDate && (
+							<div className="text-xs uppercase tracking-wider text-white/40 md:text-sm">{publishedDate}</div>
+						)}
 					</div>
-				)}
-				{!authorLink && (
-					<div className="mt-6 flex items-center justify-between gap-4">
-						<div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/60">
-							<span>By {authorName}</span>
-						</div>
-						{publishedDate && <div className="text-sm text-white/60">{publishedDate}</div>}
-					</div>
-				)}
-				{thumbnailUrl && (
-					<div className="mt-8 flex justify-center overflow-hidden">
-						<Image
-							src={thumbnailUrl}
-							alt={content.title}
-							width={1200}
-							height={675}
-							priority
-							className="h-auto w-full max-w-[60%] object-cover"
-						/>
-					</div>
-				)}
+				</div>
 			</div>
 		</div>
 	);

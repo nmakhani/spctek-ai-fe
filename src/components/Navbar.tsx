@@ -68,7 +68,7 @@ export default function Navbar() {
 						onClick={() => setMobileMenuOpen((prev) => !prev)}
 						aria-label="Toggle navigation menu"
 						aria-expanded={mobileMenuOpen}
-						className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-white transition hover:bg-white/10 lg:hidden"
+						className="mr-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-white transition hover:bg-white/10 lg:hidden"
 					>
 						<span className="sr-only">Toggle navigation menu</span>
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">

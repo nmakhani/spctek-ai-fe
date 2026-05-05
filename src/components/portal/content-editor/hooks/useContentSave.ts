@@ -6,6 +6,51 @@ import { uploadFileToR2 } from '@/lib/r2';
 import type { ContentFormData } from '../types';
 import { minifyHtml, replaceBlobUrlsInHtml } from '../utils';
 
+function extensionFromMimeType(mimeType: string): string {
+	if (!mimeType) return 'bin';
+	if (mimeType === 'image/jpeg') return 'jpg';
+	if (mimeType === 'image/png') return 'png';
+	if (mimeType === 'image/webp') return 'webp';
+	if (mimeType === 'image/gif') return 'gif';
+	if (mimeType === 'image/svg+xml') return 'svg';
+	if (mimeType === 'image/avif') return 'avif';
+	if (mimeType === 'image/bmp') return 'bmp';
+	if (mimeType === 'image/tiff') return 'tiff';
+	return mimeType.split('/')[1] || 'bin';
+}
+
+async function recoverMissingBlobFiles(blobUrls: string[], blobFileMap: Record<string, File>): Promise<void> {
+	for (let index = 0; index < blobUrls.length; index++) {
+		const blobUrl = blobUrls[index];
+		if (blobFileMap[blobUrl]) continue;
+
+		try {
+			const response = await fetch(blobUrl);
+			if (!response.ok) {
+				console.warn('[content-editor] Failed to fetch blob URL for recovery', { blobUrl, status: response.status });
+				continue;
+			}
+
+			const blob = await response.blob();
+			const mimeType = blob.type || 'application/octet-stream';
+			const extension = extensionFromMimeType(mimeType);
+			const fileName = `recovered-image-${Date.now()}-${index}.${extension}`;
+			blobFileMap[blobUrl] = new File([blob], fileName, { type: mimeType });
+
+			console.info('[content-editor] Recovered missing blob mapping from URL', {
+				blobUrl,
+				fileName,
+				mimeType,
+			});
+		} catch (error) {
+			console.warn('[content-editor] Could not recover blob URL', {
+				blobUrl,
+				error,
+			});
+		}
+	}
+}
+
 export function useContentSave(
 	mode: 'create' | 'edit',
 	contentId: string | undefined,
@@ -17,20 +62,57 @@ export function useContentSave(
 	const [error, setError] = useState('');
 
 	const saveContent = useCallback(
-		async (formData: ContentFormData, currentThumbnailUrl: string, htmlContent: string): Promise<boolean> => {
+		async (
+			formData: ContentFormData,
+			currentThumbnailUrl: string,
+			htmlContent: string,
+			blobFileMap: Record<string, File> = blobFileMapRef.current
+		): Promise<boolean> => {
 			try {
 				setSaving(true);
 				setError('');
 
 				let finalThumbnailUrl = currentThumbnailUrl;
-				if (finalThumbnailUrl.startsWith('blob:') && blobFileMapRef.current[finalThumbnailUrl]) {
-					const uploaded = await uploadFileToR2(blobFileMapRef.current[finalThumbnailUrl]);
+				if (finalThumbnailUrl.startsWith('blob:') && blobFileMap[finalThumbnailUrl]) {
+					const uploaded = await uploadFileToR2(blobFileMap[finalThumbnailUrl]);
 					finalThumbnailUrl = uploaded.publicUrl || uploaded.key;
 				}
 
 				// Minify HTML before uploading / saving to reduce unnecessary whitespace
 				const compact = minifyHtml(htmlContent);
-				const finalHtml = await replaceBlobUrlsInHtml(compact, blobFileMapRef.current);
+				const blobUrlsInHtml = Array.from(new Set(compact.match(/blob:[^"'\s]+/g) || []));
+				const missingBlobFiles = blobUrlsInHtml.filter((blobUrl) => !blobFileMap[blobUrl]);
+
+				console.info('[content-editor] Save diagnostics', {
+					blobUrlsInHtmlCount: blobUrlsInHtml.length,
+					blobFileMapCount: Object.keys(blobFileMap).length,
+					thumbnailIsBlob: finalThumbnailUrl.startsWith('blob:'),
+				});
+
+				if (missingBlobFiles.length > 0) {
+					await recoverMissingBlobFiles(missingBlobFiles, blobFileMap);
+				}
+
+				const unresolvedBlobFiles = blobUrlsInHtml.filter((blobUrl) => !blobFileMap[blobUrl]);
+
+				if (unresolvedBlobFiles.length > 0) {
+					console.warn('[content-editor] Missing file mappings for blob URLs', {
+						missingBlobFiles: unresolvedBlobFiles,
+						knownBlobUrls: Object.keys(blobFileMap),
+					});
+					throw new Error(
+						'One or more images are still local blob URLs and cannot be uploaded. Please remove and reinsert those images, then save again.'
+					);
+				}
+
+				const finalHtml = await replaceBlobUrlsInHtml(compact, blobFileMap);
+				const remainingBlobUrls = finalHtml.match(/blob:[^"'\s]+/g) || [];
+				if (remainingBlobUrls.length > 0) {
+					console.warn('[content-editor] Blob URLs remained after replacement', {
+						remainingBlobUrls,
+					});
+					throw new Error('Image upload failed for one or more local images. Please try again.');
+				}
 
 				const payload: Record<string, unknown> = {
 					title: formData.title,
@@ -58,9 +140,16 @@ export function useContentSave(
 				}
 
 				if (mode === 'edit' && contentId) {
+					console.info('[content-editor] Updating existing content', {
+						contentId,
+						hasBlobInPayload: /blob:[^"'\s]+/.test(finalHtml),
+					});
 					await contentApi.update(contentId, payload);
 					toast.success(`${entityLabel} updated`);
 				} else {
+					console.info('[content-editor] Creating content', {
+						hasBlobInPayload: /blob:[^"'\s]+/.test(finalHtml),
+					});
 					await contentApi.create(payload);
 					toast.success(`${entityLabel} created`);
 				}

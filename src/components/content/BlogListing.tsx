@@ -10,21 +10,15 @@ import BlogCard from './BlogCard';
 import FilterBar from './FilterBar';
 import type { PublicContent } from './types';
 
-function getErrorMessage(err: unknown, fallback: string): string {
-	return err instanceof Error ? err.message : fallback;
-}
-
 export default function BlogListing() {
 	const [contents, setContents] = useState<PublicContent[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const contentType = 'BLOG';
-	const errorText = 'Failed to load blogs';
 
 	const handleSearchSubmit = () => {
 		setSearchTerm(searchInput.trim());
@@ -69,12 +63,11 @@ export default function BlogListing() {
 					return;
 				}
 				setContents(response.data as PublicContent[]);
-				setError('');
-			} catch (err: unknown) {
+			} catch {
 				if (!isMounted) {
 					return;
 				}
-				setError(getErrorMessage(err, errorText));
+				setContents([]);
 			} finally {
 				if (isMounted) {
 					setLoading(false);
@@ -87,7 +80,7 @@ export default function BlogListing() {
 		return () => {
 			isMounted = false;
 		};
-	}, [contentType, searchTerm, selectedCategory, errorText]);
+	}, [contentType, searchTerm, selectedCategory]);
 
 	const publishedContents = useMemo(() => contents.filter((content) => content.is_published), [contents]);
 	const filterCategories = useMemo(
@@ -109,12 +102,6 @@ export default function BlogListing() {
 
 				<div className="grid grid-cols-1 gap-7 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
 					<div className="pt-2">
-						{error && (
-							<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">
-								{error}
-							</div>
-						)}
-
 						{loading ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 								Loading articles...

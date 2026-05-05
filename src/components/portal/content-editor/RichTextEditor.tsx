@@ -65,8 +65,32 @@ function wrapSelectionWithElement(createElement: () => HTMLElement): boolean {
 	return true;
 }
 
+function selectNode(node: Node): void {
+	const selection = window.getSelection();
+	if (!selection) return;
+
+	const range = document.createRange();
+	range.selectNode(node);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
+
+function normalizeHref(rawHref: string): string {
+	const value = rawHref.trim();
+	if (!value) return '';
+
+	// Keep anchors, query-only links, root-relative paths, protocol-relative URLs, and explicit schemes.
+	if (value.startsWith('#') || value.startsWith('?') || value.startsWith('/')) return value;
+	if (value.startsWith('//')) return `https:${value}`;
+	if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(value)) return value;
+
+	// Bare domains (e.g. "example.com") should be treated as external URLs.
+	return `https://${value}`;
+}
+
 function insertLink(href: string): boolean {
 	const cleanHref = href.trim();
+	const normalizedHref = normalizeHref(cleanHref);
 	if (!cleanHref) return false;
 
 	const range = getSelectionRange();
@@ -74,7 +98,7 @@ function insertLink(href: string): boolean {
 
 	if (range.collapsed) {
 		const anchor = document.createElement('a');
-		anchor.href = cleanHref;
+		anchor.setAttribute('href', normalizedHref);
 		anchor.target = '_blank';
 		anchor.rel = 'noopener noreferrer';
 		anchor.textContent = cleanHref;
@@ -84,7 +108,7 @@ function insertLink(href: string): boolean {
 
 	return wrapSelectionWithElement(() => {
 		const anchor = document.createElement('a');
-		anchor.href = cleanHref;
+		anchor.setAttribute('href', normalizedHref);
 		anchor.target = '_blank';
 		anchor.rel = 'noopener noreferrer';
 		return anchor;
@@ -316,6 +340,7 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	];
 
 	const headingButtons = [
+		{ label: 'P', value: 'p', title: 'Paragraph' },
 		{ label: 'H1', value: 'h1', title: 'Heading 1' },
 		{ label: 'H2', value: 'h2', title: 'Heading 2' },
 		{ label: 'H3', value: 'h3', title: 'Heading 3' },
@@ -332,7 +357,7 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	return (
 		<div className="flex flex-col gap-3">
 			{/* Toolbar */}
-			<div className="sticky top-4 z-50 w-full self-start rounded-2xl border border-white/15 bg-[#09101f]/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-md">
+			<div className="sticky top-24 z-40 w-full self-start rounded-2xl border border-white/15 bg-[#09101f]/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-md">
 				<div className="flex flex-wrap items-center gap-2">
 					{toolbarButtons.map((btn) => (
 						<ToolbarButton
@@ -355,6 +380,18 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 						onClick={() => {
 							execCommand('fontName', 'monospace');
 							handleEditorInput();
+						}}
+					/>
+
+					<ToolbarButton
+						icon="✕"
+						title="Clear all formatting"
+						onClick={() => {
+							if (editorRef.current) {
+								const text = editorRef.current.textContent || '';
+								editorRef.current.innerHTML = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+								handleEditorInput();
+							}
 						}}
 					/>
 
@@ -491,6 +528,14 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 							onInput={handleEditorInput}
 							onKeyUp={handleEditorKeyUp}
 							onMouseUp={handleEditorMouseUp}
+							onMouseDown={(e) => {
+								const target = e.target as HTMLElement | null;
+								if (target?.tagName === 'IMG') {
+									e.preventDefault();
+									selectNode(target);
+									updateActiveCommands();
+								}
+							}}
 							className="prose-inherit min-h-[50vh] w-full outline-none"
 							style={{ whiteSpace: 'pre-wrap' }}
 							data-placeholder={placeholder || 'Start writing...'}

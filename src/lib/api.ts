@@ -48,7 +48,9 @@ apiClient.interceptors.response.use(
 			message: error.message,
 		});
 
-		if (error.response?.status === 401) {
+		const status = error.response?.status;
+
+		if (status === 401) {
 			if (typeof window !== 'undefined') {
 				localStorage.removeItem('auth_token');
 				localStorage.removeItem('auth_user');

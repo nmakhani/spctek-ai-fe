@@ -113,7 +113,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 		// Ensure HTML is minified before saving so DB stores compact/raw HTML
 		const compactHtml = minifyHtml(htmlContent || '');
 		setHtmlContent(compactHtml);
-		const success = await saveContent(formData, currentThumbnailUrl, compactHtml);
+		const success = await saveContent(formData, currentThumbnailUrl, compactHtml, blobFileMap);
 		if (success) {
 			setHighlightErrors(false);
 			router.back();

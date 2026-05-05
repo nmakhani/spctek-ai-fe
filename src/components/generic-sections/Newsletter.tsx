@@ -69,13 +69,7 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 							Weekly Newsletter
 						</p>
 						<h2 className={`${compact ? 'text-xl' : 'text-3xl'} font-semibold leading-[1.08] text-white`}>
-							Scale Without
-							{!compact && (
-								<>
-									<br />
-									Operational Chaos
-								</>
-							)}
+							Scale Without Operational Chaos
 						</h2>
 						<p
 							className={`mx-auto ${compact ? 'max-w-xs text-sm' : 'max-w-md text-sm'} leading-relaxed text-slate-200/90`}
@@ -98,7 +92,11 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 										if (isError) setIsError(false);
 									}}
 									placeholder="your@email.com"
-									className="glow-input w-full border-none bg-transparent text-center text-base outline-none transition-colors placeholder:text-slate-500 sm:text-lg md:text-[1.1rem]"
+									className={`glow-input w-full border-none bg-transparent text-center outline-none transition-colors placeholder:text-slate-500 ${
+										compact
+											? 'text-sm placeholder:text-sm'
+											: 'text-base placeholder:text-base sm:text-lg sm:placeholder:text-lg md:text-[1.1rem]'
+									} `}
 								/>
 							</div>
 						</div>

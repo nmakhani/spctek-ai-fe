@@ -117,6 +117,13 @@ export default class RichParagraphTool {
 	private applyAction(command: string, value?: string) {
 		this.editable.focus();
 
+		if (command === 'removeFormat') {
+			// Clear all formatting and reset to plain text
+			const text = this.editable.textContent || '';
+			this.editable.innerHTML = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			return;
+		}
+
 		if (command === 'link') {
 			const url = window.prompt('Enter link URL', 'https://');
 			if (!url) {
