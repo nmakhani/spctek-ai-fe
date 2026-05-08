@@ -14,6 +14,7 @@ interface FilterBarProps {
 	onCategoryChange: (value: string) => void;
 	onSearchChange: (value: string) => void;
 	onSearchSubmit: () => void;
+	categoriesLoading?: boolean;
 }
 
 export default function FilterBar({
@@ -23,6 +24,7 @@ export default function FilterBar({
 	onCategoryChange,
 	onSearchChange,
 	onSearchSubmit,
+	categoriesLoading = false,
 }: FilterBarProps) {
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
@@ -41,12 +43,13 @@ export default function FilterBar({
 								key={item.value}
 								type="button"
 								onClick={() => onCategoryChange(item.value)}
+								disabled={categoriesLoading}
 								className={`relative z-10 flex-1 whitespace-nowrap px-4 pb-4 text-center text-base font-medium tracking-wide transition sm:px-5 sm:text-lg md:px-6 md:text-xl ${
 									active ? 'text-white' : 'text-white/70 hover:text-white'
-								}`}
+								} disabled:cursor-not-allowed disabled:opacity-50`}
 							>
 								{item.label}
-								{active && (
+								{active && !categoriesLoading && (
 									<span className="absolute -bottom-[1px] left-0 flex w-full justify-center">
 										<span className="h-[2px] w-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
 									</span>

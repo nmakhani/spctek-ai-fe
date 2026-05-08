@@ -51,39 +51,6 @@ export function parseContentPayload(content: string | Record<string, unknown>): 
 		const parsed = JSON.parse(contentStr) as unknown;
 		if (parsed && typeof parsed === 'object') {
 			const record = parsed as Record<string, unknown>;
-			// Check if it's legacy EditorJS format
-			if (Array.isArray((record as { blocks?: unknown[] }).blocks)) {
-				// Legacy format - extract HTML from blocks
-				const blocks = (record as { blocks?: unknown[] }).blocks || [];
-				let html = '';
-				for (const block of blocks) {
-					if (typeof block === 'object' && block !== null) {
-						const blockData = block as Record<string, unknown>;
-						if (blockData.type === 'paragraph' && blockData.data) {
-							const text = String((blockData.data as Record<string, unknown>).text || '');
-							html += `<p>${text}</p>`;
-						} else if (blockData.type === 'header' && blockData.data) {
-							const text = String((blockData.data as Record<string, unknown>).text || '');
-							const level = Number((blockData.data as Record<string, unknown>).level || 2);
-							html += `<h${level}>${text}</h${level}>`;
-						} else if (blockData.type === 'list' && blockData.data) {
-							const items = ((blockData.data as Record<string, unknown>).items as string[]) || [];
-							const style = String((blockData.data as Record<string, unknown>).style || 'unordered');
-							const tag = style === 'ordered' ? 'ol' : 'ul';
-							html += `<${tag}>${items.map((item) => `<li>${item}</li>`).join('')}</${tag}>`;
-						} else if (blockData.type === 'image' && blockData.data) {
-							const file = ((blockData.data as Record<string, unknown>).file as Record<string, unknown>) || {};
-							const url = String(file.url || '');
-							const caption = String((blockData.data as Record<string, unknown>).caption || '');
-							html += `<img src="${url}" alt="${caption}" style="max-width:100%;border-radius:0.75rem;" />`;
-						}
-					}
-				}
-				return {
-					html,
-					kpis: normalizeKpis(record.kpis),
-				};
-			}
 			// New format - content is HTML string
 			return {
 				html: contentStr,
@@ -156,6 +123,16 @@ function parseStyle(style: string): Record<string, string> {
 		}, {});
 }
 
+function stripFontStyles(style: string): string {
+	const parsed = parseStyle(style);
+	const stylesToRemove = ['font-family', 'font-size', 'font-weight'];
+	const filtered = Object.entries(parsed)
+		.filter(([key]) => !stylesToRemove.includes(key))
+		.map(([key, value]) => `${key}: ${value}`)
+		.join('; ');
+	return filtered;
+}
+
 function isBoldStyle(style: string, tag: string): boolean {
 	if (tag === 'b' || tag === 'strong') return true;
 	if (!['span', 'font', 'i', 'em', 'u', 's', 'strike', 'a'].includes(tag)) return false;
@@ -210,7 +187,7 @@ export function sanitizePastedHtml(html: string, onDataImage?: PastedImageHandle
 
 			const element = child as HTMLElement;
 			const tag = element.tagName.toLowerCase();
-			const style = element.getAttribute('style') || '';
+			const style = stripFontStyles(element.getAttribute('style') || '');
 			const isBodyChild = element.parentElement === sourceDoc.body;
 			const hasBlockChildren = Array.from(element.children).some((childEl) =>
 				[
@@ -280,7 +257,36 @@ export function sanitizePastedHtml(html: string, onDataImage?: PastedImageHandle
 			}
 
 			if (['p', 'div', 'blockquote', 'li', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre'].includes(tag)) {
-				const block = targetDoc.createElement(tag === 'div' ? 'p' : tag);
+				const headingStyles: Record<string, string> = {
+					h1: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 2.25em; font-weight: normal',
+					h2: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 1.5em; font-weight: normal',
+					h3: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 1.2em; font-weight: 500',
+				};
+
+				let finalTag = tag === 'div' ? 'p' : tag;
+				// Convert h4-h6 to h3
+				if (['h4', 'h5', 'h6'].includes(tag)) {
+					finalTag = 'h3';
+				}
+
+				const block = targetDoc.createElement(finalTag);
+
+				// Apply heading styles if it's a heading
+				if (headingStyles[finalTag]) {
+					block.setAttribute('style', headingStyles[finalTag]);
+				}
+
+				// For headings, strip styles from children to enforce the heading style
+				if (headingStyles[finalTag]) {
+					const children = Array.from(element.childNodes);
+					children.forEach((child) => {
+						if (child.nodeType === Node.ELEMENT_NODE) {
+							const childEl = child as HTMLElement;
+							childEl.removeAttribute('style');
+						}
+					});
+				}
+
 				block.append(...sanitizeChildren(element));
 				nodes.push(block);
 				return;
@@ -355,14 +361,8 @@ export function sanitizePastedHtml(html: string, onDataImage?: PastedImageHandle
 export function minifyHtml(html: string): string {
 	if (!html) return html;
 
-	// Preserve empty lines by converting them to <br> tags before minifying
-	// This ensures line breaks are preserved as semantic HTML rather than whitespace
-	const preprocessed = html
+	const compact = html
 		.trim()
-		// Convert one or more consecutive newlines to <br> tags
-		.replace(/(\r?\n\s*)+/g, '<br>');
-
-	const compact = preprocessed
 		.replace(/\r?\n+\s*/g, ' ')
 		.replace(/>\s+</g, '><')
 		.replace(/\s{2,}/g, ' ')
@@ -380,6 +380,81 @@ export function minifyHtml(html: string): string {
 		.replace(/>\s+</g, '><')
 		.replace(/\s{2,}/g, ' ')
 		.trim();
+}
+
+export function prettifyHtml(html: string): string {
+	if (!html) return html;
+
+	if (typeof document === 'undefined') {
+		return html;
+	}
+
+	const tmp = document.createElement('div');
+	tmp.innerHTML = html;
+
+	const indentStr = '\t';
+
+	function formatNode(node: Node, depth: number): string {
+		if (node.nodeType === Node.TEXT_NODE) {
+			const text = node.textContent || '';
+			if (text.trim()) {
+				return text;
+			}
+			return '';
+		}
+
+		if (node.nodeType !== Node.ELEMENT_NODE) {
+			return '';
+		}
+
+		const element = node as HTMLElement;
+		const tagName = element.tagName.toLowerCase();
+		const isVoid = ['img', 'br', 'hr', 'input', 'meta', 'link'].includes(tagName);
+
+		// Get attributes
+		let attrs = '';
+		for (let i = 0; i < element.attributes.length; i++) {
+			const attr = element.attributes[i];
+			attrs += ` ${attr.name}="${attr.value}"`;
+		}
+
+		const children = Array.from(element.childNodes);
+		const hasTextChildren = children.some((child) => child.nodeType === Node.TEXT_NODE && child.textContent?.trim());
+		const hasElementChildren = children.some((child) => child.nodeType === Node.ELEMENT_NODE);
+
+		if (isVoid) {
+			return indentStr.repeat(depth) + `<${tagName}${attrs} />`;
+		}
+
+		if (!hasElementChildren && !hasTextChildren) {
+			return indentStr.repeat(depth) + `<${tagName}${attrs}></${tagName}>`;
+		}
+
+		// Format children preserving order
+		const formattedChildren = children
+			.map((child) => formatNode(child, hasElementChildren ? depth + 1 : 0))
+			.filter(Boolean);
+
+		if (hasTextChildren && !hasElementChildren) {
+			// Text-only element: put content on its own line
+			const innerText = formattedChildren.join('').trim();
+			return `${indentStr.repeat(depth)}<${tagName}${attrs}>\n${innerText}\n${indentStr.repeat(depth)}</${tagName}>`;
+		}
+
+		if (hasElementChildren) {
+			// Has element children: join with newlines for structure
+			const innerContent = formattedChildren.join('\n');
+			return `${indentStr.repeat(depth)}<${tagName}${attrs}>\n${innerContent}\n${indentStr.repeat(depth)}</${tagName}>`;
+		}
+
+		return `${indentStr.repeat(depth)}<${tagName}${attrs}></${tagName}>`;
+	}
+
+	const formatted = Array.from(tmp.childNodes)
+		.map((node) => formatNode(node, 0))
+		.filter(Boolean)
+		.join('\n');
+	return formatted;
 }
 
 export function extractHeadingsWithIds(html: string): {

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { authorsApi, type ContentType } from '@/lib/api';
 import { ContentMetaForm } from './ContentMetaForm';
 import { EditorHeader } from './EditorHeader';
-import { EditorStyles } from './EditorStyles';
 import { EditorWorkspace } from './EditorWorkspace';
 import { useContentData, useContentSave } from './hooks';
 import type { AuthorRead } from './types';
@@ -154,7 +153,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 				onSave={handleSave}
 			/>
 
-			<main className="mx-auto mt-16 max-w-7xl px-6 py-8">
+			<main className="mx-auto mt-24 max-w-7xl px-6 py-8">
 				{error && (
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}
@@ -211,8 +210,6 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 					/>
 				</div>
 			</main>
-
-			<EditorStyles editorHolderId={baseId} />
 		</div>
 	);
 }

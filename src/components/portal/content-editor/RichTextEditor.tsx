@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 
-import { minifyHtml, sanitizePastedHtml } from './utils';
+import { minifyHtml, prettifyHtml, sanitizePastedHtml } from './utils';
 
 interface RichTextEditorProps {
 	value: string;
@@ -149,7 +149,32 @@ function applyHighlight(): boolean {
 
 function getClosestSelectionElement(tagName: string): HTMLElement | null {
 	const selection = window.getSelection();
-	const node = selection?.anchorNode;
+	if (!selection) return null;
+
+	// Check if selection contains the element
+	if (selection.rangeCount > 0) {
+		const range = selection.getRangeAt(0);
+
+		// Check if the selected node itself is the element
+		if (range.startContainer === range.endContainer && range.startContainer.nodeType === Node.ELEMENT_NODE) {
+			const container = range.startContainer as Element;
+			if (container.tagName.toLowerCase() === tagName.toLowerCase()) {
+				return container as HTMLElement;
+			}
+		}
+
+		// Check if the element is within the selection
+		const commonAncestor = range.commonAncestorContainer;
+		const ancestorElement =
+			commonAncestor.nodeType === Node.ELEMENT_NODE ? (commonAncestor as Element) : commonAncestor.parentElement;
+		if (ancestorElement) {
+			const found = ancestorElement.querySelector(tagName);
+			if (found) return found as HTMLElement;
+		}
+	}
+
+	// Otherwise use anchorNode
+	const node = selection.anchorNode;
 	const element = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
 	return element?.closest(tagName) as HTMLElement | null;
 }
@@ -243,7 +268,13 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	const [hoveredLink, setHoveredLink] = useState<string>('');
 	const [showLinkModal, setShowLinkModal] = useState(false);
 	const [linkUrl, setLinkUrl] = useState<string>('');
+	const [showAltModal, setShowAltModal] = useState(false);
+	const [altText, setAltText] = useState<string>('');
+	const [hoveredImageAlt, setHoveredImageAlt] = useState<string>('');
+	const [selectedImage, setSelectedImage] = useState<HTMLImageElement | null>(null);
+	const selectedImageRef = useRef<HTMLImageElement | null>(null);
 	const blobFileMapRef = useRef<Record<string, File>>({});
+	const htmlTextareaRef = useRef<HTMLTextAreaElement>(null);
 
 	function insertLinkWithSavedSelection(href: string): boolean {
 		// Restore the saved selection range if available
@@ -279,6 +310,14 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	useEffect(() => {
 		onBlobFileMapChange({ ...blobFileMapRef.current });
 	}, [onBlobFileMapChange]);
+
+	// Auto-resize HTML textarea
+	useEffect(() => {
+		if (htmlMode && htmlTextareaRef.current) {
+			htmlTextareaRef.current.style.height = 'auto';
+			htmlTextareaRef.current.style.height = `${htmlTextareaRef.current.scrollHeight}px`;
+		}
+	}, [htmlMode, value]);
 
 	const updateActiveCommands = useCallback(() => {
 		const base = ['bold', 'italic', 'underline', 'strikeThrough'];
@@ -340,6 +379,27 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 		updateActiveCommands();
 	}, [updateActiveCommands]);
 
+	const handleEditorKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLDivElement>) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				const selection = window.getSelection();
+				if (selection && selection.rangeCount > 0) {
+					const range = selection.getRangeAt(0);
+					const br = document.createElement('br');
+					range.deleteContents();
+					range.insertNode(br);
+					range.setStartAfter(br);
+					range.setEndAfter(br);
+					selection.removeAllRanges();
+					selection.addRange(range);
+					handleEditorInput();
+				}
+			}
+		},
+		[handleEditorInput]
+	);
+
 	const handleEditorMouseUp = useCallback(() => {
 		updateActiveCommands();
 	}, [updateActiveCommands]);
@@ -347,15 +407,24 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	const handleEditorMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
 		const target = e.target as HTMLElement;
 		const link = target.closest('a');
+		const img = target.closest('img');
+
 		if (link && link.getAttribute('href')) {
 			setHoveredLink(link.getAttribute('href') || '');
 		} else {
 			setHoveredLink('');
 		}
+
+		if (img instanceof HTMLImageElement) {
+			setHoveredImageAlt(img.getAttribute('alt') || '');
+		} else {
+			setHoveredImageAlt('');
+		}
 	}, []);
 
 	const handleEditorMouseLeave = useCallback(() => {
 		setHoveredLink('');
+		setHoveredImageAlt('');
 	}, []);
 
 	const handleEditorPaste = useCallback(
@@ -637,7 +706,6 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 					<div className="mx-1 h-6 w-px bg-white/15" />
 
 					<ToolbarButton
-						label="Link"
 						icon="↗"
 						title="Insert Link"
 						active={activeCommands.has('link')}
@@ -687,6 +755,20 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 
 					<ToolbarButton icon="IMG" title="Insert Image" onClick={insertImage} />
 
+					<ToolbarButton
+						icon="ALT"
+						title="Edit Image Alt Text"
+						active={selectedImage !== null}
+						onClick={() => {
+							if (selectedImage) {
+								selectedImageRef.current = selectedImage;
+								setAltText(selectedImage.getAttribute('alt') || '');
+								setShowAltModal(true);
+							}
+						}}
+						disabled={!selectedImage}
+					/>
+
 					<div className="ml-auto flex items-center gap-2">
 						<button
 							type="button"
@@ -698,7 +780,20 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 							className="rounded-lg border border-white/20 bg-white/[0.04] px-3 py-1.5 text-sm font-medium text-white/80 transition hover:bg-white/[0.12]"
 							title="Minify HTML"
 						>
-							Minify
+							Mini
+						</button>
+
+						<button
+							type="button"
+							onClick={() => {
+								const pretty = prettifyHtml(value || '');
+								onChange(pretty);
+								if (!htmlMode && editorRef.current) editorRef.current.innerHTML = pretty;
+							}}
+							className="rounded-lg border border-white/20 bg-white/[0.04] px-3 py-1.5 text-sm font-medium text-white/80 transition hover:bg-white/[0.12]"
+							title="Prettify HTML"
+						>
+							Pretty
 						</button>
 
 						<button
@@ -715,13 +810,14 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			{/* Editor */}
 			<div
 				ref={wrapperRef}
-				className="relative min-h-[50vh] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04]"
+				className={`relative min-h-[50vh] rounded-2xl border border-white/15 bg-white/[0.04] ${htmlMode ? '' : ''}`}
 			>
 				{htmlMode ? (
 					<textarea
+						ref={htmlTextareaRef}
 						value={value}
 						onChange={handleHtmlChange}
-						className="h-[50vh] w-full resize-y bg-transparent p-4 font-mono text-sm leading-relaxed text-white/90 outline-none"
+						className="min-h-[50vh] w-full resize-none bg-transparent p-4 font-mono text-sm leading-relaxed text-white/90 outline-none"
 						placeholder={placeholder || 'Write your content in HTML...'}
 						spellCheck={false}
 					/>
@@ -732,6 +828,7 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 							contentEditable
 							suppressContentEditableWarning
 							onInput={handleEditorInput}
+							onKeyDown={handleEditorKeyDown}
 							onKeyUp={handleEditorKeyUp}
 							onMouseUp={handleEditorMouseUp}
 							onMouseMove={handleEditorMouseMove}
@@ -741,7 +838,10 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 								if (target?.tagName === 'IMG') {
 									e.preventDefault();
 									selectNode(target);
+									setSelectedImage(target as HTMLImageElement);
 									updateActiveCommands();
+								} else {
+									setSelectedImage(null);
 								}
 							}}
 							className="prose-inherit min-h-[50vh] w-full outline-none"
@@ -759,10 +859,20 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			<input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageSelect} className="hidden" />
 
 			{/* Link preview on hover */}
-			{hoveredLink && (
+			{(hoveredLink || hoveredImageAlt) && (
 				<div className="fixed bottom-4 left-4 z-50 max-w-md overflow-hidden rounded-lg border border-white/15 bg-[#09101f]/95 px-3 py-2 text-xs text-white/80 shadow-2xl backdrop-blur-md">
-					<span className="text-white/60">Link: </span>
-					<span className="font-mono">{hoveredLink}</span>
+					{hoveredLink && (
+						<div>
+							<span className="text-white/60">Link: </span>
+							<span className="font-mono">{hoveredLink}</span>
+						</div>
+					)}
+					{hoveredImageAlt && (
+						<div className={hoveredLink ? 'mt-1' : ''}>
+							<span className="text-white/60">Alt: </span>
+							<span className="font-mono">{hoveredImageAlt}</span>
+						</div>
+					)}
 				</div>
 			)}
 
@@ -826,6 +936,66 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 								className="flex-1 rounded-lg border border-[#606bfa]/60 bg-[#606bfa]/25 px-4 py-2 text-sm font-medium text-[#a9b2ff] transition hover:bg-[#606bfa]/35"
 							>
 								Save Link
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Alt Modal */}
+			{showAltModal && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+					<div className="w-full max-w-md rounded-2xl border border-white/15 bg-[#09101f]/95 p-6 shadow-2xl shadow-black/50 backdrop-blur-md">
+						<h3 className="mb-4 text-lg font-semibold text-white">Edit Image Alt Text</h3>
+						<input
+							type="text"
+							value={altText}
+							onChange={(e) => setAltText(e.target.value)}
+							placeholder="Enter alt text (e.g., A descriptive text for the image)"
+							className="w-full rounded-lg border border-white/15 bg-white/[0.06] px-4 py-2 text-white placeholder-white/40 outline-none transition focus:border-[#606bfa]/60 focus:bg-white/[0.08]"
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									if (selectedImageRef.current) {
+										selectedImageRef.current.setAttribute('alt', altText);
+										handleEditorInput();
+									}
+									setShowAltModal(false);
+									setAltText('');
+									selectedImageRef.current = null;
+								} else if (e.key === 'Escape') {
+									setShowAltModal(false);
+									setAltText('');
+									selectedImageRef.current = null;
+								}
+							}}
+							autoFocus
+						/>
+						<div className="mt-6 flex gap-2">
+							<button
+								type="button"
+								onClick={() => {
+									setShowAltModal(false);
+									setAltText('');
+									selectedImageRef.current = null;
+								}}
+								className="flex-1 rounded-lg border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/[0.12]"
+							>
+								Cancel
+							</button>
+							<button
+								type="button"
+								onClick={() => {
+									if (selectedImageRef.current) {
+										selectedImageRef.current.setAttribute('alt', altText);
+										handleEditorInput();
+									}
+									setShowAltModal(false);
+									setAltText('');
+									selectedImageRef.current = null;
+								}}
+								className="flex-1 rounded-lg border border-[#606bfa]/60 bg-[#606bfa]/25 px-4 py-2 text-sm font-medium text-[#a9b2ff] transition hover:bg-[#606bfa]/35"
+							>
+								Save Alt Text
 							</button>
 						</div>
 					</div>

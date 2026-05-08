@@ -14,6 +14,7 @@ export default function BlogListing() {
 	const [contents, setContents] = useState<PublicContent[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [categoriesLoading, setCategoriesLoading] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
@@ -29,6 +30,7 @@ export default function BlogListing() {
 
 		const fetchCategories = async () => {
 			try {
+				setCategoriesLoading(true);
 				const response = await categoriesApi.list();
 				if (!isMounted) {
 					return;
@@ -37,6 +39,10 @@ export default function BlogListing() {
 			} catch {
 				if (isMounted) {
 					setCategories([]);
+				}
+			} finally {
+				if (isMounted) {
+					setCategoriesLoading(false);
 				}
 			}
 		};
@@ -57,7 +63,6 @@ export default function BlogListing() {
 				const response = await contentApi.list({
 					type: contentType,
 					search: searchTerm || undefined,
-					category: selectedCategory !== 'all' ? selectedCategory : undefined,
 				});
 				if (!isMounted) {
 					return;
@@ -80,12 +85,25 @@ export default function BlogListing() {
 		return () => {
 			isMounted = false;
 		};
-	}, [contentType, searchTerm, selectedCategory]);
+	}, [contentType, searchTerm]);
 
 	const publishedContents = useMemo(() => contents.filter((content) => content.is_published), [contents]);
+
+	const filteredContents = useMemo(() => {
+		if (selectedCategory === 'all') {
+			return publishedContents;
+		}
+		return publishedContents.filter((content) =>
+			content.categories?.some((category) => category.slug === selectedCategory)
+		);
+	}, [publishedContents, selectedCategory]);
+
 	const filterCategories = useMemo(
-		() => [{ label: 'All', value: 'all' }, ...categories.map((item) => ({ label: item.name, value: item.slug }))],
-		[categories]
+		() =>
+			categoriesLoading
+				? [{ label: 'Loading categories...', value: 'all' }]
+				: [{ label: 'All', value: 'all' }, ...categories.map((item) => ({ label: item.name, value: item.slug }))],
+		[categories, categoriesLoading]
 	);
 
 	return (
@@ -98,6 +116,7 @@ export default function BlogListing() {
 					onCategoryChange={setSelectedCategory}
 					onSearchChange={setSearchInput}
 					onSearchSubmit={handleSearchSubmit}
+					categoriesLoading={categoriesLoading}
 				/>
 
 				<div className="grid grid-cols-1 gap-7 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
@@ -106,13 +125,13 @@ export default function BlogListing() {
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 								Loading articles...
 							</div>
-						) : publishedContents.length === 0 ? (
+						) : filteredContents.length === 0 ? (
 							<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 								No published blogs yet. Please check back soon.
 							</div>
 						) : (
 							<div className="flex flex-col gap-12">
-								{publishedContents.map((content, index) => (
+								{filteredContents.map((content, index) => (
 									<BlogCard key={content.id} content={content} index={index} />
 								))}
 							</div>
