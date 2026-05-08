@@ -96,6 +96,22 @@ function insertLink(href: string): boolean {
 	const range = getSelectionRange();
 	if (!range) return false;
 
+	// If selection already sits inside an anchor, update it instead of nesting
+	try {
+		const sel = window.getSelection();
+		const node = sel?.anchorNode ?? null;
+		const element = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
+		const existingAnchor = element?.closest('a') as HTMLAnchorElement | null;
+		if (existingAnchor) {
+			existingAnchor.setAttribute('href', normalizedHref);
+			existingAnchor.target = '_blank';
+			existingAnchor.setAttribute('rel', 'noopener noreferrer');
+			return true;
+		}
+	} catch (err) {
+		console.error('Error updating existing link:', err);
+	}
+
 	if (range.collapsed) {
 		const anchor = document.createElement('a');
 		anchor.setAttribute('href', normalizedHref);
@@ -104,6 +120,13 @@ function insertLink(href: string): boolean {
 		anchor.textContent = cleanHref;
 		range.insertNode(anchor);
 		return true;
+	}
+
+	// Remove any anchors inside selection to avoid nested links
+	try {
+		unwrapElementsInRange(range, 'a');
+	} catch (err) {
+		console.error('Error unwrapping element in range:', err);
 	}
 
 	return wrapSelectionWithElement(() => {
@@ -131,6 +154,45 @@ function getClosestSelectionElement(tagName: string): HTMLElement | null {
 	return element?.closest(tagName) as HTMLElement | null;
 }
 
+function unwrapElementsInRange(range: Range, selector: string) {
+	const container =
+		range.commonAncestorContainer instanceof Element
+			? range.commonAncestorContainer
+			: (range.commonAncestorContainer.parentElement as Element | null);
+	if (!container) return;
+	const els = Array.from(container.querySelectorAll(selector));
+	for (const el of els) {
+		try {
+			if (range.intersectsNode(el)) {
+				const parent = el.parentNode;
+				if (!parent) continue;
+				while (el.firstChild) parent.insertBefore(el.firstChild, el);
+				parent.removeChild(el);
+			}
+		} catch (err) {
+			console.error('Error unwrapping element in range:', err);
+		}
+	}
+}
+
+function getSelectedLink(): HTMLAnchorElement | null {
+	const sel = window.getSelection();
+	if (!sel?.anchorNode) return null;
+	const node = sel.anchorNode;
+	const el = node.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node.parentElement;
+	return el?.closest('a') as HTMLAnchorElement | null;
+}
+
+function removeLink(): boolean {
+	const link = getSelectedLink();
+	if (!link) return false;
+	const parent = link.parentNode;
+	if (!parent) return false;
+	while (link.firstChild) parent.insertBefore(link.firstChild, link);
+	parent.removeChild(link);
+	return true;
+}
+
 // prettifyHtml removed: prettifying caused visual editor layout problems
 
 function ToolbarButton({
@@ -139,12 +201,14 @@ function ToolbarButton({
 	active,
 	onClick,
 	title,
+	disabled,
 }: {
 	label?: string;
 	icon: string;
 	active?: boolean;
 	onClick: () => void;
 	title: string;
+	disabled?: boolean;
 }) {
 	return (
 		<button
@@ -152,10 +216,13 @@ function ToolbarButton({
 			title={title}
 			onClick={onClick}
 			onMouseDown={(e) => e.preventDefault()}
+			disabled={disabled}
 			className={`flex h-8 min-w-[2rem] items-center justify-center rounded-lg border px-2 text-sm font-medium transition ${
-				active
-					? 'border-[#606bfa]/60 bg-[#606bfa]/25 text-[#a9b2ff]'
-					: 'border-white/15 bg-white/[0.06] text-white/70 hover:bg-white/[0.12] hover:text-white'
+				disabled
+					? 'cursor-not-allowed border-white/10 bg-white/[0.03] text-white/40'
+					: active
+						? 'border-[#606bfa]/60 bg-[#606bfa]/25 text-[#a9b2ff]'
+						: 'border-white/15 bg-white/[0.06] text-white/70 hover:bg-white/[0.12] hover:text-white'
 			}`}
 		>
 			{icon}
@@ -166,11 +233,29 @@ function ToolbarButton({
 
 export default function RichTextEditor({ value, onChange, onBlobFileMapChange, placeholder }: RichTextEditorProps) {
 	const editorRef = useRef<HTMLDivElement>(null);
+	const toolbarRef = useRef<HTMLDivElement>(null);
+	const wrapperRef = useRef<HTMLDivElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const savedRangeRef = useRef<Range | null>(null);
 	const [htmlMode, setHtmlMode] = useState(false);
 	const [activeCommands, setActiveCommands] = useState<Set<string>>(new Set());
 	const [showHeadingMenu, setShowHeadingMenu] = useState(false);
+	const [hoveredLink, setHoveredLink] = useState<string>('');
+	const [showLinkModal, setShowLinkModal] = useState(false);
+	const [linkUrl, setLinkUrl] = useState<string>('');
 	const blobFileMapRef = useRef<Record<string, File>>({});
+
+	function insertLinkWithSavedSelection(href: string): boolean {
+		// Restore the saved selection range if available
+		if (savedRangeRef.current) {
+			const sel = window.getSelection();
+			if (sel) {
+				sel.removeAllRanges();
+				sel.addRange(savedRangeRef.current);
+			}
+		}
+		return insertLink(href);
+	}
 
 	// Initialize and sync editor content
 	useEffect(() => {
@@ -178,6 +263,14 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			if (document.activeElement !== editorRef.current && editorRef.current.innerHTML !== value) {
 				// Render the normalized/minified HTML in the visual editor so it matches frontend output
 				editorRef.current.innerHTML = minifyHtml(value || '');
+				// ensure any anchors open in new tab
+				try {
+					const anchors = Array.from(editorRef.current.querySelectorAll('a')) as HTMLAnchorElement[];
+					for (const a of anchors) {
+						if (a.getAttribute('target') !== '_blank') a.setAttribute('target', '_blank');
+						if (!a.getAttribute('rel')?.includes('noopener')) a.setAttribute('rel', 'noopener noreferrer');
+					}
+				} catch {}
 			}
 		}
 	}, [value, htmlMode]);
@@ -204,6 +297,14 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 		try {
 			if (document.queryCommandState('insertUnorderedList')) active.add('insertUnorderedList');
 			if (document.queryCommandState('insertOrderedList')) active.add('insertOrderedList');
+		} catch {}
+
+		// Text alignment
+		try {
+			if (document.queryCommandState('justifyLeft')) active.add('justifyLeft');
+			if (document.queryCommandState('justifyCenter')) active.add('justifyCenter');
+			if (document.queryCommandState('justifyRight')) active.add('justifyRight');
+			if (document.queryCommandState('justifyFull')) active.add('justifyFull');
 		} catch {}
 
 		// Monospace (fontName)
@@ -243,6 +344,20 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 		updateActiveCommands();
 	}, [updateActiveCommands]);
 
+	const handleEditorMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+		const target = e.target as HTMLElement;
+		const link = target.closest('a');
+		if (link && link.getAttribute('href')) {
+			setHoveredLink(link.getAttribute('href') || '');
+		} else {
+			setHoveredLink('');
+		}
+	}, []);
+
+	const handleEditorMouseLeave = useCallback(() => {
+		setHoveredLink('');
+	}, []);
+
 	const handleEditorPaste = useCallback(
 		(e: React.ClipboardEvent<HTMLDivElement>) => {
 			e.preventDefault();
@@ -276,6 +391,16 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			const insertHtml = sanitizePastedHtml(pastedHtml, handleDataImage) || normalizePlainTextPaste(clipboardText);
 			execCommand('insertHTML', insertHtml);
 			onChange(editorRef.current?.innerHTML || value);
+			// ensure pasted anchors open in new tab
+			try {
+				const anchors = editorRef.current
+					? (Array.from(editorRef.current.querySelectorAll('a')) as HTMLAnchorElement[])
+					: [];
+				for (const a of anchors) {
+					if (a.getAttribute('target') !== '_blank') a.setAttribute('target', '_blank');
+					if (!a.getAttribute('rel')?.includes('noopener')) a.setAttribute('rel', 'noopener noreferrer');
+				}
+			} catch {}
 			updateActiveCommands();
 		},
 		[onBlobFileMapChange, onChange, updateActiveCommands, value]
@@ -297,6 +422,13 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			onChange(compact);
 		} else if (editorRef.current) {
 			editorRef.current.innerHTML = compact;
+			try {
+				const anchors = Array.from(editorRef.current.querySelectorAll('a')) as HTMLAnchorElement[];
+				for (const a of anchors) {
+					if (a.getAttribute('target') !== '_blank') a.setAttribute('target', '_blank');
+					if (!a.getAttribute('rel')?.includes('noopener')) a.setAttribute('rel', 'noopener noreferrer');
+				}
+			} catch {}
 		}
 		setShowHeadingMenu(false);
 	}, [htmlMode, value, onChange]);
@@ -357,8 +489,11 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 	return (
 		<div className="flex flex-col gap-3">
 			{/* Toolbar */}
-			<div className="sticky top-24 z-40 w-full self-start rounded-2xl border border-white/15 bg-[#09101f]/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-md">
-				<div className="flex flex-wrap items-center gap-2">
+			<div
+				ref={toolbarRef}
+				className="fixed left-0 right-0 top-28 z-40 mx-auto w-[90%] rounded-full border-b border-white/25 bg-[#09101f]/95 shadow-2xl shadow-black/30 backdrop-blur-md"
+			>
+				<div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-3">
 					{toolbarButtons.map((btn) => (
 						<ToolbarButton
 							key={btn.cmd}
@@ -385,13 +520,21 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 
 					<ToolbarButton
 						icon="✕"
-						title="Clear all formatting"
+						title="Clear selected formatting"
 						onClick={() => {
-							if (editorRef.current) {
-								const text = editorRef.current.textContent || '';
-								editorRef.current.innerHTML = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-								handleEditorInput();
+							const range = getSelectionRange();
+							if (!range) return;
+							if (range.collapsed) return;
+							// Replace selection with plain text to remove formatting and links
+							const plain = range.toString();
+							range.deleteContents();
+							range.insertNode(document.createTextNode(plain));
+							// move caret after inserted text
+							const sel = window.getSelection();
+							if (sel) {
+								sel.removeAllRanges();
 							}
+							handleEditorInput();
 						}}
 					/>
 
@@ -452,19 +595,79 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 						}}
 					/>
 
+					<div className="mx-1 h-6 w-px bg-white/15" />
+
+					<ToolbarButton
+						icon="⫷"
+						title="Align Left"
+						active={activeCommands.has('justifyLeft')}
+						onClick={() => {
+							execCommand('justifyLeft');
+							handleEditorInput();
+						}}
+					/>
+					<ToolbarButton
+						icon="⋮"
+						title="Align Center"
+						active={activeCommands.has('justifyCenter')}
+						onClick={() => {
+							execCommand('justifyCenter');
+							handleEditorInput();
+						}}
+					/>
+					<ToolbarButton
+						icon="⫸"
+						title="Align Right"
+						active={activeCommands.has('justifyRight')}
+						onClick={() => {
+							execCommand('justifyRight');
+							handleEditorInput();
+						}}
+					/>
+					<ToolbarButton
+						icon="≡"
+						title="Justify"
+						active={activeCommands.has('justifyFull')}
+						onClick={() => {
+							execCommand('justifyFull');
+							handleEditorInput();
+						}}
+					/>
+
+					<div className="mx-1 h-6 w-px bg-white/15" />
+
 					<ToolbarButton
 						label="Link"
 						icon="↗"
 						title="Insert Link"
 						active={activeCommands.has('link')}
 						onClick={() => {
-							const url = window.prompt('Enter a URL');
-							if (!url) return;
-							if (editorRef.current) editorRef.current.focus();
-							if (insertLink(url)) {
+							// Save the current selection before opening modal
+							const range = getSelectionRange();
+							savedRangeRef.current = range ? range.cloneRange() : null;
+
+							// Pre-populate modal with existing link if present
+							const existingLink = getSelectedLink();
+							if (existingLink) {
+								setLinkUrl(existingLink.getAttribute('href') || '');
+							} else {
+								setLinkUrl('');
+							}
+							setShowLinkModal(true);
+						}}
+					/>
+
+					<ToolbarButton
+						icon="⊗"
+						title="Remove Link"
+						active={activeCommands.has('link')}
+						onClick={() => {
+							if (removeLink()) {
 								handleEditorInput();
+								updateActiveCommands();
 							}
 						}}
+						disabled={!activeCommands.has('link')}
 					/>
 
 					<ToolbarButton
@@ -510,7 +713,10 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 			</div>
 
 			{/* Editor */}
-			<div className="relative min-h-[50vh] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04]">
+			<div
+				ref={wrapperRef}
+				className="relative min-h-[50vh] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04]"
+			>
 				{htmlMode ? (
 					<textarea
 						value={value}
@@ -528,6 +734,8 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 							onInput={handleEditorInput}
 							onKeyUp={handleEditorKeyUp}
 							onMouseUp={handleEditorMouseUp}
+							onMouseMove={handleEditorMouseMove}
+							onMouseLeave={handleEditorMouseLeave}
 							onMouseDown={(e) => {
 								const target = e.target as HTMLElement | null;
 								if (target?.tagName === 'IMG') {
@@ -549,6 +757,80 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 
 			{/* Hidden file input for images */}
 			<input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageSelect} className="hidden" />
+
+			{/* Link preview on hover */}
+			{hoveredLink && (
+				<div className="fixed bottom-4 left-4 z-50 max-w-md overflow-hidden rounded-lg border border-white/15 bg-[#09101f]/95 px-3 py-2 text-xs text-white/80 shadow-2xl backdrop-blur-md">
+					<span className="text-white/60">Link: </span>
+					<span className="font-mono">{hoveredLink}</span>
+				</div>
+			)}
+
+			{/* Link Modal */}
+			{showLinkModal && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+					<div className="w-full max-w-md rounded-2xl border border-white/15 bg-[#09101f]/95 p-6 shadow-2xl shadow-black/50 backdrop-blur-md">
+						<h3 className="mb-4 text-lg font-semibold text-white">Insert Link</h3>
+						<input
+							type="text"
+							value={linkUrl}
+							onChange={(e) => setLinkUrl(e.target.value)}
+							placeholder="Enter URL (e.g., https://example.com)"
+							className="w-full rounded-lg border border-white/15 bg-white/[0.06] px-4 py-2 text-white placeholder-white/40 outline-none transition focus:border-[#606bfa]/60 focus:bg-white/[0.08]"
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									if (linkUrl.trim() && editorRef.current) {
+										editorRef.current.focus();
+										if (insertLinkWithSavedSelection(linkUrl)) {
+											handleEditorInput();
+											updateActiveCommands();
+										}
+										setShowLinkModal(false);
+										setLinkUrl('');
+										savedRangeRef.current = null;
+									}
+								} else if (e.key === 'Escape') {
+									setShowLinkModal(false);
+									setLinkUrl('');
+									savedRangeRef.current = null;
+								}
+							}}
+							autoFocus
+						/>
+						<div className="mt-6 flex gap-2">
+							<button
+								type="button"
+								onClick={() => {
+									setShowLinkModal(false);
+									setLinkUrl('');
+									savedRangeRef.current = null;
+								}}
+								className="flex-1 rounded-lg border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/[0.12]"
+							>
+								Cancel
+							</button>
+							<button
+								type="button"
+								onClick={() => {
+									if (linkUrl.trim() && editorRef.current) {
+										editorRef.current.focus();
+										if (insertLinkWithSavedSelection(linkUrl)) {
+											handleEditorInput();
+											updateActiveCommands();
+										}
+										setShowLinkModal(false);
+										setLinkUrl('');
+										savedRangeRef.current = null;
+									}
+								}}
+								className="flex-1 rounded-lg border border-[#606bfa]/60 bg-[#606bfa]/25 px-4 py-2 text-sm font-medium text-[#a9b2ff] transition hover:bg-[#606bfa]/35"
+							>
+								Save Link
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 
 			<style jsx>{`
 				[contenteditable]:empty:before {

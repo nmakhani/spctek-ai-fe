@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { extractPreviewText } from '@/components/portal/content-editor/utils';
 import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
@@ -29,13 +28,11 @@ function formatContentDate(value?: string) {
 
 export default function BlogCard({ content }: { index: number; content: PublicContent }) {
 	const router = useRouter();
-	const previewText = extractPreviewText(content.content);
+	const publishedDate = formatContentDate(content.created_at);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
-	const publishedDate = formatContentDate(content.updated_at || content.created_at);
-	const displayText = content.summary || previewText;
+
+	const authorLink = `/authors/${content.author_id}`;
 	const authorName = content.author?.name || 'SPCTEK Team';
-	const authorId = content.author_id;
-	const authorLink = authorId ? `/authors/${authorId}` : null;
 
 	// Category pills logic
 	const categories = content.categories || [];
@@ -114,7 +111,9 @@ export default function BlogCard({ content }: { index: number; content: PublicCo
 							<h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-2xl">
 								{content.title}
 							</h3>
-							{displayText && <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/60">{displayText}</p>}
+							{content.summary && (
+								<p className="mt-4 line-clamp-4 text-sm leading-relaxed text-white/60">{content.summary}</p>
+							)}
 						</div>
 
 						<div className="mt-6 flex items-center text-[10px] font-bold uppercase tracking-widest text-[#a9b2ff] opacity-100 transition-all duration-300 sm:opacity-0 sm:group-hover:translate-x-2 sm:group-hover:opacity-100">

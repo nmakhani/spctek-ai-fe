@@ -154,7 +154,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 				onSave={handleSave}
 			/>
 
-			<main className="mx-auto max-w-7xl px-6 py-8">
+			<main className="mx-auto mt-16 max-w-7xl px-6 py-8">
 				{error && (
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}
@@ -200,6 +200,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 						}}
 						onMetaTitleChange={(value) => setFormData((prev) => ({ ...prev, meta_title: value }))}
 						onMetaDescriptionChange={(value) => setFormData((prev) => ({ ...prev, meta_description: value }))}
+						onCreatedAtChange={(value: string) => setFormData((prev) => ({ ...prev, created_at: value }))}
 					/>
 
 					<EditorWorkspace

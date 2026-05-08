@@ -1,3 +1,6 @@
+'use client';
+
+import { useCallback, useState } from 'react';
 import type { OutputData } from '@editorjs/editorjs';
 
 import { resolveR2PublicUrl } from '@/lib/r2';
@@ -9,17 +12,29 @@ interface ContentRendererProps {
 
 type ListItemNode = string | { content?: string; items?: ListItemNode[] };
 
+function processLinksInHtml(html: string): string {
+	// Add target="_blank" and rel="noopener noreferrer" to all links
+	return html.replace(/<a\s+([^>]*?)>/gi, (match, attrs) => {
+		if (attrs.includes('target=')) {
+			return match;
+		}
+		return `<a ${attrs} target="_blank" rel="noopener noreferrer">`;
+	});
+}
+
 function renderListItemNode(item: ListItemNode, key: string) {
 	if (typeof item === 'string') {
-		return <span dangerouslySetInnerHTML={{ __html: item }} />;
+		const processedHtml = processLinksInHtml(item);
+		return <span dangerouslySetInnerHTML={{ __html: processedHtml }} />;
 	}
 
 	const content = String(item.content || '');
+	const processedContent = processLinksInHtml(content);
 	const nested = Array.isArray(item.items) ? item.items : [];
 
 	return (
 		<>
-			<span dangerouslySetInnerHTML={{ __html: content }} />
+			<span dangerouslySetInnerHTML={{ __html: processedContent }} />
 			{nested.length > 0 && (
 				<ul className="mt-2 list-disc space-y-2 pl-6 text-white/85">
 					{nested.map((nestedItem, nestedIndex) => (
@@ -34,11 +49,27 @@ function renderListItemNode(item: ListItemNode, key: string) {
 }
 
 export function ContentRenderer({ data, title }: ContentRendererProps) {
+	const [hoveredLink, setHoveredLink] = useState<string>('');
+
+	const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+		const target = e.target as HTMLElement;
+		const link = target.closest('a');
+		if (link && link.getAttribute('href')) {
+			setHoveredLink(link.getAttribute('href') || '');
+		} else {
+			setHoveredLink('');
+		}
+	}, []);
+
+	const handleMouseLeave = useCallback(() => {
+		setHoveredLink('');
+	}, []);
+
 	return (
 		<div className="w-full rounded-2xl border border-white/15 bg-white/[0.04] p-6 md:p-8">
 			{title && <h1 className="text-3xl font-semibold leading-tight text-white md:text-4xl">{title}</h1>}
 
-			<div className="mt-8 space-y-5 text-white/90">
+			<div className="mt-8 space-y-5 text-white/90" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
 				{data.blocks.map((block, index) => {
 					const key = `${block.type}-${index}`;
 					const blockData = (block.data || {}) as Record<string, unknown>;
@@ -46,6 +77,7 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 					if (block.type === 'header') {
 						const level = Number(blockData.level) || 2;
 						const text = String(blockData.text || '');
+						const processedText = processLinksInHtml(text);
 						const blockId = block.id || `block-${index}`;
 						const id = `heading-${blockId}`;
 						if (level === 1) {
@@ -54,7 +86,7 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 									key={key}
 									id={id}
 									className="scroll-mt-24 text-3xl font-semibold text-white md:text-4xl"
-									dangerouslySetInnerHTML={{ __html: text }}
+									dangerouslySetInnerHTML={{ __html: processedText }}
 								/>
 							);
 						}
@@ -64,7 +96,7 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 									key={key}
 									id={id}
 									className="scroll-mt-24 text-2xl font-semibold text-white md:text-3xl"
-									dangerouslySetInnerHTML={{ __html: text }}
+									dangerouslySetInnerHTML={{ __html: processedText }}
 								/>
 							);
 						}
@@ -74,7 +106,7 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 									key={key}
 									id={id}
 									className="scroll-mt-24 text-xl font-semibold text-white md:text-2xl"
-									dangerouslySetInnerHTML={{ __html: text }}
+									dangerouslySetInnerHTML={{ __html: processedText }}
 								/>
 							);
 						}
@@ -83,18 +115,19 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 								key={key}
 								id={id}
 								className="scroll-mt-24 text-lg font-semibold text-white md:text-xl"
-								dangerouslySetInnerHTML={{ __html: text }}
+								dangerouslySetInnerHTML={{ __html: processedText }}
 							/>
 						);
 					}
 
 					if (block.type === 'paragraph') {
 						const text = String(blockData.text || '');
+						const processedText = processLinksInHtml(text);
 						return (
 							<p
 								key={key}
 								className="text-base leading-relaxed text-white/85"
-								dangerouslySetInnerHTML={{ __html: text }}
+								dangerouslySetInnerHTML={{ __html: processedText }}
 							/>
 						);
 					}
@@ -146,12 +179,21 @@ export function ContentRenderer({ data, title }: ContentRendererProps) {
 							return null;
 						}
 
-						return <div key={key} dangerouslySetInnerHTML={{ __html: html }} />;
+						const processedHtml = processLinksInHtml(html);
+						return <div key={key} dangerouslySetInnerHTML={{ __html: processedHtml }} />;
 					}
 
 					return null;
 				})}
 			</div>
+
+			{/* Link preview on hover */}
+			{hoveredLink && (
+				<div className="fixed bottom-4 left-4 z-50 max-w-md overflow-hidden rounded-lg border border-white/15 bg-[#09101f]/95 px-3 py-2 text-xs text-white/80 shadow-2xl backdrop-blur-md">
+					<span className="text-white/60">Link: </span>
+					<span className="font-mono">{hoveredLink}</span>
+				</div>
+			)}
 		</div>
 	);
 }

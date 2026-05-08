@@ -44,6 +44,7 @@ export function useContentData(mode: 'create' | 'edit', contentId: string | unde
 				kpis: parsedPayload.kpis,
 				meta_title: content.meta_tags?.title || '',
 				meta_description: content.meta_tags?.description || '',
+				created_at: content.created_at || '',
 			});
 			setCurrentThumbnailUrl(content.thumbnail_url || '');
 			setHtmlContent(parsedPayload.html);

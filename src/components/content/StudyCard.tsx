@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { extractPreviewText, parseContentPayload } from '@/components/portal/content-editor/utils';
+import { parseContentPayload } from '@/components/portal/content-editor/utils';
 import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
@@ -23,11 +23,9 @@ function formatContentDate(value?: string) {
 }
 
 export default function StudyCard({ index, content }: { index: number; content: PublicContent }) {
-	const previewText = extractPreviewText(content.content);
 	const { kpis } = parseContentPayload(content.content);
+	const publishedDate = formatContentDate(content.created_at);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
-	const publishedDate = formatContentDate(content.updated_at || content.created_at);
-	const displayText = content.summary || previewText;
 
 	const reversed = index % 2 === 1;
 
@@ -101,8 +99,10 @@ export default function StudyCard({ index, content }: { index: number; content: 
 							<h3 className="line-clamp-2 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-4xl">
 								{content.title}
 							</h3>
-							{displayText && (
-								<p className="mt-6 line-clamp-3 text-sm leading-relaxed text-white/60 md:text-base">{displayText}</p>
+							{content.summary && (
+								<p className="mt-6 line-clamp-3 text-sm leading-relaxed text-white/60 md:text-base">
+									{content.summary}
+								</p>
 							)}
 						</div>
 

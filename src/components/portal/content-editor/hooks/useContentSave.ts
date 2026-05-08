@@ -139,6 +139,11 @@ export function useContentSave(
 					payload.author_id = formData.author_id.trim();
 				}
 
+				// Include created_at if provided
+				if (formData.created_at && formData.created_at.trim()) {
+					payload.created_at = formData.created_at.trim();
+				}
+
 				if (mode === 'edit' && contentId) {
 					console.info('[content-editor] Updating existing content', {
 						contentId,

@@ -118,9 +118,14 @@ export default class RichParagraphTool {
 		this.editable.focus();
 
 		if (command === 'removeFormat') {
-			// Clear all formatting and reset to plain text
-			const text = this.editable.textContent || '';
-			this.editable.innerHTML = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			// Only clear formatting for the selected range inside this editable
+			const sel = window.getSelection();
+			if (!sel || sel.rangeCount === 0) return;
+			const range = sel.getRangeAt(0);
+			if (range.collapsed) return;
+			const plain = range.toString();
+			range.deleteContents();
+			range.insertNode(document.createTextNode(plain));
 			return;
 		}
 
@@ -130,6 +135,17 @@ export default class RichParagraphTool {
 				return;
 			}
 			document.execCommand('createLink', false, url);
+			// ensure created link opens in new tab
+			try {
+				const sel = window.getSelection();
+				const node = sel?.anchorNode ?? null;
+				const el = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
+				const a = el?.closest('a') as HTMLAnchorElement | null;
+				if (a) {
+					a.setAttribute('target', '_blank');
+					a.setAttribute('rel', 'noopener noreferrer');
+				}
+			} catch {}
 			return;
 		}
 

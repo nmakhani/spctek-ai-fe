@@ -100,42 +100,6 @@ export function parseContentPayload(content: string | Record<string, unknown>): 
 	};
 }
 
-export function extractPreviewText(content: string | Record<string, unknown>): string {
-	const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
-	try {
-		const parsed = JSON.parse(contentStr) as unknown;
-		if (parsed && typeof parsed === 'object') {
-			const record = parsed as Record<string, unknown>;
-			// Check if it's legacy EditorJS format
-			if (Array.isArray((record as { blocks?: unknown[] }).blocks)) {
-				const blocks = (record as { blocks?: unknown[] }).blocks || [];
-				for (const block of blocks) {
-					if (typeof block === 'object' && block !== null) {
-						const blockData = block as Record<string, unknown>;
-						if (blockData.type === 'paragraph' && blockData.data) {
-							const text = String((blockData.data as Record<string, unknown>).text || '');
-							return text.replace(/<[^>]+>/g, '');
-						}
-					}
-				}
-				return contentStr;
-			}
-		}
-	} catch {
-		// Treat as HTML
-	}
-
-	// Extract text from HTML
-	const tempDiv = typeof document !== 'undefined' ? document.createElement('div') : null;
-	if (tempDiv) {
-		tempDiv.innerHTML = contentStr;
-		const text = tempDiv.textContent || tempDiv.innerText || '';
-		return text.slice(0, 200);
-	}
-
-	return contentStr.slice(0, 200);
-}
-
 export async function replaceBlobUrlsInHtml(
 	html: string,
 	blobFileMap: Record<string, File>,

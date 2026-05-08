@@ -19,7 +19,7 @@ interface MetadeckEntry {
 // Cache for metadeck data
 let metadeckCache: Map<string, { title: string; description: string }> | null = null;
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 60 * 1000;
 
 async function fetchMetadeckCache(): Promise<Map<string, { title: string; description: string }>> {
 	const now = Date.now();

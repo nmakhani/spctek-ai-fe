@@ -55,6 +55,7 @@ export type ContentFormData = {
 	kpis: CaseStudyKpi[];
 	meta_title?: string;
 	meta_description?: string;
+	created_at?: string;
 };
 
 export const EMPTY_KPIS: CaseStudyKpi[] = [
@@ -73,4 +74,5 @@ export const EMPTY_CONTENT_FORM: ContentFormData = {
 	kpis: EMPTY_KPIS.map((item) => ({ ...item })),
 	meta_title: '',
 	meta_description: '',
+	created_at: '',
 };

@@ -26,7 +26,7 @@ export default function Hero() {
 			</p>
 
 			<div>
-				<PrimaryButton href="#roadmap-form">Get My Free AI Playbook</PrimaryButton>
+				<PrimaryButton href="#playbook-form">Get My Free AI Playbook</PrimaryButton>
 			</div>
 		</section>
 	);

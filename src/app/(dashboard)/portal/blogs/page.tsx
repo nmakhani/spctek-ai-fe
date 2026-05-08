@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 import { type Content } from '@/components/portal/content-editor/types';
-import { extractPreviewText } from '@/components/portal/content-editor/utils';
 import { PageHeader } from '@/components/portal/PageHeader';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -164,9 +163,6 @@ function BlogsContent() {
 											))}
 										</div>
 									)}
-									<p className="mb-4 line-clamp-3 flex-1 text-sm text-white/65">
-										{extractPreviewText(typeof blog.content === 'string' ? blog.content : JSON.stringify(blog.content))}
-									</p>
 
 									<div className="mb-4 flex items-center justify-between text-xs">
 										<span

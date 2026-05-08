@@ -2,6 +2,21 @@ import type { ContentType } from '@/lib/api';
 import { R2ImageUpload } from './R2ImageUpload';
 import type { AuthorRead, Category, ContentFormData } from './types';
 
+function formatDateTimeForInput(dateString: string): string {
+	if (!dateString) return '';
+	// Parse the date and format it as YYYY-MM-DDTHH:mm for datetime-local input
+	const date = new Date(dateString);
+	if (isNaN(date.getTime())) return '';
+
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 interface ContentMetaFormProps {
 	formData: ContentFormData;
 	contentType: ContentType;
@@ -17,6 +32,7 @@ interface ContentMetaFormProps {
 	onThumbnailUrlChange: (value: string, file?: File | null) => void;
 	onMetaTitleChange?: (value: string) => void;
 	onMetaDescriptionChange?: (value: string) => void;
+	onCreatedAtChange?: (value: string) => void;
 	highlightErrors?: boolean;
 }
 
@@ -35,6 +51,7 @@ export function ContentMetaForm({
 	onThumbnailUrlChange,
 	onMetaTitleChange,
 	onMetaDescriptionChange,
+	onCreatedAtChange,
 	highlightErrors = false,
 }: ContentMetaFormProps) {
 	return (
@@ -168,6 +185,18 @@ export function ContentMetaForm({
 					</div>
 				</details>
 			</div>
+
+			{onCreatedAtChange && (
+				<div>
+					<label className="mb-2 block text-sm font-medium text-white/75">Created Date & Time</label>
+					<input
+						type="datetime-local"
+						value={formatDateTimeForInput(formData.created_at || '')}
+						onChange={(e) => onCreatedAtChange(e.target.value)}
+						className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-[#606bfa]/45"
+					/>
+				</div>
+			)}
 
 			{contentType === 'CASE_STUDY' && (
 				<div>
