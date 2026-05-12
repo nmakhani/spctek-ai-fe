@@ -106,257 +106,7 @@ export async function replaceBlobUrlsInHtml(
 	return result;
 }
 
-type PastedImageHandler = (dataUrl: string, index: number) => string | null;
-
-function parseStyle(style: string): Record<string, string> {
-	return style
-		.split(';')
-		.map((entry) => entry.trim())
-		.filter(Boolean)
-		.reduce<Record<string, string>>((acc, entry) => {
-			const separatorIndex = entry.indexOf(':');
-			if (separatorIndex === -1) return acc;
-			const key = entry.slice(0, separatorIndex).trim().toLowerCase();
-			const value = entry.slice(separatorIndex + 1).trim();
-			if (key) acc[key] = value;
-			return acc;
-		}, {});
-}
-
-function stripFontStyles(style: string): string {
-	const parsed = parseStyle(style);
-	const stylesToRemove = ['font-family', 'font-size', 'font-weight'];
-	const filtered = Object.entries(parsed)
-		.filter(([key]) => !stylesToRemove.includes(key))
-		.map(([key, value]) => `${key}: ${value}`)
-		.join('; ');
-	return filtered;
-}
-
-function isBoldStyle(style: string, tag: string): boolean {
-	if (tag === 'b' || tag === 'strong') return true;
-	if (!['span', 'font', 'i', 'em', 'u', 's', 'strike', 'a'].includes(tag)) return false;
-	const parsed = parseStyle(style);
-	const weight = (parsed['font-weight'] || '').toLowerCase();
-	return weight === 'bold' || weight === 'bolder' || /^(?:[5-9]00)$/.test(weight);
-}
-
-function isHighlightStyle(style: string, tag: string): boolean {
-	if (tag === 'mark') return true;
-	if (!['span', 'font', 'b', 'strong', 'i', 'em', 'u', 's', 'strike', 'a'].includes(tag)) return false;
-	const parsed = parseStyle(style);
-	const background = (parsed['background-color'] || '').toLowerCase();
-	if (!background) return false;
-
-	return /^(?:#(?:ffff00|ff0|fff59d|fff2ac)|yellow|rgb\(255,\s*255,\s*0\)|rgba\(255,\s*255,\s*0,\s*[\d.]+\))$/.test(
-		background
-	);
-}
-
-export function sanitizePastedHtml(html: string, onDataImage?: PastedImageHandler): string {
-	if (!html) return '';
-	if (typeof document === 'undefined') return minifyHtml(html);
-
-	const parser = new DOMParser();
-	const sourceDoc = parser.parseFromString(html, 'text/html');
-	// Remove common dangerous nodes first
-	sourceDoc.querySelectorAll('script, style, meta, link, head').forEach((node) => node.remove());
-	// Some pasted HTML (e.g., from Word) includes namespaced tags like o:p which cannot be selected
-	// with querySelectorAll using a colon. Remove any element whose localName contains a colon.
-	Array.from(sourceDoc.getElementsByTagName('*')).forEach((el) => {
-		const ln = (el as Element).localName || '';
-		if (ln.includes(':')) {
-			el.remove();
-		}
-	});
-
-	const targetDoc = document.implementation.createHTMLDocument('');
-	let imageIndex = 0;
-
-	const sanitizeChildren = (parent: ParentNode): Node[] => {
-		const nodes: Node[] = [];
-
-		parent.childNodes.forEach((child) => {
-			if (child.nodeType === Node.TEXT_NODE) {
-				const text = child.textContent ?? '';
-				if (text) nodes.push(targetDoc.createTextNode(text));
-				return;
-			}
-
-			if (child.nodeType !== Node.ELEMENT_NODE) return;
-
-			const element = child as HTMLElement;
-			const tag = element.tagName.toLowerCase();
-			const style = stripFontStyles(element.getAttribute('style') || '');
-			const isBodyChild = element.parentElement === sourceDoc.body;
-			const hasBlockChildren = Array.from(element.children).some((childEl) =>
-				[
-					'p',
-					'div',
-					'blockquote',
-					'ul',
-					'ol',
-					'li',
-					'table',
-					'tr',
-					'td',
-					'th',
-					'h1',
-					'h2',
-					'h3',
-					'h4',
-					'h5',
-					'h6',
-					'pre',
-				].includes(childEl.tagName.toLowerCase())
-			);
-
-			if (tag === 'img') {
-				const source = element.getAttribute('src') || '';
-				if (!source) return;
-
-				let finalSource = source;
-				if (source.startsWith('data:image/')) {
-					finalSource = onDataImage?.(source, imageIndex++) || '';
-				}
-
-				if (!finalSource) return;
-
-				const img = targetDoc.createElement('img');
-				img.setAttribute('src', finalSource);
-				const alt = element.getAttribute('alt');
-				if (alt) img.setAttribute('alt', alt);
-				const title = element.getAttribute('title');
-				if (title) img.setAttribute('title', title);
-				img.setAttribute('style', 'max-width:100%;border-radius:0.75rem;');
-				nodes.push(img);
-				return;
-			}
-
-			if (isHighlightStyle(style, tag)) {
-				const mark = targetDoc.createElement('mark');
-				const inlineStyle = element.getAttribute('style') || '';
-				if (inlineStyle) {
-					mark.setAttribute('style', 'background-color:#fff59d;color:inherit;');
-				}
-				mark.append(...sanitizeChildren(element));
-				nodes.push(mark);
-				return;
-			}
-
-			if (isBoldStyle(style, tag)) {
-				if (isBodyChild || hasBlockChildren) {
-					nodes.push(...sanitizeChildren(element));
-					return;
-				}
-
-				const strong = targetDoc.createElement('strong');
-				strong.append(...sanitizeChildren(element));
-				nodes.push(strong);
-				return;
-			}
-
-			if (['p', 'div', 'blockquote', 'li', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre'].includes(tag)) {
-				const headingStyles: Record<string, string> = {
-					h1: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 2.25em; font-weight: normal',
-					h2: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 1.5em; font-weight: normal',
-					h3: 'font-family: Gued, Outfit, system-ui, sans-serif; font-size: 1.2em; font-weight: 500',
-				};
-
-				let finalTag = tag === 'div' ? 'p' : tag;
-				// Convert h4-h6 to h3
-				if (['h4', 'h5', 'h6'].includes(tag)) {
-					finalTag = 'h3';
-				}
-
-				const block = targetDoc.createElement(finalTag);
-
-				// Apply heading styles if it's a heading
-				if (headingStyles[finalTag]) {
-					block.setAttribute('style', headingStyles[finalTag]);
-				}
-
-				// For headings, strip styles from children to enforce the heading style
-				if (headingStyles[finalTag]) {
-					const children = Array.from(element.childNodes);
-					children.forEach((child) => {
-						if (child.nodeType === Node.ELEMENT_NODE) {
-							const childEl = child as HTMLElement;
-							childEl.removeAttribute('style');
-						}
-					});
-				}
-
-				block.append(...sanitizeChildren(element));
-				nodes.push(block);
-				return;
-			}
-
-			if (tag === 'a') {
-				const href = element.getAttribute('href') || '';
-				if (!href) {
-					nodes.push(...sanitizeChildren(element));
-					return;
-				}
-
-				const anchor = targetDoc.createElement('a');
-				anchor.setAttribute('href', href);
-				anchor.setAttribute('rel', 'noopener noreferrer');
-				const target = element.getAttribute('target');
-				if (target) anchor.setAttribute('target', target);
-				const title = element.getAttribute('title');
-				if (title) anchor.setAttribute('title', title);
-				anchor.append(...sanitizeChildren(element));
-				nodes.push(anchor);
-				return;
-			}
-
-			const allowedTags = new Set([
-				'p',
-				'div',
-				'br',
-				'b',
-				'strong',
-				'i',
-				'em',
-				'u',
-				's',
-				'strike',
-				'mark',
-				'code',
-				'pre',
-				'blockquote',
-				'ul',
-				'ol',
-				'li',
-				'hr',
-				'h1',
-				'h2',
-				'h3',
-				'h4',
-				'h5',
-				'h6',
-			]);
-
-			if (!allowedTags.has(tag)) {
-				nodes.push(...sanitizeChildren(element));
-				return;
-			}
-
-			const nextTag = tag === 'div' ? 'p' : tag;
-			const cleaned = targetDoc.createElement(nextTag);
-			cleaned.append(...sanitizeChildren(element));
-			nodes.push(cleaned);
-		});
-
-		return nodes;
-	};
-
-	const container = targetDoc.createElement('div');
-	container.append(...sanitizeChildren(sourceDoc.body));
-
-	return minifyHtml(container.innerHTML);
-}
+export { sanitizePastedHtml } from './sanitize';
 
 export function minifyHtml(html: string): string {
 	if (!html) return html;
@@ -393,14 +143,58 @@ export function prettifyHtml(html: string): string {
 	tmp.innerHTML = html;
 
 	const indentStr = '\t';
+	const blockTags = new Set([
+		'p',
+		'div',
+		'blockquote',
+		'ul',
+		'ol',
+		'li',
+		'thead',
+		'tbody',
+		'tr',
+		'td',
+		'th',
+		'h1',
+		'h2',
+		'h3',
+		'h4',
+		'h5',
+		'h6',
+	]);
+
+	function formatInlineNode(node: Node): string {
+		if (node.nodeType === Node.TEXT_NODE) {
+			return (node.textContent || '').replace(/\s+/g, ' ').trim();
+		}
+
+		if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+		const element = node as HTMLElement;
+		const tagName = element.tagName.toLowerCase();
+		const isVoid = ['img', 'br', 'hr', 'input', 'meta', 'link'].includes(tagName);
+
+		let attrs = '';
+		for (let i = 0; i < element.attributes.length; i++) {
+			const attr = element.attributes[i];
+			attrs += ` ${attr.name}="${attr.value}"`;
+		}
+
+		if (isVoid) {
+			return `<${tagName}${attrs} />`;
+		}
+
+		const inner = Array.from(element.childNodes)
+			.map((child) => formatInlineNode(child))
+			.join('');
+		return `<${tagName}${attrs}>${inner}</${tagName}>`;
+	}
 
 	function formatNode(node: Node, depth: number): string {
 		if (node.nodeType === Node.TEXT_NODE) {
 			const text = node.textContent || '';
-			if (text.trim()) {
-				return text;
-			}
-			return '';
+			const normalized = text.replace(/\s+/g, ' ').trim();
+			return normalized;
 		}
 
 		if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -410,6 +204,7 @@ export function prettifyHtml(html: string): string {
 		const element = node as HTMLElement;
 		const tagName = element.tagName.toLowerCase();
 		const isVoid = ['img', 'br', 'hr', 'input', 'meta', 'link'].includes(tagName);
+		const isBlock = blockTags.has(tagName);
 
 		// Get attributes
 		let attrs = '';
@@ -426,28 +221,21 @@ export function prettifyHtml(html: string): string {
 			return indentStr.repeat(depth) + `<${tagName}${attrs} />`;
 		}
 
+		if (!isBlock) {
+			return formatInlineNode(element);
+		}
+
 		if (!hasElementChildren && !hasTextChildren) {
 			return indentStr.repeat(depth) + `<${tagName}${attrs}></${tagName}>`;
 		}
 
-		// Format children preserving order
-		const formattedChildren = children
-			.map((child) => formatNode(child, hasElementChildren ? depth + 1 : 0))
-			.filter(Boolean);
-
-		if (hasTextChildren && !hasElementChildren) {
-			// Text-only element: put content on its own line
-			const innerText = formattedChildren.join('').trim();
-			return `${indentStr.repeat(depth)}<${tagName}${attrs}>\n${innerText}\n${indentStr.repeat(depth)}</${tagName}>`;
+		const formattedChildren = children.map((child) => formatNode(child, depth + 1)).filter(Boolean);
+		const innerContent = formattedChildren.join('\n');
+		if (!innerContent) {
+			return indentStr.repeat(depth) + `<${tagName}${attrs}></${tagName}>`;
 		}
 
-		if (hasElementChildren) {
-			// Has element children: join with newlines for structure
-			const innerContent = formattedChildren.join('\n');
-			return `${indentStr.repeat(depth)}<${tagName}${attrs}>\n${innerContent}\n${indentStr.repeat(depth)}</${tagName}>`;
-		}
-
-		return `${indentStr.repeat(depth)}<${tagName}${attrs}></${tagName}>`;
+		return `${indentStr.repeat(depth)}<${tagName}${attrs}>\n${innerContent}\n${indentStr.repeat(depth)}</${tagName}>`;
 	}
 
 	const formatted = Array.from(tmp.childNodes)

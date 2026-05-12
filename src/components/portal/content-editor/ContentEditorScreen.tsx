@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { authorsApi, type ContentType } from '@/lib/api';
@@ -21,7 +21,6 @@ interface ContentEditorScreenProps {
 
 export function ContentEditorScreen({ mode, contentId, contentType, entityLabel, backPath }: ContentEditorScreenProps) {
 	const router = useRouter();
-	const baseId = useId().replace(/:/g, '');
 	const [mounted, setMounted] = useState(false);
 	const [previewMode, setPreviewMode] = useState(false);
 	const [blobFileMap, setBlobFileMap] = useState<Record<string, File>>({});
@@ -153,7 +152,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 				onSave={handleSave}
 			/>
 
-			<main className="mx-auto mt-24 max-w-7xl px-6 py-8">
+			<main className="mx-auto mt-28 max-w-7xl px-6 py-8">
 				{error && (
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}

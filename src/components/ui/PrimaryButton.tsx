@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -49,9 +51,30 @@ export const PrimaryButton = ({ children, href, config = {}, ...props }: Primary
 		'--mt': finalConfig.marginTop,
 	} as React.CSSProperties;
 
+	const handleAnchorClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+		if (!href || typeof window === 'undefined') return;
+
+		const currentUrl = new URL(window.location.href);
+		const targetUrl = new URL(href, window.location.href);
+		const samePage = currentUrl.pathname === targetUrl.pathname && currentUrl.search === targetUrl.search;
+
+		if (!samePage) return;
+
+		const hash = targetUrl.hash || (href.startsWith('#') ? href : '');
+		if (!hash) return;
+
+		const targetId = hash.slice(1);
+		const targetElement = document.getElementById(targetId);
+		if (!targetElement) return;
+
+		event.preventDefault();
+		targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		window.history.replaceState(null, '', `${currentUrl.pathname}${currentUrl.search}${hash}`);
+	};
+
 	if (href) {
 		return (
-			<Link href={href} className={baseClasses} style={dynamicStyles}>
+			<Link href={href} className={baseClasses} style={dynamicStyles} onClick={handleAnchorClick}>
 				{children}
 			</Link>
 		);
