@@ -114,6 +114,7 @@ export default function GenericForm({
 		const hasError = Boolean(errors[field.name]);
 		const isFullWidth = field.gridSpan === 'full';
 		const spanClass = isFullWidth ? 'md:col-span-2' : 'md:col-span-1';
+		const stackClass = field.type === 'select' ? 'relative z-30' : 'relative z-10';
 
 		const sharedProps = {
 			placeholder: field.placeholder,
@@ -124,7 +125,7 @@ export default function GenericForm({
 		};
 
 		return (
-			<div key={field.name} className={spanClass}>
+			<div key={field.name} className={`${spanClass} ${stackClass}`}>
 				<label className={labelClass}>
 					{field.label} {field.required && <span className="text-red-400">*</span>}
 				</label>
