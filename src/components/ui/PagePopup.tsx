@@ -48,14 +48,8 @@ export function PagePopup({ pagePath }: PagePopupProps) {
 				const response = await popupsApi.getByPath(normalizedPath);
 				const data = response.data as PopupPayload | null;
 
-				if (!data) {
-					console.log(`[${normalizedPath}] No popup data received from API.`);
-					return;
-				}
-
-				if (!isMounted) {
-					return;
-				}
+				if (!data) return;
+				if (!isMounted) return;
 
 				setPopup(data);
 				timerId = window.setTimeout(
