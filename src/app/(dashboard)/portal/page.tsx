@@ -8,6 +8,7 @@ import {
 	Layout,
 	LucideIcon,
 	MessageSquare,
+	MessageSquarePlus,
 	Users,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -97,6 +98,13 @@ const DASHBOARD_ITEMS: DashboardCardProps[] = [
 		linkText: 'Open Metadata',
 		description: 'Manage page metadata including titles and descriptions for SEO optimization across the site.',
 		icon: Layout,
+	},
+	{
+		title: 'Popups',
+		href: '/portal/popups',
+		linkText: 'Open Popups',
+		description: 'Manage page-specific popups with delay and CTA content using a structured JSON payload.',
+		icon: MessageSquarePlus,
 	},
 ];
 

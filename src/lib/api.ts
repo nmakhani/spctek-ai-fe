@@ -98,6 +98,7 @@ export const categoriesApi = {
 };
 
 export const authApi = {
+	me: () => apiClient.get('/auth/me'),
 	login: (data: Record<string, unknown>) => apiClient.post('/auth/login', data),
 };
 
@@ -127,6 +128,15 @@ export const metadeckApi = {
 	create: (data: Record<string, unknown>) => apiClient.post('/metadeck', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/metadeck/${id}`, data),
 	delete: (id: string) => apiClient.delete(`/metadeck/${id}`),
+};
+
+export const popupsApi = {
+	list: () => apiClient.get('/popups'),
+	get: (id: string) => apiClient.get(`/popups/${id}`),
+	getByPath: (path: string) => apiClient.get('/popups/by-path', { params: { path } }),
+	create: (data: Record<string, unknown>) => apiClient.post('/popups', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/popups/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/popups/${id}`),
 };
 
 export default apiClient;

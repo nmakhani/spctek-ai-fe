@@ -19,8 +19,9 @@ import {
 	Tools,
 } from '@/components/landing-page';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { hasCooldownElapsed, markSeen, normalizePopupPath } from '@/lib/popupCooldown';
 
-const NEWSLETTER_STORAGE_KEY = 'spctek-newsletter-seen';
+const NEWSLETTER_SCOPE = normalizePopupPath('/');
 
 export default function HomePageClient() {
 	const [showNewsletterModal, setShowNewsletterModal] = useState(false);
@@ -28,11 +29,11 @@ export default function HomePageClient() {
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
 
-		if (localStorage.getItem(NEWSLETTER_STORAGE_KEY) === 'true') return;
+		if (!hasCooldownElapsed(NEWSLETTER_SCOPE)) return;
 
 		const timer = window.setTimeout(() => {
 			setShowNewsletterModal(true);
-			localStorage.setItem(NEWSLETTER_STORAGE_KEY, 'true');
+			markSeen(NEWSLETTER_SCOPE);
 		}, 5000);
 
 		return () => window.clearTimeout(timer);

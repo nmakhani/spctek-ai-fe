@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
 import { authApi } from '@/lib/api';
 
@@ -29,23 +29,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const [token, setToken] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const storedToken = localStorage.getItem('auth_token');
-		const storedUser = localStorage.getItem('auth_user');
-
-		if (storedToken && storedUser) {
-			try {
-				// eslint-disable-next-line react-hooks/set-state-in-effect
-				setToken(storedToken);
-				setUser(JSON.parse(storedUser) as User);
-			} catch {
-				localStorage.removeItem('auth_token');
-				localStorage.removeItem('auth_user');
-			}
-		}
-
-		setLoading(false);
+	const clearAuthState = useCallback(() => {
+		setToken(null);
+		setUser(null);
+		localStorage.removeItem('auth_token');
+		localStorage.removeItem('auth_user');
 	}, []);
+
+	useEffect(() => {
+		const initializeAuth = async () => {
+			const storedToken = localStorage.getItem('auth_token');
+
+			if (!storedToken) {
+				setLoading(false);
+				return;
+			}
+
+			try {
+				const response = await authApi.me();
+				setToken(storedToken);
+				setUser(response.data as User);
+				localStorage.setItem('auth_user', JSON.stringify(response.data));
+			} catch {
+				clearAuthState();
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		void initializeAuth();
+	}, [clearAuthState]);
 
 	const login = async (email: string, password: string) => {
 		const response = await authApi.login({ email, password });
@@ -59,10 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	const logout = () => {
-		setToken(null);
-		setUser(null);
-		localStorage.removeItem('auth_token');
-		localStorage.removeItem('auth_user');
+		clearAuthState();
 	};
 
 	const value = {

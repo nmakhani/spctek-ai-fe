@@ -60,9 +60,9 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 	return (
 		<div className={`relative z-10 my-2 w-full ${compact ? 'max-w-sm' : 'max-w-md'}`}>
 			<GradientBorder thickness={1.5} radius="24px" subtle={true} />
-			<GlassGlow angle={105} opacity={0.3} start={8} end={92} radius="24px" />
+			<GlassGlow angle={105} opacity={0.18} start={8} end={92} radius="24px" />
 
-			<div className="relative z-10 rounded-3xl p-4 sm:p-7 md:p-8">
+			<div className="border-white/12 relative z-10 rounded-3xl border bg-[linear-gradient(145deg,rgba(17,24,39,0.94)_0%,rgba(17,24,39,0.88)_48%,rgba(96,107,250,0.22)_100%)] p-4 shadow-[0_26px_70px_rgba(0,0,0,0.72)] sm:p-7 md:p-8">
 				<div className={`flex flex-col gap-6 sm:gap-5 ${compact ? 'py-2' : ''}`}>
 					<div className={`space-y-4 text-center ${compact ? 'sm:space-y-2' : 'sm:space-y-6'}`}>
 						<p className={`text-sm font-medium text-slate-300 ${compact ? 'sm:text-sm' : 'sm:text-base'}`}>

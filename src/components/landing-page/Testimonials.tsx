@@ -29,10 +29,10 @@ export default function Testimonials() {
 						{/* 16:9 Aspect Ratio Video Container */}
 						<div className="relative w-full pt-[56.25%]">
 							<iframe
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
 								className="absolute inset-0 h-full w-full rounded-[20px] sm:rounded-[28px]"
 								src="https://www.youtube.com/embed/tNJoRVYoJIQ?rel=0&modestbranding=1"
 								title="YouTube video player"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowFullScreen
 							/>
 						</div>
