@@ -19,6 +19,10 @@ interface ReinstatementLog {
 	appeals_made: number;
 	seller_belief: string;
 	available_documents: string;
+	report_status: string;
+	report_error?: string | null;
+	report_generated_at?: string | null;
+	report_emailed_at?: string | null;
 	created_at: string;
 	updated_at: string;
 }
@@ -33,6 +37,26 @@ interface Contact {
 
 function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
+}
+
+function getStatusLabel(status: string): string {
+	const labels: Record<string, string> = {
+		pending: 'Pending',
+		generating: 'Generating',
+		email_pending: 'Email Pending',
+		emailed: 'Emailed',
+		email_failed: 'Email Failed',
+		generation_failed: 'Generation Failed',
+	};
+	return labels[status] || status.replace(/_/g, ' ');
+}
+
+function getStatusClass(status: string): string {
+	if (status === 'emailed') return 'border-emerald-300/35 bg-emerald-500/15 text-emerald-200';
+	if (status === 'email_failed' || status === 'generation_failed')
+		return 'border-red-300/35 bg-red-500/15 text-red-200';
+	if (status === 'generating' || status === 'email_pending') return 'border-blue-300/35 bg-blue-500/15 text-blue-200';
+	return 'border-white/15 bg-white/[0.07] text-white/65';
 }
 
 function ReinstatementLogsContent() {
@@ -92,7 +116,10 @@ function ReinstatementLogsContent() {
 			setGenerating(logId);
 			setError('');
 			await reinstatementApi.generateReportFromLog({ log_id: logId });
-			toast.success('Report generated! Email sent to contact.');
+			toast.success('Report generated. Email delivery is now being tracked.');
+			if (selectedContactId) {
+				await fetchLogs(selectedContactId);
+			}
 		} catch (err: unknown) {
 			const message = getErrorMessage(err, 'Failed to generate report');
 			setError(message);
@@ -173,6 +200,30 @@ function ReinstatementLogsContent() {
 								<p className="text-xs uppercase tracking-wider text-white/50">Appeals Made</p>
 								<p className="mt-1 text-sm text-white/80">{selectedLog.appeals_made}</p>
 							</div>
+							<div className="rounded-xl border border-white/10 bg-black/20 p-4">
+								<p className="text-xs uppercase tracking-wider text-white/50">Report Status</p>
+								<span
+									className={`mt-2 inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${getStatusClass(
+										selectedLog.report_status
+									)}`}
+								>
+									{getStatusLabel(selectedLog.report_status)}
+								</span>
+							</div>
+							<div className="rounded-xl border border-white/10 bg-black/20 p-4">
+								<p className="text-xs uppercase tracking-wider text-white/50">Report Emailed At</p>
+								<p className="mt-1 text-sm text-white/80">
+									{selectedLog.report_emailed_at
+										? new Date(selectedLog.report_emailed_at).toLocaleString()
+										: 'Not emailed yet'}
+								</p>
+							</div>
+							{selectedLog.report_error && (
+								<div className="border-red-300/25 bg-red-500/10 rounded-xl border p-4 md:col-span-2">
+									<p className="text-red-200/70 text-xs uppercase tracking-wider">Report Error</p>
+									<p className="text-red-100/85 mt-1 whitespace-pre-wrap text-sm">{selectedLog.report_error}</p>
+								</div>
+							)}
 							<div className="rounded-xl border border-white/10 bg-black/20 p-4 md:col-span-2">
 								<p className="text-xs uppercase tracking-wider text-white/50">Performance Notification</p>
 								<div className="custom-scrollbar mt-1 h-48 overflow-y-auto pr-2">
@@ -258,10 +309,18 @@ function ReinstatementLogsContent() {
 							>
 								<div className="mb-4 flex items-start justify-between">
 									<div>
-										<h3 className="font-semibold text-white">{log.business_model}</h3>
+										<div className="flex flex-wrap items-center gap-2">
+											<h3 className="font-semibold text-white">{log.business_model}</h3>
+											<span
+												className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getStatusClass(log.report_status)}`}
+											>
+												{getStatusLabel(log.report_status)}
+											</span>
+										</div>
 										<p className="mt-1 text-sm text-white/65">Suspension Date: {log.suspension_date}</p>
 										<p className="text-sm text-white/65">Fulfillment Channel: {log.fulfillment_channel}</p>
 										<p className="text-sm text-white/65">Previous Appeals: {log.appeals_made}</p>
+										{log.report_error && <p className="text-red-200/80 mt-2 text-xs">Last error: {log.report_error}</p>}
 									</div>
 									<div className="text-right">
 										<p className="text-xs text-white/50">{new Date(log.created_at).toLocaleDateString()}</p>
