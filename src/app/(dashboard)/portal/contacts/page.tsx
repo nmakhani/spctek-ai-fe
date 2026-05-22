@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { ContactForm } from '@/components/portal/contacts/ContactForm';
@@ -12,6 +12,25 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DarkDropdown } from '@/components/ui/form-parts/DarkDropdown';
 import { contactsApi } from '@/lib/api';
 
+interface ContactSubmission {
+	id: string;
+	name?: string;
+	email?: string;
+	phone?: string;
+	company?: string;
+	message?: string;
+	source?: string;
+	journey?: Record<string, unknown>;
+	created_at?: string;
+	updated_at?: string;
+}
+
+interface JourneyEntry {
+	id: string;
+	source?: string;
+	journey?: Record<string, unknown>;
+}
+
 interface Contact {
 	id: string;
 	name?: string;
@@ -22,6 +41,7 @@ interface Contact {
 	source?: string;
 	journey?: Record<string, unknown>;
 	created_at?: string;
+	submissions?: ContactSubmission[];
 }
 
 function getErrorMessage(err: unknown, fallback: string): string {
@@ -37,6 +57,9 @@ function ContactsContent() {
 	const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 	const [showForm, setShowForm] = useState(false);
 	const [editingId, setEditingId] = useState<string | null>(null);
+	const [expandedContactId, setExpandedContactId] = useState<string | null>(null);
+	const [sourceFilter, setSourceFilter] = useState<string>('all');
+	const [selectedJourney, setSelectedJourney] = useState<JourneyEntry | null>(null);
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -45,15 +68,32 @@ function ContactsContent() {
 		message: '',
 		source: 'landing_page',
 	});
-	const [sourceFilter, setSourceFilter] = useState<string>('all');
-	const [selectedJourney, setSelectedJourney] = useState<Contact | null>(null);
 
-	// Fetch contacts
+	const getSubmissionDate = (submission: ContactSubmission) => {
+		return submission.created_at ? new Date(submission.created_at).getTime() : 0;
+	};
+
+	const getContactSubmissions = (contact: Contact) => {
+		return [...(contact.submissions || [])].sort((left, right) => getSubmissionDate(right) - getSubmissionDate(left));
+	};
+
+	const getContactSources = (contact: Contact) => {
+		const sources = getContactSubmissions(contact)
+			.map((submission) => submission.source)
+			.filter((source): source is string => Boolean(source));
+
+		if (!sources.length && contact.source) {
+			sources.push(contact.source);
+		}
+
+		return sources;
+	};
+
 	const fetchContacts = async () => {
 		try {
 			setLoading(true);
-			const response = await contactsApi.list();
-			setContacts(response.data);
+			const response = await contactsApi.list({ detail: true });
+			setContacts(response.data as Contact[]);
 			setError('');
 		} catch (err: unknown) {
 			const message = getErrorMessage(err, 'Failed to load contacts');
@@ -64,39 +104,34 @@ function ContactsContent() {
 		}
 	};
 
-	const filteredContacts = sourceFilter === 'all' ? contacts : contacts.filter((c) => c.source === sourceFilter);
-
-	const sources = Array.from(new Set(contacts.map((c) => c.source).filter((s): s is string => Boolean(s))));
-
-	const handleViewJourney = (contact: Contact) => {
-		setSelectedJourney(contact);
-	};
-
-	const closeJourneyModal = () => {
-		setSelectedJourney(null);
-	};
-
 	useEffect(() => {
-		fetchContacts();
+		void fetchContacts();
 	}, []);
 
-	// Handle form submit
+	const filteredContacts =
+		sourceFilter === 'all' ? contacts : contacts.filter((contact) => getContactSources(contact).includes(sourceFilter));
+
+	const sources = Array.from(
+		new Set(
+			contacts.flatMap((contact) => getContactSources(contact)).filter((source): source is string => Boolean(source))
+		)
+	);
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
 			setSaving(true);
 			setError('');
+
 			if (editingId) {
-				const response = await contactsApi.update(editingId, formData);
-				const updated = response.data as Contact;
-				setContacts((prev) => prev.map((contact) => (contact.id === editingId ? updated : contact)));
+				await contactsApi.update(editingId, formData);
 				toast.success('Contact updated');
 			} else {
-				const response = await contactsApi.create(formData);
-				const created = response.data as Contact;
-				setContacts((prev) => [created, ...prev]);
+				await contactsApi.create(formData);
 				toast.success('Contact created');
 			}
+
+			await fetchContacts();
 			setFormData({
 				name: '',
 				email: '',
@@ -116,7 +151,6 @@ function ContactsContent() {
 		}
 	};
 
-	// Handle edit
 	const handleEdit = (contact: Contact) => {
 		setFormData({
 			name: contact.name || '',
@@ -130,7 +164,6 @@ function ContactsContent() {
 		setShowForm(true);
 	};
 
-	// Handle delete
 	const requestDelete = (id: string) => {
 		setPendingDeleteId(id);
 	};
@@ -156,7 +189,6 @@ function ContactsContent() {
 		}
 	};
 
-	// Handle cancel
 	const handleCancel = () => {
 		setFormData({
 			name: '',
@@ -177,6 +209,18 @@ function ContactsContent() {
 		setPendingDeleteId(null);
 	};
 
+	const handleViewJourney = (entry: JourneyEntry) => {
+		setSelectedJourney(entry);
+	};
+
+	const closeJourneyModal = () => {
+		setSelectedJourney(null);
+	};
+
+	const toggleExpandedContact = (contactId: string) => {
+		setExpandedContactId((current) => (current === contactId ? null : contactId));
+	};
+
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -195,7 +239,7 @@ function ContactsContent() {
 				title="Contacts"
 				subtitle="Dashboard"
 				backLink="/portal"
-				backText="← Back to Home"
+				backText="<- Back to Home"
 				buttonText="+ New Contact"
 				buttonOnClick={() => setShowForm(!showForm)}
 				showForm={showForm}
@@ -251,44 +295,137 @@ function ContactsContent() {
 								</tr>
 							</thead>
 							<tbody>
-								{filteredContacts.map((contact) => (
-									<tr key={contact.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
-										<td className="px-6 py-3 text-white">{contact.name || '—'}</td>
-										<td className="px-6 py-3 text-white/75">{contact.email || '—'}</td>
-										<td className="px-6 py-3 text-white/65">{contact.phone || '—'}</td>
-										<td className="px-6 py-3 text-white/65">{contact.company || '—'}</td>
-										<td className="px-6 py-3 text-white/65">{contact.source || '—'}</td>
-										<td className="px-6 py-3 text-white/65">
-											{contact.created_at ? new Date(contact.created_at).toLocaleDateString() : '—'}
-										</td>
-										<td className="px-6 py-3">
-											<div className="flex gap-2">
-												{contact.journey && (
-													<button
-														onClick={() => handleViewJourney(contact)}
-														className="rounded-lg bg-[#10b981] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#34d399] disabled:opacity-60"
-													>
-														Track Journey
-													</button>
-												)}
-												<button
-													onClick={() => handleEdit(contact)}
-													disabled={deletingId === contact.id}
-													className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-												>
-													Edit
-												</button>
-												<button
-													onClick={() => requestDelete(contact.id)}
-													disabled={deletingId === contact.id}
-													className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
-												>
-													{deletingId === contact.id ? 'Deleting...' : 'Delete'}
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
+								{filteredContacts.map((contact) => {
+									const submissions = getContactSubmissions(contact);
+
+									return (
+										<Fragment key={contact.id}>
+											<tr
+												onClick={() => toggleExpandedContact(contact.id)}
+												className="cursor-pointer border-b border-white/10 transition hover:bg-white/[0.05]"
+											>
+												<td className="px-6 py-3 text-white">
+													<div className="flex items-center gap-3">
+														<span className="text-white/40">{expandedContactId === contact.id ? '↑' : '↓'}</span>
+														<span>{contact.name || '-'}</span>
+													</div>
+												</td>
+												<td className="px-6 py-3 text-white/75">{contact.email || '-'}</td>
+												<td className="px-6 py-3 text-white/65">{contact.phone || '-'}</td>
+												<td className="px-6 py-3 text-white/65">{contact.company || '-'}</td>
+												<td className="px-6 py-3 text-white/65">{contact.source || '-'}</td>
+												<td className="px-6 py-3 text-white/65">
+													{contact.created_at ? new Date(contact.created_at).toLocaleDateString() : '-'}
+												</td>
+												<td className="px-6 py-3">
+													<div className="flex gap-2" onClick={(event) => event.stopPropagation()}>
+														<button
+															onClick={() => handleEdit(contact)}
+															disabled={deletingId === contact.id}
+															className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
+														>
+															Edit
+														</button>
+														<button
+															onClick={() => requestDelete(contact.id)}
+															disabled={deletingId === contact.id}
+															className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
+														>
+															{deletingId === contact.id ? 'Deleting...' : 'Delete'}
+														</button>
+													</div>
+												</td>
+											</tr>
+
+											{expandedContactId === contact.id && (
+												<tr className="bg-black/18 border-b border-white/10">
+													<td colSpan={7} className="px-6 py-6">
+														<div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+															<div className="mb-4 flex items-center justify-between gap-3">
+																<div>
+																	<p className="text-sm font-semibold text-white">Contact submissions</p>
+																	<p className="text-xs text-white/55">
+																		{submissions.length} submission{submissions.length === 1 ? '' : 's'}
+																	</p>
+																</div>
+																<button
+																	type="button"
+																	onClick={(event) => {
+																		event.stopPropagation();
+																		toggleExpandedContact(contact.id);
+																	}}
+																	className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/[0.12]"
+																>
+																	Collapse
+																</button>
+															</div>
+
+															{submissions.length === 0 ? (
+																<div className="text-sm text-white/55">No submissions available.</div>
+															) : (
+																<div className="overflow-x-auto rounded-xl border border-white/10 bg-white/[0.03]">
+																	<table className="w-full min-w-[900px] text-sm">
+																		<thead className="bg-black/25">
+																			<tr>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Date</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Source</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Name</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Email</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Phone</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Company</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Message</th>
+																				<th className="px-3 py-2 text-left font-medium text-white/65">Actions</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			{submissions.map((submission) => (
+																				<tr key={submission.id} className="border-t border-white/10 align-top">
+																					<td className="px-3 py-2 text-white/70">
+																						{submission.created_at
+																							? new Date(submission.created_at).toLocaleString()
+																							: '-'}
+																					</td>
+																					<td className="px-3 py-2 text-white">{submission.source || '-'}</td>
+																					<td className="px-3 py-2 text-white">{submission.name || '-'}</td>
+																					<td className="px-3 py-2 text-white">
+																						{submission.email || contact.email || '-'}
+																					</td>
+																					<td className="px-3 py-2 text-white">{submission.phone || '-'}</td>
+																					<td className="px-3 py-2 text-white">{submission.company || '-'}</td>
+																					<td className="max-w-[280px] px-3 py-2 text-white">
+																						<div className="line-clamp-3 whitespace-pre-wrap">
+																							{submission.message || '-'}
+																						</div>
+																					</td>
+																					<td className="px-3 py-2">
+																						{submission.journey ? (
+																							<button
+																								type="button"
+																								onClick={(event) => {
+																									event.stopPropagation();
+																									handleViewJourney(submission);
+																								}}
+																								className="rounded-lg bg-[#10b981] px-3 py-1 text-xs font-medium text-white transition hover:bg-[#34d399]"
+																							>
+																								Track Journey
+																							</button>
+																						) : (
+																							<span className="text-white/45">-</span>
+																						)}
+																					</td>
+																				</tr>
+																			))}
+																		</tbody>
+																	</table>
+																</div>
+															)}
+														</div>
+													</td>
+												</tr>
+											)}
+										</Fragment>
+									);
+								})}
 							</tbody>
 						</table>
 					</div>

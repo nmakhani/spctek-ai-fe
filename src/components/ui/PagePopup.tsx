@@ -80,6 +80,30 @@ export function PagePopup({ pagePath }: PagePopupProps) {
 		};
 	}, [normalizedPath]);
 
+	useEffect(() => {
+		if (!open) {
+			return;
+		}
+
+		const closePopup = () => {
+			setOpen(false);
+		};
+
+		const handleVisibilityChange = () => {
+			if (document.visibilityState !== 'visible') {
+				closePopup();
+			}
+		};
+
+		window.addEventListener('blur', closePopup);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		return () => {
+			window.removeEventListener('blur', closePopup);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, [open]);
+
 	if (!open || !popup) {
 		return null;
 	}
@@ -93,6 +117,15 @@ export function PagePopup({ pagePath }: PagePopupProps) {
 				<GlassGlow angle={105} opacity={0.22} start={8} end={92} radius="24px" />
 
 				<div className="border-white/12 relative z-10 rounded-3xl border bg-[linear-gradient(145deg,rgba(17,24,39,0.92)_0%,rgba(17,24,39,0.86)_46%,rgba(96,107,250,0.24)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.72)] sm:p-7 md:p-8">
+					<button
+						type="button"
+						onClick={() => setOpen(false)}
+						aria-label="Close popup"
+						className="text-md absolute right-3 top-3 z-20 flex h-12 w-12 items-center justify-center font-bold"
+					>
+						X
+					</button>
+
 					<div className="flex flex-col gap-6 sm:gap-5">
 						<div className="space-y-4 text-center sm:space-y-6">
 							<h2 className="text-3xl font-semibold leading-[1.08] text-white">{popup.content.title}</h2>
@@ -117,14 +150,6 @@ export function PagePopup({ pagePath }: PagePopupProps) {
 									{popup.content.cta_text}
 								</Link>
 							)}
-
-							<button
-								type="button"
-								onClick={() => setOpen(false)}
-								className="w-full rounded-[20px] border border-white/15 bg-white/[0.06] px-8 py-3.5 text-sm font-semibold text-white/85 transition hover:bg-white/[0.12]"
-							>
-								Not now
-							</button>
 						</div>
 					</div>
 				</div>

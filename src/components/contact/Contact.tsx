@@ -47,10 +47,10 @@ export default function Contact() {
 
 		await contactsApi.create({
 			name: values.name,
+			email: values.email,
 			company: values.company,
-			email: values.email || undefined,
-			phone: values.phone || undefined,
 			message: values.message,
+			phone: values.phone || undefined,
 			source: 'website',
 		});
 

@@ -67,7 +67,7 @@ export function ContactForm({ formData, editingId, saving, onChange, onSubmit, o
 					placeholder="landing_page"
 					onChange={(value) => onChange({ ...formData, source: value })}
 				/>
-				<p className="text-xs text-white/60">Note: backend requires at least one of Email or Phone.</p>
+				<p className="text-xs text-white/60">Note: backend requires Email.</p>
 				<div className="flex gap-3 pt-4">
 					<button
 						type="submit"

@@ -62,8 +62,8 @@ apiClient.interceptors.response.use(
 );
 
 export const contactsApi = {
-	list: () => apiClient.get('/contacts'),
-	get: (id: string) => apiClient.get(`/contacts/${id}`),
+	list: (params?: { detail?: boolean }) => apiClient.get('/contacts', { params }),
+	get: (id: string, params?: { detail?: boolean }) => apiClient.get(`/contacts/${id}`, { params }),
 	create: (data: Record<string, unknown>) => apiClient.post('/contacts', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/contacts/${id}`, data),
 	delete: (id: string) => apiClient.delete(`/contacts/${id}`),
