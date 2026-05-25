@@ -1,6 +1,13 @@
 import { useCallback, type ChangeEvent, type MutableRefObject } from 'react';
 
-import { decodeHtmlEntities, execCommand, normalizePlainTextPaste } from './editorHelpers';
+import {
+	dataUrlToFile,
+	decodeHtmlEntities,
+	execCommand,
+	insertHtmlOutsideActiveLink,
+	normalizePlainTextPaste,
+} from './editorHelpers';
+import { sanitizePastedHtml } from './utils';
 
 type UseEditorHandlersArgs = {
 	value: string;
@@ -34,6 +41,14 @@ export function useEditorHandlers({
 			const clipboardHtml = e.clipboardData.getData('text/html');
 			const clipboardText = e.clipboardData.getData('text/plain');
 			const clipboardFiles = Array.from(e.clipboardData.files || []).filter((file) => file.type.startsWith('image/'));
+			const dataImageHandler = (dataUrl: string, index: number) => {
+				const file = dataUrlToFile(dataUrl, `pasted-image-${Date.now()}-${index}.png`);
+				if (!file) return null;
+
+				const blobUrl = URL.createObjectURL(file);
+				blobFileMapRef.current[blobUrl] = file;
+				return blobUrl;
+			};
 
 			if (!clipboardHtml && clipboardFiles.length > 0) {
 				const imageMarkup = clipboardFiles
@@ -43,15 +58,20 @@ export function useEditorHandlers({
 						return `<img src="${blobUrl}" alt="" style="max-width:100%;border-radius:0.75rem;" />`;
 					})
 					.join('');
-				execCommand('insertHTML', imageMarkup);
+				insertHtmlOutsideActiveLink(imageMarkup);
 				onChange(editorRef.current?.innerHTML || value);
 				onBlobFileMapChange({ ...blobFileMapRef.current });
 				handleEditorInput();
 				return;
 			}
 
-			const insertHtml = clipboardHtml ? clipboardHtml : normalizePlainTextPaste(clipboardText);
-			execCommand('insertHTML', insertHtml);
+			const rawInsertHtml = clipboardHtml ? clipboardHtml : normalizePlainTextPaste(clipboardText);
+			const insertHtml = sanitizePastedHtml(rawInsertHtml, dataImageHandler);
+			if (/<img\b/i.test(insertHtml)) {
+				insertHtmlOutsideActiveLink(insertHtml);
+			} else {
+				execCommand('insertHTML', insertHtml);
+			}
 			onChange(editorRef.current?.innerHTML || value);
 			onBlobFileMapChange({ ...blobFileMapRef.current });
 			handleEditorInput();
@@ -67,6 +87,14 @@ export function useEditorHandlers({
 			const clipboardHtml = e.clipboardData.getData('text/html');
 			const clipboardText = e.clipboardData.getData('text/plain');
 			const clipboardFiles = Array.from(e.clipboardData.files || []).filter((file) => file.type.startsWith('image/'));
+			const dataImageHandler = (dataUrl: string, index: number) => {
+				const file = dataUrlToFile(dataUrl, `pasted-image-${Date.now()}-${index}.png`);
+				if (!file) return null;
+
+				const blobUrl = URL.createObjectURL(file);
+				blobFileMapRef.current[blobUrl] = file;
+				return blobUrl;
+			};
 
 			const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(clipboardText);
 			if (!clipboardHtml && clipboardFiles.length === 0 && !looksLikeHtml) return;
@@ -96,6 +124,8 @@ export function useEditorHandlers({
 			} else {
 				insertHtml = clipboardText;
 			}
+
+			insertHtml = sanitizePastedHtml(insertHtml, dataImageHandler);
 
 			const start = textarea.selectionStart ?? value.length;
 			const end = textarea.selectionEnd ?? start;

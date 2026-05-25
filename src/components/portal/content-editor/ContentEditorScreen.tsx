@@ -204,7 +204,7 @@ export function ContentEditorScreen({ mode, contentId, contentType, entityLabel,
 					<EditorWorkspace
 						htmlContent={htmlContent}
 						onChange={setHtmlContent}
-						onBlobFileMapChange={setBlobFileMap}
+						onBlobFileMapChange={(map) => setBlobFileMap((prev) => ({ ...prev, ...map }))}
 						previewMode={previewMode}
 					/>
 				</div>

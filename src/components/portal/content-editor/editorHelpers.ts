@@ -69,13 +69,85 @@ export function selectNode(node: Node): void {
 	selection.addRange(range);
 }
 
+export function moveCaretAfterNode(node: Node): void {
+	const selection = window.getSelection();
+	if (!selection) return;
+
+	const range = document.createRange();
+	range.setStartAfter(node);
+	range.collapse(true);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
+
+export function getActiveLinkForSelection(): HTMLAnchorElement | null {
+	const selection = window.getSelection();
+	if (!selection || selection.rangeCount === 0) return null;
+
+	const range = selection.getRangeAt(0);
+	const nodes = [selection.anchorNode, selection.focusNode, range.commonAncestorContainer];
+
+	for (const node of nodes) {
+		const element = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
+		const link = element?.closest('a');
+		if (link instanceof HTMLAnchorElement) return link;
+	}
+
+	if (range.startContainer.nodeType === Node.ELEMENT_NODE) {
+		const container = range.startContainer as Element;
+		const selectedNode = container.childNodes[range.startOffset] as Element | undefined;
+		const link = selectedNode?.closest?.('a');
+		if (link instanceof HTMLAnchorElement) return link;
+	}
+
+	return null;
+}
+
+export function insertHtmlAtSelection(html: string): boolean {
+	const selection = window.getSelection();
+	if (!selection || selection.rangeCount === 0) return false;
+
+	const range = selection.getRangeAt(0);
+	const template = document.createElement('template');
+	template.innerHTML = html;
+	const fragment = template.content;
+	const lastInserted = fragment.lastChild;
+
+	range.deleteContents();
+	range.insertNode(fragment);
+
+	if (lastInserted) {
+		const nextRange = document.createRange();
+		nextRange.setStartAfter(lastInserted);
+		nextRange.collapse(true);
+		selection.removeAllRanges();
+		selection.addRange(nextRange);
+	}
+
+	return true;
+}
+
+export function insertHtmlOutsideActiveLink(html: string): boolean {
+	const activeLink = getActiveLinkForSelection();
+	if (activeLink) {
+		moveCaretAfterNode(activeLink);
+	}
+
+	return insertHtmlAtSelection(html);
+}
+
 export function normalizeHref(rawHref: string): string {
 	const value = rawHref.trim();
 	if (!value) return '';
 
 	if (value.startsWith('#') || value.startsWith('?') || value.startsWith('/')) return value;
 	if (value.startsWith('//')) return `https:${value}`;
-	if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(value)) return value;
+	const schemeMatch = value.match(/^([a-zA-Z][a-zA-Z\d+\-.]*):/);
+	if (schemeMatch) {
+		const scheme = schemeMatch[1].toLowerCase();
+		if (['http', 'https', 'mailto', 'tel'].includes(scheme)) return value;
+		return '';
+	}
 
 	return `https://${value}`;
 }
@@ -83,7 +155,7 @@ export function normalizeHref(rawHref: string): string {
 export function insertLink(href: string): boolean {
 	const cleanHref = href.trim();
 	const normalizedHref = normalizeHref(cleanHref);
-	if (!cleanHref) return false;
+	if (!cleanHref || !normalizedHref) return false;
 
 	const range = getSelectionRange();
 	if (!range) return false;
@@ -92,11 +164,19 @@ export function insertLink(href: string): boolean {
 		const sel = window.getSelection();
 		const node = sel?.anchorNode ?? null;
 		const element = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
-		const existingAnchor = element?.closest('a') as HTMLAnchorElement | null;
+		let existingAnchor = element?.closest('a') as HTMLAnchorElement | null;
+		if (!existingAnchor && range.startContainer === range.endContainer && range.startContainer.nodeType === Node.ELEMENT_NODE) {
+			const container = range.startContainer as Element;
+			const selectedNode = container.childNodes[range.startOffset] as Element | undefined;
+			existingAnchor = selectedNode?.closest?.('a') as HTMLAnchorElement | null;
+		}
 		if (existingAnchor) {
 			existingAnchor.setAttribute('href', normalizedHref);
 			existingAnchor.target = '_blank';
 			existingAnchor.setAttribute('rel', 'noopener noreferrer');
+			if (existingAnchor.querySelector('img')) {
+				moveCaretAfterNode(existingAnchor);
+			}
 			return true;
 		}
 	} catch (err) {
@@ -119,13 +199,20 @@ export function insertLink(href: string): boolean {
 		console.error('Error unwrapping element in range:', err);
 	}
 
-	return wrapSelectionWithElement(() => {
+	const linked = wrapSelectionWithElement(() => {
 		const anchor = document.createElement('a');
 		anchor.setAttribute('href', normalizedHref);
 		anchor.target = '_blank';
 		anchor.rel = 'noopener noreferrer';
 		return anchor;
 	});
+
+	const selectedLink = getSelectedLink();
+	if (selectedLink?.querySelector('img')) {
+		moveCaretAfterNode(selectedLink);
+	}
+
+	return linked;
 }
 
 export function applyHighlight(): boolean {

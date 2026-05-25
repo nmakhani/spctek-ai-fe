@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { applyHighlight, execCommand, getSelectedLink, getSelectionRange, removeLink } from './editorHelpers';
+import { applyHighlight, execCommand, getSelectedLink, getSelectionRange, removeLink, selectNode } from './editorHelpers';
 import { minifyHtml, prettifyHtml } from './utils';
 
 type HeadingButton = { label: string; value: string; title: string };
@@ -239,9 +239,18 @@ export default function EditorToolbar({
 				<button
 					type="button"
 					onClick={() => {
-						const range = getSelectionRange();
-						savedRangeRef.current = range ? range.cloneRange() : null;
-						const existingLink = getSelectedLink();
+						let existingLink = getSelectedLink();
+
+						if (selectedImage) {
+							selectNode(selectedImage);
+							const imageRange = getSelectionRange();
+							savedRangeRef.current = imageRange ? imageRange.cloneRange() : null;
+							existingLink = selectedImage.closest('a') as HTMLAnchorElement | null;
+						} else {
+							const range = getSelectionRange();
+							savedRangeRef.current = range ? range.cloneRange() : null;
+						}
+
 						if (existingLink) {
 							setLinkUrl(existingLink.getAttribute('href') || '');
 						} else {

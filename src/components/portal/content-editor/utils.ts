@@ -51,9 +51,17 @@ export function parseContentPayload(content: string | Record<string, unknown>): 
 		const parsed = JSON.parse(contentStr) as unknown;
 		if (parsed && typeof parsed === 'object') {
 			const record = parsed as Record<string, unknown>;
-			// New format - content is HTML string
+			const htmlValue =
+				typeof record.html === 'string'
+					? record.html
+					: typeof record.content === 'string'
+						? record.content
+						: typeof record.body === 'string'
+							? record.body
+							: contentStr;
+
 			return {
-				html: contentStr,
+				html: htmlValue,
 				kpis: normalizeKpis(record.kpis),
 			};
 		}

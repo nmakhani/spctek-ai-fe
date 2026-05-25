@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { contentApi, type ContentType } from '@/lib/api';
 import { uploadFileToR2 } from '@/lib/r2';
 import type { ContentFormData } from '../types';
-import { minifyHtml, replaceBlobUrlsInHtml } from '../utils';
+import { minifyHtml, replaceBlobUrlsInHtml, sanitizePastedHtml } from '../utils';
 
 function extensionFromMimeType(mimeType: string): string {
 	if (!mimeType) return 'bin';
@@ -78,8 +78,8 @@ export function useContentSave(
 					finalThumbnailUrl = uploaded.publicUrl || uploaded.key;
 				}
 
-				// Minify HTML before uploading / saving to reduce unnecessary whitespace
-				const compact = minifyHtml(htmlContent);
+				// Sanitize and minify HTML before uploading / saving.
+				const compact = minifyHtml(sanitizePastedHtml(htmlContent));
 				const blobUrlsInHtml = Array.from(new Set(compact.match(/blob:[^"'\s]+/g) || []));
 				const missingBlobFiles = blobUrlsInHtml.filter((blobUrl) => !blobFileMap[blobUrl]);
 

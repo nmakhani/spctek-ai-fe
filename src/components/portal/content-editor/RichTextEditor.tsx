@@ -3,7 +3,12 @@
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 
 import EditorCanvas from './EditorCanvas';
-import { dataUrlToFile, execCommand, getClosestSelectionElement, insertLink } from './editorHelpers';
+import {
+	dataUrlToFile,
+	getClosestSelectionElement,
+	insertHtmlOutsideActiveLink,
+	insertLink,
+} from './editorHelpers';
 import EditorToolbar from './Toolbar';
 import { useEditorHandlers } from './useEditorHandlers';
 import { minifyHtml, sanitizePastedHtml } from './utils';
@@ -237,7 +242,7 @@ export default function RichTextEditor({ value, onChange, onBlobFileMapChange, p
 				onChange(`${value}<img src="${blobUrl}" alt="" style="max-width:100%;border-radius:0.75rem;" />`);
 			} else if (editorRef.current) {
 				editorRef.current.focus();
-				execCommand('insertHTML', `<img src="${blobUrl}" alt="" style="max-width:100%;border-radius:0.75rem;" />`);
+				insertHtmlOutsideActiveLink(`<img src="${blobUrl}" alt="" style="max-width:100%;border-radius:0.75rem;" />`);
 				handleEditorInput();
 			}
 
