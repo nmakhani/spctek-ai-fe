@@ -1,6 +1,6 @@
 import { KeyboardEvent } from 'react';
 
-import { GradientBorder } from '../ui/GradientBorder';
+import { GradientBorder } from './GradientBorder';
 
 interface FilterCategory {
 	label: string;

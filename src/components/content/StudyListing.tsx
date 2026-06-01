@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { contentApi } from '@/lib/api';
-import FilterBar from './FilterBar';
+import FilterBar from '../ui/FilterBar';
 import StudyCard from './StudyCard';
 import type { PublicContent } from './types';
 

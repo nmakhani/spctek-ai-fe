@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { contentApi } from '@/lib/api';
 import Newsletter from '../generic-sections/Newsletter';
 import Playbook from '../generic-sections/Playbook';
+import FilterBar from '../ui/FilterBar';
 import BlogCard from './BlogCard';
-import FilterBar from './FilterBar';
 import type { PublicContent } from './types';
 
 export default function BlogListing() {
