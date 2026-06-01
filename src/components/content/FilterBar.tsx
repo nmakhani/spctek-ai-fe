@@ -31,12 +31,15 @@ export default function FilterBar({
 			onSearchSubmit();
 		}
 	};
+	const visibleCategories = categoriesLoading
+		? [{ label: 'Loading categories...', value: 'all' }]
+		: [{ label: 'All', value: 'all' }, ...categories];
 
 	return (
 		<div className="mb-12 w-full md:mb-16 lg:mb-20">
 			<div className="mx-auto mb-8 max-w-4xl overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:mb-10 [&::-webkit-scrollbar]:hidden">
 				<div className="inline-flex min-w-full border-b border-white/25 px-2">
-					{categories.map((item) => {
+					{visibleCategories.map((item) => {
 						const active = selectedCategory === item.value;
 						return (
 							<button

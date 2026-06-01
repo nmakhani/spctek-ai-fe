@@ -139,4 +139,12 @@ export const popupsApi = {
 	delete: (id: string) => apiClient.delete(`/popups/${id}`),
 };
 
+export const automationWorkflowsApi = {
+	list: () => apiClient.get('/automation-workflows'),
+	get: (id: string) => apiClient.get(`/automation-workflows/${id}`),
+	create: (data: Record<string, unknown>) => apiClient.post('/automation-workflows', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/automation-workflows/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/automation-workflows/${id}`),
+};
+
 export default apiClient;

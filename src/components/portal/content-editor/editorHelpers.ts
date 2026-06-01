@@ -165,7 +165,11 @@ export function insertLink(href: string): boolean {
 		const node = sel?.anchorNode ?? null;
 		const element = node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node?.parentElement;
 		let existingAnchor = element?.closest('a') as HTMLAnchorElement | null;
-		if (!existingAnchor && range.startContainer === range.endContainer && range.startContainer.nodeType === Node.ELEMENT_NODE) {
+		if (
+			!existingAnchor &&
+			range.startContainer === range.endContainer &&
+			range.startContainer.nodeType === Node.ELEMENT_NODE
+		) {
 			const container = range.startContainer as Element;
 			const selectedNode = container.childNodes[range.startOffset] as Element | undefined;
 			existingAnchor = selectedNode?.closest?.('a') as HTMLAnchorElement | null;

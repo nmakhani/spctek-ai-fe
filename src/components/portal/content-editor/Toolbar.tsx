@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { applyHighlight, execCommand, getSelectedLink, getSelectionRange, removeLink, selectNode } from './editorHelpers';
+import {
+	applyHighlight,
+	execCommand,
+	getSelectedLink,
+	getSelectionRange,
+	removeLink,
+	selectNode,
+} from './editorHelpers';
 import { minifyHtml, prettifyHtml } from './utils';
 
 type HeadingButton = { label: string; value: string; title: string };

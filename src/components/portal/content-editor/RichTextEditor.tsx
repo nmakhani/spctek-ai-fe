@@ -3,12 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 
 import EditorCanvas from './EditorCanvas';
-import {
-	dataUrlToFile,
-	getClosestSelectionElement,
-	insertHtmlOutsideActiveLink,
-	insertLink,
-} from './editorHelpers';
+import { dataUrlToFile, getClosestSelectionElement, insertHtmlOutsideActiveLink, insertLink } from './editorHelpers';
 import EditorToolbar from './Toolbar';
 import { useEditorHandlers } from './useEditorHandlers';
 import { minifyHtml, sanitizePastedHtml } from './utils';

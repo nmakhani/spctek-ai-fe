@@ -10,6 +10,7 @@ import {
 	MessageSquare,
 	MessageSquarePlus,
 	Users,
+	Workflow,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -105,6 +106,13 @@ const DASHBOARD_ITEMS: DashboardCardProps[] = [
 		linkText: 'Open Popups',
 		description: 'Manage page-specific popups with delay and CTA content using a structured JSON payload.',
 		icon: MessageSquarePlus,
+	},
+	{
+		title: 'Automation Workflows',
+		href: '/portal/automation-workflows',
+		linkText: 'Open Workflows',
+		description: 'Manage system and plugin workflow cards with teasers, category assignments, and launch links.',
+		icon: Workflow,
 	},
 ];
 

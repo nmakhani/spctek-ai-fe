@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import type { Category } from '@/components/portal/content-editor/types';
-import { categoriesApi, contentApi } from '@/lib/api';
+import { contentApi } from '@/lib/api';
 import Newsletter from '../generic-sections/Newsletter';
 import Playbook from '../generic-sections/Playbook';
 import BlogCard from './BlogCard';
@@ -12,9 +11,7 @@ import type { PublicContent } from './types';
 
 export default function BlogListing() {
 	const [contents, setContents] = useState<PublicContent[]>([]);
-	const [categories, setCategories] = useState<Category[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [categoriesLoading, setCategoriesLoading] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
@@ -24,35 +21,6 @@ export default function BlogListing() {
 	const handleSearchSubmit = () => {
 		setSearchTerm(searchInput.trim());
 	};
-
-	useEffect(() => {
-		let isMounted = true;
-
-		const fetchCategories = async () => {
-			try {
-				setCategoriesLoading(true);
-				const response = await categoriesApi.list();
-				if (!isMounted) {
-					return;
-				}
-				setCategories(response.data as Category[]);
-			} catch {
-				if (isMounted) {
-					setCategories([]);
-				}
-			} finally {
-				if (isMounted) {
-					setCategoriesLoading(false);
-				}
-			}
-		};
-
-		void fetchCategories();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -100,11 +68,19 @@ export default function BlogListing() {
 
 	const filterCategories = useMemo(
 		() =>
-			categoriesLoading
-				? [{ label: 'Loading categories...', value: 'all' }]
-				: [{ label: 'All', value: 'all' }, ...categories.map((item) => ({ label: item.name, value: item.slug }))],
-		[categories, categoriesLoading]
+			Array.from(
+				publishedContents
+					.flatMap((content) => content.categories || [])
+					.reduce((categoryMap, category) => categoryMap.set(category.slug, category.name), new Map<string, string>())
+			).map(([value, label]) => ({ label, value })),
+		[publishedContents]
 	);
+
+	useEffect(() => {
+		if (selectedCategory !== 'all' && !filterCategories.some((category) => category.value === selectedCategory)) {
+			setSelectedCategory('all');
+		}
+	}, [filterCategories, selectedCategory]);
 
 	return (
 		<div className="px-4 md:px-6 lg:px-12">
@@ -116,7 +92,7 @@ export default function BlogListing() {
 					onCategoryChange={setSelectedCategory}
 					onSearchChange={setSearchInput}
 					onSearchSubmit={handleSearchSubmit}
-					categoriesLoading={categoriesLoading}
+					categoriesLoading={loading}
 				/>
 
 				<div className="grid grid-cols-1 gap-7 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
