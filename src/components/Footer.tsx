@@ -7,15 +7,38 @@ import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
 
-export default function Footer() {
-	const footerLinks = [
-		{ name: 'About', href: '/about' },
-		{ name: 'Contact', href: '/contact' },
-		{ name: 'Reinstatement', href: '/reinstatement' },
-		{ name: 'Set Up Local AI', href: '/local-ai-setup' },
-		{ name: 'Rate my Process', href: '/process-rating' },
-	];
+const footerSections = [
+	{
+		title: 'Company',
+		links: [
+			{ name: 'Home', href: '/' },
+			{ name: 'About', href: '/about' },
+			{ name: 'Contact', href: '/contact' },
+		],
+	},
+	{
+		title: 'Services',
+		links: [
+			{ name: 'Local AI Setup', href: '/local-ai-setup' },
+			{ name: 'Business Process Audit', href: '/process-rating' },
+			{ name: 'Automation Solutions', href: '/automation-workflows' },
+		],
+	},
+	{
+		title: 'Proofs & Resources',
+		links: [
+			{ name: 'Blog', href: '/blogs' },
+			{ name: 'Case Studies', href: '/case-studies' },
+			{ name: 'AI Playbooks', href: '/ai-playbook' },
+		],
+	},
+	{
+		title: 'Tools',
+		links: [{ name: 'Amazon Reinstatement Estimator', href: '/reinstatement' }],
+	},
+];
 
+export default function Footer() {
 	const [email, setEmail] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -73,7 +96,7 @@ export default function Footer() {
 			<div className="relative z-10 mx-auto max-w-7xl px-8 py-8">
 				<div className="mb-6 grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10">
 					{/* Brand */}
-					<div className="flex flex-col items-start md:col-span-5">
+					<div className="flex flex-col items-start md:col-span-4">
 						<Link href="/" className="mb-4 block">
 							<Image
 								src="/logo.png"
@@ -94,43 +117,32 @@ export default function Footer() {
 							reliable AI-assisted systems.
 						</p>
 
-						<div className="mt-6 flex flex-wrap gap-2">
-							<span className="font-poppins rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
-								Automation-first
-							</span>
-							<span className="font-poppins rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
-								Operator-centric
-							</span>
-							<span className="font-poppins rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
-								Execution-ready
-							</span>
-						</div>
+						<Link
+							href="/ai-playbook"
+							className="font-poppins mt-6 inline-flex items-center justify-center rounded-[28px] border border-[#8d98ff]/55 bg-[#606bfa]/25 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(96,107,250,0.22)] transition hover:border-[#b5bdff] hover:bg-[#606bfa]/40"
+						>
+							Get Free AI Playbook
+						</Link>
 					</div>
 
 					{/* Navigation Links */}
-					<div className="md:col-span-2">
-						<h3 className="font-poppins mb-4 text-sm font-semibold text-white">Explore</h3>
-						<nav className="flex flex-col gap-3">
-							{footerLinks.map((link) => (
-								<Link
-									key={link.name}
-									href={link.href}
-									className="font-poppins text-sm font-light text-white/70 transition-colors hover:text-white"
-								>
-									{link.name}
-								</Link>
-							))}
-						</nav>
-					</div>
-
-					{/* Middle Column */}
-					<div className="md:col-span-2">
-						<h3 className="font-poppins mb-4 text-sm font-semibold text-white">What You Get</h3>
-						<ul className="font-poppins flex flex-col gap-3 text-sm text-white/65">
-							<li>Actionable AI implementation ideas</li>
-							<li>Practical process optimization playbooks</li>
-							<li>Simple roadmaps for operator adoption</li>
-						</ul>
+					<div className="grid gap-8 sm:grid-cols-2 md:col-span-5 lg:grid-cols-4">
+						{footerSections.map((section) => (
+							<div key={section.title}>
+								<h3 className="font-poppins mb-4 text-sm font-semibold text-white">{section.title}</h3>
+								<nav className="flex flex-col gap-3">
+									{section.links.map((link) => (
+										<Link
+											key={link.name}
+											href={link.href}
+											className="font-poppins text-sm font-light text-white/70 transition-colors hover:text-white"
+										>
+											{link.name}
+										</Link>
+									))}
+								</nav>
+							</div>
+						))}
 					</div>
 
 					{/* Newsletter */}

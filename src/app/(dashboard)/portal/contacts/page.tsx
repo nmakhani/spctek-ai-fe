@@ -290,6 +290,7 @@ function ContactsContent() {
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Phone</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Company</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Source</th>
+									<th className="px-6 py-3 text-left font-semibold text-white/75">Submissions</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Date</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Actions</th>
 								</tr>
@@ -314,6 +315,11 @@ function ContactsContent() {
 												<td className="px-6 py-3 text-white/65">{contact.phone || '-'}</td>
 												<td className="px-6 py-3 text-white/65">{contact.company || '-'}</td>
 												<td className="px-6 py-3 text-white/65">{contact.source || '-'}</td>
+												<td className="px-6 py-3 text-white/75">
+													<span className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-xs font-semibold">
+														{submissions.length}
+													</span>
+												</td>
 												<td className="px-6 py-3 text-white/65">
 													{contact.created_at ? new Date(contact.created_at).toLocaleDateString() : '-'}
 												</td>
@@ -339,7 +345,7 @@ function ContactsContent() {
 
 											{expandedContactId === contact.id && (
 												<tr className="bg-black/18 border-b border-white/10">
-													<td colSpan={7} className="px-6 py-6">
+													<td colSpan={8} className="px-6 py-6">
 														<div className="rounded-2xl border border-white/10 bg-black/20 p-4">
 															<div className="mb-4 flex items-center justify-between gap-3">
 																<div>

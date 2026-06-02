@@ -10,7 +10,7 @@ import LeadCaptureModal, { type LeadCaptureValues } from '@/components/ui/LeadCa
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { automationWorkflowsApi, contactsApi } from '@/lib/api';
 import { validateEstimatorContactForm } from '@/lib/validation';
-import { WorkflowCard } from './WorkflowCard';
+import { WorkflowCard, WorkflowDetailsModal } from './WorkflowCard';
 
 type WorkflowClass = 'system' | 'plugin';
 const ITEMS_PER_PAGE = 6;
@@ -59,7 +59,8 @@ export default function Workflows() {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
-	const [selectedWorkflow, setSelectedWorkflow] = useState<AutomationWorkflow | null>(null);
+	const [detailWorkflow, setDetailWorkflow] = useState<AutomationWorkflow | null>(null);
+	const [inquiryWorkflow, setInquiryWorkflow] = useState<AutomationWorkflow | null>(null);
 	const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
 	useEffect(() => {
@@ -146,8 +147,10 @@ export default function Workflows() {
 	};
 
 	const handleWorkflowInquire = (workflow: AutomationWorkflow) => {
+		setDetailWorkflow(null);
+
 		if (workflow.link?.trim()) {
-			setSelectedWorkflow(workflow);
+			setInquiryWorkflow(workflow);
 			return;
 		}
 
@@ -155,7 +158,7 @@ export default function Workflows() {
 	};
 
 	const handleWorkflowLeadSubmit = async (values: LeadCaptureValues) => {
-		if (!selectedWorkflow?.link) {
+		if (!inquiryWorkflow?.link) {
 			return;
 		}
 
@@ -165,17 +168,17 @@ export default function Workflows() {
 			phone: values.phone || null,
 			company: values.company || null,
 			source: 'automation_workflow',
-			message: `Workflow implementation inquiry: ${selectedWorkflow.name}`,
+			message: `Workflow implementation inquiry: ${inquiryWorkflow.name}`,
 			journey: {
-				workflow_id: selectedWorkflow.id,
-				workflow_name: selectedWorkflow.name,
-				workflow_link: selectedWorkflow.link,
+				workflow_id: inquiryWorkflow.id,
+				workflow_name: inquiryWorkflow.name,
+				workflow_link: inquiryWorkflow.link,
 			},
 		});
 
 		toast.success('Thank you. Redirecting now...');
-		window.open(selectedWorkflow.link, '_blank', 'noopener,noreferrer');
-		setSelectedWorkflow(null);
+		window.open(inquiryWorkflow.link, '_blank', 'noopener, noreferrer');
+		setInquiryWorkflow(null);
 	};
 
 	return (
@@ -215,7 +218,7 @@ export default function Workflows() {
 					<>
 						<div className="grid grid-cols-1 gap-x-8 gap-y-9 text-left md:grid-cols-2 xl:grid-cols-3">
 							{paginatedWorkflows.map((workflow) => (
-								<WorkflowCard key={workflow.id} workflow={workflow} onInquire={handleWorkflowInquire} />
+								<WorkflowCard key={workflow.id} workflow={workflow} onSelect={setDetailWorkflow} />
 							))}
 						</div>
 
@@ -245,14 +248,20 @@ export default function Workflows() {
 				)}
 			</div>
 
+			<WorkflowDetailsModal
+				workflow={detailWorkflow}
+				onClose={() => setDetailWorkflow(null)}
+				onInquire={handleWorkflowInquire}
+			/>
+
 			<LeadCaptureModal
-				isOpen={Boolean(selectedWorkflow)}
+				isOpen={Boolean(inquiryWorkflow)}
 				title="One Last Step"
 				subtitle="Enter your details before opening this workflow resource."
 				submitLabel="Continue"
 				loadingLabel="Opening..."
 				validate={validateEstimatorContactForm}
-				onClose={() => setSelectedWorkflow(null)}
+				onClose={() => setInquiryWorkflow(null)}
 				onSubmit={handleWorkflowLeadSubmit}
 			/>
 

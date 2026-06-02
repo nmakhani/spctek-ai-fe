@@ -1,4 +1,4 @@
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { GradientBorder } from './GradientBorder';
 
@@ -31,35 +31,105 @@ export default function FilterBar({
 			onSearchSubmit();
 		}
 	};
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const [canScrollLeft, setCanScrollLeft] = useState(false);
+	const [canScrollRight, setCanScrollRight] = useState(false);
 	const visibleCategories = categoriesLoading
 		? [{ label: 'Loading categories...', value: 'all' }]
 		: [{ label: 'All', value: 'all' }, ...categories];
 
+	useEffect(() => {
+		const scrollElement = scrollRef.current;
+		if (!scrollElement) {
+			return;
+		}
+
+		const updateScrollHints = () => {
+			const { scrollLeft, scrollWidth, clientWidth } = scrollElement;
+			const maxScrollLeft = scrollWidth - clientWidth;
+
+			setCanScrollLeft(scrollLeft > 1);
+			setCanScrollRight(scrollLeft < maxScrollLeft - 1);
+		};
+
+		updateScrollHints();
+		scrollElement.addEventListener('scroll', updateScrollHints, { passive: true });
+		window.addEventListener('resize', updateScrollHints);
+
+		return () => {
+			scrollElement.removeEventListener('scroll', updateScrollHints);
+			window.removeEventListener('resize', updateScrollHints);
+		};
+	}, [categories.length, categoriesLoading]);
+
 	return (
 		<div className="mb-12 w-full md:mb-16 lg:mb-20">
-			<div className="mx-auto mb-8 max-w-4xl overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:mb-10 [&::-webkit-scrollbar]:hidden">
-				<div className="inline-flex min-w-full border-b border-white/25 px-2">
-					{visibleCategories.map((item) => {
-						const active = selectedCategory === item.value;
-						return (
-							<button
-								key={item.value}
-								type="button"
-								onClick={() => onCategoryChange(item.value)}
-								disabled={categoriesLoading}
-								className={`relative z-10 flex-1 whitespace-nowrap px-4 pb-4 text-center text-base font-medium tracking-wide transition sm:px-5 sm:text-lg md:px-6 md:text-xl ${
-									active ? 'text-white' : 'text-white/70 hover:text-white'
-								} disabled:cursor-not-allowed disabled:opacity-50`}
-							>
-								{item.label}
-								{active && !categoriesLoading && (
-									<span className="absolute -bottom-[1px] left-0 flex w-full justify-center">
-										<span className="h-[2px] w-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
-									</span>
-								)}
-							</button>
-						);
-					})}
+			<div className="mx-auto mb-8 grid max-w-5xl grid-cols-[2rem_minmax(0,56rem)_2rem] items-center justify-center gap-2 md:mb-10 md:grid-cols-[2.5rem_minmax(0,56rem)_2.5rem]">
+				<div className="flex h-full items-center justify-start">
+					{canScrollLeft && (
+						<svg
+							aria-hidden="true"
+							className="h-7 w-7 animate-pulse text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M15 6L9 12L15 18"
+								stroke="currentColor"
+								strokeWidth="2.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
+						</svg>
+					)}
+				</div>
+				<div
+					ref={scrollRef}
+					className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+				>
+					<div className="inline-flex min-w-full border-b border-white/25 px-2">
+						{visibleCategories.map((item) => {
+							const active = selectedCategory === item.value;
+							return (
+								<button
+									key={item.value}
+									type="button"
+									onClick={() => onCategoryChange(item.value)}
+									disabled={categoriesLoading}
+									className={`relative z-10 flex-1 whitespace-nowrap px-4 pb-4 text-center text-base font-medium tracking-wide transition sm:px-5 sm:text-lg md:px-6 md:text-xl ${
+										active ? 'text-white' : 'text-white/70 hover:text-white'
+									} disabled:cursor-not-allowed disabled:opacity-50`}
+								>
+									{item.label}
+									{active && !categoriesLoading && (
+										<span className="absolute -bottom-[1px] left-0 flex w-full justify-center">
+											<span className="h-[2px] w-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
+										</span>
+									)}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+				<div className="flex h-full items-center justify-end">
+					{canScrollRight && (
+						<svg
+							aria-hidden="true"
+							className="h-7 w-7 animate-pulse text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M9 6L15 12L9 18"
+								stroke="currentColor"
+								strokeWidth="2.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
+						</svg>
+					)}
 				</div>
 			</div>
 
