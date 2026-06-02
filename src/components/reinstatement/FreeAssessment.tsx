@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { contactsApi, reinstatementApi } from '@/lib/api';
 import { validateEstimatorContactForm, validateEstimatorForm } from '@/lib/validation';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
+import LeadCaptureModal, { type LeadCaptureValues } from '../ui/LeadCaptureModal';
 import { SectionHeading } from '../ui/SectionHeading';
 
 const DOWNLOAD_FIELD: FieldConfig[] = [
@@ -91,32 +92,6 @@ const REINSTATEMENT_FIELDS: FieldConfig[] = [
 	},
 ];
 
-const CONTACT_FIELDS: FieldConfig[] = [
-	{
-		name: 'name',
-		type: 'text',
-		label: 'Your Name',
-		placeholder: 'John Doe',
-		required: true,
-		gridSpan: 'full',
-	},
-	{
-		name: 'email',
-		type: 'email',
-		label: 'Email Address',
-		placeholder: 'john@example.com',
-		required: true,
-		gridSpan: 'half',
-	},
-	{
-		name: 'phone',
-		type: 'text',
-		label: 'Phone Number',
-		placeholder: '+1 (555) 000-0000',
-		gridSpan: 'half',
-	},
-];
-
 export default function FreeAssessment() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [pendingData, setPendingData] = useState<FormValues | null>(null);
@@ -126,7 +101,7 @@ export default function FreeAssessment() {
 		setIsModalOpen(true);
 	};
 
-	const handleFinalSubmit = async (contactValues: FormValues) => {
+	const handleFinalSubmit = async (contactValues: LeadCaptureValues) => {
 		if (!pendingData) return;
 
 		try {
@@ -135,6 +110,7 @@ export default function FreeAssessment() {
 				name: contactValues.name,
 				email: contactValues.email,
 				phone: contactValues.phone || null,
+				company: contactValues.company || null,
 				source: 'reinstatement_estimator',
 			};
 
@@ -196,29 +172,14 @@ export default function FreeAssessment() {
 				</div>
 			</div>
 
-			{isModalOpen && (
-				<div
-					className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
-					onClick={(e) => {
-						if (e.target === e.currentTarget) setIsModalOpen(false);
-					}}
-				>
-					<div className="custom-scrollbar max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1a1a1a] p-5 shadow-2xl sm:p-6 md:p-10">
-						<div className="mb-6">
-							<h3 className="text-xl font-bold text-white sm:text-2xl md:text-3xl">One Last Step</h3>
-							<p className="mt-2 text-white/60">Where should we send your assessment?</p>
-						</div>
-
-						<GenericForm
-							fields={CONTACT_FIELDS}
-							validate={validateEstimatorContactForm}
-							onSubmit={handleFinalSubmit}
-							submitLabel="Receive Report"
-							loadingLabel="Sending..."
-						/>
-					</div>
-				</div>
-			)}
+			<LeadCaptureModal
+				isOpen={isModalOpen}
+				validate={validateEstimatorContactForm}
+				onClose={() => setIsModalOpen(false)}
+				onSubmit={handleFinalSubmit}
+				submitLabel="Receive Report"
+				loadingLabel="Sending..."
+			/>
 		</section>
 	);
 }

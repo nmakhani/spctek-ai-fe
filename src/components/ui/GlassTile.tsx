@@ -9,7 +9,7 @@ interface GlassTileProps {
 export const GlassTile = ({ title, description }: GlassTileProps) => {
 	return (
 		<div
-			className="relative flex h-full flex-col rounded-[25px] p-10 transition-all duration-500 hover:scale-[1.01]"
+			className="relative flex h-full flex-col rounded-[25px] p-6 transition-all duration-500 hover:scale-[1.01] sm:p-8 lg:p-10"
 			style={{
 				backdropFilter: 'blur(20px)',
 				border: '1.5px solid rgba(255, 255, 255, 0.12)',
@@ -21,8 +21,10 @@ export const GlassTile = ({ title, description }: GlassTileProps) => {
 			<GlassGlow angle={45} opacity={0.8} start={20} end={80} radius="25px" />
 
 			<div className="relative z-10 flex h-full flex-col">
-				<h3 className="text-[1.4rem] font-bold tracking-tight text-[#7c86fc]">{title}</h3>
-				<p className="mt-4 text-[1.1rem] font-medium leading-relaxed text-white/90">{description}</p>
+				<h3 className="text-xl font-bold text-[#7c86fc] sm:text-[1.3rem] lg:text-[1.4rem]">{title}</h3>
+				<p className="mt-3 text-base font-medium leading-relaxed text-white/90 sm:mt-4 sm:text-[1.05rem] lg:text-[1.1rem]">
+					{description}
+				</p>
 			</div>
 		</div>
 	);

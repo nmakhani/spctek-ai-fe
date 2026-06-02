@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 
 import { R2ImageUpload } from '@/components/portal/content-editor/R2ImageUpload';
@@ -406,7 +407,13 @@ function AutomationWorkflowsContent() {
 										<td className="px-6 py-3 font-medium text-white">{workflow.name}</td>
 										<td className="px-6 py-3">
 											{workflow.thumbnail_url ? (
-												<img src={workflow.thumbnail_url} alt="" className="h-12 w-16 rounded-lg object-cover" />
+												<Image
+													src={workflow.thumbnail_url}
+													alt=""
+													width={64}
+													height={48}
+													className="h-12 w-16 rounded-lg object-cover"
+												/>
 											) : (
 												<span className="text-sm text-white/45">None</span>
 											)}

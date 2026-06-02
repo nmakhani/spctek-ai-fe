@@ -1,11 +1,15 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import type { Category } from '@/components/portal/content-editor/types';
+import CalendlyModal from '@/components/ui/CalendlyModal';
 import FilterBar from '@/components/ui/FilterBar';
+import LeadCaptureModal, { type LeadCaptureValues } from '@/components/ui/LeadCaptureModal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { automationWorkflowsApi } from '@/lib/api';
+import { automationWorkflowsApi, contactsApi } from '@/lib/api';
+import { validateEstimatorContactForm } from '@/lib/validation';
 import { WorkflowCard } from './WorkflowCard';
 
 type WorkflowClass = 'system' | 'plugin';
@@ -48,12 +52,15 @@ function searchMatches(workflow: AutomationWorkflow, searchTerm: string) {
 }
 
 export default function Workflows() {
+	const filterBarRef = useRef<HTMLDivElement>(null);
 	const [workflows, setWorkflows] = useState<AutomationWorkflow[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
+	const [selectedWorkflow, setSelectedWorkflow] = useState<AutomationWorkflow | null>(null);
+	const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -133,6 +140,44 @@ export default function Workflows() {
 		setSearchTerm(searchInput.trim());
 	};
 
+	const handlePageChange = (page: number) => {
+		setCurrentPage(page);
+		filterBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
+
+	const handleWorkflowInquire = (workflow: AutomationWorkflow) => {
+		if (workflow.link?.trim()) {
+			setSelectedWorkflow(workflow);
+			return;
+		}
+
+		setIsCalendlyOpen(true);
+	};
+
+	const handleWorkflowLeadSubmit = async (values: LeadCaptureValues) => {
+		if (!selectedWorkflow?.link) {
+			return;
+		}
+
+		await contactsApi.create({
+			name: values.name,
+			email: values.email,
+			phone: values.phone || null,
+			company: values.company || null,
+			source: 'automation_workflow',
+			message: `Workflow implementation inquiry: ${selectedWorkflow.name}`,
+			journey: {
+				workflow_id: selectedWorkflow.id,
+				workflow_name: selectedWorkflow.name,
+				workflow_link: selectedWorkflow.link,
+			},
+		});
+
+		toast.success('Thank you. Redirecting now...');
+		window.open(selectedWorkflow.link, '_blank', 'noopener,noreferrer');
+		setSelectedWorkflow(null);
+	};
+
 	return (
 		<section className="font-poppins mx-auto flex max-w-7xl flex-col items-center px-4 text-center md:px-6 lg:px-12">
 			<SectionHeading size="large">
@@ -140,7 +185,7 @@ export default function Workflows() {
 				<br /> Automation Systems for Every Stage <br /> of <span className="text-[#606bfa]">Business Growth</span>
 			</SectionHeading>
 
-			<div className="mt-12 w-full md:mt-16">
+			<div ref={filterBarRef} className="mt-12 w-full scroll-mt-6 md:mt-16">
 				<FilterBar
 					categories={filterCategories}
 					selectedCategory={selectedCategory}
@@ -170,7 +215,7 @@ export default function Workflows() {
 					<>
 						<div className="grid grid-cols-1 gap-x-8 gap-y-9 text-left md:grid-cols-2 xl:grid-cols-3">
 							{paginatedWorkflows.map((workflow) => (
-								<WorkflowCard key={workflow.id} workflow={workflow} />
+								<WorkflowCard key={workflow.id} workflow={workflow} onInquire={handleWorkflowInquire} />
 							))}
 						</div>
 
@@ -190,7 +235,7 @@ export default function Workflows() {
 										max={totalPages}
 										step={1}
 										value={currentPage}
-										onChange={(event) => setCurrentPage(Number(event.target.value))}
+										onChange={(event) => handlePageChange(Number(event.target.value))}
 										className="absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent opacity-0"
 									/>
 								</div>
@@ -199,6 +244,19 @@ export default function Workflows() {
 					</>
 				)}
 			</div>
+
+			<LeadCaptureModal
+				isOpen={Boolean(selectedWorkflow)}
+				title="One Last Step"
+				subtitle="Enter your details before opening this workflow resource."
+				submitLabel="Continue"
+				loadingLabel="Opening..."
+				validate={validateEstimatorContactForm}
+				onClose={() => setSelectedWorkflow(null)}
+				onSubmit={handleWorkflowLeadSubmit}
+			/>
+
+			<CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />
 		</section>
 	);
 }

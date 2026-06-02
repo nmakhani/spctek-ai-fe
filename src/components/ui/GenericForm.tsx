@@ -48,13 +48,17 @@ interface GenericFormProps {
 	loadingLabel?: string;
 	submitActions?: SubmitAction[];
 	skipValidationForActions?: string[];
+	compact?: boolean;
 }
 
 const labelClass = 'mb-2 block text-white text-lg font-semibold md:text-2xl';
+const compactLabelClass = 'mb-2 block text-white text-sm font-semibold sm:text-base';
 const errorClass = 'mt-1 text-sm text-red-400';
 
 const inputInnerClass =
 	'w-full glow-input bg-transparent px-5 py-4 text-base text-white/90 placeholder:text-white/25 outline-none focus:ring-0 transition-all resize-none';
+const compactInputInnerClass =
+	'w-full glow-input bg-transparent px-4 py-3 text-sm text-white/90 placeholder:text-white/25 outline-none focus:ring-0 transition-all resize-none sm:text-base';
 
 export default function GenericForm({
 	fields,
@@ -66,6 +70,7 @@ export default function GenericForm({
 	loadingLabel = 'Submitting...',
 	submitActions,
 	skipValidationForActions = [],
+	compact = false,
 }: GenericFormProps) {
 	const defaultValues = fields.reduce<FormValues>((acc, f) => {
 		acc[f.name] = initialValues?.[f.name] ?? '';
@@ -126,7 +131,7 @@ export default function GenericForm({
 
 		return (
 			<div key={field.name} className={`${spanClass} ${stackClass}`}>
-				<label className={labelClass}>
+				<label className={compact ? compactLabelClass : labelClass}>
 					{field.label} {field.required && <span className="text-red-400">*</span>}
 				</label>
 
@@ -149,15 +154,25 @@ export default function GenericForm({
 										type="button"
 										disabled={loading}
 										onClick={field.onAction}
-										className="flex w-full items-center justify-between px-5 py-4 text-lg font-medium transition-all hover:bg-white/5 active:bg-white/10"
+										className={`flex w-full items-center justify-between font-medium transition-all hover:bg-white/5 active:bg-white/10 ${
+											compact ? 'px-4 py-3 text-base' : 'px-5 py-4 text-lg'
+										}`}
 									>
 										<span className="text-white/60">{field.placeholder}</span>
 										<span className="text-white/30">{field.actionLabel}</span>
 									</button>
 								) : field.type === 'textarea' ? (
-									<textarea rows={field.rows ?? 4} className={inputInnerClass} {...sharedProps} />
+									<textarea
+										rows={field.rows ?? 4}
+										className={compact ? compactInputInnerClass : inputInnerClass}
+										{...sharedProps}
+									/>
 								) : (
-									<input type={field.type} className={inputInnerClass} {...sharedProps} />
+									<input
+										type={field.type}
+										className={compact ? compactInputInnerClass : inputInnerClass}
+										{...sharedProps}
+									/>
 								)}
 							</div>
 						</>
@@ -178,11 +193,17 @@ export default function GenericForm({
 
 	return (
 		<div className="relative z-10">
-			<GradientBorder thickness={2} radius="40px" />
-			<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius="40px" />
+			<GradientBorder thickness={compact ? 1 : 2} radius={compact ? '24px' : '40px'} />
+			<GlassGlow angle={120} opacity={0.5} start={10} end={90} radius={compact ? '24px' : '40px'} />
 
-			<form className="relative space-y-6 p-5 md:p-8" style={{ borderRadius: '38px' }} onSubmit={handleSubmit}>
-				<div className="relative z-10 grid grid-cols-1 gap-5 text-left md:grid-cols-2 md:gap-6">
+			<form
+				className={compact ? 'relative space-y-4 p-4 sm:p-5' : 'relative space-y-6 p-5 md:p-8'}
+				style={{ borderRadius: compact ? '22px' : '38px' }}
+				onSubmit={handleSubmit}
+			>
+				<div
+					className={`relative z-10 grid grid-cols-1 text-left md:grid-cols-2 ${compact ? 'gap-4' : 'gap-5 md:gap-6'}`}
+				>
 					{fields.map(renderField)}
 				</div>
 
@@ -198,11 +219,11 @@ export default function GenericForm({
 										type="submit"
 										value={action.value}
 										disabled={loading}
-										className={`flex-1 rounded-2xl px-5 py-3.5 text-lg font-semibold transition-all disabled:opacity-50 ${
+										className={`flex-1 rounded-2xl font-semibold transition-all disabled:opacity-50 ${
 											isPrimary
 												? 'bg-[#606bfa] text-white hover:bg-[#6f79ff]'
 												: 'border border-white/20 bg-white/[0.08] text-white hover:bg-white/[0.12]'
-										}`}
+										} ${compact ? 'px-4 py-3 text-base' : 'px-5 py-3.5 text-lg'}`}
 									>
 										{loading ? loadingLabel : action.label}
 									</button>
@@ -212,7 +233,9 @@ export default function GenericForm({
 							<button
 								type="submit"
 								disabled={loading}
-								className="flex-[4] rounded-2xl bg-[#606bfa] py-3.5 text-lg font-semibold text-white transition-all hover:bg-[#6f79ff] disabled:opacity-50"
+								className={`flex-[4] rounded-2xl bg-[#606bfa] font-semibold text-white transition-all hover:bg-[#6f79ff] disabled:opacity-50 ${
+									compact ? 'py-3 text-base' : 'py-3.5 text-lg'
+								}`}
 							>
 								{loading ? loadingLabel : submitLabel}
 							</button>
@@ -223,7 +246,9 @@ export default function GenericForm({
 								type="button"
 								onClick={handleClear}
 								disabled={loading}
-								className="min-w-[120px] rounded-2xl border border-white py-3.5 text-lg font-semibold text-white transition-all hover:bg-white/10 disabled:opacity-50 sm:flex-1"
+								className={`min-w-[120px] rounded-2xl border border-white font-semibold text-white transition-all hover:bg-white/10 disabled:opacity-50 sm:flex-1 ${
+									compact ? 'py-3 text-base' : 'py-3.5 text-lg'
+								}`}
 							>
 								Clear Form
 							</button>

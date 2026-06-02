@@ -5,7 +5,9 @@ interface GradientNumberProps {
 	height?: string;
 	rotation?: number;
 	borderRadius?: string;
+	enlarge?: boolean;
 	className?: string;
+	valueClassName?: string;
 }
 
 export function GradientNumber({
@@ -15,7 +17,9 @@ export function GradientNumber({
 	height,
 	rotation,
 	borderRadius,
+	enlarge = false,
 	className = '',
+	valueClassName,
 }: GradientNumberProps) {
 	const hasSubValue = Boolean(subValue?.trim());
 
@@ -39,7 +43,14 @@ export function GradientNumber({
 			<div className="relative z-10 flex flex-col items-center justify-center px-2 text-center">
 				<span
 					className={
-						hasSubValue ? 'text-3xl font-bold text-white md:text-4xl' : 'text-4xl font-bold text-white md:text-6xl'
+						valueClassName ||
+						`font-bold text-white ${
+							enlarge
+								? 'text-5xl sm:text-6xl md:text-9xl'
+								: hasSubValue
+									? 'text-3xl md:text-4xl'
+									: 'text-3xl sm:text-4xl md:text-6xl'
+						}`
 					}
 				>
 					{value}

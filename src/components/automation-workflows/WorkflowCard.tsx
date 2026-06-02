@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { Gem, Plug, type LucideIcon } from 'lucide-react';
 
 import { GlassGlow } from '@/components/ui/GlassGlow';
@@ -8,29 +9,37 @@ import { GradientBorder } from '@/components/ui/GradientBorder';
 import { resolveR2PublicUrl } from '@/lib/r2';
 import type { AutomationWorkflow } from './Workflows';
 
-export function WorkflowCard({ workflow }: { workflow: AutomationWorkflow }) {
+export function WorkflowCard({
+	workflow,
+	onInquire,
+}: {
+	workflow: AutomationWorkflow;
+	onInquire: (workflow: AutomationWorkflow) => void;
+}) {
 	const thumbnailUrl = resolveR2PublicUrl(workflow.thumbnail_url || '');
 	const displayedCategories = workflow.categories.slice(0, 2);
 	const remainingCount = workflow.categories.length - displayedCategories.length;
 	const ClassIcon = workflow.class === 'system' ? Gem : Plug;
 
 	return (
-		<article className="group mx-auto h-[400px] w-full max-w-[360px] [perspective:1400px]">
+		<article className="group mx-auto h-[430px] w-full max-w-[340px] [perspective:1400px] sm:h-[410px] sm:max-w-[360px] lg:h-[400px]">
 			<div className="relative h-full rounded-3xl transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
 				<div className="pointer-events-none absolute inset-0 overflow-visible rounded-3xl [backface-visibility:hidden]">
 					<ClassBadge icon={ClassIcon} />
 					<CardShell>
 						<div className="flex h-full flex-col text-left">
-							<p className="line-clamp-2 min-h-[76px] px-5 pb-4 pt-6 text-[15px] italic leading-relaxed text-[#a9b2ff] sm:px-6">
+							<p className="line-clamp-2 min-h-[70px] px-5 pb-4 pt-6 text-[14px] italic leading-relaxed text-[#a9b2ff] sm:min-h-[76px] sm:px-6 sm:text-[15px]">
 								{workflow.teaser}
 							</p>
 
-							<div className="relative h-[170px] w-full shrink-0 overflow-hidden border-y border-white/10 bg-white/[0.04]">
+							<div className="relative h-[160px] w-full shrink-0 overflow-hidden border-y border-white/10 bg-white/[0.04] sm:h-[170px]">
 								{thumbnailUrl ? (
-									<img
+									<Image
 										src={thumbnailUrl}
 										alt=""
-										className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+										fill
+										sizes="(min-width: 1280px) 360px, (min-width: 640px) 360px, 340px"
+										className="object-cover opacity-90 transition duration-500 group-hover:scale-105"
 									/>
 								) : (
 									<div className="flex h-full w-full items-center justify-center px-6 text-center text-sm text-white/45">
@@ -40,7 +49,7 @@ export function WorkflowCard({ workflow }: { workflow: AutomationWorkflow }) {
 							</div>
 
 							<div className="flex flex-1 flex-col px-5 py-4 sm:px-6">
-								<h3 className="line-clamp-2 min-h-[64px] text-[1.35rem] font-semibold leading-tight text-white">
+								<h3 className="line-clamp-2 min-h-[56px] text-[1.2rem] font-semibold leading-tight text-white sm:min-h-[64px] sm:text-[1.35rem]">
 									{workflow.name}
 								</h3>
 
@@ -70,10 +79,10 @@ export function WorkflowCard({ workflow }: { workflow: AutomationWorkflow }) {
 				<div className="pointer-events-auto absolute inset-0 overflow-visible rounded-3xl [backface-visibility:hidden] [transform:rotateY(180deg)]">
 					<ClassBadge icon={ClassIcon} />
 					<CardShell focus>
-						<div className="flex h-full flex-col p-6 text-left">
-							<p className="text-white/76 text-[15px] leading-relaxed">{workflow.description.body}</p>
+						<div className="flex h-full flex-col p-5 text-left sm:p-6">
+							<p className="text-white/76 text-[14px] leading-relaxed sm:text-[15px]">{workflow.description.body}</p>
 
-							<ul className="ml-4 mt-2 space-y-2 text-[11px] text-white/65">
+							<ul className="ml-4 mt-2 space-y-2 text-[10.5px] text-white/65 sm:text-[11px]">
 								{workflow.description.bullets.map((bullet) => (
 									<li key={bullet} className="flex gap-2">
 										<span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#606bfa]" />
@@ -82,12 +91,13 @@ export function WorkflowCard({ workflow }: { workflow: AutomationWorkflow }) {
 								))}
 							</ul>
 
-							<a
-								href={workflow.link || '/contact'}
-								className="mx-auto mt-auto inline-flex w-fit items-center rounded-full border border-[#7d89ff]/45 bg-[#606bfa]/20 px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-[#cfd5ff] transition hover:border-[#a9b2ff] hover:bg-[#606bfa]/40 hover:text-white hover:shadow-[0_0_22px_rgba(96,107,250,0.35)]"
+							<button
+								type="button"
+								onClick={() => onInquire(workflow)}
+								className="mx-auto mt-auto inline-flex w-fit max-w-full items-center justify-center rounded-full border border-[#7d89ff]/45 bg-[#606bfa]/20 px-4 py-3 text-center text-[10px] font-bold uppercase tracking-wider text-[#cfd5ff] transition hover:border-[#a9b2ff] hover:bg-[#606bfa]/40 hover:text-white hover:shadow-[0_0_22px_rgba(96,107,250,0.35)] sm:px-5 sm:text-[11px] sm:tracking-widest"
 							>
 								Inquire for Implementation
-							</a>
+							</button>
 						</div>
 					</CardShell>
 				</div>

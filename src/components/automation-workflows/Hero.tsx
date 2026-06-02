@@ -15,6 +15,7 @@ const automationStats = [
 	{
 		value: '∞',
 		label: 'Scalable Operations',
+		enlarge: true,
 	},
 ];
 
@@ -45,11 +46,23 @@ export default function Hero() {
 			</p>
 
 			<div className="mt-8 flex flex-col items-center md:mt-10">
-				<div className="flex flex-nowrap items-start justify-center gap-3 sm:gap-4 md:gap-24">
+				<div className="flex w-full max-w-[620px] flex-nowrap items-start justify-center gap-2 sm:gap-4 md:gap-12 lg:gap-20">
 					{automationStats.map((stat) => (
-						<div key={stat.label} className="flex w-[110px] flex-col items-center gap-2">
-							<GradientNumber value={stat.value} width="180px" height="80px" rotation={90} borderRadius="16px" />
-							<span className="whitespace-nowrap text-center text-[9px] font-semibold tracking-wide text-white/65 sm:text-[12px] md:text-[14px]">
+						<div key={stat.label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+							<GradientNumber
+								value={stat.value}
+								width="clamp(88px, 27vw, 180px)"
+								height="clamp(56px, 16vw, 80px)"
+								rotation={90}
+								borderRadius="16px"
+								enlarge={stat.enlarge}
+								valueClassName={
+									stat.enlarge
+										? 'font-bold text-white text-5xl sm:text-6xl md:text-8xl'
+										: 'font-bold text-white text-3xl sm:text-4xl md:text-6xl'
+								}
+							/>
+							<span className="max-w-[110px] text-center text-[9px] font-semibold leading-tight tracking-wide text-white/65 sm:max-w-none sm:text-[12px] md:text-[14px]">
 								{stat.label}
 							</span>
 						</div>

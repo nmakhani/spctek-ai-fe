@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FAQs, Hero, Workflows } from '@/components/automation-workflows';
+import { CustomWorkflow, FAQs, Hero, Security, StandOut, Workflows } from '@/components/automation-workflows';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { generateStaticMetadata } from '@/lib/metadata';
 
@@ -10,6 +10,9 @@ export default function AutomationWorkflowsPage() {
 	const SECTIONS = [
 		{ Component: Hero, id: 'hero' },
 		{ Component: Workflows, id: 'workflows' },
+		{ Component: CustomWorkflow, id: 'custom-workflow' },
+		{ Component: StandOut, id: 'automation-systems-stand-out' },
+		{ Component: Security, id: 'automation-security' },
 		{ Component: FAQs, id: 'faqs' },
 	];
 
