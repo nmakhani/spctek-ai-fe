@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '../../../lib/api';
@@ -40,7 +40,9 @@ export default function EmbeddedContactForm({
 	const [submitting, setSubmitting] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
 		if (!name.trim() || !email.trim()) {
 			toast.error('Name and email are required');
 			return;
@@ -106,7 +108,7 @@ export default function EmbeddedContactForm({
 							<p className="text-gray-400 mt-2 text-sm leading-relaxed">{subtitle}</p>
 						</div>
 
-						<div className="flex flex-col gap-6">
+						<form className="flex flex-col gap-6" onSubmit={handleSubmit}>
 							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 								<div className="flex flex-col gap-3">
 									<label className="text-left text-sm font-bold text-white">
@@ -134,16 +136,15 @@ export default function EmbeddedContactForm({
 									<GlowTextField type="tel" value={phone} onChange={setPhone} placeholder="+1 (555) 123-4567" />
 								</div>
 							</div>
-						</div>
 
-						<button
-							type="button"
-							onClick={handleSubmit}
-							disabled={!canSubmit}
-							className="w-full rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							{submitting ? submittingText : buttonText}
-						</button>
+							<button
+								type="submit"
+								disabled={!canSubmit}
+								className="w-full rounded-xl bg-[#5A5DF3] px-6 py-4 font-medium text-white transition-colors duration-200 hover:bg-[#4d50d6] disabled:cursor-not-allowed disabled:opacity-50"
+							>
+								{submitting ? submittingText : buttonText}
+							</button>
+						</form>
 
 						<p className="text-gray-500 text-center text-xs leading-relaxed">
 							We take privacy seriously. Your details are only used to send your report and optional follow-up. No spam,

@@ -48,6 +48,10 @@ function getErrorMessage(err: unknown, fallback: string): string {
 	return err instanceof Error ? err.message : fallback;
 }
 
+function hasJourneyData(journey?: Record<string, unknown>) {
+	return Boolean(journey && Object.keys(journey).length > 0);
+}
+
 function ContactsContent() {
 	const [contacts, setContacts] = useState<Contact[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -287,8 +291,6 @@ function ContactsContent() {
 								<tr>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Name</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Email</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Phone</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Company</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Source</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Submissions</th>
 									<th className="px-6 py-3 text-left font-semibold text-white/75">Date</th>
@@ -312,8 +314,6 @@ function ContactsContent() {
 													</div>
 												</td>
 												<td className="px-6 py-3 text-white/75">{contact.email || '-'}</td>
-												<td className="px-6 py-3 text-white/65">{contact.phone || '-'}</td>
-												<td className="px-6 py-3 text-white/65">{contact.company || '-'}</td>
 												<td className="px-6 py-3 text-white/65">{contact.source || '-'}</td>
 												<td className="px-6 py-3 text-white/75">
 													<span className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-xs font-semibold">
@@ -345,7 +345,7 @@ function ContactsContent() {
 
 											{expandedContactId === contact.id && (
 												<tr className="bg-black/18 border-b border-white/10">
-													<td colSpan={8} className="px-6 py-6">
+													<td colSpan={6} className="px-6 py-6">
 														<div className="rounded-2xl border border-white/10 bg-black/20 p-4">
 															<div className="mb-4 flex items-center justify-between gap-3">
 																<div>
@@ -370,10 +370,9 @@ function ContactsContent() {
 																<div className="text-sm text-white/55">No submissions available.</div>
 															) : (
 																<div className="overflow-x-auto rounded-xl border border-white/10 bg-white/[0.03]">
-																	<table className="w-full min-w-[900px] text-sm">
+																	<table className="w-full min-w-[780px] text-sm">
 																		<thead className="bg-black/25">
 																			<tr>
-																				<th className="px-3 py-2 text-left font-medium text-white/65">Date</th>
 																				<th className="px-3 py-2 text-left font-medium text-white/65">Source</th>
 																				<th className="px-3 py-2 text-left font-medium text-white/65">Name</th>
 																				<th className="px-3 py-2 text-left font-medium text-white/65">Email</th>
@@ -386,11 +385,6 @@ function ContactsContent() {
 																		<tbody>
 																			{submissions.map((submission) => (
 																				<tr key={submission.id} className="border-t border-white/10 align-top">
-																					<td className="px-3 py-2 text-white/70">
-																						{submission.created_at
-																							? new Date(submission.created_at).toLocaleString()
-																							: '-'}
-																					</td>
 																					<td className="px-3 py-2 text-white">{submission.source || '-'}</td>
 																					<td className="px-3 py-2 text-white">{submission.name || '-'}</td>
 																					<td className="px-3 py-2 text-white">
@@ -404,7 +398,7 @@ function ContactsContent() {
 																						</div>
 																					</td>
 																					<td className="px-3 py-2">
-																						{submission.journey ? (
+																						{hasJourneyData(submission.journey) ? (
 																							<button
 																								type="button"
 																								onClick={(event) => {
