@@ -158,27 +158,44 @@ export default function Workflows() {
 	};
 
 	const handleWorkflowLeadSubmit = async (values: LeadCaptureValues) => {
-		if (!inquiryWorkflow?.link) {
+		const workflow = inquiryWorkflow;
+		const workflowLink = workflow?.link?.trim();
+
+		if (!workflow || !workflowLink) {
 			return;
 		}
 
-		await contactsApi.create({
-			name: values.name,
-			email: values.email,
-			phone: values.phone || null,
-			company: values.company || null,
-			source: 'automation_workflow',
-			message: `Workflow implementation inquiry: ${inquiryWorkflow.name}`,
-			journey: {
-				workflow_id: inquiryWorkflow.id,
-				workflow_name: inquiryWorkflow.name,
-				workflow_link: inquiryWorkflow.link,
-			},
-		});
+		const workflowWindow = window.open('about:blank', '_blank');
+		if (workflowWindow) {
+			workflowWindow.opener = null;
+		}
 
-		toast.success('Thank you. Redirecting now...');
-		window.open(inquiryWorkflow.link, '_blank', 'noopener, noreferrer');
-		setInquiryWorkflow(null);
+		try {
+			await contactsApi.create({
+				name: values.name,
+				email: values.email,
+				phone: values.phone || null,
+				company: values.company || null,
+				source: 'automation_workflow',
+				message: `Workflow implementation inquiry: ${workflow.name}`,
+				journey: {
+					workflow_id: workflow.id,
+					workflow_name: workflow.name,
+					workflow_link: workflowLink,
+				},
+			});
+
+			toast.success('Thank you. Redirecting now...');
+			if (workflowWindow) {
+				workflowWindow.location.href = workflowLink;
+			} else {
+				window.location.assign(workflowLink);
+			}
+			setInquiryWorkflow(null);
+		} catch (error) {
+			workflowWindow?.close();
+			throw error;
+		}
 	};
 
 	return (
