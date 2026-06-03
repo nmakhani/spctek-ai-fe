@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
 	{
 		name: 'Proofs & Resources',
 		children: [
-			{ name: 'Blogs', href: '/blogs' },
+			{ name: 'Blog', href: '/blogs' },
 			{ name: 'Case Studies', href: '/case-studies' },
 			{ name: 'AI Playbooks', href: '/ai-playbook' },
 		],
