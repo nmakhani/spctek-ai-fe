@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { PageHeader } from '@/components/portal/PageHeader';
+import { PortalTable, type PortalTableAction, type PortalTableColumn } from '@/components/portal/PortalTable';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -191,6 +192,29 @@ function PopupsContent() {
 		setPendingDeleteId(null);
 	};
 
+	const popupColumns: PortalTableColumn<Popup>[] = [
+		{ header: 'Path', accessor: 'path', className: 'text-white' },
+		{ header: 'Title', accessor: (popup) => popup.content.title, className: 'text-white' },
+		{ header: 'Delay', type: 'number', accessor: (popup) => `${popup.delay} ms` },
+		{ header: 'CTA', accessor: (popup) => popup.content.cta_text, className: 'text-white/70' },
+		{ header: 'Updated', type: 'date', accessor: 'updated_at' },
+	];
+
+	const getPopupActions = (popup: Popup): PortalTableAction<Popup>[] => [
+		{
+			label: 'Edit',
+			disabled: deletingId === popup.id,
+			onClick: handleEdit,
+		},
+		{
+			label: 'Delete',
+			loading: deletingId === popup.id,
+			loadingLabel: 'Deleting...',
+			variant: 'danger',
+			onClick: (selectedPopup) => requestDelete(selectedPopup.id),
+		},
+	];
+
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -312,55 +336,16 @@ function PopupsContent() {
 					</div>
 				)}
 
-				{loading ? (
-					<div className="py-12 text-center text-white/55">Loading popups...</div>
-				) : popups.length === 0 ? (
-					<div className="py-12 text-center text-white/55">No popups yet</div>
-				) : (
-					<div className="overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-						<table className="w-full">
-							<thead className="border-b border-white/10 bg-black/25">
-								<tr>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Path</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Title</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Delay</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">CTA</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Updated</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{popups.map((popup) => (
-									<tr key={popup.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
-										<td className="px-6 py-3 text-white">{popup.path}</td>
-										<td className="px-6 py-3 text-white">{popup.content.title}</td>
-										<td className="px-6 py-3 text-white/75">{popup.delay} ms</td>
-										<td className="px-6 py-3 text-white/70">{popup.content.cta_text}</td>
-										<td className="px-6 py-3 text-white/65">{new Date(popup.updated_at).toLocaleDateString()}</td>
-										<td className="px-6 py-3">
-											<div className="flex gap-2">
-												<button
-													onClick={() => handleEdit(popup)}
-													disabled={deletingId === popup.id}
-													className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-												>
-													Edit
-												</button>
-												<button
-													onClick={() => requestDelete(popup.id)}
-													disabled={deletingId === popup.id}
-													className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
-												>
-													{deletingId === popup.id ? 'Deleting...' : 'Delete'}
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
+				<PortalTable
+					columns={popupColumns}
+					loading={loading}
+					loadingMessage="Loading popups..."
+					empty={popups.length === 0}
+					emptyMessage="No popups yet"
+					data={popups}
+					getRowKey={(popup) => popup.id}
+					actions={getPopupActions}
+				/>
 			</main>
 		</div>
 	);

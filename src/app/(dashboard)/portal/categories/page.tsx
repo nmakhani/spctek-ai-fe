@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 
 import { type Category, type Content } from '@/components/portal/content-editor/types';
 import { PageHeader } from '@/components/portal/PageHeader';
+import { PortalTable, type PortalTableAction, type PortalTableColumn } from '@/components/portal/PortalTable';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -150,6 +151,80 @@ function CategoriesContent() {
 		}
 	};
 
+	const categoryColumns: PortalTableColumn<Category>[] = [
+		{
+			header: 'Category',
+			type: 'custom',
+			render: (category) =>
+				editingCategoryId === category.id ? (
+					<input
+						type="text"
+						value={editingCategoryName}
+						onChange={(e) => setEditingCategoryName(e.target.value)}
+						className="w-full min-w-44 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
+					/>
+				) : (
+					<span className="font-medium">{category.name}</span>
+				),
+		},
+		{ header: 'Slug', accessor: 'slug', className: 'text-white/60' },
+		{
+			header: 'Blogs',
+			type: 'number',
+			accessor: (category) => categoryUsageCounts[category.id]?.blogs ?? 0,
+		},
+		{
+			header: 'Case Studies',
+			type: 'number',
+			accessor: (category) => categoryUsageCounts[category.id]?.caseStudies ?? 0,
+		},
+		{
+			header: 'Workflows',
+			type: 'number',
+			accessor: (category) => categoryUsageCounts[category.id]?.workflows ?? 0,
+		},
+	];
+
+	const getCategoryActions = (category: Category): PortalTableAction<Category>[] => {
+		const isEditing = editingCategoryId === category.id;
+		const isWorking = categoryActionLoadingId === category.id;
+
+		if (isEditing) {
+			return [
+				{
+					label: 'Save',
+					loadingLabel: 'Saving...',
+					loading: isWorking,
+					variant: 'success',
+					onClick: saveCategoryEdit,
+				},
+				{
+					label: 'Cancel',
+					disabled: isWorking,
+					variant: 'secondary',
+					onClick: () => {
+						setEditingCategoryId(null);
+						setEditingCategoryName('');
+					},
+				},
+			];
+		}
+
+		return [
+			{
+				label: 'Edit',
+				disabled: isWorking,
+				onClick: startEditCategory,
+			},
+			{
+				label: 'Delete',
+				disabled: isWorking,
+				variant: 'danger',
+				onClick: (selectedCategory) => setPendingCategoryDeleteId(selectedCategory.id),
+			},
+		];
+	};
+
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -201,102 +276,17 @@ function CategoriesContent() {
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}
 
-				{loading ? (
-					<div className="py-12 text-center text-white/55">Loading categories...</div>
-				) : categories.length === 0 ? (
-					<div className="py-12 text-center text-white/55">No categories yet</div>
-				) : (
-					<div className="overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-						<table className="w-full min-w-[820px]">
-							<thead className="border-b border-white/10 bg-black/25">
-								<tr>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Category</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Slug</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Blogs</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Case Studies</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Workflows</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{categories.map((category) => {
-									const isEditing = editingCategoryId === category.id;
-									const isWorking = categoryActionLoadingId === category.id;
-									const usageCounts = categoryUsageCounts[category.id] || {
-										blogs: 0,
-										caseStudies: 0,
-										workflows: 0,
-									};
-
-									return (
-										<tr key={category.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
-											<td className="px-6 py-3 text-white">
-												{isEditing ? (
-													<input
-														type="text"
-														value={editingCategoryName}
-														onChange={(e) => setEditingCategoryName(e.target.value)}
-														className="w-full min-w-44 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-													/>
-												) : (
-													<span className="font-medium">{category.name}</span>
-												)}
-											</td>
-											<td className="px-6 py-3 text-white/60">{category.slug}</td>
-											<td className="px-6 py-3 text-white/75">{usageCounts.blogs}</td>
-											<td className="px-6 py-3 text-white/75">{usageCounts.caseStudies}</td>
-											<td className="px-6 py-3 text-white/75">{usageCounts.workflows}</td>
-											<td className="px-6 py-3">
-												{isEditing ? (
-													<div className="flex gap-2">
-														<button
-															type="button"
-															onClick={saveCategoryEdit}
-															disabled={isWorking}
-															className="rounded-lg bg-[#10b981] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#34d399] disabled:opacity-60"
-														>
-															{isWorking ? 'Saving...' : 'Save'}
-														</button>
-														<button
-															type="button"
-															onClick={() => {
-																setEditingCategoryId(null);
-																setEditingCategoryName('');
-															}}
-															disabled={isWorking}
-															className="rounded-lg border border-white/20 bg-white/[0.08] px-3 py-1.5 text-sm font-medium text-white/80 transition hover:bg-white/[0.14] disabled:opacity-60"
-														>
-															Cancel
-														</button>
-													</div>
-												) : (
-													<div className="flex gap-2">
-														<button
-															type="button"
-															onClick={() => startEditCategory(category)}
-															disabled={isWorking}
-															className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-														>
-															Edit
-														</button>
-														<button
-															type="button"
-															onClick={() => setPendingCategoryDeleteId(category.id)}
-															disabled={isWorking}
-															className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] disabled:opacity-60"
-														>
-															Delete
-														</button>
-													</div>
-												)}
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</div>
-				)}
+				<PortalTable
+					columns={categoryColumns}
+					loading={loading}
+					loadingMessage="Loading categories..."
+					empty={categories.length === 0}
+					emptyMessage="No categories yet"
+					minWidthClassName="min-w-[820px]"
+					data={categories}
+					getRowKey={(category) => category.id}
+					actions={getCategoryActions}
+				/>
 			</main>
 		</div>
 	);

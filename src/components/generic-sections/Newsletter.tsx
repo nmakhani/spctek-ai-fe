@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
@@ -26,7 +26,8 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 			);
 	};
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		setIsError(false);
 
 		if (!email) {
@@ -78,7 +79,7 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 						</p>
 					</div>
 
-					<div className={`space-y-2.5 ${compact ? '' : 'sm:space-y-4'}`}>
+					<form className={`space-y-2.5 ${compact ? '' : 'sm:space-y-4'}`} onSubmit={handleSubmit}>
 						<div className={`group relative w-full transition-all duration-300 ${isError ? 'scale-[1.01]' : ''}`}>
 							<GradientBorder thickness={1.5} radius="12px" hasError={isError} />
 							<GlassGlow angle={105} opacity={0.5} start={10} end={90} radius="12px" />
@@ -101,10 +102,10 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 							</div>
 						</div>
 
-						<PrimaryButton onClick={handleSubmit} disabled={isLoading} config={{ width: '100%', marginTop: '0' }}>
+						<PrimaryButton type="submit" disabled={isLoading} config={{ width: '100%', marginTop: '0' }}>
 							{isLoading ? 'Subscribing...' : 'Subscribe Free'}
 						</PrimaryButton>
-					</div>
+					</form>
 
 					<div className="text-center text-sm leading-snug text-slate-300/70">
 						<p>2,400+ operators subscribed</p>

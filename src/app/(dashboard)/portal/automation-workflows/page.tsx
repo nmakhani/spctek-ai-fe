@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import toast from 'react-hot-toast';
 
 import { R2ImageUpload } from '@/components/portal/content-editor/R2ImageUpload';
 import { type Category } from '@/components/portal/content-editor/types';
 import { PageHeader } from '@/components/portal/PageHeader';
+import { PortalTable, type PortalTableAction, type PortalTableColumn } from '@/components/portal/PortalTable';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -206,6 +206,46 @@ function AutomationWorkflowsContent() {
 		}
 	};
 
+	const workflowColumns: PortalTableColumn<AutomationWorkflow>[] = [
+		{ header: 'Name', accessor: 'name', className: 'font-medium text-white' },
+		{
+			header: 'Thumbnail',
+			type: 'image',
+			accessor: 'thumbnail_url',
+			fallback: <span className="text-sm text-white/45">None</span>,
+			image: {
+				width: 64,
+				height: 48,
+				className: 'h-12 w-16 rounded-lg object-cover',
+			},
+		},
+		{ header: 'Class', accessor: 'class', className: 'capitalize text-white/75' },
+		{
+			header: 'Categories',
+			accessor: (workflow) =>
+				workflow.categories.length > 0
+					? workflow.categories.map((category) => category.name).join(', ')
+					: 'Uncategorized',
+		},
+		{ header: 'Teaser', accessor: 'teaser', className: 'max-w-md text-white/70' },
+		{ header: 'Updated', type: 'date', accessor: 'updated_at' },
+	];
+
+	const getWorkflowActions = (workflow: AutomationWorkflow): PortalTableAction<AutomationWorkflow>[] => [
+		{
+			label: 'Edit',
+			disabled: deletingId === workflow.id,
+			onClick: handleEdit,
+		},
+		{
+			label: 'Delete',
+			loading: deletingId === workflow.id,
+			loadingLabel: 'Deleting...',
+			variant: 'danger',
+			onClick: (selectedWorkflow) => setPendingDeleteId(selectedWorkflow.id),
+		},
+	];
+
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -383,75 +423,17 @@ function AutomationWorkflowsContent() {
 					</div>
 				)}
 
-				{loading ? (
-					<div className="py-12 text-center text-white/55">Loading automation workflows...</div>
-				) : workflows.length === 0 ? (
-					<div className="py-12 text-center text-white/55">No automation workflows yet</div>
-				) : (
-					<div className="mt-8 overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-						<table className="w-full">
-							<thead className="border-b border-white/10 bg-black/25">
-								<tr>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Name</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Thumbnail</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Class</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Categories</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Teaser</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Updated</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{workflows.map((workflow) => (
-									<tr key={workflow.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
-										<td className="px-6 py-3 font-medium text-white">{workflow.name}</td>
-										<td className="px-6 py-3">
-											{workflow.thumbnail_url ? (
-												<Image
-													src={workflow.thumbnail_url}
-													alt=""
-													width={64}
-													height={48}
-													className="h-12 w-16 rounded-lg object-cover"
-												/>
-											) : (
-												<span className="text-sm text-white/45">None</span>
-											)}
-										</td>
-										<td className="px-6 py-3 capitalize text-white/75">{workflow.class}</td>
-										<td className="px-6 py-3 text-white/75">
-											{workflow.categories.length > 0
-												? workflow.categories.map((category) => category.name).join(', ')
-												: 'Uncategorized'}
-										</td>
-										<td className="max-w-md px-6 py-3 text-white/70">{workflow.teaser}</td>
-										<td className="px-6 py-3 text-white/65">{new Date(workflow.updated_at).toLocaleDateString()}</td>
-										<td className="px-6 py-3">
-											<div className="flex gap-2">
-												<button
-													type="button"
-													onClick={() => handleEdit(workflow)}
-													disabled={deletingId === workflow.id}
-													className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-												>
-													Edit
-												</button>
-												<button
-													type="button"
-													onClick={() => setPendingDeleteId(workflow.id)}
-													disabled={deletingId === workflow.id}
-													className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] disabled:cursor-not-allowed disabled:opacity-50"
-												>
-													{deletingId === workflow.id ? 'Deleting...' : 'Delete'}
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
+				<PortalTable
+					columns={workflowColumns}
+					loading={loading}
+					loadingMessage="Loading automation workflows..."
+					empty={workflows.length === 0}
+					emptyMessage="No automation workflows yet"
+					className="mt-8"
+					data={workflows}
+					getRowKey={(workflow) => workflow.id}
+					actions={getWorkflowActions}
+				/>
 			</main>
 		</div>
 	);

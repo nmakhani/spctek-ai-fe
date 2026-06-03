@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { PageHeader } from '@/components/portal/PageHeader';
+import { PortalTable, type PortalTableAction, type PortalTableColumn } from '@/components/portal/PortalTable';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -159,6 +160,28 @@ function MetadeckContent() {
 		setPendingDeleteId(null);
 	};
 
+	const metadeckColumns: PortalTableColumn<Metadeck>[] = [
+		{ header: 'Path', accessor: 'path', className: 'text-white' },
+		{ header: 'Title', accessor: 'title', className: 'text-white' },
+		{ header: 'Description', accessor: 'description', className: 'max-w-md truncate text-white/70' },
+		{ header: 'Updated', type: 'date', accessor: 'updated_at' },
+	];
+
+	const getMetadeckActions = (metadeck: Metadeck): PortalTableAction<Metadeck>[] => [
+		{
+			label: 'Edit',
+			disabled: deletingId === metadeck.id,
+			onClick: handleEdit,
+		},
+		{
+			label: 'Delete',
+			loading: deletingId === metadeck.id,
+			loadingLabel: 'Deleting...',
+			variant: 'danger',
+			onClick: (selectedMetadeck) => requestDelete(selectedMetadeck.id),
+		},
+	];
+
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -247,53 +270,16 @@ function MetadeckContent() {
 					</div>
 				)}
 
-				{loading ? (
-					<div className="py-12 text-center text-white/55">Loading metadata entries...</div>
-				) : metadecks.length === 0 ? (
-					<div className="py-12 text-center text-white/55">No metadata entries yet</div>
-				) : (
-					<div className="overflow-x-auto rounded-3xl border border-white/20 bg-[linear-gradient(130deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_44%,rgba(96,107,250,0.12)_100%)] shadow-[0_20px_50px_rgba(0,0,0,0.58)] backdrop-blur-xl">
-						<table className="w-full">
-							<thead className="border-b border-white/10 bg-black/25">
-								<tr>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Path</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Title</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Description</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Updated</th>
-									<th className="px-6 py-3 text-left font-semibold text-white/75">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{metadecks.map((metadeck) => (
-									<tr key={metadeck.id} className="border-b border-white/10 transition hover:bg-white/[0.05]">
-										<td className="px-6 py-3 text-white">{metadeck.path}</td>
-										<td className="px-6 py-3 text-white">{metadeck.title}</td>
-										<td className="max-w-md truncate px-6 py-3 text-white/70">{metadeck.description}</td>
-										<td className="px-6 py-3 text-white/65">{new Date(metadeck.updated_at).toLocaleDateString()}</td>
-										<td className="px-6 py-3">
-											<div className="flex gap-2">
-												<button
-													onClick={() => handleEdit(metadeck)}
-													disabled={deletingId === metadeck.id}
-													className="rounded-lg bg-[#606bfa] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-												>
-													Edit
-												</button>
-												<button
-													onClick={() => requestDelete(metadeck.id)}
-													disabled={deletingId === metadeck.id}
-													className="rounded-lg bg-[#ef4444] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
-												>
-													{deletingId === metadeck.id ? 'Deleting...' : 'Delete'}
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
+				<PortalTable
+					columns={metadeckColumns}
+					loading={loading}
+					loadingMessage="Loading metadata entries..."
+					empty={metadecks.length === 0}
+					emptyMessage="No metadata entries yet"
+					data={metadecks}
+					getRowKey={(metadeck) => metadeck.id}
+					actions={getMetadeckActions}
+				/>
 			</main>
 		</div>
 	);

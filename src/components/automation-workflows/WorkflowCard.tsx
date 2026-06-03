@@ -96,6 +96,7 @@ export function WorkflowDetailsModal({
 	}
 
 	const thumbnailUrl = resolveR2PublicUrl(workflow.thumbnail_url || '');
+	const ctaLabel = workflow.class === 'plugin' ? 'Get This Template' : 'Inquire for Implementation';
 
 	return (
 		<div
@@ -174,7 +175,7 @@ export function WorkflowDetailsModal({
 							onClick={() => onInquire(workflow)}
 							className="mt-8 inline-flex w-fit max-w-full items-center justify-center rounded-full border border-[#7d89ff]/45 bg-[#606bfa]/20 px-5 py-3 text-center text-[11px] font-bold uppercase tracking-widest text-[#cfd5ff] transition hover:border-[#a9b2ff] hover:bg-[#606bfa]/40 hover:text-white hover:shadow-[0_0_22px_rgba(96,107,250,0.35)] sm:px-6 sm:text-xs"
 						>
-							Inquire for Implementation
+							{ctaLabel}
 						</button>
 					</div>
 				</div>
