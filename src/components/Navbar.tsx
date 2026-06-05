@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -38,19 +38,38 @@ const navItems: NavItem[] = [
 ];
 
 export default function Navbar() {
-	const [scrollProgress, setScrollProgress] = useState(0);
+	const progressRef = useRef<HTMLDivElement | null>(null);
+	const frameRef = useRef<number | null>(null);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	useEffect(() => {
-		const handleScroll = () => {
+		const updateProgress = () => {
+			frameRef.current = null;
 			const scrollTop = window.scrollY;
 			const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 			const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-			setScrollProgress(scrollPercent);
+			if (progressRef.current) {
+				progressRef.current.style.transform = `scaleX(${scrollPercent / 100})`;
+			}
 		};
 
-		window.addEventListener('scroll', handleScroll);
-		return () => window.removeEventListener('scroll', handleScroll);
+		const handleScroll = () => {
+			if (frameRef.current === null) {
+				frameRef.current = window.requestAnimationFrame(updateProgress);
+			}
+		};
+
+		updateProgress();
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		window.addEventListener('resize', handleScroll);
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener('resize', handleScroll);
+			if (frameRef.current !== null) {
+				window.cancelAnimationFrame(frameRef.current);
+			}
+		};
 	}, []);
 
 	return (
@@ -65,10 +84,12 @@ export default function Navbar() {
 			>
 				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.22)_0%,transparent_32%),radial-gradient(circle_at_bottom_right,rgba(96,107,250,0.18)_0%,transparent_34%)]" />
 				<div
+					ref={progressRef}
 					className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] bg-[#7f89ff]"
 					style={{
-						width: `${scrollProgress}%`,
-						transition: 'width 0.1s ease-out',
+						transform: 'scaleX(0)',
+						transformOrigin: 'left center',
+						transition: 'transform 0.1s ease-out',
 					}}
 				/>
 

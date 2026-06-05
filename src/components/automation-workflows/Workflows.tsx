@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
 
 import type { Category } from '@/components/portal/content-editor/types';
-import CalendlyModal from '@/components/ui/CalendlyModal';
 import FilterBar from '@/components/ui/FilterBar';
-import LeadCaptureModal, { type LeadCaptureValues } from '@/components/ui/LeadCaptureModal';
+import type { LeadCaptureValues } from '@/components/ui/LeadCaptureModal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { automationWorkflowsApi, contactsApi } from '@/lib/api';
 import { validateEstimatorContactForm } from '@/lib/validation';
@@ -14,6 +14,14 @@ import { WorkflowCard, WorkflowDetailsModal } from './WorkflowCard';
 
 type WorkflowClass = 'system' | 'plugin';
 const ITEMS_PER_PAGE = 4;
+
+const LeadCaptureModal = dynamic(() => import('@/components/ui/LeadCaptureModal'), {
+	ssr: false,
+});
+
+const CalendlyModal = dynamic(() => import('@/components/ui/CalendlyModal'), {
+	ssr: false,
+});
 
 export interface AutomationWorkflow {
 	id: string;
@@ -271,18 +279,20 @@ export default function Workflows() {
 				onInquire={handleWorkflowInquire}
 			/>
 
-			<LeadCaptureModal
-				isOpen={Boolean(inquiryWorkflow)}
-				title="One Last Step"
-				subtitle="Enter your details before opening this workflow resource."
-				submitLabel="Continue"
-				loadingLabel="Opening..."
-				validate={validateEstimatorContactForm}
-				onClose={() => setInquiryWorkflow(null)}
-				onSubmit={handleWorkflowLeadSubmit}
-			/>
+			{Boolean(inquiryWorkflow) && (
+				<LeadCaptureModal
+					isOpen={Boolean(inquiryWorkflow)}
+					title="One Last Step"
+					subtitle="Enter your details before opening this workflow resource."
+					submitLabel="Continue"
+					loadingLabel="Opening..."
+					validate={validateEstimatorContactForm}
+					onClose={() => setInquiryWorkflow(null)}
+					onSubmit={handleWorkflowLeadSubmit}
+				/>
+			)}
 
-			<CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />
+			{isCalendlyOpen && <CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />}
 		</section>
 	);
 }

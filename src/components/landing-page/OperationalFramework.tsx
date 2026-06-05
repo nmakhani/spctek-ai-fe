@@ -58,7 +58,6 @@ export default function OperationalFramework() {
 							alt="Operational Framework"
 							width={1200}
 							height={800}
-							priority
 							className="h-auto w-full rounded-xl object-cover"
 						/>
 					</div>

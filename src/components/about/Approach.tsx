@@ -22,7 +22,6 @@ export default function Approach() {
 							alt="Our Approach"
 							width={1200}
 							height={800}
-							priority
 							className="h-auto w-full object-contain"
 						/>
 					</div>
