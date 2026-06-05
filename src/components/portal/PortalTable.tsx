@@ -54,8 +54,7 @@ const actionClassNames: Record<PortalTableActionVariant, string> = {
 	danger:
 		'bg-[#ef4444] text-white hover:bg-[#ff5a5a] hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] disabled:cursor-not-allowed disabled:opacity-50',
 	success: 'bg-[#10b981] text-white hover:bg-[#34d399] disabled:opacity-60',
-	secondary:
-		'border border-white/20 bg-white/[0.08] text-white/80 hover:bg-white/[0.14] disabled:opacity-60',
+	secondary: 'border border-white/20 bg-white/[0.08] text-white/80 hover:bg-white/[0.14] disabled:opacity-60',
 };
 
 function getColumnValue<T>(column: PortalTableColumn<T>, row: T) {
@@ -104,8 +103,7 @@ function renderCellValue<T>(column: PortalTableColumn<T>, row: T) {
 			return fallback;
 		}
 
-		const alt =
-			typeof column.image?.alt === 'function' ? column.image.alt(row) : column.image?.alt || '';
+		const alt = typeof column.image?.alt === 'function' ? column.image.alt(row) : column.image?.alt || '';
 
 		return (
 			<Image

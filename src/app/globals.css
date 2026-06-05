@@ -189,3 +189,107 @@ textarea.glow-input:-webkit-autofill:active {
 		);
 	}
 }
+
+.nav-playbook-cta {
+	position: relative;
+	isolation: isolate;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	border-radius: 9999px;
+	background:
+		linear-gradient(135deg, rgba(96, 107, 250, 0.28), rgba(160, 166, 252, 0.18)) padding-box,
+		linear-gradient(90deg, #606bfa, #a0a6fc, #ffffff, #7f89ff, #606bfa) border-box;
+	background-size:
+		100% 100%,
+		260% 260%;
+	border: 1px solid transparent;
+	box-shadow:
+		0 0 20px rgba(96, 107, 250, 0.36),
+		0 10px 34px rgba(96, 107, 250, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.24);
+	animation:
+		nav-playbook-border-shift 3.5s ease-in-out infinite,
+		nav-playbook-glow 2.8s ease-in-out infinite;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.nav-playbook-cta::before {
+	content: '';
+	position: absolute;
+	inset: 1px;
+	z-index: -1;
+	border-radius: inherit;
+	background:
+		radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.22), transparent 34%),
+		linear-gradient(135deg, rgba(96, 107, 250, 0.82), rgba(38, 43, 130, 0.94));
+}
+
+.nav-playbook-cta::after {
+	content: '';
+	position: absolute;
+	inset: -40% auto -40% -65%;
+	width: 42%;
+	transform: rotate(18deg);
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+	animation: nav-playbook-sheen 4.2s ease-in-out infinite;
+}
+
+.nav-playbook-cta span {
+	position: relative;
+	z-index: 1;
+	text-shadow: 0 0 16px rgba(255, 255, 255, 0.28);
+}
+
+.nav-playbook-cta:hover {
+	transform: translateY(-2px);
+	box-shadow:
+		0 0 28px rgba(160, 166, 252, 0.52),
+		0 16px 44px rgba(96, 107, 250, 0.34),
+		inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+@keyframes nav-playbook-border-shift {
+	0% {
+		background-position:
+			0 0,
+			0% 50%;
+	}
+
+	50% {
+		background-position:
+			0 0,
+			100% 50%;
+	}
+
+	100% {
+		background-position:
+			0 0,
+			0% 50%;
+	}
+}
+
+@keyframes nav-playbook-glow {
+	0%,
+	100% {
+		filter: saturate(1.05) brightness(1);
+	}
+
+	50% {
+		filter: saturate(1.35) brightness(1.12);
+	}
+}
+
+@keyframes nav-playbook-sheen {
+	0%,
+	55% {
+		left: -65%;
+	}
+
+	100% {
+		left: 125%;
+	}
+}

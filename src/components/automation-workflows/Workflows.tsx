@@ -13,7 +13,7 @@ import { validateEstimatorContactForm } from '@/lib/validation';
 import { WorkflowCard, WorkflowDetailsModal } from './WorkflowCard';
 
 type WorkflowClass = 'system' | 'plugin';
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 4;
 
 export interface AutomationWorkflow {
 	id: string;
@@ -233,7 +233,7 @@ export default function Workflows() {
 					</div>
 				) : (
 					<>
-						<div className="grid grid-cols-1 gap-x-8 gap-y-9 text-left md:grid-cols-2 xl:grid-cols-3">
+						<div className="mx-auto grid max-w-[1000px] grid-cols-1 justify-items-center gap-x-8 gap-y-10 text-left md:grid-cols-2 xl:gap-x-10">
 							{paginatedWorkflows.map((workflow) => (
 								<WorkflowCard key={workflow.id} workflow={workflow} onSelect={setDetailWorkflow} />
 							))}

@@ -91,10 +91,10 @@ export default function Navbar() {
 					</nav>
 
 					<Link
-						href="/ai-playbook"
-						className="hidden shrink-0 rounded-full border border-[#8d98ff]/60 bg-[#606bfa]/25 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_18px_rgba(96,107,250,0.28)] transition hover:border-[#b5bdff] hover:bg-[#606bfa]/40 lg:inline-flex xl:px-5"
+						href="/ai-playbook#playbook-form"
+						className="nav-playbook-cta hidden shrink-0 px-4 py-2.5 text-sm font-semibold text-white lg:inline-flex xl:px-5"
 					>
-						Get Free AI Playbook
+						<span>Get Free AI Playbook</span>
 					</Link>
 
 					<button
@@ -127,9 +127,9 @@ export default function Navbar() {
 						<Link
 							href="/ai-playbook"
 							onClick={() => setMobileMenuOpen(false)}
-							className="mt-2 rounded-xl border border-[#8d98ff]/55 bg-[#606bfa]/25 px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#606bfa]/40"
+							className="nav-playbook-cta mt-2 justify-center px-4 py-3 text-sm font-semibold text-white"
 						>
-							Get Free AI Playbook
+							<span>Get Free AI Playbook</span>
 						</Link>
 					</nav>
 				</div>

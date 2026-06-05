@@ -4,7 +4,7 @@ import { SectionHeading } from '../ui/SectionHeading';
 
 export default function Hero() {
 	return (
-		<section className="font-poppins relative mx-auto mt-24 flex max-w-7xl flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
+		<section className="font-poppins max-w-8xl relative mx-auto mt-24 flex flex-col items-center justify-center px-4 text-center md:mt-28 md:px-6 lg:mt-36 lg:px-12">
 			<GlowBackground
 				style={{
 					top: '-35%',
@@ -16,7 +16,7 @@ export default function Hero() {
 			/>
 
 			<SectionHeading size="hero">
-				Is Your <span className="text-[#a0a6fc]">Amazon</span> Account <br /> Suspended?
+				Is Your <span className="text-[#a0a6fc]">Amazon</span> Account Suspended?
 			</SectionHeading>
 
 			<div className="mt-6 max-w-[900px] md:mt-8">
