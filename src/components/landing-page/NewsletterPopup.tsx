@@ -1,7 +1,7 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 import { hasCooldownElapsed, markSeen, normalizePopupPath } from '@/lib/popupCooldown';
 
@@ -44,7 +44,10 @@ export function NewsletterPopup() {
 			>
 				Close
 			</button>
-			<div className="max-h-[90vh] w-full max-w-md overflow-y-auto overscroll-contain" onClick={(e) => e.stopPropagation()}>
+			<div
+				className="max-h-[90vh] w-full max-w-md overflow-y-auto overscroll-contain"
+				onClick={(e) => e.stopPropagation()}
+			>
 				<Newsletter onClose={() => setShowNewsletterModal(false)} />
 			</div>
 		</div>

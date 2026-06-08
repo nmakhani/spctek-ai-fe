@@ -1,4 +1,4 @@
-import { PrimaryButton } from '../ui/PrimaryButton';
+import CalendlyButton from '../ui/CalendlyButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 export default function FixGaps() {
@@ -15,7 +15,7 @@ export default function FixGaps() {
 				</p>
 
 				<div className="flex justify-center">
-					<PrimaryButton href="/contact">Book a Free Consultation</PrimaryButton>
+					<CalendlyButton>Book a Free Consultation</CalendlyButton>
 				</div>
 			</div>
 		</section>

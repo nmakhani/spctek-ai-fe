@@ -19,7 +19,7 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const PrimaryButton = ({ children, href, config = {}, ...props }: PrimaryButtonProps) => {
 	const defaults: ButtonConfig = {
-		width: '100%',
+		width: '360px',
 		bgColor: '#606bfa',
 		hoverColor: '#6f79ff',
 		textColor: '#ffffff',
@@ -30,10 +30,9 @@ export const PrimaryButton = ({ children, href, config = {}, ...props }: Primary
 
 	const baseClasses = `
     transition-all duration-300 ease-in-out 
-	h-[54px] w-full max-w-[360px] inline-flex items-center justify-center 
+	h-[54px] inline-flex max-w-full items-center justify-center 
 	rounded-[20px] text-sm font-semibold md:h-[58px] md:text-base lg:h-[60px] lg:rounded-[24px] 
     active:scale-[0.99] px-8
-    [width:var(--w)]
     [color:var(--txt)]
     [margin-top:var(--mt)]
     [background-color:var(--bg)]
@@ -44,11 +43,11 @@ export const PrimaryButton = ({ children, href, config = {}, ...props }: Primary
 		.trim();
 
 	const dynamicStyles = {
-		'--w': finalConfig.width,
 		'--bg': finalConfig.bgColor,
 		'--hbg': finalConfig.hoverColor,
 		'--txt': finalConfig.textColor,
 		'--mt': finalConfig.marginTop,
+		width: finalConfig.width,
 	} as React.CSSProperties;
 
 	const handleAnchorClick = (event: React.MouseEvent<HTMLAnchorElement>) => {

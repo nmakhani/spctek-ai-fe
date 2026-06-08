@@ -25,7 +25,7 @@ export default function Hero() {
 				flaws.
 			</p>
 
-			<div>
+			<div className="flex flex-col items-center text-center">
 				<PrimaryButton href="#process-diagnostic">Rate My Process</PrimaryButton>
 			</div>
 		</section>

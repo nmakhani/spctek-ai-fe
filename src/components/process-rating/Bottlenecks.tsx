@@ -21,7 +21,7 @@ export default function Bottlenecks() {
 		<section className="font-poppins px-4 md:px-6 lg:px-12">
 			<div className="mx-auto max-w-5xl">
 				<SectionHeading size="large">
-					Operational <span className="text-[#606bfa]">Bottlenecks</span>
+					Operational <span className="text-[#606bfa]">Bottlenecks </span>
 					Can Quietly <br /> Kill Your Business
 				</SectionHeading>
 

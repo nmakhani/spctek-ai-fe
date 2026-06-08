@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import CalendlyButton from '../ui/CalendlyButton';
 import { GlowBackground } from '../ui/GlowBackground';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 export default function OperationalFramework() {
@@ -94,7 +94,7 @@ export default function OperationalFramework() {
 
 				{/* CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/contact">Talk to an Automation Expert</PrimaryButton>
+					<CalendlyButton>Talk to an Automation Expert</CalendlyButton>
 				</div>
 			</div>
 		</section>

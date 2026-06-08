@@ -1,5 +1,5 @@
+import CalendlyButton from '../ui/CalendlyButton';
 import { GlowBackground } from '../ui/GlowBackground';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 const automationStats = [
@@ -76,9 +76,7 @@ export default function Hero() {
 					))}
 				</div>
 				<div className="flex w-full justify-center">
-					<PrimaryButton href="#roadmap-form" config={{ marginTop: '2rem' }}>
-						Book a Strategy Call
-					</PrimaryButton>
+					<CalendlyButton config={{ marginTop: '2rem' }}>Book a Strategy Call</CalendlyButton>
 				</div>
 			</div>
 		</section>

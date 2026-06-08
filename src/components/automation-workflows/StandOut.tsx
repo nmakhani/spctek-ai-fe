@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
+import CalendlyButton from '../ui/CalendlyButton';
 import { GlowBackground } from '../ui/GlowBackground';
-import { PrimaryButton } from '../ui/PrimaryButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 export default function StandOut() {
@@ -42,7 +42,7 @@ export default function StandOut() {
 				</div>
 
 				<div className="flex justify-center">
-					<PrimaryButton href="/contact">Book a Strategy Call</PrimaryButton>
+					<CalendlyButton>Book a Strategy Call</CalendlyButton>
 				</div>
 			</div>
 		</section>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PrimaryButton } from '../ui/PrimaryButton';
+import CalendlyButton from '../ui/CalendlyButton';
 import { SectionHeading } from '../ui/SectionHeading';
 
 type ToolComparison = {
@@ -143,7 +143,7 @@ export default function Tools() {
 
 				{/* CTA Button */}
 				<div className="flex justify-center">
-					<PrimaryButton href="/contact">Talk to an Automation Expert</PrimaryButton>
+					<CalendlyButton>Talk to an Automation Expert</CalendlyButton>
 				</div>
 			</div>
 		</section>
