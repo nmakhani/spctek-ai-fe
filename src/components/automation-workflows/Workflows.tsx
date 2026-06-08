@@ -19,10 +19,6 @@ const LeadCaptureModal = dynamic(() => import('@/components/ui/LeadCaptureModal'
 	ssr: false,
 });
 
-const CalendlyModal = dynamic(() => import('@/components/ui/CalendlyModal'), {
-	ssr: false,
-});
-
 export interface AutomationWorkflow {
 	id: string;
 	name: string;
@@ -69,7 +65,6 @@ export default function Workflows() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [detailWorkflow, setDetailWorkflow] = useState<AutomationWorkflow | null>(null);
 	const [inquiryWorkflow, setInquiryWorkflow] = useState<AutomationWorkflow | null>(null);
-	const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -156,24 +151,19 @@ export default function Workflows() {
 
 	const handleWorkflowInquire = (workflow: AutomationWorkflow) => {
 		setDetailWorkflow(null);
-
-		if (workflow.link?.trim()) {
-			setInquiryWorkflow(workflow);
-			return;
-		}
-
-		setIsCalendlyOpen(true);
+		setInquiryWorkflow(workflow);
 	};
 
 	const handleWorkflowLeadSubmit = async (values: LeadCaptureValues) => {
 		const workflow = inquiryWorkflow;
 		const workflowLink = workflow?.link?.trim();
 
-		if (!workflow || !workflowLink) {
+		if (!workflow) {
 			return;
 		}
 
-		const workflowWindow = window.open('about:blank', '_blank');
+		const shouldRedirect = workflow.class === 'plugin' && Boolean(workflowLink);
+		const workflowWindow = shouldRedirect ? window.open('about:blank', '_blank') : null;
 		if (workflowWindow) {
 			workflowWindow.opener = null;
 		}
@@ -184,20 +174,27 @@ export default function Workflows() {
 				email: values.email,
 				phone: values.phone || null,
 				company: values.company || null,
-				source: 'automation_workflow',
+				source: workflow.class === 'system' ? 'system_automation_workflow' : 'automation_workflow',
 				message: `Workflow implementation inquiry: ${workflow.name}`,
 				journey: {
 					workflow_id: workflow.id,
 					workflow_name: workflow.name,
-					workflow_link: workflowLink,
+					workflow_class: workflow.class,
+					workflow_link: workflowLink || null,
 				},
 			});
 
-			toast.success('Thank you. Redirecting now...');
-			if (workflowWindow) {
-				workflowWindow.location.href = workflowLink;
+			if (shouldRedirect && workflowLink) {
+				toast.success('Thank you. Redirecting now...');
+				if (workflowWindow) {
+					workflowWindow.location.href = workflowLink;
+				} else {
+					window.location.assign(workflowLink);
+				}
+			} else if (workflow.class === 'system') {
+				toast.success('Thank you. Check your email for the booking link.');
 			} else {
-				window.location.assign(workflowLink);
+				toast.success('Thank you. We received your request.');
 			}
 			setInquiryWorkflow(null);
 		} catch (error) {
@@ -283,16 +280,18 @@ export default function Workflows() {
 				<LeadCaptureModal
 					isOpen={Boolean(inquiryWorkflow)}
 					title="One Last Step"
-					subtitle="Enter your details before opening this workflow resource."
-					submitLabel="Continue"
-					loadingLabel="Opening..."
+					subtitle={
+						inquiryWorkflow?.class === 'system'
+							? 'Enter your details and we will email you the booking link.'
+							: 'Enter your details before opening this workflow resource.'
+					}
+					submitLabel={inquiryWorkflow?.class === 'system' ? 'Submit' : 'Continue'}
+					loadingLabel={inquiryWorkflow?.class === 'system' ? 'Submitting...' : 'Opening...'}
 					validate={validateEstimatorContactForm}
 					onClose={() => setInquiryWorkflow(null)}
 					onSubmit={handleWorkflowLeadSubmit}
 				/>
 			)}
-
-			{isCalendlyOpen && <CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />}
 		</section>
 	);
 }
