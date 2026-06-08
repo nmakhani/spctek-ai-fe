@@ -76,7 +76,7 @@ export default function Hero() {
 					))}
 				</div>
 				<div className="flex w-full justify-center">
-					<CalendlyButton config={{ marginTop: '2rem' }}>Book a Strategy Call</CalendlyButton>
+					<CalendlyButton config={{ width: 'fit-content', marginTop: '2rem' }}>Book a Strategy Call</CalendlyButton>
 				</div>
 			</div>
 		</section>

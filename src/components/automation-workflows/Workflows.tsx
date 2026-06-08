@@ -174,7 +174,7 @@ export default function Workflows() {
 				email: values.email,
 				phone: values.phone || null,
 				company: values.company || null,
-				source: workflow.class === 'system' ? 'system_automation_workflow' : 'automation_workflow',
+				source: workflow.class === 'system' ? 'system_automation_workflow' : 'plugin_automation_workflow',
 				message: `Workflow implementation inquiry: ${workflow.name}`,
 				journey: {
 					workflow_id: workflow.id,
