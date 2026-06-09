@@ -5,6 +5,8 @@ import { debugConsole } from './debug';
 const API_BASE_URL =
 	process.env.NEXT_PUBLIC_DEV_MODE === '1' ? process.env.NEXT_PUBLIC_API_URL_DEV : process.env.NEXT_PUBLIC_API_URL_PROD;
 
+const DEPLOYMENT_API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_PROD;
+
 const apiClient = axios.create({
 	baseURL: API_BASE_URL,
 });
@@ -145,6 +147,11 @@ export const automationWorkflowsApi = {
 	create: (data: Record<string, unknown>) => apiClient.post('/automation-workflows', data),
 	update: (id: string, data: Record<string, unknown>) => apiClient.patch(`/automation-workflows/${id}`, data),
 	delete: (id: string) => apiClient.delete(`/automation-workflows/${id}`),
+};
+
+export const deploymentApi = {
+	status: () => axios.get(`${DEPLOYMENT_API_BASE_URL}/deploy/status`),
+	run: (data: { password: string }) => axios.post(`${DEPLOYMENT_API_BASE_URL}/deploy`, data),
 };
 
 export default apiClient;

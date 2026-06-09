@@ -9,6 +9,7 @@ import {
 	LucideIcon,
 	MessageSquare,
 	MessageSquarePlus,
+	Rocket,
 	Users,
 	Workflow,
 } from 'lucide-react';
@@ -113,6 +114,13 @@ const DASHBOARD_ITEMS: DashboardCardProps[] = [
 		linkText: 'Open Workflows',
 		description: 'Manage system and plugin workflow cards with teasers, category assignments, and launch links.',
 		icon: Workflow,
+	},
+	{
+		title: 'Deployment',
+		href: '/portal/deployment',
+		linkText: 'Open Deployment',
+		description: 'Run a backend deployment and monitor the latest deployment status, logs, and errors.',
+		icon: Rocket,
 	},
 ];
 
