@@ -99,6 +99,14 @@ export const categoriesApi = {
 	delete: (id: string) => apiClient.delete(`/categories/${id}`),
 };
 
+export const statusesApi = {
+	list: () => apiClient.get('/statuses'),
+	get: (id: string) => apiClient.get(`/statuses/${id}`),
+	create: (data: Record<string, unknown>) => apiClient.post('/statuses', data),
+	update: (id: string, data: Record<string, unknown>) => apiClient.put(`/statuses/${id}`, data),
+	delete: (id: string) => apiClient.delete(`/statuses/${id}`),
+};
+
 export const authApi = {
 	me: () => apiClient.get('/auth/me'),
 	login: (data: Record<string, unknown>) => apiClient.post('/auth/login', data),
