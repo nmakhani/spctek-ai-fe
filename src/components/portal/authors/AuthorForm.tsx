@@ -1,16 +1,7 @@
 'use client';
 
 import { R2ImageUpload } from '@/components/portal/content-editor/R2ImageUpload';
-
-interface AuthorFormData {
-	name: string;
-	profile_picture_url: string;
-	profile_picture_file: File | null;
-	about: string;
-	organization: string;
-	position: string;
-	social_links: Record<string, string>;
-}
+import type { AuthorFormData } from './types';
 
 interface AuthorFormProps {
 	formData: AuthorFormData;

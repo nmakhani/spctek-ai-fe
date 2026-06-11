@@ -3,33 +3,22 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { CategoriesTable } from '@/components/portal/categories/CategoriesTable';
+import { CategoryCreateForm } from '@/components/portal/categories/CategoryCreateForm';
+import type { CategoryUsageCountMap } from '@/components/portal/categories/types';
+import { getCategoryUsageCounts, getErrorMessage } from '@/components/portal/categories/utils';
 import { type Category, type Content } from '@/components/portal/content-editor/types';
 import { PageHeader } from '@/components/portal/PageHeader';
-import { PortalTable, type PortalTableAction, type PortalTableColumn } from '@/components/portal/PortalTable';
 import { StatCard } from '@/components/portal/StatCard';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { automationWorkflowsApi, categoriesApi, contentApi } from '@/lib/api';
 
-interface AutomationWorkflowCategoryCountSource {
-	categories?: Category[];
-}
-
-interface CategoryUsageCounts {
-	blogs: number;
-	caseStudies: number;
-	workflows: number;
-}
-
-function getErrorMessage(err: unknown, fallback: string): string {
-	return err instanceof Error ? err.message : fallback;
-}
-
 function CategoriesContent() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [categories, setCategories] = useState<Category[]>([]);
-	const [categoryUsageCounts, setCategoryUsageCounts] = useState<Record<string, CategoryUsageCounts>>({});
+	const [categoryUsageCounts, setCategoryUsageCounts] = useState<CategoryUsageCountMap>({});
 	const [categoryName, setCategoryName] = useState('');
 	const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
 	const [editingCategoryName, setEditingCategoryName] = useState('');
@@ -49,24 +38,16 @@ function CategoriesContent() {
 			const nextCategories = categoriesResponse.data as Category[];
 			const blogs = blogsResponse.data as Content[];
 			const caseStudies = caseStudiesResponse.data as Content[];
-			const workflows = workflowsResponse.data as AutomationWorkflowCategoryCountSource[];
-
-			const nextUsageCounts = nextCategories.reduce<Record<string, CategoryUsageCounts>>((counts, category) => {
-				counts[category.id] = {
-					blogs: blogs.filter((item) => item.categories?.some((itemCategory) => itemCategory.id === category.id))
-						.length,
-					caseStudies: caseStudies.filter((item) =>
-						item.categories?.some((itemCategory) => itemCategory.id === category.id)
-					).length,
-					workflows: workflows.filter((item) =>
-						item.categories?.some((itemCategory) => itemCategory.id === category.id)
-					).length,
-				};
-				return counts;
-			}, {});
 
 			setCategories(nextCategories);
-			setCategoryUsageCounts(nextUsageCounts);
+			setCategoryUsageCounts(
+				getCategoryUsageCounts({
+					categories: nextCategories,
+					blogs,
+					caseStudies,
+					workflows: workflowsResponse.data,
+				})
+			);
 			setError('');
 		} catch (err: unknown) {
 			const message = getErrorMessage(err, 'Failed to load categories');
@@ -108,6 +89,11 @@ function CategoriesContent() {
 		setEditingCategoryName(category.name);
 	};
 
+	const cancelEditCategory = () => {
+		setEditingCategoryId(null);
+		setEditingCategoryName('');
+	};
+
 	const saveCategoryEdit = async () => {
 		if (!editingCategoryId) return;
 
@@ -120,8 +106,7 @@ function CategoriesContent() {
 		try {
 			setCategoryActionLoadingId(editingCategoryId);
 			await categoriesApi.update(editingCategoryId, { name });
-			setEditingCategoryId(null);
-			setEditingCategoryName('');
+			cancelEditCategory();
 			await fetchCategories();
 			toast.success('Category updated');
 		} catch (err: unknown) {
@@ -151,80 +136,6 @@ function CategoriesContent() {
 		}
 	};
 
-	const categoryColumns: PortalTableColumn<Category>[] = [
-		{
-			header: 'Category',
-			type: 'custom',
-			render: (category) =>
-				editingCategoryId === category.id ? (
-					<input
-						type="text"
-						value={editingCategoryName}
-						onChange={(e) => setEditingCategoryName(e.target.value)}
-						className="w-full min-w-44 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-					/>
-				) : (
-					<span className="font-medium">{category.name}</span>
-				),
-		},
-		{ header: 'Slug', accessor: 'slug', className: 'text-white/60' },
-		{
-			header: 'Blogs',
-			type: 'number',
-			accessor: (category) => categoryUsageCounts[category.id]?.blogs ?? 0,
-		},
-		{
-			header: 'Case Studies',
-			type: 'number',
-			accessor: (category) => categoryUsageCounts[category.id]?.caseStudies ?? 0,
-		},
-		{
-			header: 'Workflows',
-			type: 'number',
-			accessor: (category) => categoryUsageCounts[category.id]?.workflows ?? 0,
-		},
-	];
-
-	const getCategoryActions = (category: Category): PortalTableAction<Category>[] => {
-		const isEditing = editingCategoryId === category.id;
-		const isWorking = categoryActionLoadingId === category.id;
-
-		if (isEditing) {
-			return [
-				{
-					label: 'Save',
-					loadingLabel: 'Saving...',
-					loading: isWorking,
-					variant: 'success',
-					onClick: saveCategoryEdit,
-				},
-				{
-					label: 'Cancel',
-					disabled: isWorking,
-					variant: 'secondary',
-					onClick: () => {
-						setEditingCategoryId(null);
-						setEditingCategoryName('');
-					},
-				},
-			];
-		}
-
-		return [
-			{
-				label: 'Edit',
-				disabled: isWorking,
-				onClick: startEditCategory,
-			},
-			{
-				label: 'Delete',
-				disabled: isWorking,
-				variant: 'danger',
-				onClick: (selectedCategory) => setPendingCategoryDeleteId(selectedCategory.id),
-			},
-		];
-	};
-
 	return (
 		<div className="min-h-screen animate-[pageFade_450ms_ease] pb-12">
 			<ConfirmDialog
@@ -241,7 +152,7 @@ function CategoriesContent() {
 				}}
 			/>
 
-			<PageHeader title="Categories" subtitle="Dashboard" backLink="/portal" backText="← Back to Home" />
+			<PageHeader title="Categories" subtitle="Dashboard" backLink="/portal" backText="Back to Home" />
 
 			<main className="mx-auto max-w-7xl px-6 py-10">
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -249,43 +160,29 @@ function CategoriesContent() {
 					<StatCard label="Ready for Use" loading={loading} count={categories.length} />
 				</div>
 
-				<section className="border-white/18 mb-8 mt-6 rounded-3xl border bg-white/[0.04] p-5 md:p-6">
-					<div className="mb-4 flex flex-wrap items-end gap-3">
-						<div className="min-w-[240px] flex-1">
-							<label className="mb-2 block text-sm text-white/70">Add Category</label>
-							<input
-								type="text"
-								value={categoryName}
-								onChange={(e) => setCategoryName(e.target.value)}
-								placeholder="e.g. AI Workflows"
-								className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45"
-							/>
-						</div>
-						<button
-							type="button"
-							onClick={createCategory}
-							disabled={creatingCategory}
-							className="rounded-xl bg-[#606bfa] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6f79ff] disabled:opacity-60"
-						>
-							{creatingCategory ? 'Creating...' : 'Create Category'}
-						</button>
-					</div>
-				</section>
+				<CategoryCreateForm
+					name={categoryName}
+					creating={creatingCategory}
+					onNameChange={setCategoryName}
+					onCreate={createCategory}
+				/>
 
 				{error && (
 					<div className="border-red-300/35 bg-red-500/18 text-red-200 mb-6 rounded-2xl border px-4 py-3">{error}</div>
 				)}
 
-				<PortalTable
-					columns={categoryColumns}
+				<CategoriesTable
+					categories={categories}
+					usageCounts={categoryUsageCounts}
 					loading={loading}
-					loadingMessage="Loading categories..."
-					empty={categories.length === 0}
-					emptyMessage="No categories yet"
-					minWidthClassName="min-w-[820px]"
-					data={categories}
-					getRowKey={(category) => category.id}
-					actions={getCategoryActions}
+					editingCategoryId={editingCategoryId}
+					editingCategoryName={editingCategoryName}
+					actionLoadingId={categoryActionLoadingId}
+					onEditingNameChange={setEditingCategoryName}
+					onEdit={startEditCategory}
+					onCancelEdit={cancelEditCategory}
+					onSaveEdit={saveCategoryEdit}
+					onRequestDelete={setPendingCategoryDeleteId}
 				/>
 			</main>
 		</div>

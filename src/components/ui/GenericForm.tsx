@@ -20,6 +20,7 @@ export interface FieldConfig {
 	gridSpan?: 'half' | 'full';
 	rows?: number;
 	options?: string[];
+	menuMaxHeightClass?: string;
 }
 
 export interface FormValues {
@@ -119,7 +120,6 @@ export default function GenericForm({
 		const hasError = Boolean(errors[field.name]);
 		const isFullWidth = field.gridSpan === 'full';
 		const spanClass = isFullWidth ? 'md:col-span-2' : 'md:col-span-1';
-		const stackClass = field.type === 'select' ? 'relative z-30' : 'relative z-10';
 
 		const sharedProps = {
 			placeholder: field.placeholder,
@@ -130,18 +130,20 @@ export default function GenericForm({
 		};
 
 		return (
-			<div key={field.name} className={`${spanClass} ${stackClass}`}>
+			<div key={field.name} className={`${spanClass} relative`}>
 				<label className={compact ? compactLabelClass : labelClass}>
 					{field.label} {field.required && <span className="text-red-400">*</span>}
 				</label>
 
-				<div className="relative z-10">
+				<div className={field.type === 'select' ? 'relative' : 'relative z-10'}>
 					{field.type === 'select' ? (
 						<DarkDropdown
 							value={values[field.name]}
 							options={field.options || []}
 							placeholder={field.placeholder}
 							onChange={(value) => handleChange(field.name, value)}
+							compact={compact}
+							menuMaxHeightClass={field.menuMaxHeightClass}
 						/>
 					) : (
 						<>

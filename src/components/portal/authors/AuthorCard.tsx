@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import type { Author } from '@/app/(dashboard)/portal/authors/page';
+import type { Author } from './types';
 
 interface AuthorCardProps {
 	author: Author;

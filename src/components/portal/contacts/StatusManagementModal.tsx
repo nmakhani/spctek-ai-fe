@@ -17,7 +17,8 @@ interface StatusManagementModalProps {
 	onClose: () => void;
 	onCreate: (code: string) => Promise<void>;
 	onUpdate: (id: string, code: string) => Promise<void>;
-	onDelete: (id: string) => Promise<void>;
+	onDelete: (id: string) => void | Promise<void>;
+	suppressOutsideClose?: boolean;
 }
 
 export function StatusManagementModal({
@@ -30,6 +31,7 @@ export function StatusManagementModal({
 	onCreate,
 	onUpdate,
 	onDelete,
+	suppressOutsideClose = false,
 }: StatusManagementModalProps) {
 	const modalRef = useRef<HTMLDivElement>(null);
 	const [newCode, setNewCode] = useState('');
@@ -49,6 +51,10 @@ export function StatusManagementModal({
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
+			if (suppressOutsideClose) {
+				return;
+			}
+
 			if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
 				handleClose();
 			}
@@ -62,7 +68,7 @@ export function StatusManagementModal({
 				document.body.style.overflow = '';
 			};
 		}
-	}, [isOpen, handleClose]);
+	}, [isOpen, handleClose, suppressOutsideClose]);
 
 	if (!isOpen) {
 		return null;
