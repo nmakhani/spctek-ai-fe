@@ -1,7 +1,8 @@
 ﻿'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { SectionHeading } from '../ui/SectionHeading';
 
@@ -46,7 +47,7 @@ const afterTasks = [
 export default function Hero() {
 	return (
 		<section className="font-poppins relative overflow-hidden px-4 pb-12 pt-20 md:px-6 md:pt-24 lg:px-12 lg:pt-28">
-			<div className="absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(circle_at_top_left,rgba(70,182,255,0.18),transparent_34%),radial-gradient(circle_at_top_right,rgba(94,234,212,0.12),transparent_30%)]" />
+			<div className="absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(circle_at_top_left,rgba(70,182,255,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(96,107,250,0.14),transparent_34%),radial-gradient(circle_at_top_right,rgba(94,234,212,0.1),transparent_30%)]" />
 
 			<div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.03fr_0.97fr] lg:gap-11">
 				<div className="text-center lg:text-left">
@@ -77,131 +78,109 @@ export default function Hero() {
 					</div>
 				</div>
 
-				<div className="relative grid gap-3 sm:grid-cols-2">
-					<div className="pointer-events-none absolute inset-6 -z-10 rounded-full bg-[#606bfa]/20 blur-3xl" />
-					<WorkflowColumn title="Before SPCTEK AI" tone="before" tasks={beforeTasks} />
-					<WorkflowColumn title="After SPCTEK AI" tone="after" tasks={afterTasks} />
-				</div>
+				<BeforeAfterGraphic />
 			</div>
 		</section>
 	);
 }
 
-function WorkflowColumn({
-	title,
-	tone,
-	tasks,
-}: {
-	title: string;
-	tone: 'before' | 'after';
-	tasks: Array<{ title: string; description: string }>;
-}) {
-	const isAfter = tone === 'after';
-	const columnRef = useRef<HTMLDivElement | null>(null);
-	const [isScrollActive, setIsScrollActive] = useState(false);
+function BeforeAfterGraphic() {
+	const [activeIndex, setActiveIndex] = useState(0);
 
 	useEffect(() => {
-		const column = columnRef.current;
-		if (!column) {
-			return;
-		}
+		const interval = window.setInterval(() => {
+			setActiveIndex((current) => (current + 1) % beforeTasks.length);
+		}, 6200);
 
-		const mediaQuery = window.matchMedia('(max-width: 767px)');
-		let observer: IntersectionObserver | null = null;
-
-		const startObserver = () => {
-			observer?.disconnect();
-
-			observer = new IntersectionObserver(
-				([entry]) => {
-					setIsScrollActive(entry.isIntersecting);
-				},
-				{
-					root: null,
-					rootMargin: '-18% 0px -18% 0px',
-					threshold: 0.45,
-				}
-			);
-			observer.observe(column);
-		};
-
-		const handleMediaChange = () => {
-			if (mediaQuery.matches) {
-				startObserver();
-				return;
-			}
-
-			observer?.disconnect();
-			observer = null;
-			setIsScrollActive(false);
-		};
-
-		if (mediaQuery.matches) {
-			startObserver();
-		}
-		mediaQuery.addEventListener('change', handleMediaChange);
-
-		return () => {
-			mediaQuery.removeEventListener('change', handleMediaChange);
-			observer?.disconnect();
-		};
+		return () => window.clearInterval(interval);
 	}, []);
 
 	return (
-		<div
-			ref={columnRef}
-			data-scroll-active={isScrollActive ? 'true' : undefined}
-			className={`group/column relative overflow-hidden rounded-[22px] border p-4 transition delay-0 duration-300 hover:-translate-y-1 hover:delay-300 data-[scroll-active=true]:-translate-y-1 data-[scroll-active=true]:delay-300 ${
-				isAfter
-					? 'border-[#8bffb0]/42 bg-[linear-gradient(180deg,rgba(139,255,176,0.13),rgba(7,11,20,0.7))] shadow-[0_20px_60px_rgba(139,255,176,0.15),0_0_28px_rgba(139,255,176,0.08)] hover:border-[#8bffb0]/70 hover:shadow-[0_26px_80px_rgba(139,255,176,0.24),0_0_36px_rgba(139,255,176,0.14)]'
-					: 'hover:border-[#ff6b6b]/42 border-[#ff6b6b]/20 bg-[linear-gradient(180deg,rgba(255,107,107,0.085),rgba(7,11,20,0.68))] shadow-[0_18px_54px_rgba(255,107,107,0.11),0_0_22px_rgba(255,107,107,0.06)] hover:shadow-[0_24px_68px_rgba(255,107,107,0.17),0_0_30px_rgba(255,107,107,0.1)]'
-			}`}
-		>
-			<div
-				className={`pointer-events-none absolute inset-x-8 top-0 h-px transition delay-0 duration-300 group-hover/column:inset-x-4 group-hover/column:delay-300 group-data-[scroll-active=true]/column:inset-x-4 group-data-[scroll-active=true]/column:delay-300 ${
-					isAfter
-						? 'bg-gradient-to-r from-transparent via-[#8bffb0] to-transparent'
-						: 'via-white/24 bg-gradient-to-r from-transparent to-transparent'
-				}`}
-			/>
-			<div
-				className={`pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full blur-2xl transition delay-0 duration-300 group-hover/column:scale-125 group-hover/column:delay-300 group-data-[scroll-active=true]/column:scale-125 group-data-[scroll-active=true]/column:delay-300 ${
-					isAfter ? 'bg-[#8bffb0]/20' : 'bg-[#ff6b6b]/14'
-				}`}
-			/>
-			<h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-white">
-				<span
-					className={`h-2.5 w-2.5 rounded-full shadow-[0_0_14px_currentColor] ${
-						isAfter ? 'bg-[#8bffb0] text-[#8bffb0]' : 'bg-[#ff6b6b] text-[#ff6b6b]'
-					}`}
-				/>
-				{title}
-			</h2>
-			<div className="grid gap-2">
-				{tasks.map((task) => (
-					<div
-						key={task.title}
-						className={`relative h-[92px] overflow-hidden rounded-2xl border p-3 text-xs leading-relaxed text-[#dce6f5] transition duration-300 group-hover/column:translate-x-0.5 ${
-							isAfter
-								? 'border-[#8bffb0]/34 bg-[#8bffb0]/12 hover:bg-[#8bffb0]/18 hover:border-[#8bffb0]/60'
-								: 'border-white/12 hover:border-[#ffd166]/32 hover:bg-[#ffd166]/8 bg-white/[0.045]'
-						}`}
-					>
-						<div className="pointer-events-none absolute inset-0 opacity-0 transition delay-0 duration-300 group-hover/column:opacity-100 group-hover/column:delay-300 group-data-[scroll-active=true]/column:opacity-100 group-data-[scroll-active=true]/column:delay-300">
-							<div className={`absolute inset-y-0 left-0 w-1 ${isAfter ? 'bg-[#8bffb0]/70' : 'bg-[#ffd166]/70'}`} />
-						</div>
-						<div className="absolute inset-x-4 top-1/2 -translate-y-1/2 text-center transition-all delay-0 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/column:-translate-y-[2.4rem] group-hover/column:opacity-0 group-hover/column:delay-300 group-data-[scroll-active=true]/column:-translate-y-[2.4rem] group-data-[scroll-active=true]/column:opacity-0 group-data-[scroll-active=true]/column:delay-300">
-							<strong className="block text-base font-bold leading-tight text-white">{task.title}</strong>
-						</div>
-						<div className="absolute inset-x-4 top-3 translate-y-4 text-left opacity-0 transition-all delay-0 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/column:translate-y-0 group-hover/column:opacity-100 group-hover/column:delay-300 group-data-[scroll-active=true]/column:translate-y-0 group-data-[scroll-active=true]/column:opacity-100 group-data-[scroll-active=true]/column:delay-300">
-							<strong className="block text-sm font-bold leading-tight text-white">{task.title}</strong>
-							<p className="mt-1 max-w-[220px] translate-y-2 text-xs leading-snug text-[#dce6f5] opacity-0 transition-all delay-0 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/column:translate-y-0 group-hover/column:opacity-100 group-hover/column:delay-500 group-data-[scroll-active=true]/column:translate-y-0 group-data-[scroll-active=true]/column:opacity-100 group-data-[scroll-active=true]/column:delay-500">
-								{task.description}
-							</p>
-						</div>
+		<div className="relative mx-auto flex w-full max-w-[560px] justify-center overflow-visible py-6 md:py-8 lg:max-w-none lg:justify-end">
+			<div className="pointer-events-none absolute left-[3%] top-[9%] h-44 w-44 rounded-full bg-[#606bfa]/24 blur-[66px]" />
+			<div className="pointer-events-none absolute right-[-8%] top-[4%] h-56 w-56 rounded-full bg-[#5eead4]/10 blur-[80px]" />
+			<div className="pointer-events-none absolute bottom-[2%] left-[28%] h-48 w-48 rounded-full bg-[#46b6ff]/12 blur-[78px]" />
+
+			<div className="relative z-10 flex w-full flex-col gap-5 sm:w-[520px] lg:h-[410px] lg:w-[560px]">
+				<div className="relative flex min-h-[268px] flex-col justify-end overflow-visible rounded-[24px] border border-white/12 bg-white/[0.025] p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_24px_62px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:p-6 lg:absolute lg:left-0 lg:top-[58px] lg:h-[300px] lg:w-[305px] lg:pr-0">
+					<div className="pointer-events-none absolute -left-2 -top-2 h-20 w-20 rounded-full bg-white/24 blur-2xl" />
+					<div className="pointer-events-none absolute -bottom-3 -right-3 h-24 w-24 rounded-full bg-[#a0a6fc]/18 blur-2xl" />
+					<div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[linear-gradient(135deg,rgba(255,255,255,0.16),transparent_22%,transparent_68%,rgba(255,255,255,0.12))]" />
+					<div className="relative h-[242px] overflow-visible rounded-[18px] bg-[linear-gradient(180deg,rgba(84,96,219,0.58)_0%,rgba(22,26,68,0.82)_42%,rgba(7,10,28,0.95)_100%)] px-5 pb-7 pt-[96px] shadow-[0_16px_36px_rgba(0,0,0,0.36)] sm:px-7 lg:h-[238px] lg:w-[264px]">
+						<ComparisonLabel tone="before" />
+						<TaskSlide task={beforeTasks[activeIndex]} tone="before" />
 					</div>
-				))}
+				</div>
+
+				<div className="relative min-h-[304px] overflow-visible rounded-[26px] border border-white/14 bg-white/[0.035] p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.22),0_30px_76px_rgba(0,0,0,0.48)] backdrop-blur-2xl sm:p-6 lg:absolute lg:right-0 lg:top-0 lg:h-[382px] lg:w-[315px]">
+					<div className="pointer-events-none absolute -left-3 -top-3 h-24 w-24 rounded-full bg-white/26 blur-2xl" />
+					<div className="pointer-events-none absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-[#5eead4]/16 blur-2xl" />
+					<div className="pointer-events-none absolute inset-0 rounded-[30px] bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_24%,transparent_66%,rgba(255,255,255,0.14))]" />
+					<div className="relative h-[272px] overflow-visible rounded-[17px] bg-[linear-gradient(180deg,#626cff_0%,#4c55d4_31%,#202260_63%,#10122e_100%)] px-6 pb-[104px] pt-10 shadow-[0_20px_42px_rgba(0,0,0,0.42)] sm:px-8 lg:h-[334px]">
+						<TaskSlide task={afterTasks[activeIndex]} tone="after" />
+						<ComparisonLabel tone="after" />
+					</div>
+				</div>
 			</div>
 		</div>
+	);
+}
+
+function ComparisonLabel({ tone }: { tone: 'before' | 'after' }) {
+	const isAfter = tone === 'after';
+
+	return (
+		<div
+			className={`absolute z-20 rounded-[10px] border-2 border-[#6a72ff] bg-white px-4 py-2.5 leading-none text-black shadow-[0_0_22px_rgba(96,107,250,0.52),0_14px_24px_rgba(0,0,0,0.3)] ${
+				isAfter
+					? 'bottom-[38px] right-4 sm:right-[-42px] lg:bottom-[48px] lg:right-[-58px]'
+					: 'left-4 top-7 sm:left-[-42px] lg:left-[-44px] lg:top-7'
+			}`}
+		>
+			<span className="text-[14px] font-medium sm:text-[15px]">{isAfter ? 'After' : 'Before'}</span>
+			<span className="ml-1 text-[19px] font-black tracking-normal sm:text-[21px]">SPCTEK.AI</span>
+		</div>
+	);
+}
+
+function TaskSlide({
+	task,
+	tone,
+}: {
+	task: { title: string; description: string };
+	tone: 'before' | 'after';
+}) {
+	const isAfter = tone === 'after';
+
+	return (
+		<AnimatePresence mode="wait">
+			<motion.div
+				key={task.title}
+				initial={{ opacity: 0, y: 8 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: -8 }}
+				transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+				className={
+					isAfter
+						? 'absolute inset-x-6 top-12 z-10 sm:inset-x-8 sm:top-14 lg:top-16'
+						: 'absolute bottom-7 left-5 z-10 w-[172px] sm:left-7 sm:w-[188px] lg:w-[170px]'
+				}
+			>
+				<h2
+					className={`font-heading font-bold leading-[1.16] text-white ${
+						isAfter ? 'text-[1.6rem] sm:text-[1.95rem]' : 'text-[1.24rem] sm:text-[1.34rem]'
+					}`}
+				>
+					{task.title}
+				</h2>
+				<p
+					className={`mt-3 font-light leading-relaxed ${
+						isAfter ? 'text-[15px] text-white/86 sm:text-base' : 'text-[13px] text-[#c6d0e2] sm:text-sm'
+					}`}
+				>
+					{task.description}
+				</p>
+			</motion.div>
+		</AnimatePresence>
 	);
 }
