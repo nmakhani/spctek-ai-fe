@@ -5,6 +5,14 @@ export interface DeploymentLogFile {
 	modified_at: string;
 }
 
+export interface DeploymentFileContent {
+	name: string;
+	content: string;
+	size_bytes: number;
+	modified_at: string;
+	truncated: boolean;
+}
+
 export interface DeploymentError {
 	timestamp: string | null;
 	level: string | null;

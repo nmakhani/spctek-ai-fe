@@ -59,6 +59,7 @@ export function statusClasses(status: string) {
 	switch (status) {
 		case 'success':
 			return 'border-emerald-300/35 bg-emerald-500/15 text-emerald-200';
+		case 'starting':
 		case 'running':
 			return 'border-sky-300/35 bg-sky-500/15 text-sky-200';
 		case 'failed':

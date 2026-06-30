@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 import { DeploymentControlPanel } from '@/components/portal/deployment/DeploymentControlPanel';
 import { DeploymentLogsPanel } from '@/components/portal/deployment/DeploymentLogsPanel';
-import type { DeploymentStatus } from '@/components/portal/deployment/types';
+import type { DeploymentFileContent, DeploymentStatus } from '@/components/portal/deployment/types';
 import { formatGmtPlus5Time, formatStatus, getErrorMessage } from '@/components/portal/deployment/utils';
 import { PageHeader } from '@/components/portal/PageHeader';
 import { StatCard } from '@/components/portal/StatCard';
@@ -19,6 +19,10 @@ function DeploymentContent() {
 	const [deploying, setDeploying] = useState(false);
 	const [error, setError] = useState('');
 	const [status, setStatus] = useState<DeploymentStatus | null>(null);
+	const [selectedFile, setSelectedFile] = useState<string | null>(null);
+	const [fileContent, setFileContent] = useState<DeploymentFileContent | null>(null);
+	const [fileLoading, setFileLoading] = useState(false);
+	const [fileError, setFileError] = useState('');
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [deployPassword, setDeployPassword] = useState('');
 
@@ -43,21 +47,48 @@ function DeploymentContent() {
 		}
 	}, []);
 
+	const fetchDeploymentFile = useCallback(async (filename: string) => {
+		try {
+			setSelectedFile(filename);
+			setFileLoading(true);
+			setFileError('');
+			const response = await deploymentApi.file(filename);
+			setFileContent(response.data as DeploymentFileContent);
+		} catch (err: unknown) {
+			setFileContent(null);
+			setFileError(getErrorMessage(err, `Failed to load ${filename}`));
+		} finally {
+			setFileLoading(false);
+		}
+	}, []);
+
 	useEffect(() => {
 		void fetchStatus();
 	}, [fetchStatus]);
 
 	useEffect(() => {
-		if (status?.status !== 'running') {
+		if (selectedFile || !status?.files?.length) {
+			return;
+		}
+
+		const defaultFile = status.files.find((file) => file.name === 'deployment.log') || status.files[0];
+		void fetchDeploymentFile(defaultFile.name);
+	}, [fetchDeploymentFile, selectedFile, status?.files]);
+
+	useEffect(() => {
+		if (!['starting', 'running'].includes(status?.status || '')) {
 			return;
 		}
 
 		const intervalId = window.setInterval(() => {
 			void fetchStatus();
+			if (selectedFile) {
+				void fetchDeploymentFile(selectedFile);
+			}
 		}, 5000);
 
 		return () => window.clearInterval(intervalId);
-	}, [fetchStatus, status?.status]);
+	}, [fetchDeploymentFile, fetchStatus, selectedFile, status?.status]);
 
 	const runDeployment = async () => {
 		const password = deployPassword.trim();
@@ -134,7 +165,16 @@ function DeploymentContent() {
 					onRunClick={() => setConfirmOpen(true)}
 				/>
 
-				<DeploymentLogsPanel recentLog={recentLog} recentErrors={recentErrors} files={status?.files || []} />
+				<DeploymentLogsPanel
+					recentLog={recentLog}
+					recentErrors={recentErrors}
+					files={status?.files || []}
+					selectedFile={selectedFile}
+					fileContent={fileContent}
+					fileLoading={fileLoading}
+					fileError={fileError}
+					onFileSelect={(filename) => void fetchDeploymentFile(filename)}
+				/>
 			</main>
 		</div>
 	);

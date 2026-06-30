@@ -24,6 +24,7 @@ export function DeploymentControlPanel({
 	onRunClick,
 }: DeploymentControlPanelProps) {
 	const latestStatus = status?.status || 'unknown';
+	const deploymentActive = latestStatus === 'starting' || latestStatus === 'running';
 	const details = status?.deployment;
 
 	return (
@@ -52,7 +53,7 @@ export function DeploymentControlPanel({
 						value={deployPassword}
 						onChange={(event) => onPasswordChange(event.target.value)}
 						placeholder="Enter deployment password"
-						disabled={deploying || latestStatus === 'running'}
+						disabled={deploying || deploymentActive}
 						className="w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2.5 text-white outline-none transition placeholder:text-white/35 focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/45 disabled:opacity-60"
 					/>
 					<div className="flex flex-wrap gap-3">
@@ -68,11 +69,11 @@ export function DeploymentControlPanel({
 						<button
 							type="button"
 							onClick={onRunClick}
-							disabled={deploying || latestStatus === 'running' || !deployPassword.trim()}
+							disabled={deploying || deploymentActive || !deployPassword.trim()}
 							className="inline-flex items-center gap-2 rounded-xl bg-[#606bfa] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6f79ff] hover:shadow-[0_0_18px_rgba(96,107,250,0.5)] disabled:opacity-60"
 						>
 							<Rocket size={16} />
-							{deploying ? 'Starting...' : latestStatus === 'running' ? 'Deployment Running' : 'Run Deployment'}
+							{deploying ? 'Starting...' : deploymentActive ? 'Deployment Running' : 'Run Deployment'}
 						</button>
 					</div>
 				</div>

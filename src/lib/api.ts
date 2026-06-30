@@ -159,6 +159,7 @@ export const automationWorkflowsApi = {
 
 export const deploymentApi = {
 	status: () => axios.get(`${DEPLOYMENT_API_BASE_URL}/deploy/status`),
+	file: (filename: string) => axios.get(`${DEPLOYMENT_API_BASE_URL}/deploy/files/${encodeURIComponent(filename)}`),
 	run: (data: { password: string }) => axios.post(`${DEPLOYMENT_API_BASE_URL}/deploy`, data),
 };
 
