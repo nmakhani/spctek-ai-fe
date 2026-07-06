@@ -166,7 +166,7 @@ function BeforeAfterGraphic() {
 									aria-pressed={isActive}
 									className={`h-2.5 rounded-full transition-all duration-300 ${
 										isActive
-											? 'w-7 bg-[#5eead4] shadow-[0_0_14px_rgba(94,234,212,0.58)]'
+											? 'w-7 bg-[#606bfa] shadow-[0_0_14px_rgba(94,234,212,0.58)]'
 											: 'bg-white/38 hover:bg-white/58 w-2.5'
 									}`}
 								/>
