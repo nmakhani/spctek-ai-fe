@@ -305,19 +305,18 @@ export default function ChatWidget() {
 
 	return (
 		<>
-			<AnimatePresence mode="wait">
-				{isOpen ? (
-					<motion.section
-						key="chat-window"
-						layoutId="chat-widget-shell"
-						initial={{ opacity: 0.92, scale: 0.18, borderRadius: 16 }}
-						animate={{ opacity: 1, scale: 1, borderRadius: 16 }}
-						exit={{ opacity: 0, scale: 0.18, borderRadius: 16 }}
-						transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
-						style={{ transformOrigin: 'bottom right' }}
-						className={shellClassName}
-						aria-label="AXON SPCTEK AI chat"
-					>
+		<AnimatePresence mode="wait">
+			{isOpen ? (
+				<motion.section
+					key="chat-window"
+					initial={{ opacity: 0, y: 18, scale: 0.97 }}
+					animate={{ opacity: 1, y: 0, scale: 1 }}
+					exit={{ opacity: 0, y: 18, scale: 0.97 }}
+					transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+					style={{ transformOrigin: 'bottom right' }}
+					className={shellClassName}
+					aria-label="AXON SPCTEK AI chat"
+				>
 						<header className="relative border-b border-white/10 bg-[linear-gradient(135deg,rgba(96,107,250,0.34),rgba(255,255,255,0.07)_44%,rgba(7,10,24,0.72))] px-4 py-4">
 							<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(255,255,255,0.18),transparent_34%),radial-gradient(circle_at_88%_24%,rgba(94,234,212,0.16),transparent_30%)]" />
 							<div className="relative flex items-center justify-between gap-3">
@@ -489,14 +488,13 @@ export default function ChatWidget() {
 							</div>
 						</form>
 					</motion.section>
-				) : (
-					<motion.button
-						key="chat-launcher"
-						layoutId="chat-widget-shell"
-						type="button"
-						onClick={() => setIsOpen(true)}
-						aria-label="Open AXON chat"
-						aria-expanded={isOpen}
+			) : (
+				<motion.button
+					key="chat-launcher"
+					type="button"
+					onClick={() => setIsOpen(true)}
+					aria-label="Open AXON chat"
+					aria-expanded={isOpen}
 						animate={{ scale: [1, 1.06, 1] }}
 						transition={{ duration: 1.4, repeat: Infinity, repeatDelay: 4.5, ease: 'easeInOut' }}
 						className="group fixed bottom-5 right-4 z-[60] flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-[#8f98ff]/45 bg-[#606bfa] text-white shadow-[0_12px_28px_rgba(96,107,250,0.34)] transition hover:-translate-y-1 hover:rotate-3 hover:border-[#b8beff] hover:bg-[#7580ff] hover:shadow-[0_16px_34px_rgba(96,107,250,0.48)] sm:bottom-6 sm:right-6"
