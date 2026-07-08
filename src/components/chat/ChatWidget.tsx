@@ -489,20 +489,18 @@ export default function ChatWidget() {
 						</form>
 					</motion.section>
 			) : (
-				<motion.button
+				<button
 					key="chat-launcher"
 					type="button"
 					onClick={() => setIsOpen(true)}
 					aria-label="Open AXON chat"
 					aria-expanded={isOpen}
-						animate={{ scale: [1, 1.06, 1] }}
-						transition={{ duration: 1.4, repeat: Infinity, repeatDelay: 4.5, ease: 'easeInOut' }}
-						className="group fixed bottom-5 right-4 z-[60] flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-[#8f98ff]/45 bg-[#606bfa] text-white shadow-[0_12px_28px_rgba(96,107,250,0.34)] transition hover:-translate-y-1 hover:rotate-3 hover:border-[#b8beff] hover:bg-[#7580ff] hover:shadow-[0_16px_34px_rgba(96,107,250,0.48)] sm:bottom-6 sm:right-6"
+					className="group fixed bottom-5 right-4 z-[60] flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-[#8f98ff]/45 bg-[#606bfa] text-white shadow-[0_12px_28px_rgba(96,107,250,0.34)] transition-all duration-200 ease-out hover:-translate-y-1 hover:rotate-2 hover:border-[#b8beff] hover:bg-[#7580ff] hover:shadow-[0_16px_34px_rgba(96,107,250,0.48)] sm:bottom-6 sm:right-6"
 					>
 						<span className="bg-white/18 absolute inset-x-2 top-2 h-2 rounded-full transition group-hover:translate-x-1" />
 						<span className="absolute -bottom-6 -right-6 h-12 w-12 rounded-full bg-[#5eead4]/30 transition group-hover:scale-125" />
 						<Bot className="relative h-7 w-7" aria-hidden="true" />
-					</motion.button>
+					</button>
 				)}
 			</AnimatePresence>
 			<CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />
