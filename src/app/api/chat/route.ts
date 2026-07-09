@@ -26,6 +26,7 @@ type ToolResult = {
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const meetingIntentPattern = /\b(book|schedule|set up|setup|arrange|reserve|meeting|call|demo|calendar|calendly)\b/i;
 
 const tools = [
 	{
@@ -64,6 +65,8 @@ const tools = [
 	},
 ];
 
+const hasMeetingIntent = (message: string) => meetingIntentPattern.test(message);
+
 const cleanMessages = (messages: unknown): ClientMessage[] => {
 	if (!Array.isArray(messages)) return [];
 
@@ -82,6 +85,19 @@ const cleanMessages = (messages: unknown): ClientMessage[] => {
 			role: message.role,
 			content: message.content.trim().slice(0, 1400),
 		}));
+};
+
+const getLatestUserMessage = (messages: ClientMessage[]) => [...messages].reverse().find((message) => message.role === 'user');
+
+const splitCurrentMessage = (messages: ClientMessage[]) => {
+	const latestUserMessage = getLatestUserMessage(messages);
+	const conversationMemory = messages.slice(0, -1);
+
+	return {
+		currentMessage: latestUserMessage?.content.trim() || '',
+		conversationMemory,
+		hasMeetingIntent: latestUserMessage ? hasMeetingIntent(latestUserMessage.content) : false,
+	};
 };
 
 const parseToolArguments = (toolCall: ToolCall): Record<string, unknown> => {
@@ -231,7 +247,21 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		const baseMessages = [{ role: 'system', content: axonSystemPrompt }, ...cleanedMessages];
+		const { currentMessage, conversationMemory, hasMeetingIntent: currentMessageHasMeetingIntent } = splitCurrentMessage(cleanedMessages);
+		const toolAwarePrompt = `${axonSystemPrompt}
+
+Decision rule:
+- Treat conversation history as memory only.
+- The current user message is the only message allowed to authorize a booking popup.
+- Only use book_meeting when the current user message explicitly asks to book, schedule, arrange, or confirm a meeting/call.
+- Never trigger book_meeting because of earlier conversation history alone.
+
+Current user message:
+${currentMessage}
+`.trim();
+
+		const currentUserMessage = { role: 'user', content: currentMessage };
+		const baseMessages = [{ role: 'system', content: toolAwarePrompt }, ...conversationMemory, currentUserMessage];
 		const toolChoiceResponse = await fetch(GROQ_URL, {
 			method: 'POST',
 			headers: {
@@ -266,7 +296,14 @@ export async function POST(request: Request) {
 		const stream = new ReadableStream({
 			async start(controller) {
 				try {
-					const toolResults = await Promise.all(toolCalls.map((toolCall) => executeToolCall(toolCall)));
+					const toolResults = await Promise.all(
+						toolCalls
+							.filter(
+								(toolCall) =>
+									toolCall.function.name !== 'book_meeting' || currentMessageHasMeetingIntent
+							)
+							.map((toolCall) => executeToolCall(toolCall))
+					);
 
 					for (const toolResult of toolResults) {
 						if (toolResult.clientEvent) {

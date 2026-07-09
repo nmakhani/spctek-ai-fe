@@ -192,6 +192,14 @@ export const persistStoredSessions = (sessions: ChatSession[]) => {
 	window.localStorage.setItem(storedSessionsKey, JSON.stringify(sortAndLimitSessions(sessions)));
 };
 
+export const clearStoredChatMemory = () => {
+	if (typeof window === 'undefined') return;
+
+	window.localStorage.removeItem(storedSessionsKey);
+	window.localStorage.removeItem(legacyStoredMessagesKey);
+	window.localStorage.removeItem(legacySessionIdKey);
+};
+
 export const upsertStoredSession = (
 	currentSessions: ChatSession[],
 	sessionId: string,

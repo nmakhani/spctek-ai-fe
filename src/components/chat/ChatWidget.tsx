@@ -9,7 +9,14 @@ import CalendlyModal from '@/components/ui/CalendlyModal';
 import ChatConversation from './ChatConversation';
 import ChatHeader from './ChatHeader';
 import ChatSessionList from './ChatSessionList';
-import { createId, initialMessage, loadStoredChatState, persistStoredSessions, upsertStoredSession } from './chatStorage';
+import {
+	clearStoredChatMemory,
+	createId,
+	initialMessage,
+	loadStoredChatState,
+	persistStoredSessions,
+	upsertStoredSession,
+} from './chatStorage';
 import type { ChatMessage, ChatSession, StreamPayload } from './chatTypes';
 
 export default function ChatWidget() {
@@ -26,6 +33,7 @@ export default function ChatWidget() {
 	const [error, setError] = useState<string | null>(null);
 	const scrollRef = useRef<HTMLDivElement | null>(null);
 	const inputRef = useRef<HTMLTextAreaElement | null>(null);
+	const skipNextPersistRef = useRef(false);
 
 	useEffect(() => {
 		const restoredState = loadStoredChatState();
@@ -36,7 +44,45 @@ export default function ChatWidget() {
 	}, []);
 
 	useEffect(() => {
+		if (typeof window === 'undefined') return;
+
+		const clearChatMemory = () => {
+			skipNextPersistRef.current = true;
+			clearStoredChatMemory();
+			setSessions([]);
+			setActiveSessionId(createId());
+			setMessages([initialMessage]);
+			setInput('');
+			setError(null);
+			setIsLoading(false);
+			setIsCalendlyOpen(false);
+			setSessionView('sessions');
+		};
+
+		window.AXON = {
+			...(window.AXON || {}),
+			clearChatMemory,
+		};
+		window.clearAxonMemory = clearChatMemory;
+
+		return () => {
+			if (window.AXON?.clearChatMemory === clearChatMemory) {
+				delete window.AXON.clearChatMemory;
+			}
+
+			if (window.clearAxonMemory === clearChatMemory) {
+				delete window.clearAxonMemory;
+			}
+		};
+	}, []);
+
+	useEffect(() => {
 		if (!hasHydratedSessions) return;
+		if (skipNextPersistRef.current) {
+			skipNextPersistRef.current = false;
+			return;
+		}
+
 		persistStoredSessions(sessions);
 	}, [hasHydratedSessions, sessions]);
 

@@ -24,3 +24,12 @@ export type ChatSession = {
 	createdAt: number;
 	updatedAt: number;
 };
+
+declare global {
+	interface Window {
+		AXON?: {
+			clearChatMemory?: () => void;
+		};
+		clearAxonMemory?: () => void;
+	}
+}
