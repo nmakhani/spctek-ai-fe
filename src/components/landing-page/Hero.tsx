@@ -97,7 +97,7 @@ function BeforeAfterGraphic() {
 	const totalSlides = beforeTasks.length;
 
 	const goToSlide = (nextIndex: number) => {
-		setActiveIndex((current) => (nextIndex + totalSlides) % totalSlides);
+		setActiveIndex(() => (nextIndex + totalSlides) % totalSlides);
 	};
 
 	const goToPrevious = () => {
