@@ -1,7 +1,6 @@
 'use client';
 
 import type { FormEvent, KeyboardEvent, RefObject } from 'react';
-
 import { Loader2, Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -56,9 +55,7 @@ export default function ChatConversation({
 											remarkPlugins={[remarkGfm]}
 											components={{
 												p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
-												ul: ({ children }) => (
-													<ul className="mb-3 list-disc space-y-1 pl-5 last:mb-0">{children}</ul>
-												),
+												ul: ({ children }) => <ul className="mb-3 list-disc space-y-1 pl-5 last:mb-0">{children}</ul>,
 												ol: ({ children }) => (
 													<ol className="mb-3 list-decimal space-y-1 pl-5 last:mb-0">{children}</ol>
 												),
@@ -93,9 +90,15 @@ export default function ChatConversation({
 														{children}
 													</blockquote>
 												),
-												h1: ({ children }) => <h1 className="mb-3 text-lg font-bold text-white last:mb-0">{children}</h1>,
-												h2: ({ children }) => <h2 className="mb-3 text-base font-bold text-white last:mb-0">{children}</h2>,
-												h3: ({ children }) => <h3 className="mb-2 text-sm font-semibold text-white last:mb-0">{children}</h3>,
+												h1: ({ children }) => (
+													<h1 className="mb-3 text-lg font-bold text-white last:mb-0">{children}</h1>
+												),
+												h2: ({ children }) => (
+													<h2 className="mb-3 text-base font-bold text-white last:mb-0">{children}</h2>
+												),
+												h3: ({ children }) => (
+													<h3 className="mb-2 text-sm font-semibold text-white last:mb-0">{children}</h3>
+												),
 											}}
 										>
 											{message.content}
@@ -115,7 +118,7 @@ export default function ChatConversation({
 								type="button"
 								key={prompt}
 								onClick={() => onPromptClick(prompt)}
-								className="rounded-2xl border border-[#7d89ff]/35 bg-[#606bfa]/14 px-4 py-2.5 text-left text-sm font-medium text-[#dfe3ff] transition hover:border-[#a0a6fc]/70 hover:bg-[#606bfa]/24"
+								className="bg-[#606bfa]/14 hover:bg-[#606bfa]/24 rounded-2xl border border-[#7d89ff]/35 px-4 py-2.5 text-left text-sm font-medium text-[#dfe3ff] transition hover:border-[#a0a6fc]/70"
 							>
 								{prompt}
 							</button>
@@ -152,7 +155,11 @@ export default function ChatConversation({
 						aria-label="Send message to AXON"
 						className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#606bfa] text-white transition hover:bg-[#6f79ff] disabled:cursor-not-allowed disabled:opacity-45"
 					>
-						{isLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Send className="h-4 w-4" aria-hidden="true" />}
+						{isLoading ? (
+							<Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+						) : (
+							<Send className="h-4 w-4" aria-hidden="true" />
+						)}
 					</button>
 				</div>
 			</form>

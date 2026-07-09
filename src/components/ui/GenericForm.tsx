@@ -124,6 +124,7 @@ export default function GenericForm({
 		const sharedProps = {
 			placeholder: field.placeholder,
 			disabled: loading,
+			required: field.required,
 			value: values[field.name],
 			onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
 				handleChange(field.name, e.target.value),

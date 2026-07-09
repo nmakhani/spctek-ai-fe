@@ -4,6 +4,7 @@ import { Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { validateContactForm } from '@/lib/validation';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
 import { GradientBorder } from '../ui/GradientBorder';
@@ -106,6 +107,25 @@ export default function Contact() {
 				`First workflow to automate: ${values.automationGoal}`,
 			].join('\n'),
 			source: 'landing-page-assessment',
+		});
+
+		trackFormSubmitted({
+			formName: 'Landing Page AI Ops Assessment Form',
+			source: 'landing-page-assessment',
+			fields: {
+				name: values.name,
+				email: values.email,
+				company: values.company,
+				businessType: values.businessType,
+				automationGoal: values.automationGoal,
+				message: values.message,
+				source: 'landing-page-assessment',
+			},
+			profile: {
+				email: values.email,
+				name: values.name,
+				company: values.company,
+			},
 		});
 
 		toast.success("Thank you! We'll be in touch soon.");

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi, reinstatementApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { validateEstimatorContactForm, validateEstimatorForm } from '@/lib/validation';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
 import LeadCaptureModal, { type LeadCaptureValues } from '../ui/LeadCaptureModal';
@@ -138,6 +139,26 @@ export default function FreeAssessment() {
 			};
 
 			await reinstatementApi.generateReportFromLog(reportRequest);
+			trackFormSubmitted({
+				formName: 'Amazon Reinstatement Estimator Form',
+				source: 'reinstatement_estimator',
+				fields: {
+					...contactRequest,
+					performanceNotification: pendingData.performanceNotification,
+					suspensionDate: pendingData.suspensionDate,
+					previousAppeals: pendingData.previousAppeals,
+					businessModel: pendingData.businessModel,
+					fulfillmentChannel: pendingData.fulfillmentChannel,
+					suspensionCause: pendingData.suspensionCause,
+					availableDocuments: pendingData.availableDocuments,
+				},
+				profile: {
+					email: contactValues.email,
+					name: contactValues.name,
+					phone: contactValues.phone,
+					company: contactValues.company,
+				},
+			});
 			toast.success('Report generated! Check your email.');
 			setIsModalOpen(false);
 		} catch (error) {

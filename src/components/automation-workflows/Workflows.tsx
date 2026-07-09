@@ -9,6 +9,7 @@ import FilterBar from '@/components/ui/FilterBar';
 import type { LeadCaptureValues } from '@/components/ui/LeadCaptureModal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { automationWorkflowsApi, contactsApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { validateEstimatorContactForm } from '@/lib/validation';
 import { WorkflowCard, WorkflowDetailsModal } from './WorkflowCard';
 
@@ -181,6 +182,27 @@ export default function Workflows() {
 					workflow_name: workflow.name,
 					workflow_class: workflow.class,
 					workflow_link: workflowLink || null,
+				},
+			});
+
+			trackFormSubmitted({
+				formName: 'Automation Workflow Lead Form',
+				source: workflow.class === 'system' ? 'system_automation_workflow' : 'plugin_automation_workflow',
+				fields: {
+					name: values.name,
+					email: values.email,
+					phone: values.phone,
+					company: values.company,
+					workflow_id: workflow.id,
+					workflow_name: workflow.name,
+					workflow_class: workflow.class,
+					workflow_link: workflowLink || null,
+				},
+				profile: {
+					email: values.email,
+					name: values.name,
+					phone: values.phone,
+					company: values.company,
 				},
 			});
 

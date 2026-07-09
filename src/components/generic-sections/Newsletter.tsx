@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { GlassGlow } from '../ui/GlassGlow';
 import { GradientBorder } from '../ui/GradientBorder';
 import { PrimaryButton } from '../ui/PrimaryButton';
@@ -47,6 +48,17 @@ export default function Newsletter({ onClose, compact = false }: NewsletterProps
 			await contactsApi.create({
 				email: email,
 				source: 'newsletter-subscription',
+			});
+			trackFormSubmitted({
+				formName: 'Newsletter Signup',
+				source: 'newsletter-subscription',
+				fields: {
+					email,
+					source: 'newsletter-subscription',
+				},
+				profile: {
+					email,
+				},
 			});
 			toast.success("Thank you! We'll be in touch soon.");
 			setEmail('');

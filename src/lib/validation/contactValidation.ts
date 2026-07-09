@@ -11,16 +11,14 @@ export function validateContactForm(values: FormValues): FormErrors {
 		errors.name = 'Full name is required';
 	}
 
+	if (!values.email?.trim()) {
+		errors.email = 'Email is required';
+	} else if (!emailRegex.test(values.email)) {
+		errors.email = 'Please enter a valid email address';
+	}
+
 	if (!values.company?.trim()) {
 		errors.company = 'Company is required';
-	}
-
-	if (!values.email?.trim() && !values.phone?.trim()) {
-		errors.submit = 'At least one of email or phone is required';
-	}
-
-	if (values.email?.trim() && !emailRegex.test(values.email)) {
-		errors.email = 'Please enter a valid email address';
 	}
 
 	if (values.phone?.trim() && !phoneRegex.test(values.phone)) {

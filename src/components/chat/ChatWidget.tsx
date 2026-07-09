@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Bot } from 'lucide-react';
 
 import CalendlyModal from '@/components/ui/CalendlyModal';
-
 import ChatConversation from './ChatConversation';
 import ChatHeader from './ChatHeader';
 import ChatSessionList from './ChatSessionList';
@@ -350,7 +349,7 @@ export default function ChatWidget() {
 						aria-expanded={isOpen}
 						className="group fixed bottom-5 right-4 z-[60] flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-[#8f98ff]/45 bg-[#606bfa] text-white shadow-[0_12px_28px_rgba(96,107,250,0.34)] transition-all duration-200 ease-out hover:-translate-y-1 hover:rotate-2 hover:border-[#b8beff] hover:bg-[#7580ff] hover:shadow-[0_16px_34px_rgba(96,107,250,0.48)] sm:bottom-6 sm:right-6"
 					>
-						<span className="absolute inset-x-2 top-2 h-2 rounded-full bg-white/18 transition group-hover:translate-x-1" />
+						<span className="bg-white/18 absolute inset-x-2 top-2 h-2 rounded-full transition group-hover:translate-x-1" />
 						<span className="absolute -bottom-6 -right-6 h-12 w-12 rounded-full bg-[#5eead4]/30 transition group-hover:scale-125" />
 						<Bot className="relative h-7 w-7" aria-hidden="true" />
 					</button>

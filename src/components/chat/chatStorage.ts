@@ -28,7 +28,7 @@ export const createId = () => {
 	return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
-const readJson = <T,>(rawValue: string | null): T | null => {
+const readJson = <T>(rawValue: string | null): T | null => {
 	if (!rawValue) return null;
 
 	try {
@@ -200,11 +200,7 @@ export const clearStoredChatMemory = () => {
 	window.localStorage.removeItem(legacySessionIdKey);
 };
 
-export const upsertStoredSession = (
-	currentSessions: ChatSession[],
-	sessionId: string,
-	nextMessages: ChatMessage[]
-) => {
+export const upsertStoredSession = (currentSessions: ChatSession[], sessionId: string, nextMessages: ChatMessage[]) => {
 	const messagesToStore = getStoredMessagePairs(nextMessages);
 	if (!messagesToStore.length) return currentSessions;
 

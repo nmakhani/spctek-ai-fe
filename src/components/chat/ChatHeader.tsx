@@ -36,7 +36,7 @@ export default function ChatHeader({
 							<h2 className="truncate font-heading text-xl font-bold leading-none">AXON</h2>
 							<Sparkles className="h-4 w-4 shrink-0 text-[#a0a6fc]" aria-hidden="true" />
 						</div>
-						<p className="mt-1 truncate text-xs font-medium text-white/62">{title}</p>
+						<p className="text-white/62 mt-1 truncate text-xs font-medium">{title}</p>
 					</div>
 				</div>
 				<div className="flex shrink-0 items-center gap-2">
@@ -64,7 +64,11 @@ export default function ChatHeader({
 						aria-label={isFullPage ? 'Return AXON chat to compact view' : 'Open AXON chat in full page view'}
 						className="border-white/12 flex h-9 w-9 items-center justify-center rounded-full border bg-white/[0.06] text-white/75 transition hover:bg-[#606bfa]/25 hover:text-white"
 					>
-						{isFullPage ? <Minimize2 className="h-4 w-4" aria-hidden="true" /> : <Maximize2 className="h-4 w-4" aria-hidden="true" />}
+						{isFullPage ? (
+							<Minimize2 className="h-4 w-4" aria-hidden="true" />
+						) : (
+							<Maximize2 className="h-4 w-4" aria-hidden="true" />
+						)}
 					</button>
 					<button
 						type="button"

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 
 const EMAIL_PATTERN =
 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -33,6 +34,17 @@ export function FooterNewsletterForm() {
 			await contactsApi.create({
 				email,
 				source: 'footer-newsletter-subscription',
+			});
+			trackFormSubmitted({
+				formName: 'Footer Newsletter Signup',
+				source: 'footer-newsletter-subscription',
+				fields: {
+					email,
+					source: 'footer-newsletter-subscription',
+				},
+				profile: {
+					email,
+				},
 			});
 			toast.success('Subscribed successfully. Welcome aboard.');
 			setEmail('');

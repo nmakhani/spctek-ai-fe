@@ -2,8 +2,8 @@
 
 import { Clock3, MessageSquareText, Plus } from 'lucide-react';
 
-import type { ChatSession } from './chatTypes';
 import { formatSessionTime, getSessionPreview } from './chatStorage';
+import type { ChatSession } from './chatTypes';
 
 type ChatSessionListProps = {
 	sessions: ChatSession[];
@@ -30,7 +30,7 @@ export default function ChatSessionList({
 			>
 				<span>
 					<span className="block text-sm font-semibold text-white">New chat</span>
-					<span className="mt-0.5 block text-xs text-white/58">Start a fresh AXON session</span>
+					<span className="text-white/58 mt-0.5 block text-xs">Start a fresh AXON session</span>
 				</span>
 				<span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#606bfa] text-white shadow-[0_10px_24px_rgba(96,107,250,0.28)]">
 					<Plus className="h-4 w-4" aria-hidden="true" />
@@ -50,17 +50,19 @@ export default function ChatSessionList({
 								disabled={isLoading}
 								className={`group w-full rounded-2xl border px-4 py-3 text-left transition disabled:cursor-not-allowed disabled:opacity-50 ${
 									isActive
-										? 'border-[#8c96ff]/65 bg-[#606bfa]/18 shadow-[0_0_24px_rgba(96,107,250,0.14)]'
+										? 'bg-[#606bfa]/18 border-[#8c96ff]/65 shadow-[0_0_24px_rgba(96,107,250,0.14)]'
 										: 'border-white/10 bg-white/[0.055] hover:border-[#8c96ff]/50 hover:bg-white/[0.085]'
 								}`}
 							>
 								<div className="flex items-start justify-between gap-3">
 									<div className="min-w-0">
 										<p className="truncate text-sm font-semibold text-white">{session.title}</p>
-										<p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/55">{getSessionPreview(session)}</p>
+										<p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/55">
+											{getSessionPreview(session)}
+										</p>
 									</div>
 								</div>
-								<div className="mt-3 flex items-center gap-1.5 text-[11px] text-white/38">
+								<div className="text-white/38 mt-3 flex items-center gap-1.5 text-[11px]">
 									<Clock3 className="h-3.5 w-3.5" aria-hidden="true" />
 									{formatSessionTime(session.updatedAt)}
 								</div>
@@ -69,8 +71,8 @@ export default function ChatSessionList({
 					})}
 				</div>
 			) : (
-				<div className="flex min-h-[260px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/14 bg-white/[0.035] px-6 text-center">
-					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8c96ff]/35 bg-[#606bfa]/18 text-[#dfe3ff]">
+				<div className="border-white/14 flex min-h-[260px] flex-col items-center justify-center rounded-2xl border border-dashed bg-white/[0.035] px-6 text-center">
+					<div className="bg-[#606bfa]/18 mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#8c96ff]/35 text-[#dfe3ff]">
 						<MessageSquareText className="h-5 w-5" aria-hidden="true" />
 					</div>
 					<p className="text-sm font-semibold text-white">No saved AXON sessions yet</p>

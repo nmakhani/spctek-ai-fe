@@ -4,12 +4,19 @@ import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '../../../lib/api';
+import { trackFormSubmitted } from '../../../lib/klaviyoTracking';
 import { isValidEmail, isValidName, isValidPhone } from '../../../lib/validation';
 import { GlassGlow } from '../GlassGlow';
 import GlowTextField from './GlowTextField';
 
 type JsonValue = string | number | boolean | null | JsonObject | JsonValue[];
 type JsonObject = { [key: string]: JsonValue };
+
+const FORM_NAMES: Record<EmbeddedContactFormProps['source'], string> = {
+	process_diagnostic: 'Process Diagnostic Report Form',
+	ai_deployment_roadmap: 'Local AI Roadmap Report Form',
+	ai_playbook: 'AI Playbook Report Form',
+};
 
 interface EmbeddedContactFormProps {
 	formData: JsonObject;
@@ -70,6 +77,24 @@ export default function EmbeddedContactForm({
 				message,
 				source,
 				journey: journeyData,
+			});
+			trackFormSubmitted({
+				formName: FORM_NAMES[source],
+				source,
+				fields: {
+					name: name.trim(),
+					email: email.trim(),
+					company: company.trim(),
+					phone: phone.trim(),
+					source,
+					journey: journeyData,
+				},
+				profile: {
+					email: email.trim(),
+					name: name.trim(),
+					phone: phone.trim(),
+					company: company.trim(),
+				},
 			});
 			toast.success(successMessage);
 			setSubmitted(true);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { contactsApi } from '@/lib/api';
+import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { validateContactForm } from '@/lib/validation';
 import CalendlyModal from '../ui/CalendlyModal';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
@@ -42,6 +43,25 @@ export default function Contact() {
 			message: values.message,
 			phone: values.phone || undefined,
 			source: 'website',
+		});
+
+		trackFormSubmitted({
+			formName: 'Contact Page Form',
+			source: 'website',
+			fields: {
+				name: values.name,
+				email: values.email,
+				company: values.company,
+				phone: values.phone,
+				message: values.message,
+				source: 'website',
+			},
+			profile: {
+				email: values.email,
+				name: values.name,
+				phone: values.phone,
+				company: values.company,
+			},
 		});
 
 		toast.success("Thank you! We'll be in touch soon.");

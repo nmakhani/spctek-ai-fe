@@ -87,7 +87,8 @@ const cleanMessages = (messages: unknown): ClientMessage[] => {
 		}));
 };
 
-const getLatestUserMessage = (messages: ClientMessage[]) => [...messages].reverse().find((message) => message.role === 'user');
+const getLatestUserMessage = (messages: ClientMessage[]) =>
+	[...messages].reverse().find((message) => message.role === 'user');
 
 const splitCurrentMessage = (messages: ClientMessage[]) => {
 	const latestUserMessage = getLatestUserMessage(messages);
@@ -247,7 +248,11 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		const { currentMessage, conversationMemory, hasMeetingIntent: currentMessageHasMeetingIntent } = splitCurrentMessage(cleanedMessages);
+		const {
+			currentMessage,
+			conversationMemory,
+			hasMeetingIntent: currentMessageHasMeetingIntent,
+		} = splitCurrentMessage(cleanedMessages);
 		const goalSpecificPrompt = currentMessageHasMeetingIntent
 			? `
 Goal:
@@ -319,10 +324,7 @@ ${currentMessage}
 				try {
 					const toolResults = await Promise.all(
 						toolCalls
-							.filter(
-								(toolCall) =>
-									toolCall.function.name !== 'book_meeting' || currentMessageHasMeetingIntent
-							)
+							.filter((toolCall) => toolCall.function.name !== 'book_meeting' || currentMessageHasMeetingIntent)
 							.map((toolCall) => executeToolCall(toolCall))
 					);
 
