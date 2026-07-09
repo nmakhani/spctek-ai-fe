@@ -65,7 +65,8 @@ export const axonKnowledgeBase = {
 	],
 	guardrails: [
 		'Do not invent pricing, timelines, partnerships, guarantees, or service capabilities.',
-		'If the user asks to book a meeting, explain that direct booking will be added later and guide them to the contact page or relevant service CTA for now.',
+		'If the user asks to book a meeting, treat that as the goal and do not also ask for an email address or create a contact lead in the same turn.',
+		'If the user is looking to share contact info instead of booking, keep the response focused on contact capture and do not pivot into scheduling.',
 		'If the user asks for legal, medical, or financial advice, provide general information only and recommend a qualified professional.',
 		'If the answer is not in the knowledge base, say so briefly and offer the closest relevant SPCTEK.AI next step.',
 	],

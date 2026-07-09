@@ -248,13 +248,31 @@ export async function POST(request: Request) {
 
 	try {
 		const { currentMessage, conversationMemory, hasMeetingIntent: currentMessageHasMeetingIntent } = splitCurrentMessage(cleanedMessages);
+		const goalSpecificPrompt = currentMessageHasMeetingIntent
+			? `
+Goal:
+- Book the meeting.
+- Do not ask for an email address or other contact info.
+- Do not use create_contact.
+- If book_meeting is used, treat the booking flow as the primary outcome and respond briefly.
+`
+			: `
+Goal:
+- Capture contact information if the visitor is looking for follow-up.
+- Do not push booking unless the visitor explicitly asks to schedule.
+- If the visitor has not provided an email address, ask for it once and keep moving.
+`;
+
 		const toolAwarePrompt = `${axonSystemPrompt}
+
+${goalSpecificPrompt}
 
 Decision rule:
 - Treat conversation history as memory only.
-- The current user message is the only message allowed to authorize a booking popup.
-- Only use book_meeting when the current user message explicitly asks to book, schedule, arrange, or confirm a meeting/call.
-- Never trigger book_meeting because of earlier conversation history alone.
+- Only the current user message can authorize the active goal.
+- If the current user message is booking-related, use book_meeting and do not ask for contact details.
+- If the current user message is lead-capture-related, use create_contact and do not pivot into booking.
+- Never trigger either action because of earlier conversation history alone.
 
 Current user message:
 ${currentMessage}
@@ -262,6 +280,9 @@ ${currentMessage}
 
 		const currentUserMessage = { role: 'user', content: currentMessage };
 		const baseMessages = [{ role: 'system', content: toolAwarePrompt }, ...conversationMemory, currentUserMessage];
+		const activeTools = currentMessageHasMeetingIntent
+			? tools.filter((tool) => tool.function.name === 'book_meeting')
+			: tools;
 		const toolChoiceResponse = await fetch(GROQ_URL, {
 			method: 'POST',
 			headers: {
@@ -277,7 +298,7 @@ ${currentMessage}
 				stream: false,
 				stop: null,
 				top_p: 0.95,
-				tools,
+				tools: activeTools,
 				tool_choice: 'auto',
 			}),
 		});
