@@ -21,6 +21,7 @@ export function TikTokDashboardForm() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const isImage = selectedFile?.type.startsWith('image/') ?? false;
 
 	useEffect(() => {
 		const syncUser = () => setUser(getTikTokUser());
@@ -165,15 +166,29 @@ export function TikTokDashboardForm() {
 						<fieldset>
 							<legend className="mb-3 text-sm font-medium text-white/85">Interaction permissions</legend>
 							<div className="grid gap-3 sm:grid-cols-3">
-								{permissionOptions.map((option) => (
-									<label
-										key={option.id}
-										className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/75 transition hover:border-white/20 hover:bg-white/[0.07]"
-									>
-										<input type="checkbox" name={option.id} className="h-4 w-4 accent-[#606bfa]" />
-										{option.label}
-									</label>
-								))}
+								{permissionOptions.map((option) => {
+									const isVideoOnly = option.id === 'duets' || option.id === 'stitches';
+									const isDisabled = isVideoOnly && isImage;
+
+									return (
+										<label
+											key={option.id}
+											className={`flex min-h-12 items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+												isDisabled
+													? 'cursor-not-allowed border-white/5 bg-white/[0.02] text-white/35'
+													: 'cursor-pointer border-white/10 bg-white/[0.04] text-white/75 hover:border-white/20 hover:bg-white/[0.07]'
+											}`}
+										>
+											<input
+												type="checkbox"
+												name={option.id}
+												disabled={isDisabled}
+												className="h-4 w-4 accent-[#606bfa] disabled:cursor-not-allowed"
+											/>
+											{option.label}
+										</label>
+									);
+								})}
 							</div>
 						</fieldset>
 
