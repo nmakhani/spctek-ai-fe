@@ -48,7 +48,10 @@ export function TikTokRedirectHandler({ avatarUrl, state, username }: TikTokRedi
 	}
 
 	return (
-		<main className="flex min-h-screen items-center justify-center bg-[#020617] px-5 text-center text-white" role="status">
+		<main
+			className="flex min-h-screen items-center justify-center bg-[#020617] px-5 text-center text-white"
+			role="status"
+		>
 			<p className="text-sm text-white/70">Finishing TikTok sign-in…</p>
 		</main>
 	);

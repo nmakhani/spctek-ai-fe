@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { getTikTokUser } from '@/lib/tiktok-dashboard/user';
+import { getTikTokUser, type TikTokUser } from '@/lib/tiktok-dashboard/user';
 
 const permissionOptions = [
 	{ id: 'comments', label: 'Allow comments' },
@@ -11,32 +11,72 @@ const permissionOptions = [
 	{ id: 'stitches', label: 'Allow stitches' },
 ] as const;
 
-function subscribeToTikTokUser(callback: () => void) {
-	window.addEventListener('storage', callback);
-	return () => window.removeEventListener('storage', callback);
-}
-
-function getServerTikTokUser() {
-	return null;
-}
+const POST_TO_TIKTOK_WEBHOOK = 'https://n8n.spctek.com/webhook/post-content-on-tiktok';
 
 export function TikTokDashboardForm() {
 	const router = useRouter();
-	const user = useSyncExternalStore(subscribeToTikTokUser, getTikTokUser, getServerTikTokUser);
+	const [user, setUser] = useState<TikTokUser | null | undefined>(undefined);
 	const [showSchedule, setShowSchedule] = useState(false);
 	const [status, setStatus] = useState('');
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		if (!user) router.replace('/tiktok');
+		const syncUser = () => setUser(getTikTokUser());
+
+		syncUser();
+		window.addEventListener('storage', syncUser);
+		return () => window.removeEventListener('storage', syncUser);
+	}, []);
+
+	useEffect(() => {
+		if (user === null) router.replace('/tiktok');
 	}, [router, user]);
 
-	if (!user) {
+	if (user === undefined || user === null) {
 		return (
 			<main className="flex min-h-screen items-center justify-center bg-[#020617] px-5 text-white" role="status">
 				<p className="text-sm text-white/70">Loading TikTok dashboard…</p>
 			</main>
 		);
 	}
+
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		if (!selectedFile) {
+			setStatus('Please choose an image or video file before submitting.');
+			fileInputRef.current?.focus();
+			return;
+		}
+
+		setIsSubmitting(true);
+		setStatus('Submitting your media…');
+
+		try {
+			const formData = new FormData(event.currentTarget);
+
+			if (!formData.get('scheduleAt')) formData.delete('scheduleAt');
+			formData.set('media', selectedFile, selectedFile.name);
+			formData.set('state', user.state);
+
+			const response = await fetch(POST_TO_TIKTOK_WEBHOOK, {
+				method: 'POST',
+				body: formData,
+			});
+
+			if (!response.ok) {
+				throw new Error(`Submission failed (${response.status}).`);
+			}
+
+			setStatus('Your media has been submitted successfully.');
+		} catch (error) {
+			setStatus(error instanceof Error ? error.message : 'Unable to submit your media. Please try again.');
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	return (
 		<main className="min-h-screen bg-[#020617] px-5 py-6 text-white sm:px-8 lg:px-12">
@@ -59,25 +99,44 @@ export function TikTokDashboardForm() {
 					<div className="mb-8">
 						<p className="text-xs font-medium uppercase tracking-[0.18em] text-[#a0a6fc]">TikTok dashboard</p>
 						<h1 id="video-details-title" className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-							Video details
+							Media details
 						</h1>
-						<p className="mt-2 text-sm text-white/55">Prepare a video upload or schedule it for later.</p>
+						<p className="mt-2 text-sm text-white/55">Prepare a media upload or schedule it for later.</p>
 					</div>
 
 					<form
 						className="space-y-7 rounded-[28px] border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.035))] p-6 shadow-[0_28px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8"
-						onSubmit={(event) => event.preventDefault()}
+						onSubmit={handleSubmit}
 					>
 						<div>
+							<label htmlFor="media" className="mb-2 block text-sm font-medium text-white/85">
+								Media file
+							</label>
+							<input
+								ref={fileInputRef}
+								id="media"
+								name="media"
+								type="file"
+								accept="video/*,image/*"
+								required
+								onChange={(event) => setSelectedFile(event.target.files?.[0] ?? null)}
+								className="block w-full cursor-pointer rounded-2xl border border-dashed border-white/25 bg-white/[0.04] px-4 py-5 text-sm text-white/70 file:mr-4 file:rounded-lg file:border-0 file:bg-[#606bfa] file:px-4 file:py-2 file:font-semibold file:text-white hover:border-[#8c96ff] focus:outline-none focus:ring-2 focus:ring-[#606bfa]/40"
+							/>
+							<p className="mt-2 text-xs text-white/45">
+								{selectedFile ? `${selectedFile.name} selected` : 'Choose an image or video you want to post.'}
+							</p>
+						</div>
+
+						<div>
 							<label htmlFor="caption" className="mb-2 block text-sm font-medium text-white/85">
-								Video caption
+								Media caption
 							</label>
 							<textarea
 								id="caption"
 								name="caption"
 								rows={5}
 								maxLength={2200}
-								placeholder="Write a caption for your video"
+								placeholder="Write a caption for your media"
 								className="w-full resize-y rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
 							/>
 						</div>
@@ -105,12 +164,7 @@ export function TikTokDashboardForm() {
 										key={option.id}
 										className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/75 transition hover:border-white/20 hover:bg-white/[0.07]"
 									>
-										<input
-											type="checkbox"
-											name={option.id}
-											defaultChecked
-											className="h-4 w-4 accent-[#606bfa]"
-										/>
+										<input type="checkbox" name={option.id} defaultChecked className="h-4 w-4 accent-[#606bfa]" />
 										{option.label}
 									</label>
 								))}
@@ -126,7 +180,7 @@ export function TikTokDashboardForm() {
 									id="schedule-at"
 									name="scheduleAt"
 									type="datetime-local"
-									className="w-full rounded-xl border border-white/15 bg-[#11172a] px-4 py-3 text-white [color-scheme:dark] outline-none focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
+									className="w-full rounded-xl border border-white/15 bg-[#11172a] px-4 py-3 text-white outline-none [color-scheme:dark] focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
 								/>
 							</div>
 						)}
@@ -136,18 +190,18 @@ export function TikTokDashboardForm() {
 								type="button"
 								onClick={() => {
 									setShowSchedule(true);
-									setStatus('Choose a date and time to schedule this video.');
+									setStatus('Choose a date and time to schedule this media.');
 								}}
 								className="min-h-12 rounded-xl border border-white/20 px-6 py-3 font-semibold text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a0a6fc]"
 							>
 								Schedule
 							</button>
 							<button
-								type="button"
-								onClick={() => setStatus('TikTok upload integration is not connected yet.')}
+								type="submit"
+								disabled={isSubmitting}
 								className="min-h-12 rounded-xl bg-[#606bfa] px-7 py-3 font-semibold text-white transition hover:bg-[#6f79ff] hover:shadow-[0_0_24px_rgba(96,107,250,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a0a6fc]"
 							>
-								Upload
+								{isSubmitting ? 'Submitting…' : 'Submit'}
 							</button>
 						</div>
 
