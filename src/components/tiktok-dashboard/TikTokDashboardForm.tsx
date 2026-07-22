@@ -148,11 +148,17 @@ export function TikTokDashboardForm() {
 							<select
 								id="visibility"
 								name="visibility"
-								defaultValue="public"
+								defaultValue=""
 								className="w-full rounded-2xl border border-white/15 bg-[#11172a] px-4 py-3 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
 							>
-								<option value="public">Public</option>
-								<option value="private">Private</option>
+								<option value="" disabled>
+									Select visibility
+								</option>
+
+								<option value="PUBLIC_TO_EVERYONE">Public to everyone</option>
+								<option value="MUTUAL_FOLLOW_FRIENDS">Mutual follow friends</option>
+								<option value="FOLLOWER_OF_CREATORS">Follower of creators</option>
+								<option value="SELF_ONLY">Self only</option>
 							</select>
 						</div>
 
@@ -164,7 +170,7 @@ export function TikTokDashboardForm() {
 										key={option.id}
 										className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/75 transition hover:border-white/20 hover:bg-white/[0.07]"
 									>
-										<input type="checkbox" name={option.id} defaultChecked className="h-4 w-4 accent-[#606bfa]" />
+										<input type="checkbox" name={option.id} className="h-4 w-4 accent-[#606bfa]" />
 										{option.label}
 									</label>
 								))}
