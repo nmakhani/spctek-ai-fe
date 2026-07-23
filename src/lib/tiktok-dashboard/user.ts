@@ -4,6 +4,7 @@ export interface TikTokUser {
 	state: string;
 	username: string;
 	avatar_url: string;
+	privacy_levels?: string[];
 }
 
 let cachedStorageValue: string | null | undefined;
@@ -19,7 +20,9 @@ export function isTikTokUser(value: unknown): value is TikTokUser {
 		typeof user.username === 'string' &&
 		user.username.length > 0 &&
 		typeof user.avatar_url === 'string' &&
-		user.avatar_url.length > 0
+		user.avatar_url.length > 0 &&
+		(user.privacy_levels === undefined ||
+			(Array.isArray(user.privacy_levels) && user.privacy_levels.every((level) => typeof level === 'string')))
 	);
 }
 
@@ -48,4 +51,10 @@ export function saveTikTokUser(user: TikTokUser) {
 	window.localStorage.setItem(TIKTOK_USER_STORAGE_KEY, storedValue);
 	cachedStorageValue = storedValue;
 	cachedUser = user;
+}
+
+export function clearTikTokUser() {
+	window.localStorage.removeItem(TIKTOK_USER_STORAGE_KEY);
+	cachedStorageValue = null;
+	cachedUser = null;
 }

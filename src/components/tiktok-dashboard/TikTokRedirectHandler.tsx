@@ -7,8 +7,26 @@ import { isTikTokUser, saveTikTokUser } from '@/lib/tiktok-dashboard/user';
 
 interface TikTokRedirectHandlerProps {
 	avatarUrl?: string;
+	privacyLevels?: string | string[];
 	state?: string;
 	username?: string;
+}
+
+function normalizePrivacyLevels(privacyLevels?: string | string[]) {
+	if (!privacyLevels) return [];
+
+	return (Array.isArray(privacyLevels) ? privacyLevels : [privacyLevels]).flatMap((level) => {
+		if (typeof level !== 'string' || level.length === 0) return [];
+
+		try {
+			const parsed: unknown = JSON.parse(level);
+			if (Array.isArray(parsed)) return parsed.filter((value): value is string => typeof value === 'string' && value.length > 0);
+		} catch {
+			// Repeated query parameters are already individual privacy values.
+		}
+
+		return [level];
+	});
 }
 
 function getFullAvatarUrl() {
@@ -26,18 +44,24 @@ function getFullAvatarUrl() {
 	}
 }
 
-export function TikTokRedirectHandler({ avatarUrl, state, username }: TikTokRedirectHandlerProps) {
+export function TikTokRedirectHandler({ avatarUrl, privacyLevels, state, username }: TikTokRedirectHandlerProps) {
 	const router = useRouter();
 	const resolvedAvatarUrl = getFullAvatarUrl() ?? avatarUrl;
 	const isValidUser = isTikTokUser({ state, username, avatar_url: resolvedAvatarUrl });
+	const resolvedPrivacyLevels = normalizePrivacyLevels(privacyLevels);
 
 	useEffect(() => {
-		const user = { state, username, avatar_url: getFullAvatarUrl() ?? avatarUrl };
+		const user = {
+			state,
+			username,
+			avatar_url: getFullAvatarUrl() ?? avatarUrl,
+			privacy_levels: resolvedPrivacyLevels,
+		};
 		if (!isTikTokUser(user)) return;
 
 		saveTikTokUser(user);
 		router.replace('/tiktok/dashboard');
-	}, [avatarUrl, router, state, username]);
+	}, [avatarUrl, resolvedPrivacyLevels, router, state, username]);
 
 	if (!isValidUser) {
 		return (

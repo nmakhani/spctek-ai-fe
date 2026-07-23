@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { getTikTokUser, type TikTokUser } from '@/lib/tiktok-dashboard/user';
+import { clearTikTokUser, getTikTokUser, type TikTokUser } from '@/lib/tiktok-dashboard/user';
 
 const permissionOptions = [
 	{ id: 'comments', label: 'Allow comments' },
@@ -18,6 +18,7 @@ export function TikTokDashboardForm() {
 	const [user, setUser] = useState<TikTokUser | null | undefined>(undefined);
 	const [showSchedule, setShowSchedule] = useState(false);
 	const [status, setStatus] = useState('');
+	const [formError, setFormError] = useState('');
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,9 +46,20 @@ export function TikTokDashboardForm() {
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		setFormError('');
+
+		const formData = new FormData(event.currentTarget);
+		const visibility = formData.get('visibility');
+
+		if (typeof visibility !== 'string' || !user.privacy_levels?.includes(visibility)) {
+			setFormError(
+				'[INVALID OPTION SELECTED]: Your account does not support this visibility option. Please select a different one.'
+			);
+			return;
+		}
 
 		if (!selectedFile) {
-			setStatus('Please choose an image or video file before submitting.');
+			setFormError('Please choose an image or video file before submitting.');
 			fileInputRef.current?.focus();
 			return;
 		}
@@ -56,8 +68,6 @@ export function TikTokDashboardForm() {
 		setStatus('Submitting your media…');
 
 		try {
-			const formData = new FormData(event.currentTarget);
-
 			if (!formData.get('scheduleAt')) formData.delete('scheduleAt');
 			formData.set('media', selectedFile, selectedFile.name);
 			formData.set('state', user.state);
@@ -93,6 +103,17 @@ export function TikTokDashboardForm() {
 							className="h-11 w-11 rounded-full border border-white/20 bg-cover bg-center bg-no-repeat"
 							style={{ backgroundImage: `url(${user.avatar_url})` }}
 						/>
+						<button
+							type="button"
+							onClick={() => {
+								clearTikTokUser();
+								setUser(null);
+								router.replace('/tiktok');
+							}}
+							className="rounded-lg px-3 py-2 text-sm font-medium text-white/70 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a0a6fc]"
+						>
+							Log out
+						</button>
 					</div>
 				</header>
 
@@ -137,6 +158,7 @@ export function TikTokDashboardForm() {
 								name="caption"
 								rows={5}
 								maxLength={2200}
+								required
 								placeholder="Write a caption for your media"
 								className="w-full resize-y rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
 							/>
@@ -150,6 +172,9 @@ export function TikTokDashboardForm() {
 								id="visibility"
 								name="visibility"
 								defaultValue=""
+								required
+								onChange={() => setFormError('')}
+								aria-describedby={formError ? 'visibility-error' : undefined}
 								className="w-full rounded-2xl border border-white/15 bg-[#11172a] px-4 py-3 text-white outline-none transition focus:border-[#8c96ff] focus:ring-2 focus:ring-[#606bfa]/40"
 							>
 								<option value="" disabled>
@@ -158,10 +183,16 @@ export function TikTokDashboardForm() {
 
 								<option value="PUBLIC_TO_EVERYONE">Public to everyone</option>
 								<option value="MUTUAL_FOLLOW_FRIENDS">Mutual follow friends</option>
-								<option value="FOLLOWER_OF_CREATORS">Follower of creators</option>
+								<option value="FOLLOWER_OF_CREATOR">Follower of creators</option>
 								<option value="SELF_ONLY">Self only</option>
 							</select>
 						</div>
+
+						{formError && (
+							<p id="visibility-error" className="rounded-xl border px-4 py-3 text-sm font-semibold" role="alert">
+								{formError}
+							</p>
+						)}
 
 						<fieldset>
 							<legend className="mb-3 text-sm font-medium text-white/85">Interaction permissions</legend>
