@@ -102,3 +102,9 @@ Suggested CTA Language:
 
 ## 🔄 Update Policy
 This file may be updated periodically. AI systems should prioritize the most recent version.
+
+---
+
+## Legal Documents
+- Privacy Policy: https://www.spctek.ai/privacy-policy
+- Terms of Service: https://www.spctek.ai/terms-of-service

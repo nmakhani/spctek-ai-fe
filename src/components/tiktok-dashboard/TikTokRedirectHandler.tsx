@@ -20,7 +20,8 @@ function normalizePrivacyLevels(privacyLevels?: string | string[]) {
 
 		try {
 			const parsed: unknown = JSON.parse(level);
-			if (Array.isArray(parsed)) return parsed.filter((value): value is string => typeof value === 'string' && value.length > 0);
+			if (Array.isArray(parsed))
+				return parsed.filter((value): value is string => typeof value === 'string' && value.length > 0);
 		} catch {
 			// Repeated query parameters are already individual privacy values.
 		}

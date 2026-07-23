@@ -32,6 +32,13 @@ const footerSections = [
 		title: 'Tools',
 		links: [{ name: 'Amazon Reinstatement Estimator', href: '/reinstatement' }],
 	},
+	{
+		title: 'Legal',
+		links: [
+			{ name: 'Privacy Policy', href: '/privacy-policy' },
+			{ name: 'Terms of Service', href: '/terms-of-service' },
+		],
+	},
 ];
 
 export default function Footer() {
@@ -50,7 +57,7 @@ export default function Footer() {
 			<div className="relative z-10 mx-auto max-w-7xl px-8 py-8">
 				<div className="mb-6 grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10">
 					{/* Brand */}
-					<div className="flex flex-col items-start md:col-span-4">
+					<div className="flex flex-col items-start md:col-span-3">
 						<Link href="/" className="mb-4 block">
 							<Image
 								src="/logo.png"
@@ -79,7 +86,7 @@ export default function Footer() {
 					</div>
 
 					{/* Navigation Links */}
-					<div className="grid gap-8 sm:grid-cols-2 md:col-span-5 lg:grid-cols-4">
+					<div className="grid gap-8 sm:grid-cols-2 md:col-span-6 lg:grid-cols-5">
 						{footerSections.map((section) => (
 							<div key={section.title}>
 								<h3 className="font-poppins mb-4 text-sm font-semibold text-white">{section.title}</h3>

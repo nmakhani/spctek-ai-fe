@@ -11,6 +11,8 @@ const PUBLIC_PATHS = [
 	{ path: '/case-studies', priority: 0.8, changeFrequency: 'weekly' as const },
 	{ path: '/ai-playbook', priority: 0.8, changeFrequency: 'monthly' as const },
 	{ path: '/reinstatement', priority: 0.8, changeFrequency: 'monthly' as const },
+	{ path: '/privacy-policy', priority: 0.4, changeFrequency: 'monthly' as const },
+	{ path: '/terms-of-service', priority: 0.4, changeFrequency: 'monthly' as const },
 ] as const;
 
 function getSiteUrl() {
