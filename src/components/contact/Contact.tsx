@@ -118,11 +118,7 @@ export default function Contact() {
 				</div>
 			</div>
 
-			<CalendlyModal
-				isOpen={isCalendlyOpen}
-				onClose={() => setIsCalendlyOpen(false)}
-				bookingContact={bookingContact}
-			/>
+			<CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} bookingContact={bookingContact} />
 		</section>
 	);
 }

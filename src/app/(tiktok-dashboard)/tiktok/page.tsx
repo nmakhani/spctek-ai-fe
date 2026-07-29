@@ -6,7 +6,7 @@ export default function TikTokLoginPage() {
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#020617] px-5 py-12">
 			<div className="pointer-events-none absolute -left-28 top-[-8rem] h-80 w-80 rounded-full bg-[#606bfa]/25 blur-[110px]" />
-			<div className="pointer-events-none absolute -bottom-28 -right-20 h-72 w-72 rounded-full bg-cyan-400/10 blur-[110px]" />
+			<div className="bg-cyan-400/10 pointer-events-none absolute -bottom-28 -right-20 h-72 w-72 rounded-full blur-[110px]" />
 
 			<div className="relative w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-9">
 				<div className="mb-8 flex items-center gap-3">
@@ -33,7 +33,7 @@ export default function TikTokLoginPage() {
 					<TikTokLoginButton />
 				</div>
 				<p className="mt-5 text-center text-xs leading-5 text-slate-400">
-						You&apos;ll securely continue to TikTok to authorize your account.
+					You&apos;ll securely continue to TikTok to authorize your account.
 				</p>
 			</div>
 		</main>
