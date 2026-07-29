@@ -99,7 +99,9 @@ export default function GenericForm({
 		const validationErrors = skipValidation ? {} : validate?.(values) || {};
 		setErrors(validationErrors);
 
-		if (Object.keys(validationErrors).length > 0) return;
+		if (Object.keys(validationErrors).length > 0) {
+			return;
+		}
 
 		try {
 			setLoading(true);

@@ -3,12 +3,22 @@
 import { useCallback, useEffect, useRef } from 'react';
 import Script from 'next/script';
 
+import { trackKlaviyoEvent } from '@/lib/klaviyoTracking';
+
 const CALENDLY_INLINE_URL =
 	'https://calendly.com/contact-spctek/30min?background_color=060b21&text_color=ffffff&primary_color=606b96';
 
 interface CalendlyModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	bookingContact?: CalendlyBookingContact | null;
+}
+
+export interface CalendlyBookingContact {
+	email: string;
+	name?: string;
+	phone?: string;
+	company?: string;
 }
 
 declare global {
@@ -19,8 +29,9 @@ declare global {
 	}
 }
 
-export default function CalendlyModal({ isOpen, onClose }: CalendlyModalProps) {
+export default function CalendlyModal({ isOpen, onClose, bookingContact }: CalendlyModalProps) {
 	const calendlyRef = useRef<HTMLDivElement | null>(null);
+	const trackedEventUrisRef = useRef(new Set<string>());
 
 	const initCalendly = useCallback(() => {
 		if (!isOpen || !calendlyRef.current || !window.Calendly) return;
@@ -28,11 +39,15 @@ export default function CalendlyModal({ isOpen, onClose }: CalendlyModalProps) {
 		// Important: clears old iframe before re-initializing
 		calendlyRef.current.innerHTML = '';
 
+		const calendlyUrl = new URL(CALENDLY_INLINE_URL);
+		if (bookingContact?.email) calendlyUrl.searchParams.set('email', bookingContact.email);
+		if (bookingContact?.name) calendlyUrl.searchParams.set('name', bookingContact.name);
+
 		window.Calendly.initInlineWidget({
-			url: CALENDLY_INLINE_URL,
+			url: calendlyUrl.toString(),
 			parentElement: calendlyRef.current,
 		});
-	}, [isOpen]);
+	}, [bookingContact, isOpen]);
 
 	useEffect(() => {
 		document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -53,6 +68,48 @@ export default function CalendlyModal({ isOpen, onClose }: CalendlyModalProps) {
 			window.clearTimeout(timer);
 		};
 	}, [isOpen, initCalendly]);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleCalendlyMessage = (event: MessageEvent<{ event?: string; payload?: { event?: { uri?: string } } }>) => {
+			if (event.origin !== 'https://calendly.com' || event.data?.event !== 'calendly.event_scheduled') {
+				return;
+			}
+
+			const eventUri = event.data.payload?.event?.uri;
+			if (!eventUri) {
+				return;
+			}
+
+			if (!bookingContact?.email) {
+				return;
+			}
+
+			if (trackedEventUrisRef.current.has(eventUri)) {
+				return;
+			}
+
+			trackedEventUrisRef.current.add(eventUri);
+
+			trackKlaviyoEvent(
+				'Meeting Booked',
+				{
+					booking_provider: 'Calendly',
+					meeting_type: '30min',
+					page: `${window.location.pathname}${window.location.search}`,
+					calendly_event_uri: eventUri,
+				},
+				{
+					profileSource: 'website_meeting_booking',
+					profile: bookingContact,
+				}
+			);
+		};
+
+		window.addEventListener('message', handleCalendlyMessage);
+		return () => window.removeEventListener('message', handleCalendlyMessage);
+	}, [bookingContact, isOpen]);
 
 	if (!isOpen) {
 		return null;

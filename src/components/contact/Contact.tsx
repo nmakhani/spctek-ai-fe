@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { contactsApi } from '@/lib/api';
 import { trackFormSubmitted } from '@/lib/klaviyoTracking';
 import { validateContactForm } from '@/lib/validation';
-import CalendlyModal from '../ui/CalendlyModal';
+import CalendlyModal, { type CalendlyBookingContact } from '../ui/CalendlyModal';
 import GenericForm, { type FieldConfig, type FormValues } from '../ui/GenericForm';
 import { GradientBorder } from '../ui/GradientBorder';
 import { SectionHeading } from '../ui/SectionHeading';
@@ -29,21 +29,32 @@ const CONTACT_FIELDS: FieldConfig[] = [
 
 export default function Contact() {
 	const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+	const [bookingContact, setBookingContact] = useState<CalendlyBookingContact | null>(null);
 
 	const handleSubmit = async (values: FormValues, action?: string) => {
-		if (action === 'book_call') {
-			setIsCalendlyOpen(true);
-			return;
-		}
-
-		await contactsApi.create({
+		const contactPayload = {
 			name: values.name,
 			email: values.email,
 			company: values.company,
 			message: values.message,
 			phone: values.phone || undefined,
 			source: 'website',
-		});
+		};
+
+		await contactsApi.create(contactPayload);
+
+		if (action === 'book_call') {
+			const nextBookingContact = {
+				email: values.email,
+				name: values.name,
+				phone: values.phone || undefined,
+				company: values.company,
+			};
+
+			setBookingContact(nextBookingContact);
+			setIsCalendlyOpen(true);
+			return;
+		}
 
 		trackFormSubmitted({
 			formName: 'Contact Page Form',
@@ -98,7 +109,6 @@ export default function Contact() {
 						fields={CONTACT_FIELDS}
 						validate={validateContactForm}
 						onSubmit={handleSubmit}
-						skipValidationForActions={['book_call']}
 						submitActions={[
 							{ label: 'Get in Touch', value: 'get_in_touch' },
 							{ label: 'Book a Call', value: 'book_call' },
@@ -108,7 +118,11 @@ export default function Contact() {
 				</div>
 			</div>
 
-			<CalendlyModal isOpen={isCalendlyOpen} onClose={() => setIsCalendlyOpen(false)} />
+			<CalendlyModal
+				isOpen={isCalendlyOpen}
+				onClose={() => setIsCalendlyOpen(false)}
+				bookingContact={bookingContact}
+			/>
 		</section>
 	);
 }

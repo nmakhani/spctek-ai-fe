@@ -37,6 +37,9 @@ interface TrackFormSubmittedInput {
 
 const PRIVATE_FIELD_PATTERN = /password|token|secret|key|authorization|file|attachment/i;
 const MAX_STRING_LENGTH = 500;
+const KLAVIYO_COMPANY_ID = 'Ykyhnt';
+const KLAVIYO_CLIENT_EVENTS_URL = `https://a.klaviyo.com/client/events/?company_id=${KLAVIYO_COMPANY_ID}`;
+const KLAVIYO_API_REVISION = '2024-10-15';
 
 function getKlaviyo() {
 	if (typeof window === 'undefined') {
@@ -158,6 +161,110 @@ function callSafely(callback: () => unknown) {
 	}
 }
 
+async function sendIdentifiedKlaviyoEvent(
+	eventName: string,
+	properties: KlaviyoProperties | undefined,
+	profile: KlaviyoProfileInput,
+	profileSource: string | undefined
+) {
+	const email = profile.email?.trim();
+	if (!email) {
+		return;
+	}
+
+	const nameParts = splitName(profile.name);
+	const firstName = profile.firstName?.trim() || nameParts.firstName;
+	const lastName = profile.lastName?.trim() || nameParts.lastName;
+	const phone = profile.phone?.trim();
+	const company = profile.company?.trim();
+	const source = profile.source?.trim() || profileSource;
+
+	const payload = {
+		data: {
+			type: 'event',
+			attributes: {
+				properties: properties ?? {},
+				metric: {
+					data: {
+						type: 'metric',
+						attributes: { name: eventName },
+					},
+				},
+				profile: {
+					data: {
+						type: 'profile',
+						attributes: {
+							email,
+							...(firstName ? { first_name: firstName } : {}),
+							...(lastName ? { last_name: lastName } : {}),
+							...(phone ? { phone_number: phone } : {}),
+							properties: {
+								...(company ? { company } : {}),
+								...(source ? { source } : {}),
+							},
+						},
+					},
+				},
+			},
+		},
+	};
+
+	try {
+		const response = await fetch(KLAVIYO_CLIENT_EVENTS_URL, {
+			method: 'POST',
+			headers: {
+				accept: 'application/vnd.api+json',
+				'content-type': 'application/vnd.api+json',
+				revision: KLAVIYO_API_REVISION,
+			},
+			body: JSON.stringify(payload),
+		});
+
+		if (!response.ok) {
+			return;
+		}
+	} catch {
+		// Tracking must never interrupt the visitor's booking flow.
+	}
+}
+
+export function trackKlaviyoEvent(
+	eventName: string,
+	properties?: KlaviyoProperties,
+	options: { profile?: KlaviyoProfileInput; profileSource?: string } = {}
+) {
+	try {
+		if (options.profile?.email) {
+			setTimeout(() => {
+				void sendIdentifiedKlaviyoEvent(
+					eventName,
+					properties,
+					options.profile as KlaviyoProfileInput,
+					options.profileSource
+				);
+			}, 0);
+			return;
+		}
+
+		const klaviyo = getKlaviyo();
+
+		if (!klaviyo || typeof klaviyo.track !== 'function') {
+			return;
+		}
+
+		setTimeout(() => {
+			try {
+				const result = klaviyo.track?.(eventName, properties);
+				settle(result);
+			} catch {
+				// Tracking must never interrupt the visitor's journey.
+			}
+		}, 0);
+	} catch {
+		// Tracking must never interrupt the visitor's journey.
+	}
+}
+
 export function trackFormSubmitted({ formName, fields, profile, page, source, properties }: TrackFormSubmittedInput) {
 	try {
 		const klaviyo = getKlaviyo();
@@ -173,21 +280,13 @@ export function trackFormSubmitted({ formName, fields, profile, page, source, pr
 			}, 0);
 		}
 
-		if (typeof klaviyo.track !== 'function') {
-			return;
-		}
-
-		setTimeout(() => {
-			callSafely(() =>
-				klaviyo.track?.('Form Submitted', {
-					form_name: formName,
-					page: page ?? getCurrentPage(),
-					...(source ? { source } : {}),
-					...(fields ? { submitted_fields: sanitizeFields(fields) } : {}),
-					...properties,
-				})
-			);
-		}, 0);
+		trackKlaviyoEvent('Form Submitted', {
+			form_name: formName,
+			page: page ?? getCurrentPage(),
+			...(source ? { source } : {}),
+			...(fields ? { submitted_fields: sanitizeFields(fields) } : {}),
+			...properties,
+		});
 	} catch {
 		// Tracking must never interrupt the form submit path.
 	}
