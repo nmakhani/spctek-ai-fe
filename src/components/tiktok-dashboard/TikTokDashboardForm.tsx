@@ -312,7 +312,8 @@ export function TikTokDashboardForm() {
 			return;
 		}
 
-		const scheduleAtValue = typeof formData.get('scheduleAt') === 'string' ? formData.get('scheduleAt') : '';
+		const scheduleAtEntry = formData.get('scheduleAt');
+		const scheduleAtValue = typeof scheduleAtEntry === 'string' ? scheduleAtEntry : '';
 		if (showSchedule && scheduleAtValue) {
 			const scheduleDate = new Date(scheduleAtValue);
 			if (Number.isNaN(scheduleDate.getTime()) || scheduleDate.getTime() <= Date.now()) {
