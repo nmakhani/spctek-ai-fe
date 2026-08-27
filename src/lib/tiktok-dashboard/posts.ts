@@ -35,6 +35,29 @@ export class PostsFetchError extends Error {
 	}
 }
 
+interface RawPostSummaryResponse {
+	id: number;
+	title: string;
+	mediaType: string;
+	status: string;
+	scheduledAt: string | null;
+	createdAt: string;
+}
+
+interface RawPostDetailResponse extends RawPostSummaryResponse {
+	description: string;
+	mediaUrl: string;
+	privacyLevel: string;
+	commentsEnabled: boolean;
+	duetEnabled: boolean;
+	stitchEnabled: boolean;
+	brandOrganicToggle: boolean;
+	brandContentToggle: boolean;
+	updatedAt: string;
+	errorMessage: string | null;
+	publishId: string | null;
+}
+
 export function mediaKindFromMime(mimeType: string): 'PHOTO' | 'VIDEO' {
 	if (mimeType.startsWith('video/')) return 'VIDEO';
 	if (!mimeType.startsWith('image/')) {
@@ -142,7 +165,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value) && typeof value === 'object';
 }
 
-function isPostSummary(value: unknown): value is Record<string, unknown> {
+function isPostSummary(value: unknown): value is RawPostSummaryResponse {
 	return (
 		isRecord(value) &&
 		typeof value.id === 'number' &&
@@ -164,20 +187,28 @@ function isNoPostsResponse(value: unknown): boolean {
 	);
 }
 
-function isPostDetail(value: unknown): value is Record<string, unknown> {
+function isPostDetail(value: unknown): value is RawPostDetailResponse {
+	if (!isRecord(value)) return false;
+
+	const post = value as Record<string, unknown>;
 	return (
-		isPostSummary(value) &&
-		typeof value.description === 'string' &&
-		typeof value.mediaUrl === 'string' &&
-		typeof value.privacyLevel === 'string' &&
-		typeof value.commentsEnabled === 'boolean' &&
-		typeof value.duetEnabled === 'boolean' &&
-		typeof value.stitchEnabled === 'boolean' &&
-		typeof value.brandOrganicToggle === 'boolean' &&
-		typeof value.brandContentToggle === 'boolean' &&
-		typeof value.updatedAt === 'string' &&
-		(value.errorMessage === null || typeof value.errorMessage === 'string') &&
-		(value.publishId === null || typeof value.publishId === 'string')
+		typeof post.id === 'number' &&
+		typeof post.title === 'string' &&
+		typeof post.description === 'string' &&
+		typeof post.mediaType === 'string' &&
+		typeof post.mediaUrl === 'string' &&
+		typeof post.privacyLevel === 'string' &&
+		typeof post.commentsEnabled === 'boolean' &&
+		typeof post.duetEnabled === 'boolean' &&
+		typeof post.stitchEnabled === 'boolean' &&
+		typeof post.brandOrganicToggle === 'boolean' &&
+		typeof post.brandContentToggle === 'boolean' &&
+		typeof post.status === 'string' &&
+		(post.scheduledAt === null || typeof post.scheduledAt === 'string') &&
+		typeof post.createdAt === 'string' &&
+		typeof post.updatedAt === 'string' &&
+		(post.errorMessage === null || typeof post.errorMessage === 'string') &&
+		(post.publishId === null || typeof post.publishId === 'string')
 	);
 }
 
@@ -203,14 +234,14 @@ async function getJson(url: URL): Promise<unknown> {
 	return response.json();
 }
 
-function mapSummary(value: Record<string, unknown>): TikTokPostSummary {
+function mapSummary(value: RawPostSummaryResponse): TikTokPostSummary {
 	return {
-		id: value.id as number,
-		title: value.title as string,
-		mediaKind: mediaKindFromMime(value.mediaType as string),
-		status: normalizeStatus(value.status as string),
-		scheduledAt: value.scheduledAt as string | null,
-		createdAt: value.createdAt as string,
+		id: value.id,
+		title: value.title,
+		mediaKind: mediaKindFromMime(value.mediaType),
+		status: normalizeStatus(value.status),
+		scheduledAt: value.scheduledAt,
+		createdAt: value.createdAt,
 	};
 }
 
