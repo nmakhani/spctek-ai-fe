@@ -40,22 +40,22 @@ interface RawPostSummaryResponse {
 	title: string;
 	mediaType: string;
 	status: string;
-	scheduledAt: string | null;
+	scheduledAt: string | 0 | null;
 	createdAt: string;
 }
 
 interface RawPostDetailResponse extends RawPostSummaryResponse {
-	description: string;
+	description: string | 0 | null;
 	mediaUrl: string;
 	privacyLevel: string;
-	commentsEnabled: boolean;
-	duetEnabled: boolean;
-	stitchEnabled: boolean;
+	commentsEnabled: number | boolean;
+	duetEnabled: number | boolean;
+	stitchEnabled: number | boolean;
 	brandOrganicToggle: boolean;
 	brandContentToggle: boolean;
 	updatedAt: string;
-	errorMessage: string | null;
-	publishId: string | null;
+	errorMessage: string | 0 | null;
+	publishId: string | 0 | null;
 }
 
 export function mediaKindFromMime(mimeType: string): 'PHOTO' | 'VIDEO' {
@@ -82,8 +82,15 @@ export function normalizeStatus(raw: string): TikTokPostSummary['status'] {
 	return 'PROCESSING';
 }
 
-export function emptyStringToNull(value: string): string | null {
-	return value.trim() === '' ? null : value;
+export function normalizeOptionalString(value: unknown): string | null {
+	if (typeof value === 'string') return value.trim() === '' ? null : value;
+	return null;
+}
+
+function normalizeBooleanFlag(value: unknown): boolean {
+	if (typeof value === 'boolean') return value;
+	if (typeof value === 'number') return value === 1;
+	return false;
 }
 
 function logInvalidResponse(endpoint: URL, responseBody: unknown, context: string, details?: Record<string, unknown>) {
@@ -125,8 +132,8 @@ function validatePostSummary(value: unknown, path: string): ValidationIssue[] {
 		if (!isValid(field)) issues.push({ path: `${path}.${fieldName}`, expected, received: field });
 	}
 
-	if (value.scheduledAt !== null && typeof value.scheduledAt !== 'string') {
-		issues.push({ path: `${path}.scheduledAt`, expected: 'string or null', received: value.scheduledAt });
+	if (value.scheduledAt !== null && value.scheduledAt !== 0 && typeof value.scheduledAt !== 'string') {
+		issues.push({ path: `${path}.scheduledAt`, expected: 'string, 0, or null', received: value.scheduledAt });
 	}
 
 	return issues;
@@ -136,26 +143,29 @@ function validatePostDetail(value: unknown): ValidationIssue[] {
 	const issues = validatePostSummary(value, 'post');
 	if (!isRecord(value)) return issues;
 
-	const requiredFields: Array<[string, string]> = [
-		['description', 'string'],
-		['mediaUrl', 'string'],
-		['privacyLevel', 'string'],
-		['commentsEnabled', 'boolean'],
-		['duetEnabled', 'boolean'],
-		['stitchEnabled', 'boolean'],
-		['brandOrganicToggle', 'boolean'],
-		['brandContentToggle', 'boolean'],
-		['updatedAt', 'string'],
-		['errorMessage', 'string or null'],
-		['publishId', 'string or null'],
+	const requiredFields: Array<[string, string, (field: unknown) => boolean]> = [
+		['description', 'string', (field) => field === undefined || field === null || field === 0 || typeof field === 'string'],
+		['mediaUrl', 'string', (field) => typeof field === 'string'],
+		['privacyLevel', 'string', (field) => typeof field === 'string'],
+		['commentsEnabled', 'boolean or number', (field) => typeof field === 'boolean' || (typeof field === 'number' && (field === 0 || field === 1))],
+		['duetEnabled', 'boolean or number', (field) => typeof field === 'boolean' || (typeof field === 'number' && (field === 0 || field === 1))],
+		['stitchEnabled', 'boolean or number', (field) => typeof field === 'boolean' || (typeof field === 'number' && (field === 0 || field === 1))],
+		['brandOrganicToggle', 'boolean', (field) => typeof field === 'boolean'],
+		['brandContentToggle', 'boolean', (field) => typeof field === 'boolean'],
+		['updatedAt', 'string', (field) => typeof field === 'string'],
+		['errorMessage', 'string or null', (field) => field === null || field === 0 || typeof field === 'string'],
+		['publishId', 'string or null', (field) => field === null || field === 0 || typeof field === 'string'],
 	];
 
-	for (const [fieldName, expected] of requiredFields) {
+	for (const [fieldName, expected, isValid] of requiredFields) {
 		const field = value[fieldName];
-		const isOptionalString = fieldName === 'errorMessage' || fieldName === 'publishId';
-		if (isOptionalString ? field !== null && typeof field !== 'string' : valueType(field) !== expected) {
+		if (!isValid(field)) {
 			issues.push({ path: `post.${fieldName}`, expected, received: field });
 		}
+	}
+
+	if (value.scheduledAt !== null && value.scheduledAt !== 0 && typeof value.scheduledAt !== 'string') {
+		issues.push({ path: 'post.scheduledAt', expected: 'string, 0, or null', received: value.scheduledAt });
 	}
 
 	return issues;
@@ -172,7 +182,7 @@ function isPostSummary(value: unknown): value is RawPostSummaryResponse {
 		typeof value.title === 'string' &&
 		typeof value.mediaType === 'string' &&
 		typeof value.status === 'string' &&
-		(value.scheduledAt === null || typeof value.scheduledAt === 'string') &&
+		(value.scheduledAt === null || value.scheduledAt === 0 || typeof value.scheduledAt === 'string') &&
 		typeof value.createdAt === 'string'
 	);
 }
@@ -194,21 +204,21 @@ function isPostDetail(value: unknown): value is RawPostDetailResponse {
 	return (
 		typeof post.id === 'number' &&
 		typeof post.title === 'string' &&
-		typeof post.description === 'string' &&
+		(post.description === undefined || post.description === null || post.description === 0 || typeof post.description === 'string') &&
 		typeof post.mediaType === 'string' &&
 		typeof post.mediaUrl === 'string' &&
 		typeof post.privacyLevel === 'string' &&
-		typeof post.commentsEnabled === 'boolean' &&
-		typeof post.duetEnabled === 'boolean' &&
-		typeof post.stitchEnabled === 'boolean' &&
+		(typeof post.commentsEnabled === 'boolean' || (typeof post.commentsEnabled === 'number' && (post.commentsEnabled === 0 || post.commentsEnabled === 1))) &&
+		(typeof post.duetEnabled === 'boolean' || (typeof post.duetEnabled === 'number' && (post.duetEnabled === 0 || post.duetEnabled === 1))) &&
+		(typeof post.stitchEnabled === 'boolean' || (typeof post.stitchEnabled === 'number' && (post.stitchEnabled === 0 || post.stitchEnabled === 1))) &&
 		typeof post.brandOrganicToggle === 'boolean' &&
 		typeof post.brandContentToggle === 'boolean' &&
 		typeof post.status === 'string' &&
-		(post.scheduledAt === null || typeof post.scheduledAt === 'string') &&
+		(post.scheduledAt === null || post.scheduledAt === 0 || typeof post.scheduledAt === 'string') &&
 		typeof post.createdAt === 'string' &&
 		typeof post.updatedAt === 'string' &&
-		(post.errorMessage === null || typeof post.errorMessage === 'string') &&
-		(post.publishId === null || typeof post.publishId === 'string')
+		(post.errorMessage === null || post.errorMessage === 0 || typeof post.errorMessage === 'string') &&
+		(post.publishId === null || post.publishId === 0 || typeof post.publishId === 'string')
 	);
 }
 
@@ -231,7 +241,19 @@ async function getJson(url: URL): Promise<unknown> {
 		throw new PostsFetchError(message, response.status);
 	}
 
-	return response.json();
+	const responseText = await response.text();
+	if (!responseText || !responseText.trim()) return null;
+
+	try {
+		return JSON.parse(responseText);
+	} catch (error) {
+		console.warn('[TikTok posts] Non-JSON response body received.', {
+			endpoint: url.toString(),
+			rawBody: responseText,
+			error,
+		});
+		return null;
+	}
 }
 
 function mapSummary(value: RawPostSummaryResponse): TikTokPostSummary {
@@ -240,7 +262,7 @@ function mapSummary(value: RawPostSummaryResponse): TikTokPostSummary {
 		title: value.title,
 		mediaKind: mediaKindFromMime(value.mediaType),
 		status: normalizeStatus(value.status),
-		scheduledAt: value.scheduledAt,
+		scheduledAt: typeof value.scheduledAt === 'string' ? value.scheduledAt : null,
 		createdAt: value.createdAt,
 	};
 }
@@ -250,6 +272,7 @@ export async function fetchPostsList(state: string): Promise<TikTokPostSummary[]
 	endpoint.searchParams.set('state', state);
 	const responseBody = await getJson(endpoint);
 
+	if (responseBody == null) return [];
 	if (isNoPostsResponse(responseBody)) return [];
 
 	if (!Array.isArray(responseBody) || !responseBody.every(isPostSummary)) {
@@ -271,6 +294,11 @@ export async function fetchPostDetail(id: number): Promise<TikTokPostDetail> {
 	endpoint.searchParams.set('id', String(id));
 	const responseBody = await getJson(endpoint);
 
+	if (responseBody == null) {
+		console.warn('[TikTok posts] Empty post detail response received.', { endpoint: endpoint.toString(), id });
+		throw new PostsFetchError('TikTok post detail was empty.');
+	}
+
 	if (!isPostDetail(responseBody)) {
 		logInvalidResponse(endpoint, responseBody, 'post detail', {
 			validationIssues: validatePostDetail(responseBody),
@@ -280,17 +308,17 @@ export async function fetchPostDetail(id: number): Promise<TikTokPostDetail> {
 
 	return {
 		...mapSummary(responseBody),
-		description: responseBody.description,
+		description: typeof responseBody.description === 'string' ? responseBody.description : '',
 		mediaUrl: responseBody.mediaUrl,
 		mediaType: responseBody.mediaType,
 		privacyLevel: responseBody.privacyLevel,
-		commentsEnabled: responseBody.commentsEnabled,
-		duetEnabled: responseBody.duetEnabled,
-		stitchEnabled: responseBody.stitchEnabled,
+		commentsEnabled: normalizeBooleanFlag(responseBody.commentsEnabled),
+		duetEnabled: normalizeBooleanFlag(responseBody.duetEnabled),
+		stitchEnabled: normalizeBooleanFlag(responseBody.stitchEnabled),
 		brandOrganicToggle: responseBody.brandOrganicToggle,
 		brandContentToggle: responseBody.brandContentToggle,
-		errorMessage: emptyStringToNull(responseBody.errorMessage === null ? '' : responseBody.errorMessage),
+		errorMessage: normalizeOptionalString(responseBody.errorMessage),
 		updatedAt: responseBody.updatedAt,
-		publishId: emptyStringToNull(responseBody.publishId === null ? '' : responseBody.publishId),
+		publishId: normalizeOptionalString(responseBody.publishId),
 	};
 }
