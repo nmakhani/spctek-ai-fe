@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 	title: 'SPCTEK AI - Build a System. Not a Spreadsheet.',
 	description: 'AI-native operations platform.',
 	icons: { icon: '/favicon.png' },
+	verification: { google: 'google96455121f4117a15' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
