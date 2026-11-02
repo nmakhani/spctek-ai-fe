@@ -1,10 +1,12 @@
 import { Hero, StudyListing } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { generateStaticMetadata } from '@/lib/metadata';
+import { getPublishedContent } from '@/lib/public-content';
 
 export const generateMetadata = async () => await generateStaticMetadata('/case-studies');
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+	const contents = await getPublishedContent('CASE_STUDY');
 	return (
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">
@@ -20,7 +22,7 @@ export default function CaseStudiesPage() {
 				</section>
 				<SectionDivider />
 				<section id="listing">
-					<StudyListing />
+					<StudyListing initialContents={contents} />
 				</section>
 			</main>
 		</div>

@@ -2,13 +2,12 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
 import type { PublicContent } from '@/components/content/types';
-import { contentApi } from '@/lib/api';
 import { generateMetadata as generateSeoMetadata } from '@/lib/metadata';
+import { getPublicContent, PublicContentError } from '@/lib/public-content';
 import DetailClient from './DetailClient';
 
 export const getBlogData = cache(async (slug: string) => {
-	const response = await contentApi.get(slug, 'BLOG', 'slug');
-	return response.data as PublicContent;
+	return getPublicContent(slug, 'BLOG');
 });
 
 interface Props {
@@ -42,8 +41,9 @@ export default async function Page({ params }: Props) {
 
 	try {
 		blog = await getBlogData(slug);
-	} catch {
-		notFound();
+	} catch (error) {
+		if (error instanceof PublicContentError && error.status === 404) notFound();
+		throw error;
 	}
 
 	if (!blog || !blog.is_published) {

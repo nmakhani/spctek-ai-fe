@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { resolveR2PublicUrl } from '@/lib/r2';
 import { GlassGlow } from '../ui/GlassGlow';
@@ -27,11 +26,10 @@ function formatContentDate(value?: string) {
 }
 
 export default function BlogCard({ content }: { index: number; content: PublicContent }) {
-	const router = useRouter();
 	const publishedDate = formatContentDate(content.created_at);
 	const thumbnailUrl = resolveR2PublicUrl(content.thumbnail_url);
 
-	const authorLink = `/authors/${content.author_id}`;
+	const authorLink = content.author_id ? `/authors/${content.author_id}` : null;
 	const authorName = content.author?.name || 'SPCTEK Team';
 
 	const categories = content.categories || [];
@@ -39,7 +37,7 @@ export default function BlogCard({ content }: { index: number; content: PublicCo
 	const remainingCount = categories.length - displayedCategories.length;
 
 	return (
-		<div onClick={() => router.push(`/blogs/${content.slug}`)} className="group block cursor-pointer">
+		<div className="group block">
 			<div className="relative rounded-2xl transition duration-300 hover:-translate-y-1">
 				<GradientBorder thickness={1.5} radius="24px" />
 				<GlassGlow angle={105} opacity={0.3} start={10} end={90} radius="24px" />
@@ -65,12 +63,7 @@ export default function BlogCard({ content }: { index: number; content: PublicCo
 					<div className="flex flex-1 flex-col justify-start p-4 sm:p-6 md:pl-2 md:pr-10 md:pt-7">
 						<div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">
 							{authorLink ? (
-								<Link
-									target="_blank"
-									href={authorLink}
-									onClick={(e) => e.stopPropagation()}
-									className="z-30 text-[#a9b2ff] transition hover:text-white"
-								>
+								<Link target="_blank" href={authorLink} className="z-30 text-[#a9b2ff] transition hover:text-white">
 									{authorName}
 								</Link>
 							) : (
@@ -105,7 +98,9 @@ export default function BlogCard({ content }: { index: number; content: PublicCo
 
 						<div className="flex flex-col">
 							<h3 className="line-clamp-2 text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#a9b2ff] sm:text-2xl">
-								{content.title}
+								<Link href={`/blogs/${content.slug}`} className="after:absolute after:inset-0 after:z-20">
+									{content.title}
+								</Link>
 							</h3>
 							{content.summary && (
 								<div className="mt-3">

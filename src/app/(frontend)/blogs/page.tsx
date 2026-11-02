@@ -1,10 +1,12 @@
 import { BlogListing, Hero } from '@/components/content';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { generateStaticMetadata } from '@/lib/metadata';
+import { getPublishedContent } from '@/lib/public-content';
 
 export const generateMetadata = async () => await generateStaticMetadata('/blogs');
 
-export default function BlogsPage() {
+export default async function BlogsPage() {
+	const contents = await getPublishedContent('BLOG');
 	return (
 		<div className="noise-overlay relative flex min-h-screen flex-col">
 			<main className="flex-1">
@@ -22,7 +24,7 @@ export default function BlogsPage() {
 				<SectionDivider />
 
 				<section id="listing">
-					<BlogListing />
+					<BlogListing initialContents={contents} />
 				</section>
 			</main>
 		</div>

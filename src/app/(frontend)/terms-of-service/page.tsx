@@ -5,6 +5,7 @@ import { LegalDocument } from '@/components/LegalDocument';
 export const metadata: Metadata = {
 	title: 'Terms of Service | SPCTEK.AI',
 	description: 'Read the SPCTEK.AI Terms of Service.',
+	alternates: { canonical: 'https://spctek.ai/terms-of-service' },
 };
 
 export default function TermsOfServicePage() {

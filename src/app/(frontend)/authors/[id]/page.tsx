@@ -2,8 +2,8 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
 import type { PublicContent } from '@/components/content/types';
-import { authorsApi, contentApi } from '@/lib/api';
 import { generateMetadata as generateSeoMetadata } from '@/lib/metadata';
+import { getPublicAuthor, getPublishedContent, PublicContentError } from '@/lib/public-content';
 import DetailClient from './DetailClient';
 
 interface Author {
@@ -19,14 +19,13 @@ interface Author {
 }
 
 export const getAuthorData = cache(async (id: string) => {
-	const [authorResponse, blogsResponse] = await Promise.all([
-		authorsApi.get(id),
-		contentApi.list({ type: 'BLOG', author: id }),
-	]);
+	// The API expects UUIDs; invalid route parameters are missing pages, not API failures.
+	if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) notFound();
+	const [authorResponse, blogsResponse] = await Promise.all([getPublicAuthor(id), getPublishedContent('BLOG', id)]);
 
 	return {
-		author: authorResponse.data as Author,
-		blogs: (blogsResponse.data as PublicContent[]).filter((blog) => blog.is_published),
+		author: authorResponse as Author,
+		blogs: blogsResponse,
 	};
 });
 
@@ -61,8 +60,9 @@ export default async function Page({ params }: Props) {
 		const data = await getAuthorData(id);
 		author = data.author;
 		blogs = data.blogs;
-	} catch {
-		notFound();
+	} catch (error) {
+		if (error instanceof PublicContentError && error.status === 404) notFound();
+		throw error;
 	}
 
 	if (!author) {

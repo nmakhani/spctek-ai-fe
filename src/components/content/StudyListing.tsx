@@ -1,60 +1,32 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { contentApi } from '@/lib/api';
 import FilterBar from '../ui/FilterBar';
 import StudyCard from './StudyCard';
 import type { PublicContent } from './types';
 
-export default function StudyListing() {
-	const [contents, setContents] = useState<PublicContent[]>([]);
-	const [loading, setLoading] = useState(true);
+export default function StudyListing({ initialContents }: { initialContents: PublicContent[] }) {
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [searchInput, setSearchInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
-
-	const contentType = 'CASE_STUDY';
 
 	const handleSearchSubmit = () => {
 		setSearchTerm(searchInput.trim());
 	};
 
-	useEffect(() => {
-		let isMounted = true;
-
-		const fetchContents = async () => {
-			try {
-				setLoading(true);
-				const response = await contentApi.list({
-					type: contentType,
-					search: searchTerm || undefined,
-				});
-				if (!isMounted) return;
-				setContents(response.data as PublicContent[]);
-			} catch {
-				if (!isMounted) return;
-				setContents([]);
-			} finally {
-				if (isMounted) setLoading(false);
-			}
-		};
-
-		void fetchContents();
-		return () => {
-			isMounted = false;
-		};
-	}, [contentType, searchTerm]);
-
-	const publishedContents = useMemo(() => contents.filter((content) => content.is_published), [contents]);
+	const publishedContents = useMemo(() => initialContents.filter((content) => content.is_published), [initialContents]);
 	const filteredContents = useMemo(() => {
-		if (selectedCategory === 'all') {
-			return publishedContents;
-		}
-		return publishedContents.filter((content) =>
-			content.categories?.some((category) => category.slug === selectedCategory)
-		);
-	}, [publishedContents, selectedCategory]);
+		const query = searchTerm.toLowerCase();
+		return publishedContents.filter((content) => {
+			const matchesCategory =
+				selectedCategory === 'all' || content.categories?.some((category) => category.slug === selectedCategory);
+			const matchesSearch =
+				!query || [content.title, content.summary, content.content].join(' ').toLowerCase().includes(query);
+			return matchesCategory && matchesSearch;
+		});
+	}, [publishedContents, selectedCategory, searchTerm]);
+
 	const filterCategories = useMemo(
 		() =>
 			Array.from(
@@ -64,12 +36,6 @@ export default function StudyListing() {
 			).map(([value, label]) => ({ label, value })),
 		[publishedContents]
 	);
-
-	useEffect(() => {
-		if (selectedCategory !== 'all' && !filterCategories.some((category) => category.value === selectedCategory)) {
-			setSelectedCategory('all');
-		}
-	}, [filterCategories, selectedCategory]);
 
 	return (
 		<div className="px-4 md:px-6 lg:px-12">
@@ -81,15 +47,10 @@ export default function StudyListing() {
 					onCategoryChange={setSelectedCategory}
 					onSearchChange={setSearchInput}
 					onSearchSubmit={handleSearchSubmit}
-					categoriesLoading={loading}
 				/>
 
 				<div className="mx-auto max-w-5xl pt-2">
-					{loading ? (
-						<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
-							Loading case studies...
-						</div>
-					) : filteredContents.length === 0 ? (
+					{filteredContents.length === 0 ? (
 						<div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 text-center text-white/60">
 							No published case studies yet. Please check back soon.
 						</div>

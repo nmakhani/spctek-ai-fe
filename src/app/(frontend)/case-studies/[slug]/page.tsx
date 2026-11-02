@@ -2,13 +2,12 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
 import type { PublicContent } from '@/components/content/types';
-import { contentApi } from '@/lib/api';
 import { generateMetadata as generateSeoMetadata } from '@/lib/metadata';
+import { getPublicContent, PublicContentError } from '@/lib/public-content';
 import DetailClient from './DetailClient';
 
 export const getCaseStudyData = cache(async (slug: string) => {
-	const response = await contentApi.get(slug, 'CASE_STUDY', 'slug');
-	return response.data as PublicContent;
+	return getPublicContent(slug, 'CASE_STUDY');
 });
 
 interface Props {
@@ -44,8 +43,9 @@ export default async function Page({ params }: Props) {
 
 	try {
 		caseStudy = await getCaseStudyData(slug);
-	} catch {
-		notFound();
+	} catch (error) {
+		if (error instanceof PublicContentError && error.status === 404) notFound();
+		throw error;
 	}
 
 	if (!caseStudy || !caseStudy.is_published) {

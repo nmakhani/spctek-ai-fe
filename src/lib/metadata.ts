@@ -72,6 +72,7 @@ export function generateMetadata({ title, description, pageUrl, type = 'website'
 	return {
 		title,
 		description,
+		alternates: { canonical: url },
 		openGraph: {
 			title,
 			description,
